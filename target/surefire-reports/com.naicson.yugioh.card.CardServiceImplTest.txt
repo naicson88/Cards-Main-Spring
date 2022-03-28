@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------
+Test set: com.naicson.yugioh.card.CardServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 1.742 s <<< FAILURE! - in com.naicson.yugioh.card.CardServiceImplTest
+cardSearchSuccess  Time elapsed: 0.055 s  <<< ERROR!
+org.mockito.exceptions.misusing.WrongTypeOfReturnValue: 
+
+List12 cannot be returned by findAll()
+findAll() should return Page
+***
+If you're unsure why you're getting above error read on.
+Due to the nature of the syntax above problem might occur because:
+1. This exception *might* occur in wrongly written multi-threaded tests.
+   Please refer to Mockito FAQ on limitations of concurrency testing.
+2. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - 
+   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.
+
+	at com.naicson.yugioh.card.CardServiceImplTest.cardSearchSuccess(CardServiceImplTest.java:170)
+
+searchCardsUserHave  Time elapsed: 0.029 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <0> but was: <2>
+	at com.naicson.yugioh.card.CardServiceImplTest.searchCardsUserHave(CardServiceImplTest.java:95)
+
