@@ -16,6 +16,7 @@ import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.card.CardRegistry;
+import com.naicson.yugioh.util.enums.SetType;
 
 
 @Component

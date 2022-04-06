@@ -4,6 +4,7 @@ package com.naicson.yugioh.deck;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,7 +18,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.naicson.yugioh.dao.DeckDAO;
+import com.naicson.yugioh.dto.RelUserCardsDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
@@ -42,26 +48,28 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class) // Usado com Junit5 ao inves do RunWith
 public class DeckServiceImplTest {
 	
-	DeckDetailService deckService;
+	@InjectMocks
+	@Spy
+	DeckServiceImpl deckService;
 	
-	@MockBean
+	@Mock
 	DeckRepository deckRepository;
-	@MockBean
+	@Mock
 	RelDeckCardsRepository relDeckCardsRepository;
-	@MockBean
+	@Mock
 	DeckUsersRepository deckUserRepository;
-	@MockBean
+	@Mock
 	DeckDAO dao;
 	
-	@BeforeEach
-	public void setUp() {
-		this.deckService = new DeckServiceImpl(deckRepository, relDeckCardsRepository, dao,  deckUserRepository);
-		this.mockAuth();
-		
-	}
+//	@BeforeEach
+//	public void setUp() {
+//		this.deckService = new DeckServiceImpl(deckRepository, relDeckCardsRepository, dao,  deckUserRepository);
+//		this.mockAuth();
+//		
+//	}
 	
 	
 	@Test
@@ -89,9 +97,9 @@ public class DeckServiceImplTest {
 		Deck deck = ValidObjects.generateValidDeck();
 		deck.setId(1L);
 		
-		Mockito.when(relDeckCardsRepository.findByDeckId(deck.getId())).thenReturn(rels);
+		Mockito.when(relDeckCardsRepository.findByDeckId(anyLong())).thenReturn(rels);
 		
-		List<RelDeckCards> relReturned = deckService.relDeckCards(deck.getId(), "user");
+		List<RelDeckCards> relReturned = deckService.relDeckCards(deck.getId(), "konami");
 		
 		assertThat(relReturned).isNotEmpty();
 		assertThat(relReturned).isNotNull();
@@ -102,7 +110,7 @@ public class DeckServiceImplTest {
 
 	@Test
 	public void addSetToUsersCollection() throws SQLException, ErrorMessage, Exception {
-		
+		this.mockAuth();
 		Long originalDeckId = 1L;
 		
 		Deck deckOrigem = ValidObjects.generateValidDeck();
@@ -130,7 +138,7 @@ public class DeckServiceImplTest {
 	
 	@Test
 	public void addingCardToUserCollection() throws SQLException, ErrorMessage {		
-		
+		this.mockAuth();
 		UserDetailsImpl user = ValidObjects.generateValidUser();
 		Long originalDeckId = 1L;
 		int itemAtualizado = 1;
@@ -149,7 +157,7 @@ public class DeckServiceImplTest {
 	
 	@Test
 	public void validUserDontHaveDeckAndFlagAreRemove() throws SQLException, ErrorMessage {
-			
+		this.mockAuth();
 		Long originalDeckid = 1L;			
 		Mockito.when(dao.verifyIfUserAleadyHasTheDeck(originalDeckid,1)).thenReturn(0);	
 		int retorno = deckService.ImanegerCardsToUserCollection(originalDeckid, "R");
@@ -173,7 +181,7 @@ public class DeckServiceImplTest {
 		listDeckDTO.add(deckTwo);
 		
 		Mockito.when(dao.relationDeckAndCards(originalDeckId)).thenReturn(listDeckDTO);
-		Mockito.when(dao.verifyIfUserAleadyHasTheCard(user.getId(), "")).thenReturn(false);
+		Mockito.when(dao.verifyIfUserAleadyHasTheCard(anyLong(), anyString())).thenReturn(false);
 		Mockito.when(dao.insertCardToUserCollection(any())).thenReturn(1);
 		
 		int qtdCardsAddedOrRemoved = deckService.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
@@ -197,9 +205,9 @@ public class DeckServiceImplTest {
 		listDeckDTO.add(deckTwo);
 		
 		Mockito.when(dao.relationDeckAndCards(originalDeckId)).thenReturn(listDeckDTO);
-		Mockito.when(dao.verifyIfUserAleadyHasTheCard(user.getId(), "")).thenReturn(true);
-		Mockito.when(dao.changeQuantityOfEspecifCardUserHas(user.getId(), "", "A")).thenReturn(1);
-		Mockito.when(dao.insertCardToUserCollection(any())).thenReturn(1);
+		Mockito.when(dao.verifyIfUserAleadyHasTheCard(anyLong(), anyString())).thenReturn(true);
+		Mockito.when(dao.changeQuantityOfEspecifCardUserHas(anyLong(), anyString(), anyString())).thenReturn(1);
+		Mockito.lenient().when(dao.insertCardToUserCollection(any(RelUserCardsDTO.class))).thenReturn(1);
 		
 		int qtdCardsAddedOrRemoved = deckService.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
 		

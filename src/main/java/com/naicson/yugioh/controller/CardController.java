@@ -61,21 +61,7 @@ public class CardController {
 	RelDeckCardsRepository relDeckCardsRepository;
 	
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
-	
-	@GetMapping
-	public List<Card> listar(){
-		return cardService.listar();
-	}
-	
-	@PostMapping
-	public Card adicionar(@RequestBody Card card) {
-		return cardService.add(card);
-	}
-	
-	@GetMapping(path = {"id/{id}"})
-	public Card listarId(@PathVariable("id") Integer id) {	
-		return cardService.listarId(id);
-	}
+
 	
 	@GetMapping(path = {"num/{numero}"})
 	public Card listarNumero(@PathVariable("numero") Long numero) {
@@ -88,17 +74,6 @@ public class CardController {
 		CardDetailsDTO card = cardService.findCardByNumberWithDecks(cardNumero);
 
 		return new ResponseEntity<CardDetailsDTO>(card, HttpStatus.OK);		
-	}
-	
-	@PutMapping(path = {"editar/{id}"})
-	public Card editar(@RequestBody Card card, @PathVariable("id") Integer id) {
-		card.setId(id);
-		return cardService.editar(card);
-	}
-	
-	@DeleteMapping(path = {"del/{id}"})
-	public Card card (@PathVariable("id") int id) {
-		return cardService.deletar(id);
 	}	
 	
 	//Transforma as cartas encontradas no DTO para passar menos parametros
@@ -162,22 +137,6 @@ public class CardController {
 		}
 	}
 	
-	@GetMapping(path = {"/add-card-to-user"})
-	@ResponseBody
-	public ResponseEntity<CardAndSetsDTO> findCardToAddToUserCollection(@RequestParam Long cardNumber) throws SQLException, ErrorMessage {
-		
-		if(cardNumber <= 0)
-			throw new ErrorMessage(" The card number is invalid!");
-		
-		CardAndSetsDTO dto = cardService.findCardToAddToUserCollection(cardNumber);
-		
-		if(dto != null ) {
-			return new ResponseEntity<CardAndSetsDTO>(dto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<CardAndSetsDTO>(dto, HttpStatus.NO_CONTENT);
-		}
-	}
-	
 	@GetMapping(path = {"/load-cards-userscollection"})
 	@ResponseBody
 	public ResponseEntity<List<CardsSearchDTO>> loadCardsUserHave(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
@@ -202,23 +161,11 @@ public class CardController {
 	
 	@GetMapping(path = {"/card-user-details"})
 	@ResponseBody
-	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Long cardNumber) throws ErrorMessage, SQLException, Exception {
-		try {
-			if(cardNumber == null || cardNumber == 0)
-				throw new ErrorMessage("Card number invalid.");
+	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Long cardNumber) {
 			
 			CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardNumber);	
 			
-			return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);
-			
-		}catch(ErrorMessage me){
-			throw me;
-		}catch(SQLException sql) {
-			throw sql;
-		}catch (Exception ex) {
-			throw ex;
-		}
-		
+			return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);	
 	}
 	
 	@GetMapping(path = {"/cardname-usercollection"})

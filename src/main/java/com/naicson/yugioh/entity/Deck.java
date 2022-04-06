@@ -8,14 +8,22 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.naicson.yugioh.entity.sets.DeckUsers;
+import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.util.enums.SetCollectionTypes;
+import com.naicson.yugioh.util.enums.SetType;
 
 @Entity
 @Table(name = "tab_decks")
@@ -32,23 +40,21 @@ public class Deck implements Serializable {
 	private Long id;
 	private String nome;
 	private String imagem;
-	private String nomePortugues;
-	
+	private String nomePortugues;	
 	@Column(name = "qtd_cards")
 	private Long qtd_cards;
 	private Long qtd_comuns;
 	private Long qtd_raras;
 	private Long qtd_super_raras;
-	private Long qtd_ultra_raras;
-	//private Long qtd_secret_raras;
-	
-	private Date lancamento;
-	
+	private Long qtd_ultra_raras;	
+	private Date lancamento;	
 	@Column(name = "set_type")
 	private String setType;
 	@Column(name = "dt_criacao")
 	private Date dt_criacao;
-	
+	@ManyToOne()
+	@JoinColumn(name = "set_collection_id", insertable = true, referencedColumnName = "id", nullable = true)
+	private SetCollection setCollection;
 	@Transient
 	private List<Card> cards;
 	@Transient
@@ -194,6 +200,8 @@ public class Deck implements Serializable {
 				+ lancamento + ", cards=" + cards + "]";
 	}
 
+	
+
 	public String getSetType() {
 		return setType;
 	}
@@ -202,12 +210,28 @@ public class Deck implements Serializable {
 		this.setType = setType;
 	}
 
+	public List<Card> getExtraDeckCards() {
+		return extraDeckCards;
+	}
+
+	public void setExtraDeckCards(List<Card> extraDeckCards) {
+		this.extraDeckCards = extraDeckCards;
+	}
+
 	public Date getDt_criacao() {
 		return dt_criacao;
 	}
 
 	public void setDt_criacao(Date dt_criacao) {
 		this.dt_criacao = dt_criacao;
+	}
+
+	public SetCollection getSetCollection() {
+		return setCollection;
+	}
+
+	public void setSetCollection(SetCollection setCollection) {
+		this.setCollection = setCollection;
 	}
 		
 }

@@ -1,6 +1,7 @@
 package com.naicson.yugioh.util;
 
 import java.util.Date;
+import java.util.List;
 
 import com.naicson.yugioh.dto.RelUserCardsDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
@@ -47,9 +48,9 @@ public abstract class ValidObjects {
 		return relDeckCards;
 	}
 	
-	public static Card generateValidCard() {
+	public static Card generateValidCard(Integer id) {
 		Card card = new Card();
-		
+		card.setId(id);
 		//card.setArquetipo("Arquetipo Teste");
 		card.setAtk(2000);
 		//card.setAtributo("EARTH");
@@ -60,6 +61,7 @@ public abstract class ValidObjects {
 		card.setEscala(8);
 		card.setNumero(15060L);
 		card.setImagem("mocked imagem");
+		card.setNome("Test Name");
 		
 		return card;
 	}

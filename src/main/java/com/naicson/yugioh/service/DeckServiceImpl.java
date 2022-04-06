@@ -92,6 +92,8 @@ public class DeckServiceImpl implements DeckDetailService {
 			relation =	relDeckCardsRepository.findByDeckId(deckId);
 		else if("user".equalsIgnoreCase(setSource))
 			relation = dao.relDeckUserCards(deckId);
+		else
+			throw new IllegalArgumentException("Informed Set Source is invalid!" + setSource);
 		
 		if(relation == null || relation.size() == 0) {
 			logger.error("Relation of cards is empty. Deck id: ".toUpperCase() + deckId);

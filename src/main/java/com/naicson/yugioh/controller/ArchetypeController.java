@@ -40,7 +40,7 @@ public class ArchetypeController {
 		
 		Archetype arch = archRepository.findById(archId).get();
 		System.out.println(arch.toString());
-		List<CardOfArchetypeDTO> cards = cardService.encontrarPorArchetype(archId);
+		List<CardOfArchetypeDTO> cards = cardService.findCardByArchetype(archId);
 		
 		arch.setArrayCards(cards);
 		System.out.println(arch.toString());

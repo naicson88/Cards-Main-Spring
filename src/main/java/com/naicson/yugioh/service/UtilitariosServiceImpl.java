@@ -153,7 +153,7 @@ public class UtilitariosServiceImpl implements UtilitariosService {
 						card.setEscala((Integer)    obj.get("scale"));
 						card.setImagem(imagem_url);
 										
-						cardController.adicionar(card);
+						
 						count++;
 
 					} else {
@@ -161,8 +161,7 @@ public class UtilitariosServiceImpl implements UtilitariosService {
 						card.setNomePortugues((String) 	obj.get("name"));
 						card.setDescricaoPortugues((String) obj.get("desc"));
 						
-						cardController.editar(card, card.getId());
-						count++;
+	
 					}			
 				}		
 			}catch (Exception e){

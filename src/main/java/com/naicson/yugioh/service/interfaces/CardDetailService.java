@@ -2,6 +2,7 @@ package com.naicson.yugioh.service.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,29 +24,15 @@ import com.naicson.yugioh.util.search.SearchCriteria;
 @Service
 public interface CardDetailService {
 	
-	List<Card> listar();
-	
-	Card listarId(int id);
-	
-	Card listarNumero(Long numero);
-	
-	Card add(Card card);
-	
-	Card editar(Card card);
-	
-	Card deletar (int id);
-	
 	Card cardDetails(Integer id);
 	
 	List<Deck> cardDecks(Long cardNumero);	
 	
-	List<CardOfArchetypeDTO> encontrarPorArchetype(Integer archId);
+	List<CardOfArchetypeDTO> findCardByArchetype(Integer archId);
 	
-	List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) throws SQLException, ErrorMessage;
+	List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers);
 	
-	CardAndSetsDTO findCardToAddToUserCollection(Long cardNumber) throws SQLException, ErrorMessage;
-	
-	CardOfUserDetailDTO cardOfUserDetails(Long cardNumber) throws ErrorMessage, SQLException, Exception;
+	CardOfUserDetailDTO cardOfUserDetails(Long cardNumber);
 	
 	CardDetailsDTO findCardByNumberWithDecks(Long cardNumero);
 	
@@ -64,5 +51,9 @@ public interface CardDetailService {
 	List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber);
 	
 	List<Long> findCardsNotRegistered(List<Long> cardsNumber);
+
+	Card listarNumero(Long numero);
+	
+	 Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource);
 
 }

@@ -29,7 +29,7 @@ public class CardDAO {
 		return relList;
 	}
 	
-	public List<Tuple> listCardOfUserDetails(Long cardNumber, long userId) throws SQLException, Exception {
+	public List<Tuple> listCardOfUserDetails(Long cardNumber, long userId) {
 		Query query = em.createNativeQuery("select du.nome , rel.card_set_code , rel.card_raridade as rarity,\r\n"
 			+ " rel.card_price as price, count(rel.card_set_code) as quantity\r\n"
 			+ "from tab_deck_users du \r\n"
