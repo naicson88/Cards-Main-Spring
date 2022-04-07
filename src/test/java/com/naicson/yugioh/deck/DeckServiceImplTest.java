@@ -7,33 +7,35 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.naicson.yugioh.dao.DeckDAO;
 import com.naicson.yugioh.dto.RelUserCardsDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
-import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.DeckUsers;
@@ -71,6 +73,10 @@ public class DeckServiceImplTest {
 //		
 //	}
 	
+	@BeforeEach
+	public void setup(){
+	    MockitoAnnotations.initMocks(this); //without this you will get NPE
+	}
 	
 	@Test
 	public void findADeckByTheId() throws Exception {
@@ -215,8 +221,47 @@ public class DeckServiceImplTest {
 		
 	}
 	
+	@Test
+	public void entityNotFoundWhenTryingAddSetToUserCollection() {
+		this.mockAuth();
+		Optional<Deck> opt = Optional.ofNullable(null);
+		
+		when(deckRepository.findById(anyLong())).thenReturn(opt);
+		
+		EntityNotFoundException exception = Assertions.assertThrows(EntityNotFoundException.class, () -> {
+			deckService.addSetToUserCollection(1L);		
+		  
+		});
+		
+		String expected = "No Set found with this code.";
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+	}
 	
-	private void mockAuth() {
+	@Test
+	public void invalidDeckInfoWhenTryingAddSetToUserCollection() {
+		this.mockAuth();
+		Deck deck = ValidObjects.generateValidDeck();
+		
+		Optional<Deck> opt = Optional.of(deck);
+		
+		when(deckRepository.findById(anyLong())).thenReturn(opt);
+		
+		opt.get().setNome(null);
+
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			deckService.addSetToUserCollection(1L);		
+		  
+		});
+		
+		String expected = "Invalid Deck name, can't be customized!";
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+	}
+	
+	private UserDetailsImpl mockAuth() {
 		UserDetailsImpl user = ValidObjects.generateValidUser();
 		
 		Authentication authentication = mock(Authentication.class);
@@ -224,5 +269,7 @@ public class DeckServiceImplTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
+        
+        return user;
 	}
 }

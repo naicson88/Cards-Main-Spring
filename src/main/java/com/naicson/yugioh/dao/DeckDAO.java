@@ -77,7 +77,7 @@ public class DeckDAO {
 			
 	}
 	
-	public List<DeckDTO> relationDeckAndCards(Long originalDeckId) throws SQLException {
+	public List<DeckDTO> relationDeckAndCards(Long originalDeckId) {
 		
 		Query query = em.createNativeQuery("SELECT * FROM tab_rel_deck_cards WHERE DECK_ID = :deckId", DeckDTO.class)
 				.setParameter("deckId", originalDeckId);
@@ -86,7 +86,7 @@ public class DeckDAO {
 		return relationDeckAndCards;			
 	}
 	
-	public boolean verifyIfUserAleadyHasTheCard(long userId, String cardSetCode) throws SQLException {
+	public boolean verifyIfUserAleadyHasTheCard(long userId, String cardSetCode) {
 		
 		Query query = em.createNativeQuery(" SELECT count(*) FROM tab_rel_user_cards WHERE CARD_SET_CODE = :cardSetCode AND USER_ID = :userId ")
 				.setParameter("cardSetCode", cardSetCode)
@@ -120,7 +120,7 @@ public class DeckDAO {
 			
 	}
 	
-	public int changeQuantityOfEspecifCardUserHas(long userId, String cardSetCode, String flagAddOrRemove) throws SQLException {
+	public int changeQuantityOfEspecifCardUserHas(long userId, String cardSetCode, String flagAddOrRemove){
 		
 		int changed;
 		
@@ -143,7 +143,7 @@ public class DeckDAO {
 		
 	}
 	
-	public int insertCardToUserCollection(RelUserCardsDTO rel) throws SQLException {
+	public int insertCardToUserCollection(RelUserCardsDTO rel){
 		
 		Query query = em.createNativeQuery(" INSERT INTO tab_rel_user_cards (user_id, card_numero, card_set_code, qtd, dt_criacao)"
 				+ " VALUES (:userId, :card_number, :card_set_code, :qtd, :dt_criacao) ")
@@ -320,6 +320,8 @@ public class DeckDAO {
 		return id;
 		
 	}
+	
+	
 	
 	
 		

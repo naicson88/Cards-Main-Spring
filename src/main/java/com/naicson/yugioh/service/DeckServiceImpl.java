@@ -1,7 +1,6 @@
 package com.naicson.yugioh.service;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -119,67 +118,57 @@ public class DeckServiceImpl implements DeckDetailService {
 
 
 	@Override
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
-	public int addSetToUserCollection(Long originalDeckId) throws SQLException, ErrorMessage, Exception {
-		try {
+	@Transactional(rollbackFor = Exception.class)
+	public int addSetToUserCollection(Long originalDeckId) {
 
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
-			String customizeDeckName = GeneralFunctions.momentAsString();
-
-			// Consulta o deck pelo Id
-			Deck deckOrigem = deckRepository.findById(originalDeckId).orElseThrow(() -> new ErrorMessage("No Set found with this code."));			
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+		
+		if (user == null)
+			 new EntityNotFoundException("Invalid user!");
+		
+		Deck deckOrigem = deckRepository.findById(originalDeckId)
+				.orElseThrow(() -> new EntityNotFoundException("No Set found with this code."));			
 			
-
-			if (user == null) {
-				logger.error("It was not able found user!".toUpperCase());
-				throw new ErrorMessage("It was not able found user!");
-			}
-				
-				// Cria um novo deck que será inserido como do usuário
-				
-				DeckUsers newDeck = new DeckUsers();
-				newDeck.setImagem(deckOrigem.getImagem());
-				newDeck.setNome(deckOrigem.getNome()+"_"+customizeDeckName);
-				newDeck.setKonamiDeckCopied(deckOrigem.getId());
-				
-				newDeck.setUserId(user.getId());
-				newDeck.setDtCriacao(new Date());
-				newDeck.setSetType(deckOrigem.getSetType());
-							
-				
-				if (newDeck.getNome() == null  || newDeck.getUserId() == 0) {
-					logger.error("It was not possible find de Deck!".toUpperCase());
-					throw new ErrorMessage("It was not possible find de Deck!");
-				}
-				
-				DeckUsers generatedDeckId = deckUserRepository.save(newDeck);
-
-				if (generatedDeckId == null) {
-					logger.error("It was not possible add Deck to user.".toUpperCase());
-					throw new ErrorMessage("It was not possible add Deck to user.");
-				}
-				
-				//Adiciona os cards do Deck original ao novo Deck.
-				int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckId.getId());
-				
-				if(addCardsOnNewDeck <= 0) {
-					logger.error("It was not possible add cards to the new Deck.".toUpperCase());
-					throw new ErrorMessage("It was not possible add cards to the new Deck.");
-				}
-				
-				//Adiciona os cards a coleção do usuário.
-				 int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
-
-				if (addCardsToUsersCollection < 1) {
-					throw new ErrorMessage("Unable to include Cards for User!");
-				}
-
-				return addCardsToUsersCollection;
+			DeckUsers newDeck = new DeckUsers();
+			newDeck.setImagem(deckOrigem.getImagem());
+			newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
+			newDeck.setKonamiDeckCopied(deckOrigem.getId());			
+			newDeck.setUserId(user.getId());
+			newDeck.setDtCriacao(new Date());
+			newDeck.setSetType(deckOrigem.getSetType());				
+			
+			DeckUsers generatedDeckUser = deckUserRepository.save(newDeck);
 	
-		} catch (ErrorMessage msg) {
-			throw msg;
-		} 
+			if (generatedDeckUser == null) 
+				 new EntityNotFoundException("It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
+						
+			//Adiciona os cards do Deck original ao novo Deck.
+			int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
+			
+			if(addCardsOnNewDeck < 1)
+				 throw new NoSuchElementException("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
+						
+			//Adiciona os cards a coleção do usuário.
+			 int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
+	
+			if (addCardsToUsersCollection < 1) {
+				 new NoSuchElementException("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
+			}
+	
+			return addCardsToUsersCollection;
+	 
+	}
+	
+	private String customizeDeckName(String deckName) {
+		
+		if(deckName == null || deckName.isBlank())
+			throw new IllegalArgumentException("Invalid Deck name, can't be customized!");
+		
+		String customizedDeckName = deckName+"_"+GeneralFunctions.momentAsString();
+	
+		return customizedDeckName;
+		
 	}
 	
 
@@ -233,9 +222,8 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Override
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
-	public int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove)
-			throws SQLException, ErrorMessage {
-		try {
+	public int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove) {
+			
 			int qtdCardsAddedOrRemoved = 0;
 
 			List<DeckDTO> relDeckAndCards = dao.relationDeckAndCards(originalDeckId);
@@ -254,7 +242,7 @@ public class DeckServiceImpl implements DeckDetailService {
 									flagAddOrRemove);
 
 							if (manegeQtd < 1) {
-								throw new ErrorMessage("It was not possible to manege card to the user's collection!");
+								 new ErrorMessage("It was not possible to manege card to the user's collection!");
 							}
 
 							qtdCardsAddedOrRemoved++;
@@ -272,8 +260,8 @@ public class DeckServiceImpl implements DeckDetailService {
 							int insertCard = dao.insertCardToUserCollection(rel);
 
 							if (insertCard < 1) {
-								throw new ErrorMessage(
-										"It was not possible to add this Card to the user's collection.");
+								 new ErrorMessage("It was not possible to add this Card to the user's collection.");
+										
 							}
 
 							qtdCardsAddedOrRemoved++;
@@ -281,16 +269,13 @@ public class DeckServiceImpl implements DeckDetailService {
 					}
 
 				} else {
-					throw new ErrorMessage("Check the Add or Remove parameter sent!");
+					 new ErrorMessage("Check the Add or Remove parameter sent!");
 				}
 
 			} 
 
 			return qtdCardsAddedOrRemoved;
 
-		} catch (ErrorMessage msg) {
-			throw msg;
-		}
 	}
 	
 
@@ -346,20 +331,15 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Override
 	//@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
-	public int addCardsToUserDeck(Long originalDeckId, Long generatedDeckId) throws SQLException, Exception, ErrorMessage {
-		try {	
-			
-			if (originalDeckId == null && generatedDeckId == null) {
-				throw new ErrorMessage("Original deck or generated deck is null");
-			}
-			
+	public int addCardsToUserDeck(Long originalDeckId, Long generatedDeckId) {
+				
+			if (originalDeckId == null && generatedDeckId == null) 
+				 new ErrorMessage("Original deck or generated deck is null");
+					
 			int cardsAddedToDeck = dao.addCardsToDeck(originalDeckId, generatedDeckId);
 			
-			return cardsAddedToDeck;
+			return cardsAddedToDeck;	
 			
-		}catch(ErrorMessage em) {
-			throw em;
-		}
 	}
 	
 

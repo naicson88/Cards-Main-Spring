@@ -1,46 +1,37 @@
 package com.naicson.yugioh.service.card;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.dao.CardDAO;
 import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.cards.CardAndSetsDTO;
 import com.naicson.yugioh.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
 import com.naicson.yugioh.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.entity.stats.CardPriceInformation;
-import com.naicson.yugioh.entity.stats.CardViewsInformation;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.DeckRepository;
@@ -49,7 +40,6 @@ import com.naicson.yugioh.service.HomeServiceImpl;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ApiExceptionHandler;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.CardSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
@@ -204,7 +194,6 @@ public class CardServiceImpl implements CardDetailService {
 	
 
 	@Override
-	@Transactional
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
 		Card card = cardRepository.findByNumero(cardNumero);
@@ -254,6 +243,7 @@ public class CardServiceImpl implements CardDetailService {
 		if(total != null) {
 			
 			total.stream().forEach(relation -> {
+				System.out.println(relation.get(1));
 				mapCardSetAndQuantity.put(relation.get(1, String.class), relation.get(0, BigInteger.class).intValue());
 			});			
 			
@@ -336,6 +326,10 @@ public class CardServiceImpl implements CardDetailService {
 	
 	@Override
 	public Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable) {
+		
+		if(criterias == null || criterias.isEmpty())
+			throw new IllegalArgumentException("Criterias is invalid");
+		
 		CardSpecification spec = new CardSpecification();
 		
 		criterias.stream().forEach(criterio ->
@@ -385,6 +379,7 @@ public class CardServiceImpl implements CardDetailService {
 
 	@Override
 	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber) {
+		
 		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("Card number is invalid");
 		
@@ -400,12 +395,12 @@ public class CardServiceImpl implements CardDetailService {
 	@Override
 	public List<Long> findCardsNotRegistered(List<Long> cardsNumber) {
 		
-		if(cardsNumber == null || cardsNumber.isEmpty()) {
-			logger.error("List with card numbers is invalid");
+		if(cardsNumber == null || cardsNumber.isEmpty()) 
 			throw new IllegalArgumentException("List with card numbers is invalid");
-		}
+		
 		
 		List<Long> cardsRegistered = cardRepository.findAllCardsByListOfCardNumbers(cardsNumber);
+		
 		List<Long> cardsNotRegistered = new ArrayList<>();
 		
 		if(cardsRegistered == null || cardsRegistered.isEmpty()) {
@@ -419,23 +414,22 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	private List<Long> verifyCardsNotRegistered(List<Long> cardsNumber, List<Long> cardsRegistered) {
-			
-		if(cardsNumber == null || cardsNumber.isEmpty()) {
-			logger.error("List with card numbers is invalid");
-			throw new IllegalArgumentException("List with card numbers is invalid");
-		}
 		
-		if(cardsRegistered == null || cardsRegistered.isEmpty()) {
-			logger.error("There is no list of comparison since cards registered is empty");
+		List<Long> allCards = new LinkedList<>(cardsNumber);
+		
+		if(allCards == null || allCards.isEmpty())			
+			throw new IllegalArgumentException("List with card numbers is invalid");		
+		
+		if(cardsRegistered == null || cardsRegistered.isEmpty())			
 			throw new IllegalArgumentException("There is no list of comparison since cards registered is empty");
-		}
 		
-		if(cardsRegistered.containsAll(cardsNumber))
+		
+		if(cardsRegistered.containsAll(allCards))
 			return Collections.emptyList();
 			
-			cardsNumber.removeAll(cardsRegistered);
+			allCards.removeAll(cardsRegistered);
 			
-			return cardsNumber;		
+			return allCards;		
 	}
 
 

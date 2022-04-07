@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -14,13 +15,16 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.persistence.Tuple;
 
+import org.hibernate.jpa.spi.NativeQueryTupleTransformer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +65,9 @@ import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.util.ValidObjects;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import com.naicson.yugioh.util.search.CardSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
+import com.naicson.yugioh.util.search.SearchOperation;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class) // Usado com Junit5 ao inves do RunWith
@@ -69,7 +75,7 @@ public class CardServiceImplTest {
 	
 	@InjectMocks
 	@Spy
-	CardServiceImpl impl;
+	CardServiceImpl cardService;
 	
 	@Mock
 	private CardRepository cardRepository;	
@@ -111,7 +117,7 @@ public class CardServiceImplTest {
 		
 		Mockito.when(dao.searchForCardsUserHave(anyLong(), anyString())).thenReturn(list);
 		
-		List<RelUserCardsDTO> listReturned = impl.searchForCardsUserHave(cardsNumbers);
+		List<RelUserCardsDTO> listReturned = cardService.searchForCardsUserHave(cardsNumbers);
 		
 		assertEquals(2, listReturned.size());
 		assertThat(listReturned.get(0).getCardNumero() == 111);
@@ -130,7 +136,7 @@ public class CardServiceImplTest {
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);
 		Mockito.when(dao.listCardOfUserDetails(anyLong(), anyLong())).thenReturn(tupleList);
 		
-		CardOfUserDetailDTO dto = impl.cardOfUserDetails(1L);
+		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1L);
 		
 		assertEquals(dto.getCardName(), card.getNome());
 		assertEquals(dto.getCardNumber(), card.getNumero());
@@ -146,7 +152,7 @@ public class CardServiceImplTest {
 		
 		Mockito.when(cardRepository.getByGenericType(pageable,"teste", 1)).thenReturn(pageCard);
 		
-		List<CardsSearchDTO> dto = impl.getByGenericType(pageable,"teste", 1);
+		List<CardsSearchDTO> dto = cardService.getByGenericType(pageable,"teste", 1);
 		
 		assertNotNull(dto);
 		assertFalse(dto.isEmpty());
@@ -160,9 +166,9 @@ public class CardServiceImplTest {
 		List<Card> cardList = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
 		Page<Card> pageCard = new PageImpl<Card>(cardList);
 				
-		Mockito.doReturn(pageCard).when(impl).findAll(any(), any()); 
+		Mockito.doReturn(pageCard).when(cardService).findAll(any(), any()); 
 		//Mockito.when(impl.findAll(any(), any())).thenReturn(pageCard);
-		List<CardsSearchDTO> dto = impl.cardSearch(criteriaList, null, pageable);
+		List<CardsSearchDTO> dto = cardService.cardSearch(criteriaList, null, pageable);
 		
 		assertThat(!dto.isEmpty());
 		assertEquals(dto.get(0).getNome(), cardList.get(0).getNome());
@@ -179,7 +185,7 @@ public class CardServiceImplTest {
 		
 		Mockito.when(cardRepository.cardSearchByNameUserCollection("teste", user.getId(), pageable )).thenReturn(pageCard);
 		
-		List<CardsSearchDTO> dto = impl.cardSearchByNameUserCollection("teste", pageable);
+		List<CardsSearchDTO> dto = cardService.cardSearchByNameUserCollection("teste", pageable);
 		
 		assertNotNull(dto);
 		assertThat(!dto.isEmpty());
@@ -193,7 +199,7 @@ public class CardServiceImplTest {
 		
 		Mockito.when(cardRepository.findByArchetype(anyInt())).thenReturn(cardList);
 		
-		List<CardOfArchetypeDTO> dto = impl.findCardByArchetype(1);
+		List<CardOfArchetypeDTO> dto = cardService.findCardByArchetype(1);
 		
 		assertEquals(2, dto.size());
 		assertEquals(cardList.get(0).getNome(), dto.get(0).getNome());
@@ -207,7 +213,7 @@ public class CardServiceImplTest {
 		Integer archId = 1;
 		
 		NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-			impl.findCardByArchetype(archId);			
+			cardService.findCardByArchetype(archId);			
 		  
 		});
 		
@@ -231,23 +237,130 @@ public class CardServiceImplTest {
 		Map<String, Integer> mapUser = Map.of("CCC",1 ,"DDD",2);
 		
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);		
-		//Mockito.when(impl.cardDecks(anyLong())).thenReturn(listDeck);		
-		doReturn(listDeck).when(impl).cardDecks(anyLong());
 		Mockito.when(relDeckCardsRepository.findByDeckIdAndCardNumber(any(), any()))
 			.thenReturn(List.of(ValidObjects.generateRelDeckCards()));		
 		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
-		doReturn(mapUser).when(impl).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
-		doReturn(mapKonami).when(impl).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
+		doReturn(listDeck).when(cardService).cardDecks(anyLong());
+		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
+		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
 		
-		CardDetailsDTO dto = impl.findCardByNumberWithDecks(1L);
+		CardDetailsDTO dto = cardService.findCardByNumberWithDecks(1L);
 		
 		assertNotNull(dto.getCard());
-			
+		assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
+		assertNotNull(dto.getQtdUserHaveByUserCollection().get("CCC"));
+					
+	}
+	
+	@Test
+	public void findQtdCardUserHaveByCollectionKONAMI() {
+		this.mockAuth();
+		
+		String collectionSource = "konami"; 
+		
+		List<Tuple> tupleList = new ArrayList<>();
+		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
+		
+		tupleList.add((Tuple)nativeQueryTupleTransformer
+				.transformTuple(new Object[]{new BigInteger("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
+		
+		Mockito.when(cardRepository.findQtdUserHaveByKonamiCollection(anyInt(), anyLong())).thenReturn(tupleList);
+		
+		Map<String, Integer> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
+		
+		assertNotNull(map);
+		assertNotNull(map.get("AAA"));
 		
 	}
 	
+	@Test
+	public void findQtdCardUserHaveByCollectionUSER() {
+		this.mockAuth();
+		String collectionSource = "user"; 
+		
+		List<Tuple> tupleList = new ArrayList<>();
+		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
+		
+		tupleList.add((Tuple)nativeQueryTupleTransformer
+				.transformTuple(new Object[]{new BigInteger("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
+		
+		Mockito.when(cardRepository.findQtdUserHaveByUserCollection(anyInt(), anyLong())).thenReturn(tupleList);
+		
+		Map<String, Integer> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
+		
+		assertNotNull(map);
+		assertNotNull(map.get("AAA"));
+	}
+	
+	@Test
+	public void searchCardDetailedWithCriteriasSuccess() {
+		
+		SearchCriteria c1 = new SearchCriteria();
+		c1.setKey("AAA");
+		c1.setOperation(SearchOperation.EQUAL);
+		c1.setOrPredicate(false);	
+		List<SearchCriteria> list = List.of(c1);
+		
+		List<Card> cardList = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));	
+		Page<Card> pageCard = new PageImpl<Card>(cardList);
+		
+		doReturn(pageCard).when(cardService).findAll(any(CardSpecification.class), any(Pageable.class));
+		
+		Page<Card> page = cardService.searchCardDetailed(list, null, pageable);
+		
+		assertNotNull(page);
+		assertEquals(page.getSize(), 2);
+		assertEquals(page.getContent().get(0).getNome(), cardList.get(0).getNome());	
+	}
+	
+	@Test
+	public void searchCardDetailedWithCriteriasError() {	
+		
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cardService.searchCardDetailed(null, null, pageable);		
+		  
+		});
+		
+		String expected = "Criterias is invalid";
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+	
+	}
+	
+	@Test
+	public void findCardsNotRegisteredWhenThereIsCardNotRegistered() {
+		
+		List<Long> allNumbers = List.of(1000L,5000L, 3000L, 2000L, 4000L,9000L,8000L);
+		List<Long> registered = List.of(1000L,5000L, 3000L, 2000L);
+		
+		Mockito.when(cardRepository.findAllCardsByListOfCardNumbers(anyList())).thenReturn(registered);
+		
+		List<Long> notRegistered = cardService.findCardsNotRegistered(allNumbers);
+		
+		assertNotNull(notRegistered);
+		assertTrue(notRegistered.size() == 3);
+		assertTrue(notRegistered.containsAll(List.of(4000L,9000L,8000L)));
+			
+	}
+	
+	@Test
+	public void findCardsNotRegisteredWhenThereIsNOCardNotRegistered() {
+		List<Long> allNumbers = List.of(1000L,5000L, 3000L, 2000L, 4000L,9000L,8000L);
+		
+		Mockito.when(cardRepository.findAllCardsByListOfCardNumbers(anyList())).thenReturn(null);
+		
+		List<Long> cardsNotRegistered = cardService.findCardsNotRegistered(allNumbers);
+				
+		assertNotNull(cardsNotRegistered);
+		assertTrue(cardsNotRegistered.size() == allNumbers.size());
+		assertTrue(cardsNotRegistered.containsAll(List.of(1000L,5000L, 3000L, 2000L, 4000L,9000L,8000L)));
+		
+	}
+	
+
 	private void mockAuth() {
 		UserDetailsImpl user = ValidObjects.generateValidUser();
 		

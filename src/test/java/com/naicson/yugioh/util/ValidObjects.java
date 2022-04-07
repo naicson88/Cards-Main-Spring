@@ -1,7 +1,14 @@
 package com.naicson.yugioh.util;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.naicson.yugioh.dto.RelUserCardsDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
@@ -97,5 +104,8 @@ public abstract class ValidObjects {
 		
 		return dto;
 	}
+	
+
+
 	
 }
