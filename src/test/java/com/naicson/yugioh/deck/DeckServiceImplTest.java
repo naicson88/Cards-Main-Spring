@@ -2,10 +2,13 @@
 package com.naicson.yugioh.deck;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
@@ -14,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,10 +39,13 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.naicson.yugioh.dao.DeckDAO;
 import com.naicson.yugioh.dto.RelUserCardsDTO;
+import com.naicson.yugioh.dto.RelUserDeckDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.DeckUsers;
+import com.naicson.yugioh.mocks.DeckUsersMock;
+import com.naicson.yugioh.mocks.RelUserDeckDTOMock;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
@@ -76,6 +83,18 @@ public class DeckServiceImplTest {
 	@BeforeEach
 	public void setup(){
 	    MockitoAnnotations.initMocks(this); //without this you will get NPE
+	}
+	
+	private UserDetailsImpl mockAuth() {
+		UserDetailsImpl user = ValidObjects.generateValidUser();
+		
+		Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
+        
+        return user;
 	}
 	
 	@Test
@@ -261,15 +280,54 @@ public class DeckServiceImplTest {
 		assertTrue(actual.contains(expected));
 	}
 	
-	private UserDetailsImpl mockAuth() {
-		UserDetailsImpl user = ValidObjects.generateValidUser();
+	@Test
+	public void searchAllDecksUserHaveContainingOneOrMore() {
+		this.mockAuth();
+		Long[] list = {10L, 30L, 40L};
+		List<RelUserDeckDTO> dto = List.of(RelUserDeckDTOMock.generateValidRelUserDeckDTO(), RelUserDeckDTOMock.generateValidRelUserDeckDTO());
 		
-		Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
-        
-        return user;
+		Mockito.when(dao.searchForDecksUserHave(anyLong(), anyString())).thenReturn(dto);
+		
+		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(list);
+		
+		assertNotNull(rel);
+		assertEquals(2, rel.size());
+		assertThat(dto.get(0).getQuantity() == rel.get(0).getQuantity());
 	}
+	
+	@Test
+	public void removeSetFromUsersCollectionsSuccessfully() {
+		
+		Optional <DeckUsers> opt = Optional.of(DeckUsersMock.generateValidDeckUsers()); 
+		
+		Mockito.when(deckUserRepository.findById(anyLong())).thenReturn(opt);
+		Mockito.when(dao.removeCardsFromUserSet(anyLong())).thenReturn(40);
+		doNothing().when(deckUserRepository).deleteById(anyLong());
+		
+		int qtdRemoved = deckService.removeSetFromUsersCollection(1L);
+		
+		assertEquals(40, qtdRemoved);
+		
+	}
+	
+	@Test
+	public void removeSetFromUsersCollectionsError() {
+		Long setId = 1L;
+		Optional <DeckUsers> opt = Optional.ofNullable(null);
+		
+		Mockito.when(deckUserRepository.findById(anyLong())).thenReturn(opt);
+		
+		NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
+			deckService.removeSetFromUsersCollection(setId);
+		  
+		});
+		
+		String expected = "Set not found with this code. Id = " + setId;
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+		
+	}
+	
+
 }

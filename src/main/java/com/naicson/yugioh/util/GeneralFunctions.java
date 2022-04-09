@@ -46,6 +46,19 @@ public abstract class GeneralFunctions {
 		return str;
 	}
 	
+	public static String transformArrayInStringForLong(Long[] array) {
+		
+		String str = "";
+
+		for (Long values : array) {
+			str += values;
+			str += ",";
+		}
+		str += "0";
+		
+		return str;
+	}
+	
     public static String momentAsString() {
     	String hour = String.valueOf(LocalDateTime.now().getHour());
     	String minutes = String.valueOf(LocalDateTime.now().getMinute());

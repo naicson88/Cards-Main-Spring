@@ -26,9 +26,9 @@ public interface DeckDetailService {
 
 	int addSetToUserCollection(Long originalDeckId) throws SQLException, ErrorMessage, Exception;
 
-	int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) throws SQLException, ErrorMessage;
+	int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove);
 
-	List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) throws SQLException, ErrorMessage;
+	List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds);
 
 	Long addDeck(Deck deck) throws SQLException, ErrorMessage;
 

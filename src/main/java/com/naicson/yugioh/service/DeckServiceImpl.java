@@ -173,11 +173,9 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 
 	@Override
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
-	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove)
-			throws SQLException, ErrorMessage {
+	@Transactional(rollbackFor = Exception.class)
+	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
 
-		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
 			int itemAtualizado;
@@ -192,36 +190,30 @@ public class DeckServiceImpl implements DeckDetailService {
 			if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0) {
 				itemAtualizado = dao.addDeckToUserCollection(originalDeckId, user.getId());
 
-				if (itemAtualizado < 1) {
-					throw new ErrorMessage("Unable to include Deck for User!");
-				}
+				if (itemAtualizado < 1) 
+					throw new NoSuchElementException("Unable to include Deck for User! Original Deck ID: " + originalDeckId.toString());
+				
 
 			} else {
 				itemAtualizado = dao.changeQuantitySpecificDeckUserHas(originalDeckId, user.getId(), flagAddOrRemove);
 
-				if (itemAtualizado < 1) {
-					throw new ErrorMessage("Unable to manege Deck for User!");
-				}
+				if (itemAtualizado < 1) 
+					throw new NoSuchElementException("Unable to manege Deck for User! Original Deck ID: " + originalDeckId.toString());
+				
 			}
 
 			int qtdAddedOrRemoved = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(),
 					flagAddOrRemove);
 
-			if (qtdAddedOrRemoved < 1) {
-				throw new ErrorMessage("Unable to include Cards for User!");
-			}
-
+			if (qtdAddedOrRemoved < 1)
+				throw new NoSuchElementException("Unable to include Cards for User! Original Deck ID: " + originalDeckId.toString());
+			
 			return qtdAddedOrRemoved;
 
-		} catch (ErrorMessage msg) {
-			throw msg;
-		} catch (Exception ex) {
-			throw ex;
-		}
 	}
 	
 	@Override
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
+	@Transactional(rollbackFor = Exception.class)
 	public int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove) {
 			
 			int qtdCardsAddedOrRemoved = 0;
@@ -241,9 +233,9 @@ public class DeckServiceImpl implements DeckDetailService {
 							int manegeQtd = dao.changeQuantityOfEspecifCardUserHas(userId, relation.getCard_set_code(),
 									flagAddOrRemove);
 
-							if (manegeQtd < 1) {
-								 new ErrorMessage("It was not possible to manege card to the user's collection!");
-							}
+							if (manegeQtd < 1) 
+								 throw new NoSuchElementException("It was not possible to manege card to the user's collection!");
+							
 
 							qtdCardsAddedOrRemoved++;
 
@@ -259,19 +251,16 @@ public class DeckServiceImpl implements DeckDetailService {
 							
 							int insertCard = dao.insertCardToUserCollection(rel);
 
-							if (insertCard < 1) {
-								 new ErrorMessage("It was not possible to add this Card to the user's collection.");
+							if (insertCard < 1) 
+								throw new NoSuchElementException("It was not possible to add this Card to the user's collection.");
 										
-							}
-
 							qtdCardsAddedOrRemoved++;
 						}
 					}
 
-				} else {
-					 new ErrorMessage("Check the Add or Remove parameter sent!");
-				}
-
+				} else 
+					throw new IllegalArgumentException("Check the Add or Remove parameter sent!");
+				
 			} 
 
 			return qtdCardsAddedOrRemoved;
@@ -280,61 +269,44 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 
 	@Override
-	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) throws SQLException, ErrorMessage {
-		try {
+	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
+		
+			if (decksIds == null || decksIds.length == 0)
+				throw new IllegalArgumentException("Invalid Array with Deck's Ids");
+						
+			UserDetailsImpl user = GeneralFunctions.userLogged();
 
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+			String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
 
-			if (user.getId() == 0) {
-				throw new ErrorMessage("Unable to query user decks, user ID not entered");
-			}
-
-			if (decksIds == null || decksIds.length == 0) {
-				throw new ErrorMessage("Unable to query user decks, decks IDs not entered");
-			}
-
-			String decksIdsString = "";
-
-			for (Long id : decksIds) {
-				decksIdsString += id;
-				decksIdsString += ",";
-			}
-			decksIdsString += "0";
+			if(decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
+				throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
 
 			List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
-
+			
 			return relUserDeckList;
 
-		} catch (ErrorMessage em) {
-			throw em;
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 	
 
 	@Override
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
-	public Long addDeck(Deck deck) throws SQLException, ErrorMessage {
-		Long id = 0L;
+	@Transactional(rollbackFor = Exception.class)
+	public Long addDeck(Deck deck)  {
 
-		if (deck != null) {
+		if (deck == null)
+			throw new IllegalArgumentException("Invalid Deck informed");
+			
 			dao = new DeckDAO();
-			id = dao.addDeck(deck);
-		} else {
-			throw new ErrorMessage("O deck informado não é válido.");
-		}
-
+			Long id = dao.addDeck(deck);
+		
 		return id;
 	}
 	
 	@Override
-	//@Transactional(rollbackFor = {Exception.class, ErrorMessage.class, SQLException.class})
+	@Transactional(rollbackFor = Exception.class)
 	public int addCardsToUserDeck(Long originalDeckId, Long generatedDeckId) {
 				
 			if (originalDeckId == null && generatedDeckId == null) 
-				 new ErrorMessage("Original deck or generated deck is null");
+				 new IllegalArgumentException("Original deck or generated deck is invalid.");
 					
 			int cardsAddedToDeck = dao.addCardsToDeck(originalDeckId, generatedDeckId);
 			
@@ -344,29 +316,21 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 
 	@Override
-	public int removeSetFromUsersCollection(Long setId) throws SQLException, ErrorMessage, Exception {
-	
-		// Consulta o deck pelo Id
+	@Transactional(rollbackFor = Exception.class)
+	public int removeSetFromUsersCollection(Long setId) {
+		
 		Optional<DeckUsers> dk = deckUserRepository.findById(setId);
 		
-		if(dk.isEmpty()) {
-			logger.error("Set not found with this code. Id = ".toUpperCase() + setId);
-			throw new ErrorMessage("Set not found with this code. Id = " + setId);
-		}
-		
+		if(dk.isEmpty()) 
+			throw new NoSuchElementException("Set not found with this code. Id = " + setId);
+			
 		DeckUsers setOrigem = dk.get();
-		
-		//Remove os cards da coleção do usuário. 
-		//int qtdRemoved = this.addOrRemoveCardsToUserCollection(setId, user.getId(), "R");
-		
-		//Remove os Cards do Set.
+
 		int qtdRemoved = dao.removeCardsFromUserSet(setId);
-		
-		//Remove o Set.
+
 		deckUserRepository.deleteById(setOrigem.getId());
 		
-		return qtdRemoved;
-		
+		return qtdRemoved;	
 	}
 
 	@Override

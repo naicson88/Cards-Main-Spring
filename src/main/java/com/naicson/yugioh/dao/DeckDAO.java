@@ -52,7 +52,7 @@ public class DeckDAO {
 		
 	 }
 
-	public int addDeckToUserCollection(Long originalDeckId, long userId) throws SQLException {
+	public int addDeckToUserCollection(Long originalDeckId, long userId) {
 		Query query = em.createNativeQuery("INSERT INTO TAB_REL_USER_DECK (user_id, deck_id, qtd) values(:user_id, :deck_id, 1)")
 				.setParameter("user_id", userId)
 				.setParameter("deck_id", originalDeckId);
@@ -64,11 +64,10 @@ public class DeckDAO {
 		
 	}
 	
-	public Long addDeck(Deck deck) throws SQLException, ErrorMessage {
+	public Long addDeck(Deck deck) {
 		
-		if(deck == null) {
-			throw new ErrorMessage("Deck is null.");
-		}	
+		if(deck == null) 
+			throw new IllegalArgumentException("Deck is null.");		
 		
 			Deck d = deckRepository.save(deck);
 			deckRepository.flush();
@@ -208,16 +207,15 @@ public class DeckDAO {
 	}
 
 	
-	public int removeCardsFromUserSet(Long setId) throws SQLException, Exception, ErrorMessage {
-		int removed = 0;
-		
-		if(setId == null || setId == 0) {
-			throw new ErrorMessage("Set id was not informed.");
-		}		
+	public int removeCardsFromUserSet(Long setId) {
+			
+		if(setId == null || setId == 0)
+			throw new IllegalArgumentException("Set id was not informed.");
+				
 		Query query = em.createNativeQuery("DELETE FROM tab_rel_deckusers_cards WHERE deck_id = :setId")
 				.setParameter("setId", setId);	
 		
-		removed = query.executeUpdate();
+		int removed = query.executeUpdate();
 		
 		return removed;
 	}
