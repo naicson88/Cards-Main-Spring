@@ -101,8 +101,8 @@ public class DeckController {
 	}
 	
 	@GetMapping("/edit-deck")
-	public ResponseEntity<Deck> editDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
-		Deck deck = deckService.editDeck(deckId, setSource);
+	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
+		Deck deck = deckService.editUserDeck(deckId);
 		
 		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
 	}

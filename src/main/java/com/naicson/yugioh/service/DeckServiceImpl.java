@@ -334,12 +334,6 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public List<Deck> findByNomeContaining(String nomeDeck) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Card> cardsOfDeck(Long deckId, String table) {
 		
 		List<Card> cards = dao.cardsOfDeck(deckId, table);
@@ -352,23 +346,21 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 
 	@Override
-	public Deck deckAndCards(Long deckId, String setSource) throws Exception {
+	public Deck deckAndCards(Long deckId, String deckSource) {
 		
 		Deck deck = new Deck();
 		
-		if(!("Konami").equalsIgnoreCase(setSource) && !("User").equalsIgnoreCase(setSource)) {
+		if(!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource)) 
+			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);			
 			
-			logger.error("INVALID SETTYPE. SETTYPE WAS = " + setSource);
-			throw new IllegalArgumentException("SetType invalid. SetType was = " + setSource);			
-		}	
 		
-		deck =  this.returnDeckWithCards(deckId, setSource);
+		deck =  this.returnDeckWithCards(deckId, deckSource);
 		deck = this.countQtdCardRarityInTheDeck(deck);
 		
 		return deck;
 	}
 	
-	private Deck returnDeckWithCards(Long deckId, String setSource) {
+	private Deck returnDeckWithCards(Long deckId, String deckSource) {
 		
 		if(deckId == null || deckId == 0)
 			throw new  IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
@@ -376,23 +368,22 @@ public class DeckServiceImpl implements DeckDetailService {
 		Deck deck = new Deck();
 		List<Card> mainDeck = null;
 		
-		if("konami".equalsIgnoreCase(setSource))
+		if("konami".equalsIgnoreCase(deckSource))
 			deck = this.findById(deckId);
 		
-		else if("user".equalsIgnoreCase(setSource)) {
+		else if("user".equalsIgnoreCase(deckSource)) {
 			DeckUsers deckUser = deckUserRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
 			deck = Deck.deckFromDeckUser(deckUser);
-		}		
-			
-		if(deck == null) {
-			logger.error("Deck not found. Id informed: ".toUpperCase() + deckId);
+		} else
+			throw new IllegalArgumentException("Invalid Deck Source: " + deckSource);
+		
+		if(deck == null)
 			throw new EntityNotFoundException("Deck not found. Id informed: " + deckId);
-		}
-			
-		String table = ("konami").equalsIgnoreCase(setSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
+				
+		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
 		
 		mainDeck = this.cardsOfDeck(deckId, table);
-		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, setSource);
+		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);
 		
 		deck.setCards(mainDeck);
 		deck.setRel_deck_cards(relDeckCards);
@@ -400,10 +391,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;		
 	}
 	
-	private Deck editUserDeck(Long deckId) throws ErrorMessage {
+	@Override
+	public Deck editUserDeck(Long deckId) {
 		
-		if(deckId == null || ("").equals(deckId))
-			throw new  IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
+		if(deckId == null || deckId == 0)
+			throw new  IllegalArgumentException("Invalid Deck Id: " + deckId);
 		
 		Deck deck = new Deck();
 		
@@ -414,10 +406,9 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 		
-		if(user.getId() != deckUser.getUserId()) {
-			logger.error("This Deck dont belongs to the user ".toUpperCase() + user.getId());
-			throw new ErrorMessage("This Deck dont belongs to the user " + user.getId());
-		}
+		if(user.getId() != deckUser.getUserId()) 
+			throw new RuntimeException("This Deck dont belong to user: " + user.getId());
+		
 		
 		deck.setNome(deckUser.getNome());
 		deck.setImagem(deckUser.getImagem());
@@ -426,7 +417,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		mainDeck = this.consultMainDeck(deckId);
 		
-		List<Card> sideDeckCards = dao.consultSideDeckCards(deckId, "User");
+		List<Card> sideDeckCards = this.consultSideDeckCards(deckId, "User");
 		List<Card> extraDeck = this.consultExtraDeckCards(deckId, "User");
 		
 		deck.setCards(mainDeck);
@@ -438,10 +429,21 @@ public class DeckServiceImpl implements DeckDetailService {
 		int sumDecks = deck.getCards().size() + deck.getExtraDeck().size() + deck.getSideDeckCards().size();
 		
 		if(sumDecks != deck.getRel_deck_cards().size())
-			throw new ErrorMessage("Cards quantity don't match relation quantity." + 
+			throw new RuntimeException("Cards quantity don't match relation quantity." + 
 					"Param received: deckId = " + deckId + " setType = User");
 		
 		return deck;
+	}
+	
+	@Override
+	public List<Card> consultSideDeckCards(Long deckId, String deckSource) {
+		
+		if(deckId == null || deckId == 0 || ( !"user".equalsIgnoreCase(deckSource) && !"konami".equalsIgnoreCase(deckSource)))
+			throw new IllegalArgumentException("Invalid Deck Id or Deck Source");
+		
+		List<Card> extraDeckCards = dao.consultSideDeckCards(deckId, deckSource);
+		
+		return extraDeckCards;
 	}
 	
 	@Override
@@ -601,26 +603,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			card.getCard_raridade().equals(CardRarity.ULTRA_RARE.getCardRarity())).count());
 		
 		//Cards sem raridade definida
-		return deck;
-	}
-	
-	@Override
-	public Deck editDeck(Long deckId, String setSource) {
-		Deck deck = new Deck();
-		
-		try {
-			//Validar futuramente se é Konami deck ou Userdeck.
-			 deck = this.editUserDeck(deckId);
-
-		}catch(ErrorMessage em) {
-			logger.error(em.getMsg().toUpperCase());
-		}
-		 
-		 if(deck == null || deck.getCards().isEmpty()) {
-			 logger.error("Deck is invalid. Informed ID: ".toUpperCase() + deckId);
-			 throw new EntityNotFoundException("Deck is invalid. Informed ID: " + deckId);
-		 }
-		
 		return deck;
 	}
 

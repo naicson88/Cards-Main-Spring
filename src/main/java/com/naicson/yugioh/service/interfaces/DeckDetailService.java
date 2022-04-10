@@ -12,13 +12,11 @@ import com.naicson.yugioh.dto.RelUserDeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public interface DeckDetailService {
 	
-	List<Deck> findByNomeContaining(String nomeDeck);
 	
 	List<Card> cardsOfDeck(Long deckId, String table) throws ErrorMessage;
 	 
@@ -55,11 +53,13 @@ public interface DeckDetailService {
 	
 	Deck countQtdCardRarityInTheDeck(Deck deck);
 
-	Deck editDeck(Long deckId, String deckType);
-
 	List<RelDeckCards> relDeckCards(Long deckId, String setSource);
 	
 	Deck saveKonamiDeck(Deck kDeck);
+
+	List<Card> consultSideDeckCards(Long deckId, String deckSource);
+
+	Deck editUserDeck(Long deckId);
 	
 	
 }

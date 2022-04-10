@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
@@ -41,6 +42,7 @@ import com.naicson.yugioh.dao.DeckDAO;
 import com.naicson.yugioh.dto.RelUserCardsDTO;
 import com.naicson.yugioh.dto.RelUserDeckDTO;
 import com.naicson.yugioh.dto.set.DeckDTO;
+import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.DeckUsers;
@@ -328,6 +330,94 @@ public class DeckServiceImplTest {
 		assertTrue(actual.contains(expected));
 		
 	}
+	
+	@Test
+	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsUser() {
+		
+		Long deckId = 1L;
+		String deckSource = "user";	
+		Optional<DeckUsers> du = Optional.of(DeckUsersMock.generateValidDeckUsers());
+		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
+		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
+		
+		Mockito.when(deckUserRepository.findById(1L)).thenReturn(du);
+		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_deckusers_cards");
+		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
+		
+		Deck deck = deckService.deckAndCards(deckId, deckSource);
+		
+		assertNotNull(deck);
+		assertEquals(deck.getCards().size(), mainDeck.size());
+		assertEquals(deck.getRel_deck_cards().size(), rel.size());
+			
+	}
+	
+	@Test
+	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsKonami() {
+		
+		Long deckId = 1L;
+		String deckSource = "konami";	
+		Deck deck = ValidObjects.generateValidDeck();
+		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
+		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
+		
+		Mockito.doReturn(deck).when(deckService).findById(deckId);
+		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_deck_cards");
+		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
+		
+		Deck deckReturned = deckService.deckAndCards(deckId, deckSource);
+		
+		assertNotNull(deckReturned);
+		assertEquals(deckReturned.getCards().size(), mainDeck.size());
+		assertEquals(deckReturned.getRel_deck_cards().size(), rel.size());
+			
+	}
+	
+	@Test
+	public void testDeckAndCardWithInvalidSource() {
+		
+		Long deckId = 1L;
+		String deckSource = "Invalid Source";	
+		
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			deckService.deckAndCards(deckId, deckSource);	  
+		});
+		
+		String expected = "Deck Source invalid: " + deckSource;
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+			
+	}
+	
+	@Test
+	public void editUserDeckSuccessfully() {
+		UserDetailsImpl user = this.mockAuth();
+		user.setId(1);
+		Long deckId = 1L;
+		
+		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
+		List<Card> sideDeck = List.of(ValidObjects.generateValidCard(3), ValidObjects.generateValidCard(4));
+		List<Card> extraDeck = Collections.emptyList();
+		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards(),
+				ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
+		Optional<DeckUsers> du = Optional.of(DeckUsersMock.generateValidDeckUsers());
+		
+		Mockito.when(deckUserRepository.findById(deckId)).thenReturn(du);
+		doReturn(mainDeck).when(deckService).consultMainDeck(deckId);
+		doReturn(sideDeck).when(deckService).consultSideDeckCards(deckId, "User");
+		doReturn(extraDeck).when(deckService).consultExtraDeckCards(deckId, "User");
+		doReturn(rel).when(deckService).relDeckUserCards(deckId);
+		
+		Deck deck = deckService.editUserDeck(deckId);
+		
+		assertNotNull(deck);
+		assertThat(deck.getCards().contains(mainDeck.get(0)));
+		assertThat(deck.getSideDeckCards().contains(sideDeck.get(0)));
+		assertTrue(deck.getExtraDeck().isEmpty());
+	}
+	
+	
 	
 
 }
