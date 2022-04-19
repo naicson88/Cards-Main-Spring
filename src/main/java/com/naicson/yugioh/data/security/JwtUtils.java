@@ -1,4 +1,4 @@
-package com.naicson.yugioh.security;
+package com.naicson.yugioh.data.security;
 
 import java.util.Date;
 

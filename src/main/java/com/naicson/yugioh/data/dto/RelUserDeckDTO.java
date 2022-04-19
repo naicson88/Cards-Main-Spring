@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dto;
+package com.naicson.yugioh.data.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

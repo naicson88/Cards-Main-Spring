@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dao;
+package com.naicson.yugioh.data.dao;
 
 import java.lang.annotation.Native;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import javax.persistence.Tuple;
 
 import org.springframework.stereotype.Repository;
 
-import com.naicson.yugioh.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 
 @Repository
 public class CardDAO {

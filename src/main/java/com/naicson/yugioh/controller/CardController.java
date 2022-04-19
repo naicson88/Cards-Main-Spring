@@ -14,25 +14,20 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-
-import com.naicson.yugioh.dto.cards.CardAndSetsDTO;
-import com.naicson.yugioh.dto.cards.CardDetailsDTO;
-import com.naicson.yugioh.dto.cards.CardOfUserDetailDTO;
-import com.naicson.yugioh.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
+import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
@@ -40,9 +35,7 @@ import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
-
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
-
 import com.naicson.yugioh.util.search.SearchCriteria;
 
 

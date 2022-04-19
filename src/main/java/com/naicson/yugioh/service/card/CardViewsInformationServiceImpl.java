@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.home.RankingForHomeDTO;
+import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.stats.CardViewsInformation;
 import com.naicson.yugioh.repository.CardRepository;

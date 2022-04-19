@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dao;
+package com.naicson.yugioh.data.dao;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -18,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.RelUserDeckDTO;
-import com.naicson.yugioh.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
@@ -306,7 +306,7 @@ public class DeckDAO {
 			Query query = em.createNativeQuery("insert into tab_rel_deckusers_cards (deck_id, card_numero, card_raridade, card_set_code, card_price, dt_criacao, "
 					+ "is_side_deck) values (:deck_id,:card_numero, :card_raridade, :card_set_code, :card_price, :dt_criacao, :is_side_deck )")
 			.setParameter("deck_id", deckId)
-			.setParameter("card_numero", rel.getCard_numero())
+			.setParameter("card_numero", rel.getCardNumber())
 			.setParameter("card_raridade", rel.getCard_raridade())
 			.setParameter("card_set_code", rel.getCard_set_code())
 			.setParameter("card_price", rel.getCard_price())

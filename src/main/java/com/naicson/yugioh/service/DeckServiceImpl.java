@@ -21,10 +21,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.dao.DeckDAO;
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.RelUserDeckDTO;
-import com.naicson.yugioh.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dao.DeckDAO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;

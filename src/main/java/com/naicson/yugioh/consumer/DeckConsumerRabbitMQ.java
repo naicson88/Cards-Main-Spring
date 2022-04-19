@@ -2,7 +2,6 @@ package com.naicson.yugioh.consumer;
 
 import java.util.Date;
 
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,14 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.dto.KonamiDeck;
+import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.card.CardRegistry;
-import com.naicson.yugioh.util.enums.SetType;
-
 
 @Component
 public class DeckConsumerRabbitMQ {
@@ -34,7 +32,7 @@ public class DeckConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deck}")
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	private void consumer(KonamiDeck kDeck) {
 		
 		try {
@@ -54,15 +52,15 @@ public class DeckConsumerRabbitMQ {
 			logger.info("Deck successfully saved!");
 			
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error("DeckConsumer: " + e.getLocalizedMessage());
 		}			
 	}
 	
 	private Deck createNewDeck(KonamiDeck kDeck) {
 		
-		if(kDeck == null) {
+		if(kDeck == null) 
 			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
-		}
+		
 		
 		Deck deck = new Deck();
 		deck.setDt_criacao(new Date());

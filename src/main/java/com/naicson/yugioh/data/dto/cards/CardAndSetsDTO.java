@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dto.cards;
+package com.naicson.yugioh.data.dto.cards;
 
 import java.util.Map;
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.security.JwtUtils;
 import com.naicson.yugioh.entity.auth.ERole;
 import com.naicson.yugioh.entity.auth.JwtResponse;
 import com.naicson.yugioh.entity.auth.LoginRequest;
@@ -28,7 +29,6 @@ import com.naicson.yugioh.entity.auth.SignupRequest;
 import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
-import com.naicson.yugioh.security.JwtUtils;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
 

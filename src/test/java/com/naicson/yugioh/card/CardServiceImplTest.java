@@ -43,12 +43,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.naicson.yugioh.dao.CardDAO;
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.cards.CardDetailsDTO;
-import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
-import com.naicson.yugioh.dto.cards.CardOfUserDetailDTO;
-import com.naicson.yugioh.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.data.dao.CardDAO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
+import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.Deck;

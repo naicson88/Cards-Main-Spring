@@ -1,6 +1,6 @@
 package com.naicson.yugioh.mocks;
 
-import com.naicson.yugioh.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 
 public class RelUserDeckDTOMock {
 	

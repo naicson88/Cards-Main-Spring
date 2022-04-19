@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dto.home;
+package com.naicson.yugioh.data.dto.home;
 
 import java.util.List;
 

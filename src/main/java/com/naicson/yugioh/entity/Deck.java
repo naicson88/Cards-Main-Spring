@@ -55,6 +55,7 @@ public class Deck implements Serializable {
 	@ManyToOne()
 	@JoinColumn(name = "set_collection_id", insertable = true, referencedColumnName = "id", nullable = true)
 	private SetCollection setCollection;
+	
 	@Transient
 	private List<Card> cards;
 	@Transient
@@ -189,19 +190,6 @@ public class Deck implements Serializable {
 		this.cards = cards;
 	}
 	
-	
-
-
-	@Override
-	public String toString() {
-		return "Deck [id=" + id + ", nome=" + nome + ", imagem=" + imagem + ", nomePortugues=" + nomePortugues
-				+ ", qtd_cards=" + qtd_cards + ", qtd_comuns=" + qtd_comuns + ", qtd_raras=" + qtd_raras
-				+ ", qtd_super_raras=" + qtd_super_raras + ", qtd_ulta_raras=" + qtd_ultra_raras + ", lancamento="
-				+ lancamento + ", cards=" + cards + "]";
-	}
-
-	
-
 	public String getSetType() {
 		return setType;
 	}
@@ -233,5 +221,7 @@ public class Deck implements Serializable {
 	public void setSetCollection(SetCollection setCollection) {
 		this.setCollection = setCollection;
 	}
+	
+	
 		
 }

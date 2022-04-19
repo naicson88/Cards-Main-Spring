@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.repository.ArchetypeRepository;

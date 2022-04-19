@@ -31,6 +31,7 @@ public class SetCollection {
 	private Boolean onlyDefaultDeck;
 	private Date releaseDate;
 	private Date registrationDate;
+	private Boolean isSpeedDuel;
 	
 	@OneToMany(mappedBy = "setCollection", cascade = CascadeType.ALL)
 	private List<Deck> decks;
@@ -96,6 +97,14 @@ public class SetCollection {
 
 	public void setOnlyDefaultDeck(Boolean onlyDefaultDeck) {
 		this.onlyDefaultDeck = onlyDefaultDeck;
+	}
+
+	public Boolean getIsSpeedDuel() {
+		return isSpeedDuel;
+	}
+
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
 	}
 		
 }

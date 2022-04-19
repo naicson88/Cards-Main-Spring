@@ -8,12 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.cards.CardAndSetsDTO;
-import com.naicson.yugioh.dto.cards.CardDetailsDTO;
-import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
-import com.naicson.yugioh.dto.cards.CardOfUserDetailDTO;
-import com.naicson.yugioh.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.CardAndSetsDTO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
+import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;

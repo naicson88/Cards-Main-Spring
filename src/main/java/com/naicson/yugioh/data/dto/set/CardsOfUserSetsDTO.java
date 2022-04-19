@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dto.set;
+package com.naicson.yugioh.data.dto.set;
 
 import java.math.BigInteger;
 

@@ -1,4 +1,4 @@
-package com.naicson.yugioh.dto;
+package com.naicson.yugioh.data.dto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 
@@ -22,6 +23,7 @@ public class KonamiDeck implements Serializable{
 	private Date lancamento;
 	private String setType;
 	private List<CardYuGiOhAPI> cardsToBeRegistered;
+	@JsonProperty("relDeckCards")
 	private List<RelDeckCards> relDeckCards;
 	
 	public Long getId() {
@@ -67,17 +69,19 @@ public class KonamiDeck implements Serializable{
 	public void setListRelDeckCards(List<RelDeckCards> listRelDeckCards) {
 		this.relDeckCards = listRelDeckCards;
 	}
-	@Override
-	public String toString() {
-		return "KonamiDeck [id=" + id + ", imagem=" + imagem + ", nome=" + nome + ", nomePortugues=" + nomePortugues
-				+ ", lancamento=" + lancamento + ", setType=" + setType + ", listRelDeckCards=" + relDeckCards
-				+ "]";
-	}
+
 	public List<CardYuGiOhAPI> getCardsToBeRegistered() {
 		return cardsToBeRegistered;
 	}
 	public void setCardsToBeRegistered(List<CardYuGiOhAPI> cardsToBeRegistered) {
 		this.cardsToBeRegistered = cardsToBeRegistered;
+	}
+	
+	@Override
+	public String toString() {
+		return "KonamiDeck [id=" + id + ", imagem=" + imagem + ", nome=" + nome + ", nomePortugues=" + nomePortugues
+				+ ", lancamento=" + lancamento + ", setType=" + setType + ", cardsToBeRegistered=" + cardsToBeRegistered
+				+ ", relDeckCards=" + relDeckCards + "]";
 	}
 	
 	
