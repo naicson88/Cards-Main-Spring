@@ -13,7 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.util.enums.SetCollectionTypes;
 
@@ -32,7 +36,6 @@ public class SetCollection {
 	private Date releaseDate;
 	private Date registrationDate;
 	private Boolean isSpeedDuel;
-	
 	@OneToMany(mappedBy = "setCollection", cascade = CascadeType.ALL)
 	private List<Deck> decks;
 	@Enumerated(EnumType.STRING)
@@ -40,6 +43,21 @@ public class SetCollection {
 
 	public SetCollection() {
 		
+	}
+	
+	public static SetCollection setCollectionDtoToEntity(SetCollectionDto dto) {
+		
+		SetCollection collection = new SetCollection();
+		collection.setImgPath(dto.getImgPath());
+		collection.setIsSpeedDuel(dto.getIsSpeedDuel());
+		collection.setName(dto.getName());
+		collection.setOnlyDefaultDeck(dto.getOnlyDefaultDeck());
+		collection.setPortugueseName(dto.getPortugueseName());
+		collection.setRegistrationDate(new Date());
+		collection.setReleaseDate(dto.getReleaseDate());
+		collection.setSetCollectionType(SetCollectionTypes.valueOf(dto.getSetType()));
+		
+		return collection;
 	}
 	
 	public Integer getId() {

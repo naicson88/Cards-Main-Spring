@@ -28,10 +28,7 @@ import com.naicson.yugioh.util.enums.SetType;
 @Entity
 @Table(name = "tab_decks")
 public class Deck implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -74,8 +71,7 @@ public class Deck implements Serializable {
 		deck.setId(deckUser.getId());
 		deck.setNome(deckUser.getNome());
 		deck.setImagem(deckUser.getImagem());
-		return deck;
-		
+		return deck;		
 	}
 	
 	public List<Card> getExtraDeck() {

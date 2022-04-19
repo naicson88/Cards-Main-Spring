@@ -1,6 +1,5 @@
 package com.naicson.yugioh.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
@@ -22,7 +22,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 	Logger logger = LoggerFactory.getLogger(RelDeckCardsServiceImpl.class);
 
 	@Override
-	public List<RelDeckCards> saveRelDeckCards(List<RelDeckCards> listRelDeckCards) throws Exception, IllegalArgumentException, SQLException {
+	public List<RelDeckCards> saveRelDeckCards(List<RelDeckCards> listRelDeckCards) {
 		
 		List<RelDeckCards> relSaved = new ArrayList<>();
 		
@@ -44,7 +44,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 				});
 				
 				if(listRelDeckCards.size() != relSaved.size()) {
-					throw new Exception("It was not possible save all Relations");
+					throw new ErrorMessage("It was not possible save all Relations");
 				}	
 				
 			return relSaved;
