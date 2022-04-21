@@ -71,6 +71,8 @@ public class SetCollectionConsumerRabbitMQ {
 //				logger.info("Deck successfully saved! Deck: {}" , newDeck.toString());
 //				
 //			});
+			
+			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );
 //			
 			
 		}catch (Exception e) {
