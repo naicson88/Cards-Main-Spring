@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.util.enums.SetType;
 
 @Component
 public class ConsumerUtils {
@@ -27,7 +28,8 @@ public class ConsumerUtils {
 			deck.setNome(kDeck.getNome().trim());
 			deck.setNomePortugues(kDeck.getNomePortugues());
 			deck.setRel_deck_cards(kDeck.getListRelDeckCards());
-			deck.setSetType(kDeck.getSetType());
+			deck.setSetType(SetType.valueOf(kDeck.getSetType()).toString());
+			deck.setIsSpeedDuel(kDeck.getIsSpeedDuel());
 			
 			return deck;
 		}

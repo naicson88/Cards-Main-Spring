@@ -44,34 +44,34 @@ public class SetCollectionConsumerRabbitMQ {
 		
 		try {	
 			
+			logger.info("Start consuming new Set Collection: {}" , json);
+			
 			SetCollectionDto setCollection = convertJsonToSetCollectionDto(json);
 			
 			SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 		
-			setCollectionEntity.setName("");//teste
-			
 			setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
 			
-			setCollection.getDecks().stream()
-			.filter(deck -> deck.getCardsToBeRegistered().size() > 0)
-			.forEach(deck -> cardRegistry.RegistryCardFromYuGiOhAPI(deck));
-			
-			setCollection.getDecks().stream().forEach(konamiDeck -> {
-				
-				Deck newDeck = ConsumerUtils.createNewDeck(konamiDeck);
-				
-				newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
-				
-				Long deckId = deckService.saveKonamiDeck(newDeck).getId();
-				
-				newDeck = ConsumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
-				
-				relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
-				
-				logger.info("Deck successfully saved! Deck: {}" , newDeck.toString());
-				
-			});
-			
+//			setCollection.getDecks().stream()
+//			.filter(deck -> deck.getCardsToBeRegistered().size() > 0)
+//			.forEach(deck -> cardRegistry.RegistryCardFromYuGiOhAPI(deck));
+//			
+//			setCollection.getDecks().stream().forEach(konamiDeck -> {
+//				
+//				Deck newDeck = ConsumerUtils.createNewDeck(konamiDeck);
+//				
+//				newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
+//				
+//				Long deckId = deckService.saveKonamiDeck(newDeck).getId();
+//				
+//				newDeck = ConsumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
+//				
+//				relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
+//				
+//				logger.info("Deck successfully saved! Deck: {}" , newDeck.toString());
+//				
+//			});
+//			
 			
 		}catch (Exception e) {
 			logger.error("Error consuming Set Collection: {} " , e.getMessage());

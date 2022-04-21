@@ -4,14 +4,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.KonamiDeck;
+import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.card.CardRegistry;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class DeckConsumerRabbitMQ {
@@ -29,9 +36,13 @@ public class DeckConsumerRabbitMQ {
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deck}")
 	@Transactional(rollbackFor = Exception.class)
-	private void consumer(KonamiDeck kDeck) {
+	private void consumer(String json) {
 		
 		try {
+			
+			logger.info("Start consuming new KonamiDeck: {}" , json);
+			
+			KonamiDeck kDeck = convertJsonToSetCollectionDto(json);
 			
 			cardRegistry.RegistryCardFromYuGiOhAPI(kDeck);
 			
@@ -51,6 +62,28 @@ public class DeckConsumerRabbitMQ {
 			logger.error("DeckConsumer: " + e.getLocalizedMessage());
 		}			
 	}
+	
+	private KonamiDeck convertJsonToSetCollectionDto(String json) {
+			
+		try {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+			
+			KonamiDeck dto = mapper.readValue(json, KonamiDeck.class);
+			
+			return dto;
+			
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+		}
 	
 //	private Deck createNewDeck(KonamiDeck kDeck) {
 //		

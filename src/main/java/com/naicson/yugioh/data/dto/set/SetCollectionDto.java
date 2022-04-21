@@ -16,7 +16,7 @@ public class SetCollectionDto {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date releaseDate;
 	private String setType;
-	private List<KonamiDeck> decks;
+	private List<Integer> decks;
 	private Boolean isSpeedDuel;
 
 	
@@ -64,13 +64,15 @@ public class SetCollectionDto {
 		this.deckParameters = deckParameters;
 	}
 
-	public List<KonamiDeck> getDecks() {
+	public List<Integer> getDecks() {
 		return decks;
 	}
-	public void setDecks(List<KonamiDeck> decks) {
+	public void setDecks(List<Integer> decks) {
 		this.decks = decks;
 	}
-	
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
 	public boolean getIsSpeedDuel() {
 		return isSpeedDuel;
 	}

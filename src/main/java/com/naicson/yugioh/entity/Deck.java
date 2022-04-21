@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -43,15 +46,16 @@ public class Deck implements Serializable {
 	private Long qtd_comuns;
 	private Long qtd_raras;
 	private Long qtd_super_raras;
-	private Long qtd_ultra_raras;	
+	private Long qtd_ultra_raras;
+	private Long qtd_secret_raras;
 	private Date lancamento;	
 	@Column(name = "set_type")
 	private String setType;
 	@Column(name = "dt_criacao")
 	private Date dt_criacao;
-	@ManyToOne()
-	@JoinColumn(name = "set_collection_id", insertable = true, referencedColumnName = "id", nullable = true)
-	private SetCollection setCollection;
+	@ManyToMany(mappedBy = "decks")
+	private List<SetCollection> setCollection;
+	private Boolean isSpeedDuel;
 	
 	@Transient
 	private List<Card> cards;
@@ -72,6 +76,10 @@ public class Deck implements Serializable {
 		deck.setNome(deckUser.getNome());
 		deck.setImagem(deckUser.getImagem());
 		return deck;		
+	}
+	
+	public Deck( Long id) {
+		this.id = id;
 	}
 	
 	public List<Card> getExtraDeck() {
@@ -210,14 +218,29 @@ public class Deck implements Serializable {
 		this.dt_criacao = dt_criacao;
 	}
 
-	public SetCollection getSetCollection() {
+	public List<SetCollection> getSetCollection() {
 		return setCollection;
 	}
 
-	public void setSetCollection(SetCollection setCollection) {
+	public void setSetCollection(List<SetCollection> setCollection) {
 		this.setCollection = setCollection;
 	}
-	
-	
+
+	public Boolean getIsSpeedDuel() {
+		return isSpeedDuel;
+	}
+
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
+
+	public Long getQtd_secret_raras() {
+		return qtd_secret_raras;
+	}
+
+	public void setQtd_secret_raras(Long qtd_secret_raras) {
+		this.qtd_secret_raras = qtd_secret_raras;
+	}
+
 		
 }

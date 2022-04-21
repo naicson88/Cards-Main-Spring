@@ -27,6 +27,7 @@ public class KonamiDeck implements Serializable{
 	@JsonProperty("relDeckCards")
 	private List<RelDeckCards> relDeckCards;
 	private Integer setCollectionId;
+	private Boolean isSpeedDuel;
 	
 	public Long getId() {
 		return id;
@@ -86,17 +87,25 @@ public class KonamiDeck implements Serializable{
 		this.setCollectionId = setCollectionId;
 	}
 	
-	@Override
-	public String toString() {
-		return "KonamiDeck [id=" + id + ", imagem=" + imagem + ", nome=" + nome + ", nomePortugues=" + nomePortugues
-				+ ", lancamento=" + lancamento + ", setType=" + setType + ", cardsToBeRegistered=" + cardsToBeRegistered
-				+ ", relDeckCards=" + relDeckCards + ", setCollectionId=" + setCollectionId + "]";
-	}
 	public String getRequestSource() {
 		return requestSource;
 	}
 	public void setRequestSource(String requestSource) {
 		this.requestSource = requestSource;
+	}
+	public Boolean getIsSpeedDuel() {
+		return isSpeedDuel;
+	}
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
+	
+	@Override
+	public String toString() {
+		return "KonamiDeck [id=" + id + ", requestSource=" + requestSource + ", imagem=" + imagem + ", nome=" + nome
+				+ ", nomePortugues=" + nomePortugues + ", lancamento=" + lancamento + ", setType=" + setType
+				+ ", cardsToBeRegistered=" + cardsToBeRegistered + ", relDeckCards=" + relDeckCards
+				+ ", setCollectionId=" + setCollectionId + ", isSpeedDuel=" + isSpeedDuel + "]";
 	}
 	
 	

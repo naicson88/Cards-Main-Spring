@@ -601,12 +601,14 @@ public class DeckServiceImpl implements DeckDetailService {
 			card.getCard_raridade().equals(CardRarity.SUPER_RARE.getCardRarity())).count());
 		deck.setQtd_ultra_raras(deck.getRel_deck_cards().stream().filter(card -> 
 			card.getCard_raridade().equals(CardRarity.ULTRA_RARE.getCardRarity())).count());
+		deck.setQtd_secret_raras(deck.getRel_deck_cards().stream().filter(card -> 
+			card.getCard_raridade().equals(CardRarity.SECRET_RARE.getCardRarity())).count());
 		
-		//Cards sem raridade definida
 		return deck;
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Deck saveKonamiDeck(Deck kDeck) {
 		
 		try {

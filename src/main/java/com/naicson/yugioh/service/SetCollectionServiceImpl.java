@@ -36,10 +36,10 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		if(setCollection.getOnlyDefaultDeck() == null)
 			throw new IllegalArgumentException("Invalid Only default Deck definition.");
-		
-		if(CollectionUtils.isEmpty(setCollection.getDecks()))
-			throw new IllegalArgumentException("Invalid Deck for Set Collection.");
-		
+//		
+//		if(CollectionUtils.isEmpty(setCollection.getDecks()))
+//			throw new IllegalArgumentException("Invalid Deck for Set Collection.");
+//		
 		if(StringUtils.isEmpty(setCollection.getImgPath()))
 			throw new IllegalArgumentException("Invalid Image path for Set Collection.");
 		
