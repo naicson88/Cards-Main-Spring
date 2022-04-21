@@ -24,7 +24,7 @@ public class ConsumerUtils {
 			deck.setDt_criacao(new Date());
 			deck.setImagem(kDeck.getImagem());
 			deck.setLancamento(kDeck.getLancamento());
-			deck.setNome(adjustDeckName(kDeck.getNome()));
+			deck.setNome(kDeck.getNome().trim());
 			deck.setNomePortugues(kDeck.getNomePortugues());
 			deck.setRel_deck_cards(kDeck.getListRelDeckCards());
 			deck.setSetType(kDeck.getSetType());
@@ -32,20 +32,20 @@ public class ConsumerUtils {
 			return deck;
 		}
 	
-	public static String adjustDeckName(String rawName) {
-		
-		if(StringUtils.containsIgnoreCase(rawName,"Structure" )) {
-			rawName = rawName.replace("Structure", "");
-
-			if(StringUtils.containsIgnoreCase(rawName,"Deck"))
-				rawName = rawName.replace("Deck", "");
-	
-			if(StringUtils.containsIgnoreCase(rawName,":"))
-				rawName = rawName.replace(":", "");
-		}
-					
-		return rawName.trim();
-	}
+//	public static String adjustDeckName(String rawName) {
+//		
+//		if(StringUtils.containsIgnoreCase(rawName,"Structure" )) {
+//			rawName = rawName.replace("Structure", "");
+//
+//			if(StringUtils.containsIgnoreCase(rawName,"Deck"))
+//				rawName = rawName.replace("Deck", "");
+//	
+//			if(StringUtils.containsIgnoreCase(rawName,":"))
+//				rawName = rawName.replace(":", "");
+//		}
+//					
+//		return rawName.trim();
+//	}
 	
 	public static Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
 		
