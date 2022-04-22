@@ -129,34 +129,34 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		Deck deckOrigem = deckRepository.findById(originalDeckId)
 				.orElseThrow(() -> new EntityNotFoundException("No Set found with this code."));			
-			
-			DeckUsers newDeck = new DeckUsers();
-			newDeck.setImagem(deckOrigem.getImagem());
-			newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
-			newDeck.setKonamiDeckCopied(deckOrigem.getId());			
-			newDeck.setUserId(user.getId());
-			newDeck.setDtCriacao(new Date());
-			newDeck.setSetType(deckOrigem.getSetType());				
-			
-			DeckUsers generatedDeckUser = deckUserRepository.save(newDeck);
+				
+		DeckUsers newDeck = new DeckUsers();
+		newDeck.setImagem(deckOrigem.getImagem());
+		newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
+		newDeck.setKonamiDeckCopied(deckOrigem.getId());			
+		newDeck.setUserId(user.getId());
+		newDeck.setDtCriacao(new Date());
+		newDeck.setSetType(deckOrigem.getSetType());				
+		
+		DeckUsers generatedDeckUser = deckUserRepository.save(newDeck);
+
+		if (generatedDeckUser == null) 
+			 throw new EntityNotFoundException("It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
+					
+		//Adiciona os cards do Deck original ao novo Deck.
+		int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
+		
+		if(addCardsOnNewDeck < 1)
+			 throw new NoSuchElementException("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
+					
+		//Adiciona os cards a coleção do usuário.
+		 int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
+
+		if (addCardsToUsersCollection < 1) 
+			throw new RuntimeException("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
 	
-			if (generatedDeckUser == null) 
-				 new EntityNotFoundException("It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
-						
-			//Adiciona os cards do Deck original ao novo Deck.
-			int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
-			
-			if(addCardsOnNewDeck < 1)
-				 throw new NoSuchElementException("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
-						
-			//Adiciona os cards a coleção do usuário.
-			 int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
-	
-			if (addCardsToUsersCollection < 1) {
-				 new NoSuchElementException("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
-			}
-	
-			return addCardsToUsersCollection;
+
+		return addCardsToUsersCollection;
 	 
 	}
 	
@@ -176,39 +176,39 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
 
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
-			int itemAtualizado;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+		int itemAtualizado;
 
-			Integer alreadyHasThisDeck = dao.verifyIfUserAleadyHasTheDeck(originalDeckId, user.getId());
+		Integer alreadyHasThisDeck = dao.verifyIfUserAleadyHasTheDeck(originalDeckId, user.getId());
 
-			// Se o usuário não tiver o Deck e for passado parametro para remover esse deck.
-			if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0 && flagAddOrRemove.equals("R")) {
-				return 0;
-			}
+		// Se o usuário não tiver o Deck e for passado parametro para remover esse deck.
+		if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0 && flagAddOrRemove.equals("R")) 
+			return 0;
+		
 
-			if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0) {
-				itemAtualizado = dao.addDeckToUserCollection(originalDeckId, user.getId());
+		if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0) {
+			itemAtualizado = dao.addDeckToUserCollection(originalDeckId, user.getId());
 
-				if (itemAtualizado < 1) 
-					throw new NoSuchElementException("Unable to include Deck for User! Original Deck ID: " + originalDeckId.toString());
-				
-
-			} else {
-				itemAtualizado = dao.changeQuantitySpecificDeckUserHas(originalDeckId, user.getId(), flagAddOrRemove);
-
-				if (itemAtualizado < 1) 
-					throw new NoSuchElementException("Unable to manege Deck for User! Original Deck ID: " + originalDeckId.toString());
-				
-			}
-
-			int qtdAddedOrRemoved = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(),
-					flagAddOrRemove);
-
-			if (qtdAddedOrRemoved < 1)
-				throw new NoSuchElementException("Unable to include Cards for User! Original Deck ID: " + originalDeckId.toString());
+			if (itemAtualizado < 1) 
+				throw new NoSuchElementException("Unable to include Deck for User! Original Deck ID: " + originalDeckId.toString());
 			
-			return qtdAddedOrRemoved;
+
+		} else {
+			itemAtualizado = dao.changeQuantitySpecificDeckUserHas(originalDeckId, user.getId(), flagAddOrRemove);
+
+			if (itemAtualizado < 1) 
+				throw new NoSuchElementException("Unable to manege Deck for User! Original Deck ID: " + originalDeckId.toString());
+			
+		}
+
+		int qtdAddedOrRemoved = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(),
+				flagAddOrRemove);
+
+		if (qtdAddedOrRemoved < 1)
+			throw new NoSuchElementException("Unable to include Cards for User! Original Deck ID: " + originalDeckId.toString());
+		
+		return qtdAddedOrRemoved;
 
 	}
 	
@@ -314,7 +314,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			
 	}
 	
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int removeSetFromUsersCollection(Long setId) {

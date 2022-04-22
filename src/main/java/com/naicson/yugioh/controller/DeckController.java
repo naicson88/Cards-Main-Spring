@@ -53,7 +53,7 @@ public class DeckController {
 		return deckRepository.findAll();
 	}
 
-	@GetMapping("/pagination")
+	@GetMapping("/get-sets")
 	public ResponseEntity<Page<Deck>> deckPagination(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
@@ -115,12 +115,12 @@ public class DeckController {
 	}
 
 	@GetMapping(path = { "/add-deck-to-user-collection/{deckId}" })
-	public int addSetToUserCollection(@PathVariable("deckId") Long deckId) throws Exception, ErrorMessage {
-		if (deckId != null && deckId > 0) {
-			return deckService.addSetToUserCollection(deckId);
-		} else {
-			throw new ErrorMessage("The deck informed is not valid!");
-		}
+	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
+	
+		Integer qtdAdded = deckService.addSetToUserCollection(deckId);
+		
+		return new ResponseEntity<Integer>(qtdAdded, HttpStatus.OK);
+					
 	}
 
 	@GetMapping(path = { "/remove-set-to-user-collection/{deckId}" })
