@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,9 +17,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.util.enums.SetCollectionTypes;
+import com.naicson.yugioh.util.enums.SetType;
 
 @Entity
 @Table(name = "tab_set_collection")
@@ -33,16 +36,18 @@ public class SetCollection {
 	private String portugueseName;
 	private String imgPath;
 	private Boolean onlyDefaultDeck;
+	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date releaseDate;
 	private Date registrationDate;
 	private Boolean isSpeedDuel;
-	@ManyToMany()
+	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name="tab_setcollection_deck",
     joinColumns={@JoinColumn(name="set_collection_id")},
     inverseJoinColumns={@JoinColumn(name="deck_id")})
+	@JsonManagedReference
 	private List<Deck> decks;
 	@Enumerated(EnumType.STRING)
-	private SetCollectionTypes setCollectionType;
+	private SetType setCollectionType;
 
 
 	public SetCollection() {
@@ -59,7 +64,7 @@ public class SetCollection {
 		collection.setPortugueseName(dto.getPortugueseName());
 		collection.setRegistrationDate(new Date());
 		collection.setReleaseDate(dto.getReleaseDate());
-		collection.setSetCollectionType(SetCollectionTypes.valueOf(dto.getSetType()));
+		collection.setSetCollectionType(SetType.valueOf(dto.getSetType()));
 		
 		List<Deck> decks = dto.getDecks().stream().map(id -> new Deck(id.longValue())).collect(Collectors.toList());
 		
@@ -98,10 +103,10 @@ public class SetCollection {
 	public void setDecks(List<Deck> decks) {
 		this.decks = decks;
 	}
-	public SetCollectionTypes getSetCollectionType() {
+	public SetType getSetCollectionType() {
 		return setCollectionType;
 	}
-	public void setSetCollectionType(SetCollectionTypes setCollectionType) {
+	public void setSetCollectionType(SetType setCollectionType) {
 		this.setCollectionType = setCollectionType;
 	}
 	public Date getReleaseDate() {

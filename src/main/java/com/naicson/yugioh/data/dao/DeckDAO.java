@@ -25,7 +25,7 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.DeckRepository;
-import com.naicson.yugioh.service.DeckServiceImpl;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Repository

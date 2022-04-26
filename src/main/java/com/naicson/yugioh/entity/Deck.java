@@ -1,32 +1,22 @@
 package com.naicson.yugioh.entity;
 
-
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.util.enums.SetCollectionTypes;
-import com.naicson.yugioh.util.enums.SetType;
 
 @Entity
 @Table(name = "tab_decks")
@@ -48,12 +38,14 @@ public class Deck implements Serializable {
 	private Long qtd_super_raras;
 	private Long qtd_ultra_raras;
 	private Long qtd_secret_raras;
+	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date lancamento;	
 	@Column(name = "set_type")
 	private String setType;
 	@Column(name = "dt_criacao")
 	private Date dt_criacao;
 	@ManyToMany(mappedBy = "decks")
+	@JsonBackReference
 	private List<SetCollection> setCollection;
 	private Boolean isSpeedDuel;
 	

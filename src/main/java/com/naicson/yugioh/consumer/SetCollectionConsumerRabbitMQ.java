@@ -15,10 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.service.DeckServiceImpl;
-import com.naicson.yugioh.service.RelDeckCardsServiceImpl;
-import com.naicson.yugioh.service.SetCollectionServiceImpl;
 import com.naicson.yugioh.service.card.CardRegistry;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
+import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component

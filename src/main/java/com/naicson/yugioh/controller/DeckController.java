@@ -28,24 +28,28 @@ import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
-import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.setcollection.SetsBySetTypeImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @RestController
 @RequestMapping({ "yugiohAPI/decks" })
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-public class DeckController {
+public class DeckController<T> {
 
 	@Autowired
 	DeckRepository deckRepository;
 	@Autowired
 	DeckServiceImpl deckService;
 	@Autowired
+	SetsBySetTypeImpl<T> setsBySetType;
+	@Autowired
 	DeckUsersRepository deckUserRepository;
 
-	Page<Deck> deckList = null;
+	Page<Deck> setList = null;
 	Page<DeckUsers> deckUserList = null;
 
 	@GetMapping("/todos")
@@ -57,14 +61,10 @@ public class DeckController {
 	public ResponseEntity<Page<Deck>> deckPagination(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
-
-		if (!setType.equals("") && setType != null && !setType.equals("UD"))
-			deckList = deckRepository.findAll(pageable);
+				
+		    setList =  setsBySetType.findAllSetsByType(pageable, SetType.valueOf(setType));
 		
-		if (deckList.isEmpty()) {
-			return new ResponseEntity<Page<Deck>>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(deckList, HttpStatus.OK);
+		return new ResponseEntity<>(setList, HttpStatus.OK);
 
 	}
 

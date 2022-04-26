@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
-import com.naicson.yugioh.service.DeckServiceImpl;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
 
 @Component
 public class AdminFunctions {
