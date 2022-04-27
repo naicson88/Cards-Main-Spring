@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,6 @@ import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
-import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class DeckServiceImpl implements DeckDetailService {
@@ -48,12 +45,16 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	@PersistenceContext
 	EntityManager em;
+	
 	@Autowired
 	DeckDAO dao;
+	
 	@Autowired
 	DeckRepository deckRepository;
+	
 	@Autowired 
 	DeckUsersRepository deckUserRepository;	
+	
 	@Autowired
 	RelDeckCardsRepository relDeckCardsRepository;	
 	
@@ -272,19 +273,19 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Override
 	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
 		
-			if (decksIds == null || decksIds.length == 0)
-				throw new IllegalArgumentException("Invalid Array with Deck's Ids");
-						
-			UserDetailsImpl user = GeneralFunctions.userLogged();
+		if (decksIds == null || decksIds.length == 0)
+			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
+					
+		UserDetailsImpl user = GeneralFunctions.userLogged();
 
-			String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
+		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
 
-			if(decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
-				throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
+		if(decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
+			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
 
-			List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
-			
-			return relUserDeckList;
+		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
+		
+		return relUserDeckList;
 
 	}
 	
@@ -625,6 +626,13 @@ public class DeckServiceImpl implements DeckDetailService {
 		}
 		
 		return kDeck;
+	}
+
+	@Override
+	public Page<Deck> findAll(Pageable pageable) {
+		Page<Deck> decks = deckRepository.findAll(pageable);
+		
+		return decks;
 	}
 	
 }

@@ -3,10 +3,9 @@ package com.naicson.yugioh.service.setcollection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.util.enums.SetType;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 
 public interface ISetsByType<T> {
 	
- 	Page<Deck> findAllSetsByType(Pageable pageable, SetType setType);
+ 	Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType);
 }

@@ -24,12 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Pageable;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.service.setcollection.SetsBySetTypeImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
@@ -45,11 +47,11 @@ public class DeckController<T> {
 	@Autowired
 	DeckServiceImpl deckService;
 	@Autowired
-	SetsBySetTypeImpl<T> setsBySetType;
+	ISetsByType<T> setsBySetType;
 	@Autowired
 	DeckUsersRepository deckUserRepository;
 
-	Page<Deck> setList = null;
+	Page<DeckSummaryDTO> setList = null;
 	Page<DeckUsers> deckUserList = null;
 
 	@GetMapping("/todos")
@@ -58,13 +60,13 @@ public class DeckController<T> {
 	}
 
 	@GetMapping("/get-sets")
-	public ResponseEntity<Page<Deck>> deckPagination(
-			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-			@RequestParam String setType) {
-				
-		    setList =  setsBySetType.findAllSetsByType(pageable, SetType.valueOf(setType));
-		
-		return new ResponseEntity<>(setList, HttpStatus.OK);
+	public ResponseEntity<Page<DeckSummaryDTO>> deckPagination(
+		@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+		@RequestParam String setType) {
+			
+	    setList =  setsBySetType.findAllSetsByType(pageable, setType);
+	
+	    return new ResponseEntity<>(setList, HttpStatus.OK);
 
 	}
 

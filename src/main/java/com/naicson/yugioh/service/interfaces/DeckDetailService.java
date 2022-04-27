@@ -2,9 +2,6 @@ package com.naicson.yugioh.service.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.Query;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +16,10 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 @Service
 public interface DeckDetailService {
 	
-	
 	List<Card> cardsOfDeck(Long deckId, String table) throws ErrorMessage;
-	 
+	
+	Page<Deck> findAll(Pageable pageable);
+	
 	Deck findById(Long Id);
 
 	int addSetToUserCollection(Long originalDeckId) throws SQLException, ErrorMessage, Exception;
