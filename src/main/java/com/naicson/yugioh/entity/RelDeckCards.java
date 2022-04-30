@@ -2,6 +2,7 @@ package com.naicson.yugioh.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -104,7 +105,25 @@ public class RelDeckCards implements Serializable {
 		return "RelDeckCards [id=" + id + ", deckId=" + deckId + ", cardNumber=" + cardNumber + ", cardSetCode="
 				+ cardSetCode + ", card_price=" + card_price + ", card_raridade=" + card_raridade + ", dt_criacao="
 				+ dt_criacao + ", isSideDeck=" + isSideDeck + ", isSpeedDuel=" + isSpeedDuel + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(cardNumber);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RelDeckCards other = (RelDeckCards) obj;
+		return Objects.equals(cardNumber, other.cardNumber);
 	}	
+
 	
 	
 	

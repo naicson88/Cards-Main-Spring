@@ -25,12 +25,14 @@ import org.springframework.data.domain.Pageable;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.service.setcollection.SetsBySetTypeImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
@@ -44,10 +46,16 @@ public class DeckController<T> {
 
 	@Autowired
 	DeckRepository deckRepository;
+	
 	@Autowired
 	DeckServiceImpl deckService;
+	
+	@Autowired
+	SetCollectionService setCollService;
+	
 	@Autowired
 	ISetsByType<T> setsBySetType;
+	
 	@Autowired
 	DeckUsersRepository deckUserRepository;
 
@@ -93,12 +101,19 @@ public class DeckController<T> {
 		return new ResponseEntity<>(deckUserList, HttpStatus.OK);
 	}
 
-	@GetMapping
-	public ResponseEntity<Deck> deckAndCards(@RequestParam Long id, @RequestParam String source) throws Exception {
-		Deck deck;	
+	@GetMapping("/set-details")
+	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
+		SetDetailsDTO deck = null;	
 		
-		deck = deckService.deckAndCards(id, source);	
+		if("DECK".equals(setType))
+			deck = deckService.deckAndCards(id, source);
 		
+//		else if ("COLLECTION".equals(setType))
+//			deck = setCollService.setCollectionDetailsAsDeck(id, source);
+//		
+//		else
+//			throw new IllegalArgumentException("Invalid Set Type");
+				
 		return new ResponseEntity<>(deck, HttpStatus.OK) ;
 	}
 	

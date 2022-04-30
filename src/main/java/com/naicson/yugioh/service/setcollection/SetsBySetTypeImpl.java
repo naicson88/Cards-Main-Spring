@@ -36,7 +36,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 			 pageDeck = deckService.findAll(pageable);		
 			 pageDTO = convertPageDeck(pageDeck);
 		} 
-		// Any other type is a collection
+		
 		else {
 			pageSet =  setRepository.findAllBySetType(pageable, setType.toString());
 			pageDTO = this.convertPageSetToPageDeck(pageSet);
@@ -58,6 +58,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	private DeckSummaryDTO convertSetCollectionToDTO(SetCollection set) {
 		
 		DeckSummaryDTO deck = new DeckSummaryDTO();
+		deck.setId(set.getId().longValue());
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
 		deck.setSetType(set.getSetCollectionType().toString());
@@ -81,6 +82,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	private DeckSummaryDTO convertDeckToDTO(Deck originalDeck) {
 				
 		DeckSummaryDTO deck = new DeckSummaryDTO();
+		deck.setId(originalDeck.getId());
 		deck.setLancamento(originalDeck.getLancamento());
 		deck.setNome(originalDeck.getNome());
 		deck.setSetType(originalDeck.getSetType().toString());

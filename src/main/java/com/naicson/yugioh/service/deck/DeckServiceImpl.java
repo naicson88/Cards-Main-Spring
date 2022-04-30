@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,6 +17,7 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
@@ -34,6 +40,7 @@ import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
+import com.naicson.yugioh.service.SetsUtils;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
@@ -106,6 +113,17 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 	
 	@Override
+	public List<Card> cardsOfDeck(Long deckId, String table) {
+		
+		List<Card> cards = dao.cardsOfDeck(deckId, table);
+		
+		if(cards == null || cards.size() == 0)
+			throw new IllegalArgumentException("Can't find cards of this Set.");
+		
+		return cards;
+	}
+	
+	@Override
 	public List<RelDeckCards> relDeckUserCards(Long deckUserId){
 		if(deckUserId == null || deckUserId == 0)
 			throw new IllegalArgumentException("Deck User Id informed is invalid");
@@ -117,7 +135,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		return relation;
 	}
-
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -173,7 +190,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 	}
 	
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
@@ -269,7 +285,6 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	}
 	
-
 	@Override
 	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
 		
@@ -289,7 +304,6 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	}
 	
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Long addDeck(Deck deck)  {
@@ -333,35 +347,60 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		return qtdRemoved;	
 	}
-
-	@Override
-	public List<Card> cardsOfDeck(Long deckId, String table) {
-		
-		List<Card> cards = dao.cardsOfDeck(deckId, table);
-		
-		if(cards == null || cards.size() == 0)
-			throw new IllegalArgumentException("Can't find cards of this Set.");
-		
-		return cards;
-	}
 	
-
 	@Override
-	public Deck deckAndCards(Long deckId, String deckSource) {
+	public SetDetailsDTO deckAndCards(Long deckId, String deckSource) {
 		
 		Deck deck = new Deck();
 		
+		SetsUtils utils = new SetsUtils();
+		
 		if(!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource)) 
 			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);			
-			
-		
+				
 		deck =  this.returnDeckWithCards(deckId, deckSource);
 		deck = this.countQtdCardRarityInTheDeck(deck);
 		
-		return deck;
+		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
+		
+		dto = utils.getSetStatistics(dto);
+		
+		return dto;
 	}
 	
-	private Deck returnDeckWithCards(Long deckId, String deckSource) {
+	private SetDetailsDTO convertDeckToSetDetailsDTO(Deck deck) {
+		
+		SetDetailsDTO dto  = new SetDetailsDTO();
+		InsideDeckDTO insideDeck = new InsideDeckDTO();
+	
+		BeanUtils.copyProperties(deck, dto);
+		
+		Map<Long, CardSetDetailsDTO> mapCardSetDetails = new HashMap<>();
+		
+		List<CardSetDetailsDTO>	cardDetailsList = deck.getCards().stream().map(c -> {
+			CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();
+			BeanUtils.copyProperties(c, cardDetail);
+			
+			mapCardSetDetails.put(cardDetail.getNumero(), cardDetail);
+			
+			return cardDetail;
+				
+		}).collect(Collectors.toList());
+			
+		deck.getRel_deck_cards().forEach(r -> {
+			CardSetDetailsDTO detail =  mapCardSetDetails.get(r.getCardNumber());		
+			BeanUtils.copyProperties(r, detail);
+		});	
+	
+		insideDeck.setCards(cardDetailsList);
+		
+		dto.setInsideDecks(List.of(insideDeck));
+		
+		return dto;
+	}
+	
+	@Override
+	public Deck returnDeckWithCards(Long deckId, String deckSource) {
 		
 		if(deckId == null || deckId == 0)
 			throw new  IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
@@ -375,6 +414,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		else if("user".equalsIgnoreCase(deckSource)) {
 			DeckUsers deckUser = deckUserRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
 			deck = Deck.deckFromDeckUser(deckUser);
+			
 		} else
 			throw new IllegalArgumentException("Invalid Deck Source: " + deckSource);
 		

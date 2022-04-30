@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
@@ -37,7 +38,7 @@ public interface DeckDetailService {
 	int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove)
 			throws SQLException, ErrorMessage;
 	
-	Deck deckAndCards(Long deckId, String setType) throws Exception;
+	SetDetailsDTO deckAndCards(Long deckId, String setType) throws Exception;
 	
 	List<Card> consultMainDeck(Long deckId);
 	
@@ -60,5 +61,7 @@ public interface DeckDetailService {
 	List<Card> consultSideDeckCards(Long deckId, String deckSource);
 
 	Deck editUserDeck(Long deckId);
+	
+	Deck returnDeckWithCards(Long deckId, String deckSource);
 	
 }

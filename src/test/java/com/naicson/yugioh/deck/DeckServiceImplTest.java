@@ -42,6 +42,7 @@ import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
@@ -344,11 +345,11 @@ public class DeckServiceImplTest {
 		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_deckusers_cards");
 		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
 		
-		Deck deck = deckService.deckAndCards(deckId, deckSource);
+		SetDetailsDTO deck = deckService.deckAndCards(deckId, deckSource);
 		
 		assertNotNull(deck);
-		assertEquals(deck.getCards().size(), mainDeck.size());
-		assertEquals(deck.getRel_deck_cards().size(), rel.size());
+		assertEquals(deck.getInsideDeck().size(), mainDeck.size());
+		//assertEquals(deck.getCards().get(0).getRelDeckCards().size(), rel.size());
 			
 	}
 	
@@ -365,11 +366,11 @@ public class DeckServiceImplTest {
 		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_deck_cards");
 		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
 		
-		Deck deckReturned = deckService.deckAndCards(deckId, deckSource);
+		SetDetailsDTO deckReturned = deckService.deckAndCards(deckId, deckSource);
 		
 		assertNotNull(deckReturned);
-		assertEquals(deckReturned.getCards().size(), mainDeck.size());
-		assertEquals(deckReturned.getRel_deck_cards().size(), rel.size());
+		assertEquals(deckReturned.getInsideDeck().size(), mainDeck.size());
+		//assertEquals(deckReturned.getCards().get(0).getRelDeckCards().size(), rel.size());
 			
 	}
 	

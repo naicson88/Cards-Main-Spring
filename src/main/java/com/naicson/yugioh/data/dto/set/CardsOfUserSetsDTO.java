@@ -14,7 +14,6 @@ public class CardsOfUserSetsDTO {
 		
 	}
 	
-	
 	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, BigInteger quantity) {
 		super();
 		this.setName = setName;

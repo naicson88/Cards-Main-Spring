@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tab_cards")
 public class Card {
@@ -24,6 +26,7 @@ public class Card {
 	private Long numero;
 	private String categoria;
 	private String nome;
+	@JsonIgnore
 	private String nomePortugues;
 	@ManyToOne
 	@JoinColumn(name = "atributo_id",  referencedColumnName = "id")
@@ -35,6 +38,7 @@ public class Card {
 	@Column(columnDefinition="text")
 	private String descricao;
 	@Column(columnDefinition="text")
+	@JsonIgnore
 	private String descricaoPortugues;
 	private String imagem;
 	private Integer escala;

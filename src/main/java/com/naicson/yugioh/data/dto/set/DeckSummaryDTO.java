@@ -5,7 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DeckSummaryDTO {
-	
+	private Long id;
 	private String nome;
 	private String imagem;
 	@JsonFormat(pattern="MM-dd-yyyy")
@@ -53,6 +53,14 @@ public class DeckSummaryDTO {
 
 	public void setQuantityUserHave(int quantityUserHave) {
 		this.quantityUserHave = quantityUserHave;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	
