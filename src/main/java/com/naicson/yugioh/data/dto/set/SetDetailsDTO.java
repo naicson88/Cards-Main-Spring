@@ -27,9 +27,13 @@ public class SetDetailsDTO {
 	private Boolean isSpeedDuel;
 	private List<InsideDeckDTO> insideDecks;	
 	
-	private Map<CardAttributes, Integer> statisticQuantityByAttribute;
-	private Map<Integer, Integer> statisticQuantityByLevel;
-	private Map<String, Integer> staticQuantityByProperty;
+	private Map<CardAttributes, Integer> statsQuantityByAttribute;
+	private Map<Integer, Integer> statsQuantityByLevel;
+	private Map<String, Integer> statsQuantityByProperty;
+	private Map<String, Integer> statsQuantityByGenericType;
+	private Map<String, Integer> statsQuantityByType;
+	private Map<Integer, Integer> statsAtk;
+	private Map<Integer, Integer> statsDef;
 	
 	public Long getId() {
 		return id;
@@ -123,25 +127,50 @@ public class SetDetailsDTO {
 	public void setInsideDecks(List<InsideDeckDTO> insideDecks) {
 		this.insideDecks = insideDecks;
 	}
-	public Map<CardAttributes, Integer> getStatisticQuantityByAttribute() {
-		return statisticQuantityByAttribute;
+	public Map<CardAttributes, Integer> getStatsQuantityByAttribute() {
+		return statsQuantityByAttribute;
 	}
-	public void setStatisticQuantityByAttribute(Map<CardAttributes, Integer> statisticQuantityByAttribute) {
-		this.statisticQuantityByAttribute = statisticQuantityByAttribute;
+	public void setStatsQuantityByAttribute(Map<CardAttributes, Integer> statsQuantityByAttribute) {
+		this.statsQuantityByAttribute = statsQuantityByAttribute;
 	}
-	public Map<Integer, Integer> getStatisticQuantityByLevel() {
-		return statisticQuantityByLevel;
+	public Map<Integer, Integer> getStatsQuantityByLevel() {
+		return statsQuantityByLevel;
 	}
-	public void setStatisticQuantityByLevel(Map<Integer, Integer> statisticQuantityByLevel) {
-		this.statisticQuantityByLevel = statisticQuantityByLevel;
+	public void setStatsQuantityByLevel(Map<Integer, Integer> statsQuantityByLevel) {
+		this.statsQuantityByLevel = statsQuantityByLevel;
 	}
-	public Map<String, Integer> getStaticQuantityByProperty() {
-		return staticQuantityByProperty;
+	public Map<String, Integer> getStatsQuantityByProperty() {
+		return statsQuantityByProperty;
 	}
-	public void setStaticQuantityByProperty(Map<String, Integer> staticQuantityByProperty) {
-		this.staticQuantityByProperty = staticQuantityByProperty;
+	public void setStatsQuantityByProperty(Map<String, Integer> statsQuantityByProperty) {
+		this.statsQuantityByProperty = statsQuantityByProperty;
 	}
-	
+	public Map<String, Integer> getStatsQuantityByGenericType() {
+		return statsQuantityByGenericType;
+	}
+	public void setStatsQuantityByGenericType(Map<String, Integer> statsQuantityByGenericType) {
+		this.statsQuantityByGenericType = statsQuantityByGenericType;
+	}
+	public Map<Integer, Integer> getStatsAtk() {
+		return statsAtk;
+	}
+	public void setStatsAtk(Map<Integer, Integer> statsAtk) {
+		this.statsAtk = statsAtk;
+	}
+
+	public Map<Integer, Integer> getStatsDef() {
+		return statsDef;
+	}
+	public void setStatsDef(Map<Integer, Integer> statsDef) {
+		this.statsDef = statsDef;
+	}
+	public Map<String, Integer> getStatsQuantityByType() {
+		return statsQuantityByType;
+	}
+	public void setStatsQuantityByType(Map<String, Integer> statsQuantityByType) {
+		this.statsQuantityByType = statsQuantityByType;
+	}
+
 		
 	
 }
