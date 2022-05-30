@@ -81,4 +81,18 @@ public abstract class GeneralFunctions {
     		e.getMessage();
     	}
     }
+    
+    public static String getFolderBySetType(String setType) {
+    	
+    	if("DECK".equalsIgnoreCase(setType))
+			return "deck";
+		else if("BOOSTER".equalsIgnoreCase(setType))
+			return "booster";
+    	if("TIN".equalsIgnoreCase(setType))
+			return "tin";
+		else if("BOX".equalsIgnoreCase(setType))
+			return "box";
+    	
+    	return null;
+    }
 }
