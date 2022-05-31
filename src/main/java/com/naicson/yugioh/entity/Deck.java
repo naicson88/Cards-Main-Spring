@@ -48,6 +48,7 @@ public class Deck implements Serializable {
 	@JsonBackReference
 	private List<SetCollection> setCollection;
 	private Boolean isSpeedDuel;
+	private String imgurUrl;
 	
 	@Transient
 	private List<Card> cards;
@@ -232,6 +233,14 @@ public class Deck implements Serializable {
 
 	public void setQtd_secret_raras(long qtd_secret_raras) {
 		this.qtd_secret_raras = qtd_secret_raras;
+	}
+
+	public String getImgurUrl() {
+		return imgurUrl;
+	}
+
+	public void setImgurUrl(String imgurUrl) {
+		this.imgurUrl = imgurUrl;
 	}
 
 		

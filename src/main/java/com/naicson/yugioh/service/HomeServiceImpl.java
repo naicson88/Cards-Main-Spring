@@ -82,7 +82,7 @@ public class HomeServiceImpl implements HomeDetailService{
 				
 				lastSet.setId(set.get(0,BigInteger.class).longValue());
 				lastSet.setName(set.get(2, String.class));
-			    lastSet.setImg(setsImgPath+setFolder+set.get(1, String.class)+".jpg");
+			    lastSet.setImg(set.get(1, String.class));
 				lastSet.setPrice(totalSetPrice(lastSet.getId()));
 				lastSet.setSetCode("WWW-EN001");
 				

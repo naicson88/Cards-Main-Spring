@@ -86,7 +86,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setLancamento(originalDeck.getLancamento());
 		deck.setNome(originalDeck.getNome());
 		deck.setSetType(originalDeck.getSetType().toString());
-		deck.setImagem(originalDeck.getImagem());
+		deck.setImagem(originalDeck.getImgurUrl() != null ? originalDeck.getImgurUrl() : originalDeck.getImagem());
 		deck.setNomePortugues(originalDeck.getNomePortugues());
 		
 		Long[] idEntity = {originalDeck.getId()};
