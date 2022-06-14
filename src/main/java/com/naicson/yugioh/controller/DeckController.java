@@ -1,6 +1,5 @@
 package com.naicson.yugioh.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
@@ -34,6 +32,9 @@ import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 @RestController
 @RequestMapping({ "yugiohAPI/decks" })
@@ -64,6 +65,7 @@ public class DeckController<T> {
 	}
 
 	@GetMapping("/get-sets")
+	@ApiOperation(value="Return summary Set informations with Pagination", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Page<DeckSummaryDTO>> deckPagination(
 		@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 		@RequestParam String setType) {
@@ -75,6 +77,7 @@ public class DeckController<T> {
 	}
 
 	@GetMapping("/sets-of-user")
+	@ApiOperation(value="Return Sets of a User", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Page<DeckUsers>> setsOfUser(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
@@ -98,6 +101,7 @@ public class DeckController<T> {
 	}
 
 	@GetMapping("/set-details")
+	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		SetDetailsDTO deck = null;	
 		
@@ -114,6 +118,7 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/edit-deck")
+	@ApiOperation(value="Edit a Set by its ID and Source type", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
 		Deck deck = deckService.editUserDeck(deckId);
 		
@@ -121,6 +126,7 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/search-by-set-name")
+	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<Deck>> searchByDeckName(@RequestParam("setName") String setName, @RequestParam("source") String source) {
 		List<Deck> setsFound = this.deckService.searchByDeckName(setName, source);
 		
@@ -128,6 +134,7 @@ public class DeckController<T> {
 	}
 
 	@GetMapping(path = { "/add-deck-to-user-collection/{deckId}" })
+	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
 	
 		Integer qtdAdded = deckService.addSetToUserCollection(deckId);
@@ -137,31 +144,31 @@ public class DeckController<T> {
 	}
 
 	@GetMapping(path = { "/remove-set-to-user-collection/{deckId}" })
-	public int removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) throws Exception, ErrorMessage {
-		if (deckId != null && deckId > 0) {
-			return deckService.removeSetFromUsersCollection(deckId);
-		} else {
-			throw new ErrorMessage("The deck informed is not valid!");
-		}
+	@ApiOperation(value="Remove a Set from User collection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) {
+		
+		 deckService.removeSetFromUsersCollection(deckId);
+		
+		return new ResponseEntity<String>("Set was successfully removed from your collection", HttpStatus.OK);
+
 	}
 
 	@GetMapping("/rel-user-decks")
-	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) throws SQLException, ErrorMessage {
-		List<RelUserDeckDTO> rel = null;
+	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
+	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
 
-		if (decksIds != null && decksIds.length > 0) {
-			rel = deckService.searchForDecksUserHave(decksIds);
-		}
-
+		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
+		
 		return rel;
 	}
 	
 	@PostMapping(path = "/save-userdeck",  produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<String> saveUserDeck(@RequestBody Deck deck) throws SQLException{
+	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
 		this.deckService.saveUserdeck(deck);
-		List<String> retorno = List.of("Deck saved successfully");
 		
-		return retorno; 
+		return new ResponseEntity<String>("Deck saved successfully", HttpStatus.CREATED);
+
 	}
 
 }

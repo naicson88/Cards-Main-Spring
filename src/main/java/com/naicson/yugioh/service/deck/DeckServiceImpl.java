@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,7 @@ import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class DeckServiceImpl implements DeckDetailService {
@@ -342,6 +344,9 @@ public class DeckServiceImpl implements DeckDetailService {
 		DeckUsers setOrigem = dk.get();
 
 		int qtdRemoved = dao.removeCardsFromUserSet(setId);
+		
+		if(qtdRemoved <= 0)
+			throw new ErrorMessage("It was not possible remove cards from Deck: " + setId);
 
 		deckUserRepository.deleteById(setOrigem.getId());
 		
@@ -535,7 +540,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	
   @Transactional
   @Override
-  public void saveUserdeck(Deck deck) throws SQLException {
+  public void saveUserdeck(Deck deck)  {
 	DeckUsers userDeck = new DeckUsers();
 	
 	if(deck.getNome() == null || deck.getNome().equals("")) {
@@ -564,10 +569,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		userDeck.setNome(deck.getNome());
 		userDeck = deckUserRepository.save(userDeck);
 		
-		if(userDeck == null) {
-			logger.error("IT WAS NOT POSSIBLE INSERT A NEW USERDECK");
-			throw new SQLException("It was not possible create/update the Deck");
-		}	
+		if(userDeck == null) 
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the Deck");			
 		
 	for(RelDeckCards rel : deck.getRel_deck_cards()) {
 		
@@ -582,10 +585,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		int isSaved = dao.saveRelDeckUserCard(rel, userDeck.getId());
 		
-		if(isSaved == 0) {
-			logger.error("IT WAS NOT POSSIBLE SAVE A CARD IN USERDECK");
-			throw new SQLException("It was not possible save the card " + rel.getCard_set_code());
-		}		
+		if(isSaved == 0)
+			throw new ErrorMessage("It was not possible save the card " + rel.getCard_set_code());				
 	}
 		
  }

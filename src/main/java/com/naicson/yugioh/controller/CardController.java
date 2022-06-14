@@ -38,6 +38,9 @@ import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 
 @RestController
 @RequestMapping({"yugiohAPI/cards"})
@@ -54,13 +57,14 @@ public class CardController {
 	RelDeckCardsRepository relDeckCardsRepository;
 	
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
-
 	
+	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
 	@GetMapping(path = {"num/{numero}"})
 	public Card listarNumero(@PathVariable("numero") Long numero) {
 		return cardService.listarNumero(numero);
 	}
 	
+	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {
 
@@ -69,9 +73,8 @@ public class CardController {
 		return new ResponseEntity<CardDetailsDTO>(card, HttpStatus.OK);		
 	}	
 	
-	//Transforma as cartas encontradas no DTO para passar menos parametros
 	@PostMapping(path = {"/searchCard"})
-	@ResponseBody
+	@ApiOperation(value="Search cards and return a Pagination", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<CardsSearchDTO>> cardSearch(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable, 
 			@RequestBody List<SearchCriteria> criterias, String join){
 			
@@ -81,7 +84,7 @@ public class CardController {
 	}
 	
 	@PostMapping(path = {"/searchCardDetailed"})
-	@ResponseBody
+	@ApiOperation(value="Search cards and return detailed information with Pagination", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Page<Card>> cardSearchDetailed(@PageableDefault(page = 1, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable, 
 			@RequestBody List<SearchCriteria> criterias, String join){
 		Page<Card> listCards = cardService.searchCardDetailed(criterias, join, pageable);
@@ -90,7 +93,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/randomCards"})
-	@ResponseBody
+	@ApiOperation(value="Bring random Cards informations", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<CardsSearchDTO>> randomCards(){
 		List<CardsSearchDTO> dtoList = new ArrayList<>();
 		
@@ -105,7 +108,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/randomCardsDetailed"})
-	@ResponseBody
+	@ApiOperation(value="Bring detailed random Cards informations", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<Card>> randomCardsDetailed(){
 		
 		List<Card> cards = cardService.randomCardsDetailed();
@@ -113,9 +116,8 @@ public class CardController {
 		return new ResponseEntity<List<Card>>(cards, HttpStatus.OK);
 	}
 	
-	
 	@GetMapping(path = {"/rel-user-cards"})
-	@ResponseBody
+	@ApiOperation(value="Search for cards that user have", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<RelUserCardsDTO>> searchForCardsUserHave(@RequestParam int[] cardsNumbers) throws SQLException, ErrorMessage {
 		List<RelUserCardsDTO> rel = null;
 		
@@ -131,7 +133,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/load-cards-userscollection"})
-	@ResponseBody
+	@ApiOperation(value="Search for cards from user collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<CardsSearchDTO>> loadCardsUserHave(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String genericType) throws SQLException, ErrorMessage{
 		
@@ -153,15 +155,16 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/card-user-details"})
-	@ResponseBody
+	@ApiOperation(value="Get details of a card that user have", authorizations = { @Authorization(value="JWT") })	
 	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Long cardNumber) {
-			
-			CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardNumber);	
-			
-			return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);	
+		
+		CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardNumber);	
+		
+		return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);	
 	}
 	
 	@GetMapping(path = {"/cardname-usercollection"})
+	@ApiOperation(value="Search card by name of a user collection", authorizations = { @Authorization(value="JWT") })	
 	public ResponseEntity<List<CardsSearchDTO>> cardSearchByNameUserCollection(
 			@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC)
 			Pageable pageable, @RequestParam String cardName) {
@@ -173,6 +176,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/search-cardSetcodes"})
+	@ApiOperation(value="Find all decks of a card by its Number", authorizations = { @Authorization(value="JWT") })	
 	public ResponseEntity<List<RelDeckCards>> findAllRelDeckCardsByCardNumber(@RequestParam Long cardNumber){
 		List<RelDeckCards> relation = this.cardService.findAllRelDeckCardsByCardNumber(cardNumber);
 		
@@ -180,6 +184,7 @@ public class CardController {
 	}
 	
 	@PostMapping(path = {"/search-cards-not-registered"})
+	@ApiOperation(value="Search Cards by its Numbers", authorizations = { @Authorization(value="JWT") })	
 	public ResponseEntity<List<Long>> searchCardsByCardNumbers(@RequestBody List<Long> cardNumbers){
 		
 		logger.info("Start request for cards not registered...".toUpperCase());

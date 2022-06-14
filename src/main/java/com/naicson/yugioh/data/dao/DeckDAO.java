@@ -294,7 +294,7 @@ public class DeckDAO {
 		return relation;
 	}
 	
-	public void deleteCardsDeckuserByDeckId(Long deckUserId) throws SQLException {
+	public void deleteCardsDeckuserByDeckId(Long deckUserId) {
 		Query query = em.createNativeQuery("delete from tab_rel_deckusers_cards where deck_id = :deckUserId");
 		query.setParameter("deckUserId", deckUserId);
 		query.executeUpdate();

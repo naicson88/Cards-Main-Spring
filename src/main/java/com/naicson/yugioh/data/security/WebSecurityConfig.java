@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -57,8 +58,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/yugiohAPI/auth/**").permitAll()
-			.antMatchers("/yugiohAPI/auth/**").permitAll()
+			.authorizeRequests().antMatchers(
+					"/yugiohAPI/auth/**",
+				    // -- Swagger UI v2
+		            "/v2/api-docs",
+		            "/swagger-resources",
+		            "/swagger-resources/**",
+		            "/configuration/ui",
+		            "/configuration/security",
+		            "/swagger-ui.html",
+		            "/webjars/**",
+		            // -- Swagger UI v3 (OpenAPI)
+		            "/v3/api-docs/**",
+		            "/swagger-ui/**").permitAll()
+	
 			.anyRequest().authenticated()
 			.and().formLogin().disable();
 
@@ -73,5 +86,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        source.registerCorsConfiguration("/**", configuration);
 	        return source;
 	    }
-
+	   
 }
