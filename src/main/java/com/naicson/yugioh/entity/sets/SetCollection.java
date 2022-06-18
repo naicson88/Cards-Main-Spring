@@ -40,6 +40,8 @@ public class SetCollection {
 	private Date releaseDate;
 	private Date registrationDate;
 	private Boolean isSpeedDuel;
+	private String imgurUrl;
+	
 	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name="tab_setcollection_deck",
     joinColumns={@JoinColumn(name="set_collection_id")},
@@ -57,7 +59,7 @@ public class SetCollection {
 	public static SetCollection setCollectionDtoToEntity(SetCollectionDto dto) {
 		
 		SetCollection collection = new SetCollection();
-		collection.setImgPath(dto.getImgPath());
+		collection.setImgurUrl(dto.getImgPath());
 		collection.setIsSpeedDuel(dto.getIsSpeedDuel());
 		collection.setName(dto.getName());
 		collection.setOnlyDefaultDeck(dto.getOnlyDefaultDeck());
@@ -144,6 +146,14 @@ public class SetCollection {
 				+ imgPath + ", onlyDefaultDeck=" + onlyDefaultDeck + ", releaseDate=" + releaseDate
 				+ ", registrationDate=" + registrationDate + ", isSpeedDuel=" + isSpeedDuel + ", decks=" + decks
 				+ ", setCollectionType=" + setCollectionType + "]";
+	}
+
+	public String getImgurUrl() {
+		return imgurUrl;
+	}
+
+	public void setImgurUrl(String imgurUrl) {
+		this.imgurUrl = imgurUrl;
 	}
 	
 	

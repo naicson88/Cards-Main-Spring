@@ -62,7 +62,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
 		deck.setSetType(set.getSetCollectionType().toString());
-		deck.setImagem(set.getImgPath());
+		deck.setImagem(set.getImgurUrl());
 		deck.setNomePortugues(set.getPortugueseName());
 		deck.setQuantityUserHave(0);
 		

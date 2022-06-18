@@ -260,8 +260,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 		card.setSets(this.cardDecks(cardNumero));
 					
-		if(card.getSets() != null && card.getSets().size() > 0) {
-			
+		if(card.getSets() != null && card.getSets().size() > 0) {			
 			card.getSets().stream().forEach(deck -> 
 				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
 		}

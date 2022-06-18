@@ -64,7 +64,7 @@ public class CardController {
 		return cardService.listarNumero(numero);
 	}
 	
-	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
+	@ApiOperation(value="Return Card details by its Number", authorizations = { @Authorization(value="JWT") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {
 

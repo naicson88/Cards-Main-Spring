@@ -144,7 +144,7 @@ public class HomeServiceImpl implements HomeDetailService{
 				LastAddedDTO lastAdded = new LastAddedDTO();
 				
 				lastAdded.setId(set.get(0, BigInteger.class).longValue());
-				lastAdded.setImg("..\\"+set.get(1, String.class));
+				lastAdded.setImg(set.get(14, String.class));
 				lastAdded.setName(set.get(2, String.class));
 				
 				return lastAdded;

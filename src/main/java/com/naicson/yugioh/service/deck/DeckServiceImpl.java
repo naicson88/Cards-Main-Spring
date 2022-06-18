@@ -1,6 +1,5 @@
 package com.naicson.yugioh.service.deck;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -598,10 +597,10 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		List<Deck> setsFound = null;
 		
-		if("K".equals(source)) {
+		if("KONAMI".equals(source)) {
 			setsFound = this.deckRepository.findTop30ByNomeContaining(setName);
 			
-		} else if("U".equals(source)) {
+		} else if("USER".equals(source)) {
 			List<DeckUsers> deckUser = this.deckUserRepository.findTop30ByNomeContaining(setName);
 			
 			setsFound = deckUser.stream().map(du -> {

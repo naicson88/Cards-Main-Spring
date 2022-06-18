@@ -60,6 +60,7 @@ public class DeckConsumerRabbitMQ {
 			
 		} catch(Exception e) {
 			logger.error("DeckConsumer: " + e.getLocalizedMessage());
+			throw e;
 		}			
 	}
 	

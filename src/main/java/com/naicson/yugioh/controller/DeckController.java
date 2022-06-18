@@ -3,6 +3,7 @@ package com.naicson.yugioh.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -102,17 +103,15 @@ public class DeckController<T> {
 
 	@GetMapping("/set-details")
 	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
+	@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		SetDetailsDTO deck = null;	
 		
 		if("DECK".equals(setType))
-			deck = deckService.deckAndCards(id, source);
-		
-//		else if ("COLLECTION".equals(setType))
-//			deck = setCollService.setCollectionDetailsAsDeck(id, source);
-//		
-//		else
-//			throw new IllegalArgumentException("Invalid Set Type");
+			deck = deckService.deckAndCards(id, source);		
+		else 
+			deck = setCollService.setCollectionDetailsAsDeck(id, source);
+
 				
 		return new ResponseEntity<>(deck, HttpStatus.OK) ;
 	}

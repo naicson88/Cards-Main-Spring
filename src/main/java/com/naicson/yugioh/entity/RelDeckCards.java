@@ -34,6 +34,8 @@ public class RelDeckCards implements Serializable {
 	private Date dt_criacao;	
 	private Boolean isSideDeck;
 	private Boolean isSpeedDuel;
+	@Column(nullable = false)
+	private Integer cardId;
 	
 	public Long getId() {
 		return id;
@@ -122,6 +124,12 @@ public class RelDeckCards implements Serializable {
 			return false;
 		RelDeckCards other = (RelDeckCards) obj;
 		return Objects.equals(cardNumber, other.cardNumber);
+	}
+	public Integer getCardId() {
+		return cardId;
+	}
+	public void setCardId(Integer cardId) {
+		this.cardId = cardId;
 	}	
 
 	

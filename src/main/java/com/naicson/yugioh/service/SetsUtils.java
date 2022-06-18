@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.stereotype.Service;
+
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.util.enums.CardAttributes;
 import com.naicson.yugioh.util.enums.CardProperty;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
 
+@Service
 public class SetsUtils {
 	
 	public SetDetailsDTO getSetStatistics(SetDetailsDTO detailDTO) {

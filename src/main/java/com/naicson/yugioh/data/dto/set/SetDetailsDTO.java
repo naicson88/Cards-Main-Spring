@@ -26,6 +26,7 @@ public class SetDetailsDTO {
 	private Date dt_criacao;
 	private Boolean isSpeedDuel;
 	private List<InsideDeckDTO> insideDecks;	
+	private String imgurUrl;
 	
 	private Map<CardAttributes, Integer> statsQuantityByAttribute;
 	private Map<Integer, Integer> statsQuantityByLevel;
@@ -169,6 +170,12 @@ public class SetDetailsDTO {
 	}
 	public void setStatsQuantityByType(Map<String, Integer> statsQuantityByType) {
 		this.statsQuantityByType = statsQuantityByType;
+	}
+	public String getImgurUrl() {
+		return imgurUrl;
+	}
+	public void setImgurUrl(String imgurUrl) {
+		this.imgurUrl = imgurUrl;
 	}
 
 		

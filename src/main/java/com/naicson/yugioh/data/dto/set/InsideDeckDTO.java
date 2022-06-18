@@ -15,8 +15,21 @@ public class InsideDeckDTO {
 	public List<CardSetDetailsDTO> getCards() {
 		return cards;
 	}
+	
 	public void setCards(List<CardSetDetailsDTO> cards) {
 		this.cards = cards;
+	}
+	public String getInsideDeckName() {
+		return insideDeckName;
+	}
+	public void setInsideDeckName(String insideDeckName) {
+		this.insideDeckName = insideDeckName;
+	}
+	public String getInsideDeckImage() {
+		return insideDeckImage;
+	}
+	public void setInsideDeckImage(String insideDeckImage) {
+		this.insideDeckImage = insideDeckImage;
 	}
 	
 	

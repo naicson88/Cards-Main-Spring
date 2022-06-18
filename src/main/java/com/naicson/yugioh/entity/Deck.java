@@ -44,11 +44,12 @@ public class Deck implements Serializable {
 	private String setType;
 	@Column(name = "dt_criacao")
 	private Date dt_criacao;
+	private Boolean isSpeedDuel;
+	private String imgurUrl;
+	
 	@ManyToMany(mappedBy = "decks")
 	@JsonBackReference
 	private List<SetCollection> setCollection;
-	private Boolean isSpeedDuel;
-	private String imgurUrl;
 	
 	@Transient
 	private List<Card> cards;
