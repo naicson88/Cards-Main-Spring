@@ -6,5 +6,5 @@ import com.naicson.yugioh.entity.RelDeckCards;
 
 public interface RelDeckCardsDetails {
 	
-	List<RelDeckCards> saveRelDeckCards(List<RelDeckCards> list) throws Exception;
+	List<RelDeckCards> saveRelDeckCards(List<RelDeckCards> list);
 }

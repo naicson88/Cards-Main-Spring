@@ -1,4 +1,5 @@
 package com.naicson.yugioh.util.enums;
+import java.util.Arrays;
 
 public enum CardProperty {
 	
@@ -8,16 +9,23 @@ public enum CardProperty {
 	NORMAL("Normal"),
 	FIELD("Field"),
 	RITUAL("Ritual"),
-	COUNTER("Counter");
+	COUNTER("Counter"),
+	UNKNOWN("0");
 	
 	
-	private final String cardRarity;
+	private final String property;
 	
-	CardProperty(String rarity){
-		cardRarity = rarity;
+	public String getCardProperty() {
+		return property;
 	}
 	
-	public String getCardRarity() {
-		return cardRarity;
+	CardProperty(String property){
+		this.property = property;
 	}
+	
+	public static final CardProperty getByValue(String value){
+	    return Arrays.stream(CardProperty.values())
+	    		.filter(enumRole -> enumRole.property.equals(value)).findFirst().orElse(UNKNOWN);
+	}
+
 }

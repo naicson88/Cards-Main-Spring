@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 
@@ -19,13 +20,17 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 	List<Deck> findTop30ByNomeContaining(String nomeDeck);
 	
 	Page<Deck> findAllBySetType(String setType, Pageable pageable);
-	//Page<Deck> findAllByUserId(int userId, Pageable pageable);
 	
 	List<Deck> findAllByIdIn(Long[] arraySetsIds);
 	
-	//List<Deck> findAllByUserId(long userId);
-	
 	@Query(value = "Select * from TAB_DECK_USERS where user_id = :userId", countQuery = "SELECT count(*) FROM yugioh.tab_cards", nativeQuery = true)
 	Page<DeckUsers> listDeckUser(Pageable page, Long userId);
+	
+	@Query(value = " SELECT DK.id, DK.user_id, KONAMI_DECK_COPIED AS deck_id, COUNT(KONAMI_DECK_COPIED) AS qtd " +
+				   " FROM TAB_DECK_USERS DK " +
+				   " WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (:deckId) " +
+				   " GROUP BY (KONAMI_DECK_COPIED) ", nativeQuery = true)	
+	List<RelUserDeckDTO> searchForDecksUserHave(Long userId, String deckId);
+	
 	
 }

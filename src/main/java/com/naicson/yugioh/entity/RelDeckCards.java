@@ -2,6 +2,7 @@ package com.naicson.yugioh.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,8 +31,11 @@ public class RelDeckCards implements Serializable {
 	private String cardSetCode;
 	private Double card_price;
 	private String card_raridade;
-	private Date dt_criacao;
+	private Date dt_criacao;	
 	private Boolean isSideDeck;
+	private Boolean isSpeedDuel;
+	@Column(nullable = false)
+	private Integer cardId;
 	
 	public Long getId() {
 		return id;
@@ -45,12 +49,7 @@ public class RelDeckCards implements Serializable {
 	public void setDeckId(Long deck_id) {
 		this.deckId = deck_id;
 	}
-	public Long getCard_numero() {
-		return cardNumber ;
-	}
-	public void setCard_numero(Long card_numero) {
-		this.cardNumber = card_numero;
-	}
+
 	public String getCard_set_code() {
 		return cardSetCode;
 	}
@@ -80,7 +79,60 @@ public class RelDeckCards implements Serializable {
 	}
 	public void setIsSideDeck(Boolean isSideDeck) {
 		this.isSideDeck = isSideDeck;
+	}
+	public Boolean getIsSpeedDuel() {
+		return isSpeedDuel;
+	}
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
+	public Long getCardNumber() {
+		return cardNumber;
+	}
+	public void setCardNumber(Long cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+	public String getCardSetCode() {
+		return cardSetCode;
+	}
+	public void setCardSetCode(String cardSetCode) {
+		this.cardSetCode = cardSetCode;
+	}
+	public void setSpeedDuel(boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
+	
+	@Override
+	public String toString() {
+		return "RelDeckCards [id=" + id + ", deckId=" + deckId + ", cardNumber=" + cardNumber + ", cardSetCode="
+				+ cardSetCode + ", card_price=" + card_price + ", card_raridade=" + card_raridade + ", dt_criacao="
+				+ dt_criacao + ", isSideDeck=" + isSideDeck + ", isSpeedDuel=" + isSpeedDuel + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(cardNumber);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RelDeckCards other = (RelDeckCards) obj;
+		return Objects.equals(cardNumber, other.cardNumber);
+	}
+	public Integer getCardId() {
+		return cardId;
+	}
+	public void setCardId(Integer cardId) {
+		this.cardId = cardId;
 	}	
+
+	
 	
 	
 }

@@ -1,46 +1,37 @@
 package com.naicson.yugioh.service.card;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dao.CardDAO;
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.cards.CardAndSetsDTO;
-import com.naicson.yugioh.dto.cards.CardDetailsDTO;
-import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
-import com.naicson.yugioh.dto.cards.CardOfUserDetailDTO;
-import com.naicson.yugioh.dto.cards.CardsSearchDTO;
-import com.naicson.yugioh.dto.set.CardsOfUserSetsDTO;
+import com.naicson.yugioh.data.dao.CardDAO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
+import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.entity.stats.CardPriceInformation;
-import com.naicson.yugioh.entity.stats.CardViewsInformation;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.DeckRepository;
@@ -49,7 +40,6 @@ import com.naicson.yugioh.service.HomeServiceImpl;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ApiExceptionHandler;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.CardSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
@@ -104,17 +94,16 @@ public class CardServiceImpl implements CardDetailService {
 	}
 	
 	@Override
-	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) throws SQLException, ErrorMessage {
-		try {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
+	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
+				
+		UserDetailsImpl user = GeneralFunctions.userLogged();
 		
 		if(user.getId() == 0) {
-			throw new ErrorMessage("Unable to query user cards, user ID not entered");
+			 new ErrorMessage("Unable to query user cards, user ID not entered");
 		}
 		
 		if(cardsNumbers == null || cardsNumbers.length == 0) {
-			throw new ErrorMessage("Unable to query user cards, decks IDs not entered");
+			 new ErrorMessage("Unable to query user cards, decks IDs not entered");
 		}
 		
 	     String cardsNumbersString = "";
@@ -129,112 +118,17 @@ public class CardServiceImpl implements CardDetailService {
 		
 	     return relUserCardsList;
 	     
-		}catch(ErrorMessage em) {
-			throw em;
-			
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-	
-	/*@Override
-	public CardAndSetsDTO findCardToAddToUserCollection (Long cardNumber) throws SQLException, ErrorMessage {
-		
-		Card card = cardRepository.findByNumero(cardNumber.longValue());
-		
-		if(card == null)
-			throw new NoSuchElementException("It was not possible find a card to add to user's collection ");
-		
-		//Procura os decks e os set codes desse card
-		List<RelDeckCards> rels = relDeckCardsRepository.findCardByNumberAndIsKonamiDeck(cardNumber);
-		
-		if(rels == null)
-			throw new NoSuchElementException(" There is no deck associate with this card. ");
-		
-		Long[] arraySetsIds = new Long[rels.size()];
-		//Coloca em um array pra poder buscar os decks com esse id
-		for(int i = 0; i < rels.size(); i++) {
-			arraySetsIds[i] = rels.get(i).getDeckId();
-		}
-		
-		List<Deck> sets = deckRepository.findAllByIdIn(arraySetsIds);
-		
-			if(sets == null)
-				throw new NoSuchElementException(" Zero deck was found.");
-			
-		Map <String, String> mapImgSetcode = new HashMap<>();
-		
-		for(RelDeckCards rel: rels ) {
-			Deck setAux =  sets.stream().filter(set -> rel.getDeckId() == set.getId()).findAny().orElse(null);
-			
-			if(setAux != null)
-			mapImgSetcode.put(rel.getCard_set_code(), setAux.getImagem());
-		}
-		
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-		List<Deck> usersSets = deckRepository.findAllByUserId(user.getId());
-		
-		Map<Long, String> mapUsersSets = new HashMap<>();
-		
-		if(usersSets != null && usersSets.size() > 0) {
-			for(Deck userSet: usersSets) {
-				mapUsersSets.put(userSet.getId(), userSet.getNome());
-			}
-		}		
-		
-		CardAndSetsDTO dto = new CardAndSetsDTO();
-		
-		dto.setNumero(card.getNumero());
-		dto.setNome(card.getNome());
-		dto.setImagem(card.getImagem());
-		dto.setMapDeckSetcode(mapImgSetcode);
-		dto.setMapSetsOfUser(mapUsersSets);
-		
-		return dto;
-	}*/
-	
-	@Override
-	public List<Card> listar() {
-		// TODO Auto-generated method stub
-		return cardRepository.findAll();
 	}
 
-	@Override
-	public Card listarId(int id) {
-		// TODO Auto-generated method stub
-		return cardRepository.findById(id);
-	}
-
-	@Override
-	public Card add(Card card) {
-
-		return cardRepository.save(card);
-	}
-
-	@Override
-	public Card editar(Card card) {
-		// TODO Auto-generated method stub
-		return cardRepository.save(card);
-	}
-
-	@Override
-	public Card deletar(int id) {
-		// TODO Auto-generated method stub
-		Card card = cardRepository.findById(id);
-		if(card != null) {
-			cardRepository.delete(card);
-		}
-		
-		return card;
-	}
 
 	@Override
 	public Card listarNumero(Long numero) {
 		return cardRepository.findByNumero(numero);
 	}
+	
 
 	@Override
-	public List<CardOfArchetypeDTO> encontrarPorArchetype(Integer archId) {
+	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
 		
 		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId);
 		
@@ -253,9 +147,8 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public CardOfUserDetailDTO cardOfUserDetails(Long cardNumber) throws ErrorMessage, SQLException, Exception{
-				
-		try {
+	public CardOfUserDetailDTO cardOfUserDetails(Long cardNumber) {
+			
 
 			UserDetailsImpl user = GeneralFunctions.userLogged();
 						
@@ -267,7 +160,7 @@ public class CardServiceImpl implements CardDetailService {
 			
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardNumber, user.getId());
 			
-			if(cardsDetails != null) {
+			if(cardsDetails != null ) {
 				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
 				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(
 						c.get(0, String.class),
@@ -297,53 +190,44 @@ public class CardServiceImpl implements CardDetailService {
 			
 			return cardUserDTO;
 			
-		}catch (Exception ex) {
-			throw ex;
-		}
 	}
 	
 
 	@Override
-	@Transactional
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
 		Card card = cardRepository.findByNumero(cardNumero);
 		
-		if (card == null || card.getId() == null) {
-			logger.error("It was not possible find card with number: {}".toUpperCase(), cardNumero);
+		if (card == null || card.getId() == null) 
 			throw new EntityNotFoundException("It was not possible find card with number: " + cardNumero);
-		}
-		
-		card = this.setAllCardSetsAndAlternativeNumbers(cardNumero, card);
+				
+		card = this.setAllDecksAndAlternativeNumbers(cardNumero, card);
 		
 		CardDetailsDTO dto = new CardDetailsDTO();
 		
 		dto.setCard(card);
-		dto.setQtdUserHaveByKonamiCollection(this.findQtdUserHaveByCollection(card.getId(), "konami"));
-		dto.setQtdUserHaveByUserCollection(this.findQtdUserHaveByCollection(card.getId(), "user"));
+		dto.setQtdUserHaveByKonamiCollection(this.findQtdCardUserHaveByCollection(card.getId(), "konami"));
+		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId(), "user"));
 		dto.setPrices(cardPriceService.getAllPricesOfACardById(card.getId()));
 		
-		try {
-			dto.setViews(this.updateQtdCardViews(cardNumero));	
-			
-		}catch(Exception e) {
-			logger.error(e.getMessage());
-		}
+		dto.setViews(viewsService.updateCardViewsOrInsertInDB(cardNumero));	
 		
 		return dto;
+		
 	}
 
-	private CardViewsInformation updateQtdCardViews(Long cardNumero) {
-		
-		CardViewsInformation views = viewsService.updateCardViewsOrInsertInDB(cardNumero);
-		
-		if(views != null)
-			logger.info("Card views successfully updated!");
-		
-		return views;
-	}
-
-	private Map<String, Integer> findQtdUserHaveByCollection(Integer cardId, String collectionSource) {
+//	private CardViewsInformation updateQtdCardViews(Long cardNumero) {
+//		
+//		CardViewsInformation views = viewsService.updateCardViewsOrInsertInDB(cardNumero);
+//		
+//		if(views != null)
+//			logger.info("Card views successfully updated!");
+//		
+//		return views;
+//	}
+	
+	@Override
+	public Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 		
 		Map<String, Integer> mapCardSetAndQuantity = new HashMap<>();
@@ -359,6 +243,7 @@ public class CardServiceImpl implements CardDetailService {
 		if(total != null) {
 			
 			total.stream().forEach(relation -> {
+				System.out.println(relation.get(1));
 				mapCardSetAndQuantity.put(relation.get(1, String.class), relation.get(0, BigInteger.class).intValue());
 			});			
 			
@@ -371,12 +256,11 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	
-	private Card setAllCardSetsAndAlternativeNumbers(Long cardNumero, Card card) {
+	private Card setAllDecksAndAlternativeNumbers(Long cardNumero, Card card) {
 		
 		card.setSets(this.cardDecks(cardNumero));
 					
-		if(card.getSets() != null && card.getSets().size() > 0) {
-			
+		if(card.getSets() != null && card.getSets().size() > 0) {			
 			card.getSets().stream().forEach(deck -> 
 				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
 		}
@@ -408,6 +292,7 @@ public class CardServiceImpl implements CardDetailService {
 
 	@Override
 	public Page<Card> findAll(CardSpecification spec, Pageable pageable) {
+		
 		if(spec == null )
 			throw new IllegalArgumentException("No specification for card search");
 		
@@ -440,6 +325,10 @@ public class CardServiceImpl implements CardDetailService {
 	
 	@Override
 	public Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable) {
+		
+		if(criterias == null || criterias.isEmpty())
+			throw new IllegalArgumentException("Criterias is invalid");
+		
 		CardSpecification spec = new CardSpecification();
 		
 		criterias.stream().forEach(criterio ->
@@ -489,6 +378,7 @@ public class CardServiceImpl implements CardDetailService {
 
 	@Override
 	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber) {
+		
 		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("Card number is invalid");
 		
@@ -502,20 +392,14 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public CardAndSetsDTO findCardToAddToUserCollection(Long cardNumber) throws SQLException, ErrorMessage {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Long> findCardsNotRegistered(List<Long> cardsNumber) {
 		
-		if(cardsNumber == null || cardsNumber.isEmpty()) {
-			logger.error("List with card numbers is invalid");
+		if(cardsNumber == null || cardsNumber.isEmpty()) 
 			throw new IllegalArgumentException("List with card numbers is invalid");
-		}
+		
 		
 		List<Long> cardsRegistered = cardRepository.findAllCardsByListOfCardNumbers(cardsNumber);
+		
 		List<Long> cardsNotRegistered = new ArrayList<>();
 		
 		if(cardsRegistered == null || cardsRegistered.isEmpty()) {
@@ -529,23 +413,23 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	private List<Long> verifyCardsNotRegistered(List<Long> cardsNumber, List<Long> cardsRegistered) {
-			
-		if(cardsNumber == null || cardsNumber.isEmpty()) {
-			logger.error("List with card numbers is invalid");
-			throw new IllegalArgumentException("List with card numbers is invalid");
-		}
 		
-		if(cardsRegistered == null || cardsRegistered.isEmpty()) {
-			logger.error("There is no list of comparison since cards registered is empty");
+		List<Long> allCards = new LinkedList<>(cardsNumber);
+		
+		if(allCards == null || allCards.isEmpty())			
+			throw new IllegalArgumentException("List with card numbers is invalid");		
+		
+		if(cardsRegistered == null || cardsRegistered.isEmpty())			
 			throw new IllegalArgumentException("There is no list of comparison since cards registered is empty");
-		}
 		
-		if(cardsRegistered.containsAll(cardsNumber))
+		
+		if(cardsRegistered.containsAll(allCards))
 			return Collections.emptyList();
 			
-			cardsNumber.removeAll(cardsRegistered);
+			allCards.removeAll(cardsRegistered);
 			
-			return cardsNumber;		
+			return allCards;		
 	}
+
 
 }

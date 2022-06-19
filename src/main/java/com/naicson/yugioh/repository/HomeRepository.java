@@ -2,18 +2,13 @@ package com.naicson.yugioh.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.naicson.yugioh.dto.home.HomeDTO;
-import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.sets.DeckUsers;
+import com.naicson.yugioh.data.dto.home.HomeDTO;
 
 
 @Repository

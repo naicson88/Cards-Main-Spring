@@ -7,13 +7,14 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.home.RankingForHomeDTO;
+import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.stats.CardViewsInformation;
 import com.naicson.yugioh.repository.CardRepository;
@@ -99,6 +100,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	}
 
 	@Override
+	@Transactional
 	public CardViewsInformation updateCardViewsOrInsertInDB(Long cardNumber) {
 		this.validCardNumber(cardNumber);
 		
@@ -119,6 +121,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 
 
 	private CardViewsInformation insertCardViews(Long cardNumber) {
+		
 		this.validCardNumber(cardNumber);
 		
 		CardViewsInformation views = new CardViewsInformation();
@@ -138,8 +141,13 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	}
 	
 	private void validCardNumber(Long cardNumber) {
+		
 		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("Invalid Card Number: " + cardNumber);
+		
+		if (cardRepository.findByNumero(cardNumber) == null ) 
+			throw new EntityNotFoundException("Can't find card with number: " + cardNumber);
+		
 	}
 	
 }

@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.naicson.yugioh.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 
 @Entity
 @Table(name = "tab_archetypes")

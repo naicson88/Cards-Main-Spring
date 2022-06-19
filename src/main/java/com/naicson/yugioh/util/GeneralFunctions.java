@@ -46,6 +46,19 @@ public abstract class GeneralFunctions {
 		return str;
 	}
 	
+	public static String transformArrayInStringForLong(Long[] array) {
+		
+		String str = "";
+
+		for (Long values : array) {
+			str += values;
+			str += ",";
+		}
+		str += "0";
+		
+		return str;
+	}
+	
     public static String momentAsString() {
     	String hour = String.valueOf(LocalDateTime.now().getHour());
     	String minutes = String.valueOf(LocalDateTime.now().getMinute());
@@ -67,5 +80,19 @@ public abstract class GeneralFunctions {
     	}catch(IOException e) {
     		e.getMessage();
     	}
+    }
+    
+    public static String getFolderBySetType(String setType) {
+    	
+    	if("DECK".equalsIgnoreCase(setType))
+			return "deck";
+		else if("BOOSTER".equalsIgnoreCase(setType))
+			return "booster";
+    	if("TIN".equalsIgnoreCase(setType))
+			return "tin";
+		else if("BOX".equalsIgnoreCase(setType))
+			return "box";
+    	
+    	return null;
     }
 }

@@ -3,9 +3,7 @@ package com.naicson.yugioh.service;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -14,18 +12,16 @@ import javax.persistence.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.home.HomeDTO;
-import com.naicson.yugioh.dto.home.LastAddedDTO;
-import com.naicson.yugioh.dto.home.RankingForHomeDTO;
-import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.data.dto.home.HomeDTO;
+import com.naicson.yugioh.data.dto.home.LastAddedDTO;
 import com.naicson.yugioh.repository.HomeRepository;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.service.interfaces.HomeDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.CardStats;
 import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
@@ -41,6 +37,9 @@ public class HomeServiceImpl implements HomeDetailService{
 	CardViewsInformationServiceImpl cardViewService;
 
 	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);	
+	
+	@Value("${sets.imgs.path}")
+	private String setsImgPath;
 	
 	@Override
 	public HomeDTO getHomeDto() {
@@ -74,18 +73,22 @@ public class HomeServiceImpl implements HomeDetailService{
 		List<LastAddedDTO> lastsSetsAdded = new ArrayList<>();
 		
 			if(sets != null && !sets.isEmpty()) {
-				//Lasts cards or decks added
-					lastsSetsAdded = sets.stream().map(set ->{
-					LastAddedDTO lastSet = new LastAddedDTO();				
-					lastSet.setId(set.get(0,BigInteger.class).longValue());
-					lastSet.setImg("..\\"+set.get(1, String.class));
-					lastSet.setName(set.get(2, String.class));
-					lastSet.setPrice(totalSetPrice(lastSet.getId()));
-					lastSet.setSetCode("WWW-EN001");
+			//Lasts cards or decks added
+				lastsSetsAdded = sets.stream().map(set ->{
 					
-					return lastSet;
-				}).collect(Collectors.toList());
+				LastAddedDTO lastSet = new LastAddedDTO();
+				String setFolder = set.get(6, String.class);
+				setFolder = GeneralFunctions.getFolderBySetType(setFolder)+"\\";
 				
+				lastSet.setId(set.get(0,BigInteger.class).longValue());
+				lastSet.setName(set.get(2, String.class));
+			    lastSet.setImg(set.get(1, String.class));
+				lastSet.setPrice(totalSetPrice(lastSet.getId()));
+				lastSet.setSetCode("WWW-EN001");
+				
+				return lastSet;
+			}).collect(Collectors.toList());
+			
 				if(lastsSetsAdded == null || lastsSetsAdded.isEmpty()) {
 					logger.error("LIST WITH LASTS ADDED IS EMPTY");
 					throw new ErrorMessage("List with lasts added is empty");
@@ -141,7 +144,7 @@ public class HomeServiceImpl implements HomeDetailService{
 				LastAddedDTO lastAdded = new LastAddedDTO();
 				
 				lastAdded.setId(set.get(0, BigInteger.class).longValue());
-				lastAdded.setImg("..\\"+set.get(1, String.class));
+				lastAdded.setImg(set.get(14, String.class));
 				lastAdded.setName(set.get(2, String.class));
 				
 				return lastAdded;

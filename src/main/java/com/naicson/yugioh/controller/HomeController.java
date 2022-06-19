@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naicson.yugioh.dto.home.HomeDTO;
+import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.service.HomeServiceImpl;
 
 @RestController

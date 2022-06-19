@@ -24,25 +24,29 @@ public class ApiExceptionHandler {
 			
 		@ExceptionHandler(value = {Exception.class})
 		public ResponseEntity<ApiExceptions> handleExceptionError(Exception e) {
-			ApiExceptions ex = new ApiExceptions(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, this.time);			
+			ApiExceptions ex = new ApiExceptions(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, this.time);	
+			logger.error("Exception: " + e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
 		}
 		
 		@ExceptionHandler(value = {IllegalArgumentException.class})
 		public ResponseEntity<Object> handleValiationException(IllegalArgumentException e){			
 			ApiExceptions ex = new ApiExceptions(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST, this.time);	
+			logger.error("IllegalArgumentException: "+ e.getMessage());
 			return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
 		}
 		
 		@ExceptionHandler(value = {NoSuchElementException.class})
 		public ResponseEntity<Object> handleNotFoundlErros(NoSuchElementException e){	
 			ApiExceptions ex = new ApiExceptions(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND, ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));	
+			logger.error("NoSuchElementException: " + e.getMessage());
 			return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
 		}
 		
 		@ExceptionHandler(value = {EntityNotFoundException.class})
 		public ResponseEntity<Object> handleEntityNotFoundlErros(EntityNotFoundException e){			
 			ApiExceptions ex = new ApiExceptions(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND, ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));	
+			logger.error("EntityNotFoundException: " + e.getMessage());
 			return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
 		}
 			

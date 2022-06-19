@@ -2,12 +2,13 @@ package com.naicson.yugioh.util;
 
 import java.util.Date;
 
-import com.naicson.yugioh.dto.RelUserCardsDTO;
-import com.naicson.yugioh.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.util.enums.CardRarity;
 
 public abstract class ValidObjects {
 	
@@ -37,9 +38,9 @@ public abstract class ValidObjects {
 	public static RelDeckCards generateRelDeckCards() {
 		RelDeckCards relDeckCards = new RelDeckCards();
 		
-		relDeckCards.setCard_numero(9999999L);
+		relDeckCards.setCardNumber(9999999L);
 		relDeckCards.setCard_price(90.58);
-		relDeckCards.setCard_raridade("R");
+		relDeckCards.setCard_raridade(CardRarity.RARE.getCardRarity());
 		relDeckCards.setCard_set_code("YYYY-1111");
 		relDeckCards.setDeckId(1L);
 		relDeckCards.setDt_criacao(new Date());
@@ -47,9 +48,9 @@ public abstract class ValidObjects {
 		return relDeckCards;
 	}
 	
-	public static Card generateValidCard() {
+	public static Card generateValidCard(Integer id) {
 		Card card = new Card();
-		
+		card.setId(id);
 		//card.setArquetipo("Arquetipo Teste");
 		card.setAtk(2000);
 		//card.setAtributo("EARTH");
@@ -60,6 +61,7 @@ public abstract class ValidObjects {
 		card.setEscala(8);
 		card.setNumero(15060L);
 		card.setImagem("mocked imagem");
+		card.setNome("Test Name");
 		
 		return card;
 	}
@@ -95,5 +97,8 @@ public abstract class ValidObjects {
 		
 		return dto;
 	}
+	
+
+
 	
 }

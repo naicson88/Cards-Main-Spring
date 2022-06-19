@@ -1,13 +1,20 @@
 package com.naicson.yugioh.util.exceptions;
 
-public class ErrorMessage extends Exception {
+import org.springframework.http.HttpStatus;
+
+public class ErrorMessage extends RuntimeException {
 	
 	private static final long serialVersionUID = 1149241039409861914L;
 	
 	private String status_code;
 	private String msg;
+	private HttpStatus httpStatus;
 	
-	
+	public ErrorMessage(HttpStatus httStatus, String msg) {
+		super();
+		this.setHttpStatus(httStatus);
+		this.msg = msg;
+	}
 	
 	public ErrorMessage(String status_code, String msg) {
 		super();
@@ -41,6 +48,14 @@ public class ErrorMessage extends Exception {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
+	}
+
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
 	}
 	
 	

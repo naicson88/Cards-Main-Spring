@@ -6,6 +6,7 @@ public enum CardRarity {
 	RARE("Rare"),
 	SUPER_RARE("Super Rare"),
 	ULTRA_RARE("Ultra Rare"),
+	SECRET_RARE("Secret Rare"),
 	NOT_DEFINED("Not Defined");
 	
 	

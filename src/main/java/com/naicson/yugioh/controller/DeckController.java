@@ -1,51 +1,63 @@
 package com.naicson.yugioh.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.domain.Pageable;
 
-import com.naicson.yugioh.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.sets.DeckUsersRepository;
-import com.naicson.yugioh.service.DeckServiceImpl;
 import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.interfaces.SetCollectionService;
+import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 @RestController
 @RequestMapping({ "yugiohAPI/decks" })
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-public class DeckController {
+public class DeckController<T> {
 
 	@Autowired
 	DeckRepository deckRepository;
+	
 	@Autowired
 	DeckServiceImpl deckService;
+	
+	@Autowired
+	SetCollectionService setCollService;
+	
+	@Autowired
+	ISetsByType<T> setsBySetType;
+	
 	@Autowired
 	DeckUsersRepository deckUserRepository;
 
-	Page<Deck> deckList = null;
+	Page<DeckSummaryDTO> setList = null;
 	Page<DeckUsers> deckUserList = null;
 
 	@GetMapping("/todos")
@@ -53,22 +65,20 @@ public class DeckController {
 		return deckRepository.findAll();
 	}
 
-	@GetMapping("/pagination")
-	public ResponseEntity<Page<Deck>> deckPagination(
-			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-			@RequestParam String setType) {
-
-		if (!setType.equals("") && setType != null && !setType.equals("UD"))
-			deckList = deckRepository.findAll(pageable);
-		
-		if (deckList.isEmpty()) {
-			return new ResponseEntity<Page<Deck>>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(deckList, HttpStatus.OK);
+	@GetMapping("/get-sets")
+	@ApiOperation(value="Return summary Set informations with Pagination", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<Page<DeckSummaryDTO>> deckPagination(
+		@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+		@RequestParam String setType) {
+			
+	    setList =  setsBySetType.findAllSetsByType(pageable, setType);
+	
+	    return new ResponseEntity<>(setList, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/sets-of-user")
+	@ApiOperation(value="Return Sets of a User", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Page<DeckUsers>> setsOfUser(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
@@ -91,23 +101,31 @@ public class DeckController {
 		return new ResponseEntity<>(deckUserList, HttpStatus.OK);
 	}
 
-	@GetMapping
-	public ResponseEntity<Deck> deckAndCards(@RequestParam Long id, @RequestParam String source) throws Exception {
-		Deck deck;	
+	@GetMapping("/set-details")
+	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
+	@Cacheable(value = "setDetails")
+	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
+		SetDetailsDTO deck = null;	
 		
-		deck = deckService.deckAndCards(id, source);	
-		
+		if("DECK".equals(setType))
+			deck = deckService.deckAndCards(id, source);		
+		else 
+			deck = setCollService.setCollectionDetailsAsDeck(id, source);
+
+				
 		return new ResponseEntity<>(deck, HttpStatus.OK) ;
 	}
 	
 	@GetMapping("/edit-deck")
-	public ResponseEntity<Deck> editDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
-		Deck deck = deckService.editDeck(deckId, setSource);
+	@ApiOperation(value="Edit a Set by its ID and Source type", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
+		Deck deck = deckService.editUserDeck(deckId);
 		
 		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
 	}
 	
 	@GetMapping("/search-by-set-name")
+	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<Deck>> searchByDeckName(@RequestParam("setName") String setName, @RequestParam("source") String source) {
 		List<Deck> setsFound = this.deckService.searchByDeckName(setName, source);
 		
@@ -115,40 +133,41 @@ public class DeckController {
 	}
 
 	@GetMapping(path = { "/add-deck-to-user-collection/{deckId}" })
-	public int addSetToUserCollection(@PathVariable("deckId") Long deckId) throws Exception, ErrorMessage {
-		if (deckId != null && deckId > 0) {
-			return deckService.addSetToUserCollection(deckId);
-		} else {
-			throw new ErrorMessage("The deck informed is not valid!");
-		}
+	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
+	
+		Integer qtdAdded = deckService.addSetToUserCollection(deckId);
+		
+		return new ResponseEntity<Integer>(qtdAdded, HttpStatus.OK);
+					
 	}
 
 	@GetMapping(path = { "/remove-set-to-user-collection/{deckId}" })
-	public int removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) throws Exception, ErrorMessage {
-		if (deckId != null && deckId > 0) {
-			return deckService.removeSetFromUsersCollection(deckId);
-		} else {
-			throw new ErrorMessage("The deck informed is not valid!");
-		}
+	@ApiOperation(value="Remove a Set from User collection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) {
+		
+		 deckService.removeSetFromUsersCollection(deckId);
+		
+		return new ResponseEntity<String>("Set was successfully removed from your collection", HttpStatus.OK);
+
 	}
 
 	@GetMapping("/rel-user-decks")
-	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) throws SQLException, ErrorMessage {
-		List<RelUserDeckDTO> rel = null;
+	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
+	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
 
-		if (decksIds != null && decksIds.length > 0) {
-			rel = deckService.searchForDecksUserHave(decksIds);
-		}
-
+		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
+		
 		return rel;
 	}
 	
-	@PostMapping(path = "/save-userdeck",  produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<String> saveUserDeck(@RequestBody Deck deck) throws SQLException{
+	@PostMapping(path = "/save-userdeck",  consumes={"application/json"})
+	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
 		this.deckService.saveUserdeck(deck);
-		List<String> retorno = List.of("Deck saved successfully");
 		
-		return retorno; 
+		return new ResponseEntity<String>("Deck saved successfully", HttpStatus.CREATED);
+
 	}
 
 }

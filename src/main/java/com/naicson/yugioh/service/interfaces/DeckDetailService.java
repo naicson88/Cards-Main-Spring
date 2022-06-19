@@ -2,33 +2,32 @@ package com.naicson.yugioh.service.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.Query;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public interface DeckDetailService {
 	
-	List<Deck> findByNomeContaining(String nomeDeck);
-	
 	List<Card> cardsOfDeck(Long deckId, String table) throws ErrorMessage;
-	 
+	
+	Page<Deck> findAll(Pageable pageable);
+	
 	Deck findById(Long Id);
 
 	int addSetToUserCollection(Long originalDeckId) throws SQLException, ErrorMessage, Exception;
 
-	int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) throws SQLException, ErrorMessage;
+	int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove);
 
-	List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) throws SQLException, ErrorMessage;
+	List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds);
 
 	Long addDeck(Deck deck) throws SQLException, ErrorMessage;
 
@@ -39,7 +38,7 @@ public interface DeckDetailService {
 	int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove)
 			throws SQLException, ErrorMessage;
 	
-	Deck deckAndCards(Long deckId, String setType) throws Exception;
+	SetDetailsDTO deckAndCards(Long deckId, String setType) throws Exception;
 	
 	List<Card> consultMainDeck(Long deckId);
 	
@@ -55,11 +54,14 @@ public interface DeckDetailService {
 	
 	Deck countQtdCardRarityInTheDeck(Deck deck);
 
-	Deck editDeck(Long deckId, String deckType);
-
 	List<RelDeckCards> relDeckCards(Long deckId, String setSource);
 	
 	Deck saveKonamiDeck(Deck kDeck);
+
+	List<Card> consultSideDeckCards(Long deckId, String deckSource);
+
+	Deck editUserDeck(Long deckId);
 	
+	Deck returnDeckWithCards(Long deckId, String deckSource);
 	
 }

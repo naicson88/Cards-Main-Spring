@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.security.JwtUtils;
 import com.naicson.yugioh.entity.auth.ERole;
 import com.naicson.yugioh.entity.auth.JwtResponse;
 import com.naicson.yugioh.entity.auth.LoginRequest;
@@ -28,9 +29,11 @@ import com.naicson.yugioh.entity.auth.SignupRequest;
 import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
-import com.naicson.yugioh.security.JwtUtils;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 @CrossOrigin(origins = "${angular.path}", maxAge = 3600)
 @RestController
@@ -48,6 +51,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
+	@ApiOperation(value="Login in the application")
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
 		Authentication auth = authManeger.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

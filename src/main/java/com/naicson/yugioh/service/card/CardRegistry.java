@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.dto.CardYuGiOhAPI;
-import com.naicson.yugioh.dto.KonamiDeck;
+import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
+import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.Card;
