@@ -355,13 +355,13 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Override
 	public SetDetailsDTO deckAndCards(Long deckId, String deckSource) {
 		
+		if(!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource)) 
+			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);
+		
 		Deck deck = new Deck();
 		
 		SetsUtils utils = new SetsUtils();
-		
-		if(!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource)) 
-			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);			
-				
+					
 		deck =  this.returnDeckWithCards(deckId, deckSource);
 		deck = this.countQtdCardRarityInTheDeck(deck);
 		

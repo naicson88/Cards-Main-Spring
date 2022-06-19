@@ -161,7 +161,7 @@ public class DeckController<T> {
 		return rel;
 	}
 	
-	@PostMapping(path = "/save-userdeck",  produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/save-userdeck",  consumes={"application/json"})
 	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
 		this.deckService.saveUserdeck(deck);
