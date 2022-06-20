@@ -48,7 +48,6 @@ public class Deck implements Serializable {
 	private String imgurUrl;
 	
 	@ManyToMany(mappedBy = "decks")
-	@JsonBackReference
 	private List<SetCollection> setCollection;
 	
 	@Transient
