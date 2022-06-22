@@ -1,10 +1,16 @@
 package com.naicson.yugioh.controller;
 
+import javax.print.DocFlavor.SERVICE_FORMATTED;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -25,5 +31,13 @@ public class SetCollectionController {
 	@ApiOperation(value="Get a Set Collection by its ID", authorizations = { @Authorization(value="JWT") })
 	public SetCollection findById(@PathVariable("id") Integer id) {
 		return service.findById(id);
+	}
+	
+	@GetMapping("/add/{setId}")
+	@ApiOperation(value="Add a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> addSetCollectionInUsersCollection(@PathVariable("setId") Integer setId) {
+		String msg = service.addSetCollectionInUsersCollection(setId);
+		
+		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 	}
 }

@@ -174,9 +174,14 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 			
 	@Override
 	public SetCollection findById(Integer id) {	
-		SetCollection col = setColRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("SetCollection not found"));
-		
+		SetCollection col = setColRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("SetCollection not found"));		
 		return col;
+	}
+
+	@Override
+	public String addSetCollectionInUsersCollection(Integer setId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
