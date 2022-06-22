@@ -46,7 +46,6 @@ public class SetCollection {
 	@JoinTable(name="tab_setcollection_deck",
     joinColumns={@JoinColumn(name="set_collection_id")},
     inverseJoinColumns={@JoinColumn(name="deck_id")})
-	@JsonManagedReference
 	private List<Deck> decks;
 	@Enumerated(EnumType.STRING)
 	private SetType setCollectionType;

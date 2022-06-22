@@ -1,7 +1,9 @@
 package com.naicson.yugioh.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
@@ -32,7 +37,6 @@ import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -161,12 +165,15 @@ public class DeckController<T> {
 		return rel;
 	}
 	
-	@PostMapping(path = "/save-userdeck",  consumes={"application/json"})
+	@PostMapping(path = "/save-userdeck")
 	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
+//		ObjectMapper mapper = new ObjectMapper();
+//		Deck deck = mapper.readValue(json, Deck.class);
+		
 		this.deckService.saveUserdeck(deck);
 		
-		return new ResponseEntity<String>("Deck saved successfully", HttpStatus.CREATED);
+		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
 
 	}
 
