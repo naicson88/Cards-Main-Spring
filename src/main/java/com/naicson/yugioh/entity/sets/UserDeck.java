@@ -11,11 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.beans.BeanUtils;
+
+import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.util.GeneralFunctions;
 
 @Entity
-@Table(name = "tab_deck_users")
-public class DeckUsers {
+@Table(name = "tab_user_deck")
+public class UserDeck {
 	
 	@Id
 	@Column
@@ -28,22 +32,24 @@ public class DeckUsers {
 	private Long userId;
 	private Date dtCriacao;
 	private String setType;
+	private Boolean isSpeedDuel;
+	private String imgurUrl;
 	@Transient
 	private List<RelDeckCards> relDeckCards;
+
+	public static UserDeck userDeckFromDeck(Deck deck) {
+		UserDeck du = new UserDeck();
+		BeanUtils.copyProperties(deck, du);
+		
+		du.setNome(du.getNome()+"_"+GeneralFunctions.momentAsString());
+		du.setUserId(GeneralFunctions.userLogged().getId());
+		du.setDtCriacao(new Date());
+		du.setKonamiDeckCopied(deck.getId());
+		du.setRelDeckCards(deck.getRel_deck_cards());
+		
+		return du;
 	
-	public DeckUsers(Long id, String nome, String imagem, Long konamiDeckCopied, Long userId, Date dtCriacao,
-			String setType) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.imagem = imagem;
-		this.konamiDeckCopied = konamiDeckCopied;
-		this.userId = userId;
-		this.dtCriacao = dtCriacao;
-		this.setType = setType;
 	}
-	
-	
 	
 	public List<RelDeckCards> getRelDeckCards() {
 		return relDeckCards;
@@ -53,7 +59,7 @@ public class DeckUsers {
 		this.relDeckCards = relDeckCards;
 	}
 
-	public DeckUsers() {}
+	public UserDeck() {}
 	
 	public Long getId() {
 		return id;
@@ -98,6 +104,26 @@ public class DeckUsers {
 
 	public void setSetType(String setType) {
 		this.setType = setType;
+	}
+
+
+	public Boolean getIsSpeedDuel() {
+		return isSpeedDuel;
+	}
+
+
+	public void setIsSpeedDuel(Boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
+	}
+
+
+	public String getImgurUrl() {
+		return imgurUrl;
+	}
+
+
+	public void setImgurUrl(String imgurUrl) {
+		this.imgurUrl = imgurUrl;
 	}
 
 	

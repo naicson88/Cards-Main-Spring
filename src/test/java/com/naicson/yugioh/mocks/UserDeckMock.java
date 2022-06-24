@@ -2,12 +2,13 @@ package com.naicson.yugioh.mocks;
 
 import java.util.Date;
 
-import com.naicson.yugioh.entity.sets.DeckUsers;
+import com.naicson.yugioh.entity.sets.UserDeck;
 
-public class DeckUsersMock {
+
+public class UserDeckMock {
 	
-	public static DeckUsers generateValidDeckUsers() {
-		DeckUsers d = new DeckUsers();
+	public static UserDeck generateValidUserDeck() {
+		UserDeck d = new UserDeck();
 		d.setDtCriacao(new Date());
 		d.setId(1L);
 		d.setImagem("Any String");

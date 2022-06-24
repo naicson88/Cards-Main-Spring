@@ -180,7 +180,7 @@ public class DeckDAO {
 	public List<RelUserDeckDTO> searchForDecksUserHave(long userId, String decksIds) {		
 		Query query = em.createNativeQuery(
 				" SELECT DK.id, DK.user_id, KONAMI_DECK_COPIED AS deck_id, COUNT(KONAMI_DECK_COPIED) AS qtd " +
-				" FROM TAB_DECK_USERS DK " + 
+				" FROM tab_user_deck DK " + 
 				" WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (" +  decksIds + ")" +
 				" GROUP BY (KONAMI_DECK_COPIED) ", RelUserDeckDTO.class)
 				

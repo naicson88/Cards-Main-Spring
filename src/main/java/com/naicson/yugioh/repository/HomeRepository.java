@@ -14,22 +14,22 @@ import com.naicson.yugioh.data.dto.home.HomeDTO;
 @Repository
 public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 	
-	@Query(value = "select  count(set_type) from tab_deck_users as du where set_type = :setType and du.user_id = :userId ", nativeQuery = true)
+	@Query(value = "select  count(set_type) from tab_user_deck as du where set_type = :setType and du.user_id = :userId ", nativeQuery = true)
 	long returnQuantitySetType(String setType, Long userId);
 	
 	@Query(value = "select  count(card_numero) "
 			+ " from tab_rel_deckusers_cards rel "
-			+ " inner join tab_deck_users du on du.id = rel.deck_id "
+			+ " inner join tab_user_deck du on du.id = rel.deck_id "
 			+ " where du.user_id = :userId ", nativeQuery = true)
 	long returnQuantityCardsUserHave(long userId);
 	
-	@Query(value = "select distinct * from tab_deck_users where user_id = :userId order by dt_criacao desc limit 10", nativeQuery = true)
+	@Query(value = "select distinct * from tab_user_deck where user_id = :userId order by dt_criacao desc limit 10", nativeQuery = true)
 	List<Tuple> returnLastSetsAddedToUser(long userId);
 	
 	@Query(value = 	
 			 " select distinct cards.numero, cards.nome, rel.card_set_code, rel.card_price from tab_cards cards "
 			+ " inner join tab_rel_deckusers_cards rel on rel.card_numero = cards.numero "
-			+ " inner join tab_deck_users du on du.id = rel.deck_id "
+			+ " inner join tab_user_deck du on du.id = rel.deck_id "
 			+ " where du.user_id = :userId"
 			+ " order by du.dt_criacao "
 			+ " limit 10 ", nativeQuery = true)

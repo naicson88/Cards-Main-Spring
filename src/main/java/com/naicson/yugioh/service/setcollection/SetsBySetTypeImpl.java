@@ -8,18 +8,19 @@ import org.springframework.stereotype.Component;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.SetCollectionRepository;
-import com.naicson.yugioh.service.interfaces.DeckDetailService;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.enums.SetType;
-
-import ch.qos.logback.core.pattern.Converter;
 
 @Component
 public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	
 	@Autowired
-	DeckDetailService deckService;
+	UserDeckServiceImpl userDeckService;
+	
+	@Autowired
+	DeckServiceImpl deckService;
 	
 	@Autowired
 	SetCollectionRepository setRepository;
@@ -90,8 +91,8 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setNomePortugues(originalDeck.getNomePortugues());
 		
 		Long[] idEntity = {originalDeck.getId()};
-		 if(deckService.searchForDecksUserHave(idEntity) != null && deckService.searchForDecksUserHave(idEntity).size() > 0)
-			 deck.setQuantityUserHave(deckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
+		 if(userDeckService.searchForDecksUserHave(idEntity) != null && userDeckService.searchForDecksUserHave(idEntity).size() > 0)
+			 deck.setQuantityUserHave(userDeckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
 		
 		return deck;
 	}
