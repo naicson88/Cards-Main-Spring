@@ -32,7 +32,7 @@ public class CardDAO {
 	public List<Tuple> listCardOfUserDetails(Long cardNumber, long userId) {
 		Query query = em.createNativeQuery("select du.nome , rel.card_set_code , rel.card_raridade as rarity,\r\n"
 			+ " rel.card_price as price, count(rel.card_set_code) as quantity\r\n"
-			+ "from tab_deck_users du \r\n"
+			+ "from tab_user_deck du \r\n"
 			+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = du.id \r\n"
 			+ "where rel.card_numero = :cardNumber and du.user_id = :userId", Tuple.class)
 				.setParameter("cardNumber", cardNumber)

@@ -9,6 +9,7 @@ import com.naicson.yugioh.entity.Deck;
 
 public class CardsSearchDTO {
 	
+	private Integer cardId;
 	private Long numero;
 	private String nome;
 	private String imagem;
@@ -20,15 +21,16 @@ public class CardsSearchDTO {
 		
 	}	
 	
-	public CardsSearchDTO(Long numero, String nome, String imagem) {
+	public CardsSearchDTO(Integer cardId, Long numero, String nome, String imagem) {
 		super();
 		this.numero = numero;
 		this.nome = nome;
 		this.imagem = imagem;
+		this.cardId =  cardId;
 	}
 
 	public static CardsSearchDTO transformInDTO(Card card) {
-		return new CardsSearchDTO(card.getNumero(), card.getNome(), card.getImagem());
+		return new CardsSearchDTO(card.getId(), card.getNumero(), card.getNome(), card.getImagem());
 	}
 	
 	public Card transformInObject() {

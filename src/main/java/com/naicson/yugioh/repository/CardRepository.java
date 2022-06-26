@@ -48,7 +48,7 @@ public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificat
 	
 	@Query(value = " SELECT DISTINCT * FROM yugioh.tab_cards CARDS "
 			+ " INNER JOIN TAB_REL_DECKUSERS_CARDS UCARDS ON UCARDS.CARD_NUMERO = CARDS.NUMERO "
-			+ " INNER JOIN TAB_DECK_USERS DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
+			+ " INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
 			+ " WHERE CARDS.GENERIC_TYPE = :genericType AND DUSERS.USER_ID = :userId "
 			+ " GROUP BY CARDS.NUMERO ",
 			countQuery = "SELECT count(*) FROM tab_cards",
@@ -57,7 +57,7 @@ public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificat
 	
 	@Query(value = " SELECT DISTINCT * FROM yugioh.tab_cards CARDS "
 			+ " INNER JOIN TAB_REL_DECKUSERS_CARDS UCARDS ON UCARDS.CARD_NUMERO = CARDS.NUMERO "
-			+ " INNER JOIN TAB_DECK_USERS DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
+			+ " INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
 			+ " WHERE CARDS.nome like CONCAT('%',:cardName,'%') AND DUSERS.USER_ID = :userId "
 			+ " GROUP BY CARDS.NUMERO ",
 			countQuery = "SELECT count(*) FROM tab_cards",
@@ -73,7 +73,7 @@ public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificat
 	+ " FROM yugioh.tab_rel_deckusers_cards as rel\r\n"
 	+ " inner join tab_rel_deck_cards rdc on rdc.card_set_code = rel.card_set_code"
 	+ " inner join tab_decks decks on decks.id = rdc.deck_id\r\n"
-	+ " inner join tab_deck_users du on du.id = rel.deck_id\r\n"
+	+ " inner join tab_user_deck du on du.id = rel.deck_id\r\n"
 	+ " where du.user_id = :userId "
 	+ " and  rel.card_numero in (select card_alternative_number from tab_card_alternative_numbers where card_id = :cardId) "
 	+ " group by rel.card_set_code, decks.nome", nativeQuery = true)
@@ -82,7 +82,7 @@ public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificat
 	@Query(value = " SELECT count(rel.card_set_code) as total, CONCAT(du.nome, ' (', rel.card_set_code,')' ) AS card_set "
 	+ " FROM yugioh.tab_rel_deckusers_cards as rel\r\n"
 	+ " inner join tab_rel_deck_cards rdc on rdc.card_set_code = rel.card_set_code"
-	+ " inner join tab_deck_users du on du.id = rel.deck_id\r\n"
+	+ " inner join tab_user_deck du on du.id = rel.deck_id\r\n"
 	+ " where du.user_id = :userId "
 	+ " and  rel.card_numero in (select card_alternative_number from tab_card_alternative_numbers where card_id = :cardId) "
 	+ " group by rel.card_set_code, du.nome", nativeQuery = true)

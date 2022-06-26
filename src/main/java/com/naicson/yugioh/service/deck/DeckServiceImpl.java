@@ -351,7 +351,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (deck == null)
 			throw new EntityNotFoundException("Deck not found. Id informed: " + deckId);
 
-		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_UserDeck_cards";
+		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
 
 		mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);

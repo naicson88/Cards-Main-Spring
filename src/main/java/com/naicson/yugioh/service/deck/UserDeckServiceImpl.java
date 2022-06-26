@@ -30,6 +30,7 @@ import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
@@ -127,6 +128,7 @@ public class UserDeckServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public int removeSetFromUsersCollection(Long setId) {
 		logger.info("Starting removing Set from user collection. ID {}", setId);
+		int qtdRemoved = 0;
 
 		Optional<UserDeck> dk = userDeckRepository.findById(setId);
 
@@ -134,14 +136,18 @@ public class UserDeckServiceImpl {
 			throw new NoSuchElementException("Set not found with this code. Id = " + setId);
 
 		UserDeck setOrigem = dk.get();
+		
+		if(dao.relDeckUserCards(setId).size() > 0) {
+			 qtdRemoved = dao.removeCardsFromUserSet(setId);
 
-		int qtdRemoved = dao.removeCardsFromUserSet(setId);
-
-		if (qtdRemoved <= 0)
-			throw new ErrorMessage("It was not possible remove cards from Deck: " + setId);
+			if (qtdRemoved <= 0)
+				throw new ErrorMessage("It was not possible remove cards from Deck: " + setId);
+		}
 
 		userDeckRepository.deleteById(setOrigem.getId());
-
+		
+		logger.info("Cards removed from User Deck: {}", setId);
+		
 		return qtdRemoved;
 	}
 
@@ -180,12 +186,8 @@ public class UserDeckServiceImpl {
 	@Transactional
 	public void saveUserdeck(Deck deck) {
 		UserDeck userDeck = new UserDeck();
-
-		if (deck.getNome() == null || deck.getNome().equals(""))
-			throw new IllegalArgumentException("UserDeck name cannot be null or empty");
-
-		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
-			throw new IllegalArgumentException("There is no card in this deck");
+		
+		this.validUserDeck(deck);
 
 		// Check if it is a new deck or a existing deck
 		if (deck.getId() != null && deck.getId() != 0) {
@@ -196,7 +198,7 @@ public class UserDeckServiceImpl {
 			UserDetailsImpl user = GeneralFunctions.userLogged();
 			userDeck.setUserId(user.getId());
 			userDeck.setDtCriacao(new Date());
-			userDeck.setSetType("D");
+			userDeck.setSetType("DECK");
 
 		}
 
@@ -206,7 +208,16 @@ public class UserDeckServiceImpl {
 
 		if (userDeck == null)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the Deck");
+			
+		this.saveRelDeckCardsFromUserDeck(deck, userDeck);
 
+		logger.info("User Deck was saved! ID: {}", deck.getId());
+
+	}
+
+
+	private void saveRelDeckCardsFromUserDeck(Deck deck, UserDeck userDeck) {
+		
 		for (RelDeckCards rel : deck.getRel_deck_cards()) {
 
 			if (rel.getCard_price() == null)
@@ -217,16 +228,17 @@ public class UserDeckServiceImpl {
 
 			if (rel.getCard_set_code() == null || rel.getCard_set_code().isEmpty())
 				rel.setCard_set_code("Not Defined");
+			
+			rel.setQuantity(1);
 
 			int isSaved = dao.saveRelDeckUserCard(rel, userDeck.getId());
 
 			if (isSaved == 0)
 				throw new ErrorMessage("It was not possible save the card " + rel.getCard_set_code());
 		}
-
-		logger.info("User Deck was saved! ID: {}", deck.getId());
-
 	}
+
+
 
 	@Transactional(rollbackFor = Exception.class)
 	public int addSetToUserCollection(Long originalDeckId) {
@@ -246,6 +258,7 @@ public class UserDeckServiceImpl {
 		newDeck.setUserId(user.getId());
 		newDeck.setDtCriacao(new Date());
 		newDeck.setSetType(deckOrigem.getSetType());
+		newDeck.setIsSpeedDuel(deckOrigem.getIsSpeedDuel());
 
 		UserDeck generatedDeckUser = userDeckRepository.save(newDeck);
 
@@ -405,4 +418,17 @@ public class UserDeckServiceImpl {
 		return qtdAddedOrRemoved;
 
 	}
+	
+	private void validUserDeck(Deck deck) {
+
+		if (deck.getNome() == null || deck.getNome().equals(""))
+			throw new IllegalArgumentException("UserDeck name cannot be null or empty");
+
+		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
+			throw new IllegalArgumentException("There is no card in this deck");
+		
+		SetType.valueOf(deck.getSetType());
+		
+	}
+
 }
