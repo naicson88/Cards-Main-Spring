@@ -11,5 +11,4 @@ public interface SetCollectionService {
 	
 	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
 
-	public String addSetCollectionInUsersCollection(Integer setId);
 }

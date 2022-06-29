@@ -9,25 +9,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.service.interfaces.SetCollectionService;
+import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 
 @RestController
-@RequestMapping({ "yugiohAPI/collection" })
+@RequestMapping({ "yugiohAPI/user-setcollection" })
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class SetCollectionController {
+public class UserSetCollectionController {
 	
 	@Autowired
-	SetCollectionService service;
+	private UserSetCollectionServiceImpl service;
 	
-	@GetMapping("/{id}")
-	@ApiOperation(value="Get a Set Collection by its ID", authorizations = { @Authorization(value="JWT") })
-	public SetCollection findById(@PathVariable("id") Integer id) {
-		return service.findById(id);
+	@GetMapping("/add/{setId}")
+	@ApiOperation(value="Add a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> addSetCollectionInUsersCollection(@PathVariable("setId") Integer setId) {
+		String msg = service.addSetCollectionInUsersCollection(setId);
+		
+		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 	}
-	
-
 }

@@ -54,10 +54,10 @@ public class UserSetCollection {
 	
 	public UserSetCollection() {}
 	
-	public static UserSetCollection setCollectionToUserSetCollection(SetCollection set) {
+	public static UserSetCollection convertToUserSetCollection(SetCollection set) {
 		
 		UserSetCollection userSet = new UserSetCollection();
-		BeanUtils.copyProperties(userSet, set);
+		BeanUtils.copyProperties(set, userSet);
 		
 		userSet.setDtUpdate(new Date());
 		userSet.setId(null);

@@ -1,4 +1,4 @@
-package com.naicson.yugioh.service;
+package com.naicson.yugioh.service.user;
 
 import javax.transaction.Transactional;
 

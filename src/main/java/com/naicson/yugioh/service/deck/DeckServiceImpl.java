@@ -32,8 +32,8 @@ import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
-import com.naicson.yugioh.service.SetsUtils;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
+import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.enums.CardRarity;
 
 @Service

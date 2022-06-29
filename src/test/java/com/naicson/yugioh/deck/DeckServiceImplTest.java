@@ -49,9 +49,9 @@ import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.mocks.RelUserDeckDTOMock;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
-import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.ValidObjects;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 

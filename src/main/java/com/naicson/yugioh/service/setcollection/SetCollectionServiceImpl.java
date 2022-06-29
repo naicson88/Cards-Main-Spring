@@ -1,8 +1,6 @@
 package com.naicson.yugioh.service.setcollection;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +21,9 @@ import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.SetCollectionRepository;
-import com.naicson.yugioh.service.SetsUtils;
-import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
-import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 
 @Service
@@ -187,26 +181,6 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		return col;
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public String addSetCollectionInUsersCollection(Integer setId) {
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-		
-		if (user == null)
-			new EntityNotFoundException("Invalid user!");
-		
-		SetCollection set = setColRepository.findById(setId)
-				.orElseThrow(() -> new EntityNotFoundException("No SetCollection found with this ID: " + setId));
-		
-		UserSetCollection userSet = UserSetCollection.setCollectionToUserSetCollection(set);
-		
-		logger.info("Saving Decks from SetCollection... {}", LocalDateTime.now());
-		
-		
-		
-		
-		
-		return null;
-	}
+
 
 }

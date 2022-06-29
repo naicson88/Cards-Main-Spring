@@ -27,7 +27,7 @@ import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
-import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
 import com.naicson.yugioh.util.enums.SetType;
@@ -213,6 +213,45 @@ public class UserDeckServiceImpl {
 
 		logger.info("User Deck was saved! ID: {}", deck.getId());
 
+	}
+	
+	@Transactional
+	public void saveUserDeck(UserDeck userDeck) {
+		this.validUserDeck(userDeck);
+		
+	 UserDeck userDeckSaved = userDeckRepository.save(userDeck);
+	 
+	 if (userDeckSaved == null)
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the User Deck");
+	 
+	 	userDeck.getRelDeckCards().stream().forEach(rel -> {
+	 		dao.saveRelDeckUserCard(rel, userDeckSaved.getId());
+	 	});
+	 	
+	 	logger.info("Save User Deck and RelDeckCards of UserDeck: {}", userDeckSaved.getId());
+		
+	}
+
+
+	private void validUserDeck(UserDeck userDeck) {
+		
+		if(userDeck == null)
+			throw new IllegalArgumentException("Invalid UserDeck");
+		
+		if (userDeck.getNome() == null || userDeck.getNome().isBlank())
+			throw new IllegalArgumentException("UserDeck name cannot be null or empty");
+
+		if (userDeck.getImagem() == null || userDeck.getImagem().isBlank())
+			throw new IllegalArgumentException("UserDeck Image cannot be null or empty");
+		
+		if (userDeck.getDtCriacao() == null)
+			throw new IllegalArgumentException("UserDeck Creation Date cannot be null or empty");
+		
+		if (userDeck.getIsSpeedDuel() == null)
+			throw new IllegalArgumentException("UserDeck IsSpeedDuel cannot be null or empty");
+		
+		SetType.valueOf(userDeck.getSetType());
+		
 	}
 
 

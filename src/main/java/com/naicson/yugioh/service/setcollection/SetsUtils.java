@@ -1,4 +1,4 @@
-package com.naicson.yugioh.service;
+package com.naicson.yugioh.service.setcollection;
 
 import java.util.HashMap;
 import java.util.List;

@@ -13,7 +13,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 
 
 public abstract class GeneralFunctions {

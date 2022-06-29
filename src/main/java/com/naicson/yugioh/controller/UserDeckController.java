@@ -23,8 +23,8 @@ import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
-import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 
 import io.swagger.annotations.ApiOperation;
@@ -79,8 +79,6 @@ public class UserDeckController {
 	@PostMapping(path = "/save-userdeck")
 	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
-//		ObjectMapper mapper = new ObjectMapper();
-//		Deck deck = mapper.readValue(json, Deck.class);
 		
 		this.deckService.saveUserdeck(deck);
 		

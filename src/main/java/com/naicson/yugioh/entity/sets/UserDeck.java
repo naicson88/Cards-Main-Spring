@@ -38,16 +38,16 @@ public class UserDeck {
 	private List<RelDeckCards> relDeckCards;
 
 	public static UserDeck userDeckFromDeck(Deck deck) {
-		UserDeck du = new UserDeck();
-		BeanUtils.copyProperties(deck, du);
+		UserDeck userDeck = new UserDeck();
+		BeanUtils.copyProperties(deck, userDeck);
 		
-		du.setNome(du.getNome()+"_"+GeneralFunctions.momentAsString());
-		du.setUserId(GeneralFunctions.userLogged().getId());
-		du.setDtCriacao(new Date());
-		du.setKonamiDeckCopied(deck.getId());
-		du.setRelDeckCards(deck.getRel_deck_cards());
+		userDeck.setNome(userDeck.getNome()+"_"+GeneralFunctions.momentAsString());
+		userDeck.setUserId(GeneralFunctions.userLogged().getId());
+		userDeck.setDtCriacao(new Date());
+		userDeck.setKonamiDeckCopied(deck.getId());
+		userDeck.setRelDeckCards(deck.getRel_deck_cards());
 		
-		return du;
+		return userDeck;
 	
 	}
 	
