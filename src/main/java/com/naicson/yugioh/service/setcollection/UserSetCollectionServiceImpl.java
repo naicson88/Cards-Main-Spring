@@ -34,27 +34,31 @@ public class UserSetCollectionServiceImpl {
 	Logger logger = LoggerFactory.getLogger(UserSetCollectionServiceImpl.class);
 	
 	@Transactional(rollbackFor = Exception.class)
-	public String addSetCollectionInUsersCollection(Integer setId) {
+	public UserSetCollection addSetCollectionInUsersCollection(Integer setId) {
 			
 		SetCollection set = setService.findById(setId);
 		
-		set.getDecks().stream().forEach(deck -> {
-			deck.setRel_deck_cards(relService.findRelByDeckId(deck.getId()));
-		});
-		
+//		set.getDecks().stream().forEach(deck -> {
+//			deck.setRel_deck_cards(relService.findRelByDeckId(deck.getId()));
+//		});
+//		
 		UserSetCollection userSet = UserSetCollection.convertToUserSetCollection(set);
 		
-//		userSet.getUserDeck().forEach(deck -> {
-//			userDeckService.saveUserDeck(deck);
-//		});
-		
+		userSet.getUserDeck().forEach(deck -> {
+			deck.setId(userDeckService.saveUserDeck(deck).getId());}
+		);
+				
 		UserSetCollection setSaved = userSetRepository.save(userSet);
+		
+		setSaved.getUserDeck().stream().forEach(deck -> {
+			userSetRepository.saveSetUserDeckRelation(setSaved.getId(), deck.getId());
+		});
 		
 		if(setSaved == null || setSaved.getId() == null || setSaved.getId() == 0)
 			throw new ErrorMessage("It was not possible save User SetCollection");
 		
 		logger.info("Saving Decks from SetCollection... {}", LocalDateTime.now());
 	
-		return null;
+		return setSaved;
 	}
 }

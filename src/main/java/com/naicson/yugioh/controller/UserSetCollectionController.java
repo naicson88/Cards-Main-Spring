@@ -25,8 +25,9 @@ public class UserSetCollectionController {
 	@GetMapping("/add/{setId}")
 	@ApiOperation(value="Add a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> addSetCollectionInUsersCollection(@PathVariable("setId") Integer setId) {
-		String msg = service.addSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
+		service.addSetCollectionInUsersCollection(setId);
+		
+		return new ResponseEntity<String>("SetCollection Added Successfully!", HttpStatus.CREATED);
 	}
 }

@@ -216,20 +216,23 @@ public class UserDeckServiceImpl {
 	}
 	
 	@Transactional
-	public void saveUserDeck(UserDeck userDeck) {
+	public UserDeck saveUserDeck(UserDeck userDeck) {
 		this.validUserDeck(userDeck);
 		
 	 UserDeck userDeckSaved = userDeckRepository.save(userDeck);
 	 
 	 if (userDeckSaved == null)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the User Deck");
-	 
-	 	userDeck.getRelDeckCards().stream().forEach(rel -> {
-	 		dao.saveRelDeckUserCard(rel, userDeckSaved.getId());
-	 	});
 	 	
+	 if(userDeck.getRelDeckCards() != null && userDeck.getRelDeckCards().size() > 0) {
+		 userDeck.getRelDeckCards().stream().forEach(rel -> {
+		 		dao.saveRelDeckUserCard(rel, userDeckSaved.getId());
+		 	});
+	 }
+	 	 	
 	 	logger.info("Save User Deck and RelDeckCards of UserDeck: {}", userDeckSaved.getId());
 		
+	 	return userDeckSaved;
 	}
 
 

@@ -47,6 +47,7 @@ public class SetCollection {
     joinColumns={@JoinColumn(name="set_collection_id")},
     inverseJoinColumns={@JoinColumn(name="deck_id")})
 	private List<Deck> decks;
+	
 	@Enumerated(EnumType.STRING)
 	private SetType setCollectionType;
 
