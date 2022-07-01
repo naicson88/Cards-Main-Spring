@@ -2,6 +2,8 @@ package com.naicson.yugioh.service.setcollection;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +62,24 @@ public class UserSetCollectionServiceImpl {
 		logger.info("Saving Decks from SetCollection... {}", LocalDateTime.now());
 	
 		return setSaved;
+	}
+
+	public void removeSetCollectionInUsersCollection(Long setId) {
+		
+		if(setId == null || setId ==  0)
+			throw new IllegalArgumentException("Invalid Set ID:" +  setId);
+		
+		UserSetCollection set = userSetRepository.findById(setId).orElseThrow(() -> new  EntityNotFoundException("Set not found with ID: " + setId));
+		
+		userSetRepository.deleteSetUserDeckRelation(setId);
+		
+		set.getUserDeck().stream().forEach(deck -> { 
+			userDeckService.removeSetFromUsersCollection(deck.getId());
+		});
+
+		userSetRepository.delete(set);
+		
+		logger.info("Deleted User SetCollection ID: " + setId);
+		
 	}
 }

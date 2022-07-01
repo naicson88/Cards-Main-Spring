@@ -1,6 +1,7 @@
 package com.naicson.yugioh.entity.sets;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class UserSetCollection {
 //    joinColumns={@JoinColumn(name="user_set_collection_id")},
 //    inverseJoinColumns={@JoinColumn(name="deck_id")})
 	@Transient
-	private Set<UserDeck> userDeck;
+	private List<UserDeck> userDeck;
 	
 	@Enumerated(EnumType.STRING)
 	private SetType setCollectionType;
@@ -68,11 +69,12 @@ public class UserSetCollection {
 		userSet.setName(set.getName()+"_"+GeneralFunctions.momentAsString());
 		userSet.setRegistrationDate(new Date());
 		userSet.setUserId(GeneralFunctions.userLogged().getId());
+		userSet.setImgPath(set.getImgurUrl());
 		
-		Set<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
+		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
 			UserDeck du = UserDeck.userDeckFromDeck(d);		
 			return du;
-		}).collect(Collectors.toSet());
+		}).collect(Collectors.toList());
 		
 		userSet.setUserDeck(listDeckUser);
 		
@@ -147,10 +149,10 @@ public class UserSetCollection {
 	public void setDtUpdate(Date dtUpdate) {
 		DtUpdate = dtUpdate;
 	}
-	public Set<UserDeck> getUserDeck() {
+	public List<UserDeck> getUserDeck() {
 		return userDeck;
 	}
-	public void setUserDeck(Set<UserDeck> userDeck) {
+	public void setUserDeck(List<UserDeck> userDeck) {
 		this.userDeck = userDeck;
 	}
 	public SetType getSetCollectionType() {

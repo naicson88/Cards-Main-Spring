@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.service.setcollection.ISetsByType;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 
@@ -33,7 +35,7 @@ import io.swagger.annotations.Authorization;
 @RestController
 @RequestMapping({ "yugiohAPI/userDeck" })
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class UserDeckController {
+public class UserDeckController<T> {
 	
 	@Autowired
 	UserDeckRepository deckUserRepository;
@@ -41,31 +43,21 @@ public class UserDeckController {
 	@Autowired
 	UserDeckServiceImpl deckService;
 	
-	Page<UserDeck> deckUserList = null;
+	@Autowired
+	ISetsByType<T> setsBySetType;
+	
+	Page<DeckSummaryDTO> setList = null;
 	
 
 	@GetMapping("/sets-of-user")
 	@ApiOperation(value="Return Sets of a User", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<Page<UserDeck>> setsOfUser(
+	public ResponseEntity<Page<DeckSummaryDTO>> setsOfUser(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
-		
-			switch(setType) {
-				case "UD": setType =  "D"; break;
-				case "UB": setType =  "B"; break;
-				case "UT": setType =  "T"; break;				
-			}
-
-			UserDetailsImpl user = GeneralFunctions.userLogged();
 			
-			deckUserList = deckUserRepository.findAllByUserIdAndSetType(user.getId(), setType, pageable);
+			setList = setsBySetType.findAllUserSetsByType(pageable, setType);
 
-		if (deckUserList == null) {
-
-			return new ResponseEntity<Page<UserDeck>>(HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<>(deckUserList, HttpStatus.OK);
+		return new ResponseEntity<>(setList, HttpStatus.OK);
 	}
 	
 	@GetMapping("/edit-deck")

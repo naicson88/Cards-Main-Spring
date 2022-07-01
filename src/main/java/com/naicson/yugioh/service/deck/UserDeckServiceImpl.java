@@ -12,6 +12,8 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -472,5 +474,18 @@ public class UserDeckServiceImpl {
 		SetType.valueOf(deck.getSetType());
 		
 	}
+	
+	public Page<UserDeck> findAll(Pageable pageable) {
+		Page<UserDeck> decks = userDeckRepository.findAll(pageable);
+
+		return decks;
+	}
+
+
+	public Page<UserDeck> findAllBySetType(Pageable pageable, String setType) {
+		Page<UserDeck> decks = userDeckRepository.findAllBySetType(pageable, setType);
+		return decks;
+	}
+
 
 }

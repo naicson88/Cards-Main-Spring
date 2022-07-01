@@ -558,4 +558,10 @@ public class DeckServiceImpl implements DeckDetailService {
 		return decks;
 	}
 
+	public Page<Deck> findAllBySetType(Pageable pageable, String setType) {
+		Page<Deck> decks = deckRepository.findAllBySetType(pageable, setType);
+
+		return decks;
+	}
+
 }

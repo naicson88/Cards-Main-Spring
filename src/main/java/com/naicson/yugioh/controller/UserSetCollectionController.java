@@ -30,4 +30,13 @@ public class UserSetCollectionController {
 		
 		return new ResponseEntity<String>("SetCollection Added Successfully!", HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/remove/{setId}")
+	@ApiOperation(value="Remove a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> removeSetCollectionInUsersCollection(@PathVariable("setId") Long setId) {
+		
+		service.removeSetCollectionInUsersCollection(setId);
+		
+		return new ResponseEntity<String>("SetCollection has been removed Successfully!", HttpStatus.CREATED);
+	}
 }

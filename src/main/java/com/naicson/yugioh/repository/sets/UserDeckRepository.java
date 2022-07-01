@@ -16,4 +16,6 @@ public interface UserDeckRepository extends JpaRepository<UserDeck, Long>{
 
 	List<UserDeck> findTop30ByNomeContaining(String setName);
 
+	Page<UserDeck> findAllBySetType(Pageable pageable, String setType);
+
 }

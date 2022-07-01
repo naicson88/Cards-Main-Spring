@@ -31,6 +31,8 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 				   " WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (:deckId) " +
 				   " GROUP BY (KONAMI_DECK_COPIED) ", nativeQuery = true)	
 	List<RelUserDeckDTO> searchForDecksUserHave(Long userId, String deckId);
+
+	Page<Deck> findAllBySetType(Pageable pageable, String setType);
 	
 	
 }
