@@ -2,11 +2,11 @@ package com.naicson.yugioh.util.enums;
 
 public enum SetType {
 	
-	BOX("B"),
-	BOOSTER("BST"),
-	DECK("D"),
-	DEFAULT("DEF"),
-	TIN("T");
+	BOX("BOX"),
+	BOOSTER("BOOSTER"),
+	DECK("DECK"),
+	DEFAULT("DEFAULT"),
+	TIN("TIN");
 	
 	private final String type;
 	

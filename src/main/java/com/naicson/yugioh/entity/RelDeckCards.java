@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "tab_rel_deck_cards")
 public class RelDeckCards implements Serializable {
 	
-
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -36,6 +35,7 @@ public class RelDeckCards implements Serializable {
 	private Boolean isSpeedDuel;
 	@Column(nullable = false)
 	private Integer cardId;
+	private Integer quantity;
 	
 	public Long getId() {
 		return id;
@@ -102,6 +102,12 @@ public class RelDeckCards implements Serializable {
 		this.isSpeedDuel = isSpeedDuel;
 	}
 	
+	public Integer getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 	@Override
 	public String toString() {
 		return "RelDeckCards [id=" + id + ", deckId=" + deckId + ", cardNumber=" + cardNumber + ", cardSetCode="

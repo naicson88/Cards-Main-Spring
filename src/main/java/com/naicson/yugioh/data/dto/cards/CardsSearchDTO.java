@@ -2,13 +2,12 @@ package com.naicson.yugioh.data.dto.cards;
 
 import java.util.List;
 
-import javax.persistence.Transient;
-
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 
 public class CardsSearchDTO {
 	
+	private Integer cardId;
 	private Long numero;
 	private String nome;
 	private String imagem;
@@ -20,15 +19,16 @@ public class CardsSearchDTO {
 		
 	}	
 	
-	public CardsSearchDTO(Long numero, String nome, String imagem) {
+	public CardsSearchDTO(Integer cardId, Long numero, String nome, String imagem) {
 		super();
 		this.numero = numero;
 		this.nome = nome;
 		this.imagem = imagem;
+		this.setCardId(cardId);
 	}
 
 	public static CardsSearchDTO transformInDTO(Card card) {
-		return new CardsSearchDTO(card.getNumero(), card.getNome(), card.getImagem());
+		return new CardsSearchDTO(card.getId(), card.getNumero(), card.getNome(), card.getImagem());
 	}
 	
 	public Card transformInObject() {
@@ -73,6 +73,14 @@ public class CardsSearchDTO {
 
 	public void setTotalFound(Long totalFound) {
 		this.totalFound = totalFound;
+	}
+
+	public Integer getCardId() {
+		return cardId;
+	}
+
+	public void setCardId(Integer cardId) {
+		this.cardId = cardId;
 	}
 	
 	

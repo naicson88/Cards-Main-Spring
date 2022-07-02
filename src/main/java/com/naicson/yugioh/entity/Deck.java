@@ -15,8 +15,8 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.entity.sets.UserDeck;
 
 @Entity
 @Table(name = "tab_decks")
@@ -63,11 +63,11 @@ public class Deck implements Serializable {
 		
 	}
 	
-	public static Deck deckFromDeckUser(DeckUsers deckUser) {
+	public static Deck deckFromDeckUser(UserDeck deckUser) {
 		Deck deck = new Deck();
 		deck.setId(deckUser.getId());
 		deck.setNome(deckUser.getNome());
-		deck.setImagem(deckUser.getImagem());
+		deck.setImagem(deckUser.getImgurUrl());
 		return deck;		
 	}
 	

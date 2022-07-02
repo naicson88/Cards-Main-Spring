@@ -29,7 +29,7 @@ import com.naicson.yugioh.entity.auth.SignupRequest;
 import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
-import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
 
 import io.swagger.annotations.ApiOperation;

@@ -7,7 +7,7 @@ import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.service.UserDetailsImpl;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.enums.CardRarity;
 
 public abstract class ValidObjects {

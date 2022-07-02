@@ -1,8 +1,12 @@
 package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +54,11 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 				}	
 				
 			return relSaved;
+	}
+	
+	public List<RelDeckCards> findRelByDeckId(Long deckId){
+		List<RelDeckCards> list = relDeckCardsRepository.findByDeckId(deckId);	
+		return list;
 	}
 	
 }

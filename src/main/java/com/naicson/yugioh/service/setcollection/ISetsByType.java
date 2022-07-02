@@ -8,4 +8,8 @@ import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 public interface ISetsByType<T> {
 	
  	Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType);
+ 	
+
+ 	Page<DeckSummaryDTO> findAllUserSetsByType(Pageable pageable, String setType);
+ 	
 }

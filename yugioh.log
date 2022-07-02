@@ -1,502 +1,163 @@
-2022-06-19 00:03:23.271  WARN 18612 --- [http-nio-8080-exec-7] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
-2022-06-19 00:03:23.276 ERROR 18612 --- [http-nio-8080-exec-7] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'card_id' doesn't have a default value
-2022-06-19 00:03:23.281 ERROR 18612 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement
-2022-06-19 00:04:30.215  WARN 18612 --- [http-nio-8080-exec-4] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
-2022-06-19 00:04:30.222 ERROR 18612 --- [http-nio-8080-exec-4] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'card_id' doesn't have a default value
-2022-06-19 00:04:31.874 ERROR 18612 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement
-2022-06-19 00:06:46.905  INFO 11328 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 11328 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:06:46.909  INFO 11328 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:06:47.849  INFO 11328 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:06:47.992  INFO 11328 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 132ms. Found 15 JPA repository interfaces.
-2022-06-19 00:06:48.624  INFO 11328 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:06:48.635  INFO 11328 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:06:48.635  INFO 11328 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:06:48.738  INFO 11328 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:06:48.738  INFO 11328 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1782 ms
-2022-06-19 00:06:48.822  WARN 11328 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:06:48.997  INFO 11328 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:06:49.051  INFO 11328 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:06:49.211  INFO 11328 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:06:49.330  INFO 11328 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:06:49.512  INFO 11328 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:06:49.530  INFO 11328 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:06:50.505  INFO 11328 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:06:50.513  INFO 11328 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:06:51.913  INFO 11328 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@794b139b, org.springframework.security.web.context.SecurityContextPersistenceFilter@2b26d289, org.springframework.security.web.header.HeaderWriterFilter@560e1459, org.springframework.web.filter.CorsFilter@77217c17, org.springframework.security.web.authentication.logout.LogoutFilter@7806db3f, com.naicson.yugioh.data.security.AuthTokenFilter@62966c9f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3a33d655, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3b9d85c2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@87276c4, org.springframework.security.web.session.SessionManagementFilter@4c3125ff, org.springframework.security.web.access.ExceptionTranslationFilter@514eefc4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4f50e974]
-2022-06-19 00:06:51.939  INFO 11328 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:06:52.117  INFO 11328 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:06:52.592  INFO 11328 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 00:06:52.593  INFO 11328 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 00:06:52.626  INFO 11328 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 00:06:52.664  INFO 11328 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 00:06:52.983  INFO 11328 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 00:06:53.076  INFO 11328 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.58 seconds (JVM running for 7.797)
-2022-06-19 00:07:02.666  INFO 11328 --- [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 00:07:02.668  INFO 11328 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 00:07:02.680  INFO 11328 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 12 ms
-2022-06-19 00:07:21.479  WARN 11328 --- [http-nio-8080-exec-8] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1064, SQLState: 42000
-2022-06-19 00:07:21.479 ERROR 11328 --- [http-nio-8080-exec-8] o.h.engine.jdbc.spi.SqlExceptionHelper   : You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'is_side_deck) values (1,19665973, 'Common', 'YS17-EN018', 1.22, '2022-06-19 03:0' at line 1
-2022-06-19 00:07:21.493 ERROR 11328 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute statement
-2022-06-19 00:08:32.726  INFO 4264 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 4264 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:08:32.731  INFO 4264 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:08:33.643  INFO 4264 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:08:33.785  INFO 4264 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 130ms. Found 15 JPA repository interfaces.
-2022-06-19 00:08:34.391  INFO 4264 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:08:34.401  INFO 4264 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:08:34.401  INFO 4264 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:08:34.511  INFO 4264 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:08:34.512  INFO 4264 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1732 ms
-2022-06-19 00:08:34.587  WARN 4264 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:08:34.767  INFO 4264 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:08:34.822  INFO 4264 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:08:34.987  INFO 4264 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:08:35.119  INFO 4264 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:08:35.296  INFO 4264 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:08:35.314  INFO 4264 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:08:36.294  INFO 4264 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:08:36.302  INFO 4264 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:08:37.770  INFO 4264 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@39a8c08f, org.springframework.security.web.context.SecurityContextPersistenceFilter@4c3125ff, org.springframework.security.web.header.HeaderWriterFilter@514eefc4, org.springframework.web.filter.CorsFilter@5c0d876c, org.springframework.security.web.authentication.logout.LogoutFilter@727b3b0, com.naicson.yugioh.data.security.AuthTokenFilter@62966c9f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2b26d289, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@303a484e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@794b139b, org.springframework.security.web.session.SessionManagementFilter@560e1459, org.springframework.security.web.access.ExceptionTranslationFilter@57d8d8e2, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6d2413e]
-2022-06-19 00:08:37.794  INFO 4264 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:08:37.949  INFO 4264 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:08:38.415  WARN 4264 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8080 is already in use
-2022-06-19 00:08:38.423  INFO 4264 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:08:38.429  INFO 4264 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:08:38.431  INFO 4264 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2022-06-19 00:08:38.438  INFO 4264 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-06-19 00:08:38.440  INFO 4264 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2022-06-19 00:08:38.451  INFO 4264 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-06-19 00:08:38.453 ERROR 4264 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Web server failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
-
-2022-06-19 00:13:31.307  INFO 1832 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 1832 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:13:31.311  INFO 1832 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:13:32.214  INFO 1832 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:13:32.349  INFO 1832 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 125ms. Found 15 JPA repository interfaces.
-2022-06-19 00:13:32.942  INFO 1832 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:13:32.952  INFO 1832 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:13:32.952  INFO 1832 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:13:33.054  INFO 1832 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:13:33.055  INFO 1832 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1695 ms
-2022-06-19 00:13:33.121  WARN 1832 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:13:33.304  INFO 1832 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:13:33.358  INFO 1832 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:13:33.505  INFO 1832 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:13:33.629  INFO 1832 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:13:33.796  INFO 1832 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:13:33.812  INFO 1832 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:13:34.720  INFO 1832 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:13:34.728  INFO 1832 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:13:36.006  INFO 1832 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@22858c21, org.springframework.security.web.context.SecurityContextPersistenceFilter@6aa7d7a0, org.springframework.security.web.header.HeaderWriterFilter@2f726cf4, org.springframework.web.filter.CorsFilter@39a8c08f, org.springframework.security.web.authentication.logout.LogoutFilter@21143041, com.naicson.yugioh.data.security.AuthTokenFilter@4193da4d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@d2ca3a9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@56511eda, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5c0d876c, org.springframework.security.web.session.SessionManagementFilter@4700db93, org.springframework.security.web.access.ExceptionTranslationFilter@57e83608, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@996126b]
-2022-06-19 00:13:36.029  INFO 1832 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:13:36.145  INFO 1832 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:13:36.626  INFO 1832 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 00:13:36.627  INFO 1832 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 00:13:36.652  INFO 1832 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 00:13:36.690  INFO 1832 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 00:13:37.024  INFO 1832 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 00:13:37.123  INFO 1832 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.185 seconds (JVM running for 7.011)
-2022-06-19 00:13:42.742  INFO 1832 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 00:13:42.742  INFO 1832 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 00:13:42.751  INFO 1832 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
-2022-06-19 00:16:21.255  INFO 1832 --- [http-nio-8080-exec-9] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:19:19.797  INFO 3936 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 3936 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:19:19.801  INFO 3936 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:19:20.699  INFO 3936 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:19:20.833  INFO 3936 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 124ms. Found 15 JPA repository interfaces.
-2022-06-19 00:19:21.434  INFO 3936 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:19:21.445  INFO 3936 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:19:21.445  INFO 3936 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:19:21.549  INFO 3936 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:19:21.550  INFO 3936 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1701 ms
-2022-06-19 00:19:21.610  WARN 3936 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:19:21.793  INFO 3936 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:19:21.847  INFO 3936 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:19:21.996  INFO 3936 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:19:22.113  INFO 3936 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:19:22.284  INFO 3936 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:19:22.302  INFO 3936 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:19:23.202  INFO 3936 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:19:23.211  INFO 3936 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:19:24.540  INFO 3936 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6d4b09c7, org.springframework.security.web.context.SecurityContextPersistenceFilter@12d24c43, org.springframework.security.web.header.HeaderWriterFilter@509bf2d5, org.springframework.web.filter.CorsFilter@4f50e974, org.springframework.security.web.authentication.logout.LogoutFilter@50508ed3, com.naicson.yugioh.data.security.AuthTokenFilter@7be3a837, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4a66949a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c3125ff, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@76ecbfbf, org.springframework.security.web.session.SessionManagementFilter@4b4b02d, org.springframework.security.web.access.ExceptionTranslationFilter@183e8c8a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5eb4b746]
-2022-06-19 00:19:24.564  INFO 3936 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:19:24.684  INFO 3936 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:19:25.156  INFO 3936 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 00:19:25.157  INFO 3936 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 00:19:25.181  INFO 3936 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 00:19:25.211  INFO 3936 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 00:19:25.518  INFO 3936 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 00:19:25.617  INFO 3936 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.198 seconds (JVM running for 7.02)
-2022-06-19 00:19:29.298  INFO 3936 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 00:19:29.298  INFO 3936 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 00:19:29.306  INFO 3936 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
-2022-06-19 00:19:29.843  INFO 3936 --- [http-nio-8080-exec-1] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:27.137  INFO 3936 --- [http-nio-8080-exec-6] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:31.233  INFO 3936 --- [http-nio-8080-exec-7] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:31.978  INFO 3936 --- [http-nio-8080-exec-8] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:32.142  INFO 3936 --- [http-nio-8080-exec-9] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:32.257  INFO 3936 --- [http-nio-8080-exec-10] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:53.468  INFO 3936 --- [http-nio-8080-exec-5] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:54.981  INFO 3936 --- [http-nio-8080-exec-4] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:24:55.586  INFO 3936 --- [http-nio-8080-exec-6] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:25:03.571  INFO 3936 --- [http-nio-8080-exec-7] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:25:37.018  INFO 3936 --- [http-nio-8080-exec-4] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:26:48.013  INFO 3936 --- [http-nio-8080-exec-1] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:30:03.930  INFO 16688 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 16688 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:30:03.934  INFO 16688 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:30:04.869  INFO 16688 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:30:05.003  INFO 16688 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 123ms. Found 15 JPA repository interfaces.
-2022-06-19 00:30:05.617  INFO 16688 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:30:05.629  INFO 16688 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:30:05.630  INFO 16688 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:30:05.737  INFO 16688 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:30:05.738  INFO 16688 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1754 ms
-2022-06-19 00:30:05.813  WARN 16688 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:30:05.999  INFO 16688 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:30:06.052  INFO 16688 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:30:06.194  INFO 16688 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:30:06.314  INFO 16688 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:30:06.486  INFO 16688 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:30:06.502  INFO 16688 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:30:07.455  INFO 16688 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:30:07.463  INFO 16688 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:30:08.759  INFO 16688 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3f33c5e4, org.springframework.security.web.context.SecurityContextPersistenceFilter@1ae69abe, org.springframework.security.web.header.HeaderWriterFilter@5c815478, org.springframework.web.filter.CorsFilter@258ff54a, org.springframework.security.web.authentication.logout.LogoutFilter@3049dcac, com.naicson.yugioh.data.security.AuthTokenFilter@3f7f9d3f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50508ed3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5b784f16, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@50c462b8, org.springframework.security.web.session.SessionManagementFilter@6ccd3cf1, org.springframework.security.web.access.ExceptionTranslationFilter@77eb76f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@63bb52ea]
-2022-06-19 00:30:08.786  INFO 16688 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:30:08.899  INFO 16688 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:30:09.462  WARN 16688 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8080 is already in use
-2022-06-19 00:30:09.468  INFO 16688 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:30:09.475  INFO 16688 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:30:09.477  INFO 16688 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2022-06-19 00:30:09.483  INFO 16688 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-06-19 00:30:09.485  INFO 16688 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2022-06-19 00:30:09.494  INFO 16688 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-06-19 00:30:09.496 ERROR 16688 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Web server failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
-
-2022-06-19 00:30:22.066  INFO 9892 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 9892 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:30:22.070  INFO 9892 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:30:22.984  INFO 9892 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:30:23.119  INFO 9892 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 125ms. Found 15 JPA repository interfaces.
-2022-06-19 00:30:23.720  INFO 9892 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:30:23.731  INFO 9892 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:30:23.731  INFO 9892 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:30:23.838  INFO 9892 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:30:23.839  INFO 9892 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1723 ms
-2022-06-19 00:30:23.904  WARN 9892 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:30:24.089  INFO 9892 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:30:24.143  INFO 9892 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:30:24.289  INFO 9892 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:30:24.410  INFO 9892 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:30:24.587  INFO 9892 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:30:24.605  INFO 9892 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:30:25.541  INFO 9892 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:30:25.550  INFO 9892 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:30:26.906  INFO 9892 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@22858c21, org.springframework.security.web.context.SecurityContextPersistenceFilter@6aa7d7a0, org.springframework.security.web.header.HeaderWriterFilter@2f726cf4, org.springframework.web.filter.CorsFilter@39a8c08f, org.springframework.security.web.authentication.logout.LogoutFilter@21143041, com.naicson.yugioh.data.security.AuthTokenFilter@2ac0cb64, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@d2ca3a9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@56511eda, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5c0d876c, org.springframework.security.web.session.SessionManagementFilter@4700db93, org.springframework.security.web.access.ExceptionTranslationFilter@57e83608, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@996126b]
-2022-06-19 00:30:26.933  INFO 9892 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:30:27.070  INFO 9892 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:30:27.583  INFO 9892 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 00:30:27.584  INFO 9892 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 00:30:27.608  INFO 9892 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 00:30:27.651  INFO 9892 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 00:30:28.030  INFO 9892 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 00:30:28.126  INFO 9892 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.433 seconds (JVM running for 7.262)
-2022-06-19 00:30:31.197  INFO 9892 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 00:30:31.198  INFO 9892 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 00:30:31.208  INFO 9892 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
-2022-06-19 00:30:31.819  INFO 9892 --- [http-nio-8080-exec-1] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:31:01.956  INFO 9892 --- [http-nio-8080-exec-5] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 00:32:25.594  INFO 16500 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 16500 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 00:32:25.599  INFO 16500 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 00:32:26.625  INFO 16500 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 00:32:26.777  INFO 16500 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 141ms. Found 15 JPA repository interfaces.
-2022-06-19 00:32:27.495  INFO 16500 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 00:32:27.513  INFO 16500 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 00:32:27.514  INFO 16500 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 00:32:27.626  INFO 16500 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 00:32:27.626  INFO 16500 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1957 ms
-2022-06-19 00:32:27.708  WARN 16500 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 00:32:27.916  INFO 16500 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 00:32:27.978  INFO 16500 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 00:32:28.162  INFO 16500 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 00:32:28.277  INFO 16500 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 00:32:28.446  INFO 16500 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 00:32:28.464  INFO 16500 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 00:32:29.429  INFO 16500 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 00:32:29.437  INFO 16500 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 00:32:30.727  INFO 16500 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@38f4a641, org.springframework.security.web.context.SecurityContextPersistenceFilter@526a1b51, org.springframework.security.web.header.HeaderWriterFilter@d2ca3a9, org.springframework.web.filter.CorsFilter@1902ad0f, org.springframework.security.web.authentication.logout.LogoutFilter@5a503cf0, com.naicson.yugioh.data.security.AuthTokenFilter@6915351c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@70c6c6a7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@be56353, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@653fbbfc, org.springframework.security.web.session.SessionManagementFilter@7f680a9a, org.springframework.security.web.access.ExceptionTranslationFilter@6aa7d7a0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5713e35f]
-2022-06-19 00:32:30.749  INFO 16500 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 00:32:30.862  INFO 16500 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 00:32:31.334  INFO 16500 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 00:32:31.335  INFO 16500 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 00:32:31.357  INFO 16500 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 00:32:31.387  INFO 16500 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 00:32:31.716  INFO 16500 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 00:32:31.813  INFO 16500 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.593 seconds (JVM running for 7.409)
-2022-06-19 00:32:38.032  INFO 16500 --- [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 00:32:38.033  INFO 16500 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 00:32:38.045  INFO 16500 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 12 ms
-2022-06-19 00:32:40.404  INFO 16500 --- [http-nio-8080-exec-4] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 1
-2022-06-19 14:20:15.704  INFO 5024 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 5024 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 14:20:15.710  INFO 5024 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 14:20:17.600  INFO 5024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 14:20:17.818  INFO 5024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 203ms. Found 15 JPA repository interfaces.
-2022-06-19 14:20:18.594  INFO 5024 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 14:20:18.608  INFO 5024 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 14:20:18.609  INFO 5024 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 14:20:18.744  INFO 5024 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 14:20:18.744  INFO 5024 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2972 ms
-2022-06-19 14:20:18.817  WARN 5024 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 14:20:19.061  INFO 5024 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 14:20:19.152  INFO 5024 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 14:20:19.426  INFO 5024 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 14:20:19.589  INFO 5024 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 14:20:19.822  INFO 5024 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 14:20:19.858  INFO 5024 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 14:20:21.265  INFO 5024 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 14:20:21.275  INFO 5024 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 14:20:22.915  INFO 5024 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@46c28400, org.springframework.security.web.context.SecurityContextPersistenceFilter@3123ac1a, org.springframework.security.web.header.HeaderWriterFilter@12e04531, org.springframework.web.filter.CorsFilter@2d6abfc7, org.springframework.security.web.authentication.logout.LogoutFilter@44f8d884, com.naicson.yugioh.data.security.AuthTokenFilter@54fbaa65, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@354ed5c4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a5a8c6f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4f5d587c, org.springframework.security.web.session.SessionManagementFilter@16baf8d0, org.springframework.security.web.access.ExceptionTranslationFilter@467625e3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2eef43f5]
-2022-06-19 14:20:22.942  INFO 5024 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 14:20:23.084  INFO 5024 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 14:20:23.677  INFO 5024 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 14:20:23.679  INFO 5024 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 14:20:23.716  INFO 5024 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 14:20:23.757  INFO 5024 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 14:20:24.270  INFO 5024 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 14:20:24.391  INFO 5024 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 9.208 seconds (JVM running for 10.822)
-2022-06-19 14:20:31.668  INFO 5024 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 14:20:31.668  INFO 5024 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 14:20:31.683  INFO 5024 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
-2022-06-19 14:23:15.025 ERROR 5024 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:23:26.351 ERROR 5024 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:35:07.244 ERROR 5024 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:35:09.837 ERROR 5024 --- [http-nio-8080-exec-9] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:37:17.400 ERROR 5024 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:38:45.990  INFO 14696 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 14696 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 14:38:45.994  INFO 14696 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 14:38:47.209  INFO 14696 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 14:38:47.360  INFO 14696 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 139ms. Found 15 JPA repository interfaces.
-2022-06-19 14:38:48.071  INFO 14696 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 14:38:48.081  INFO 14696 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 14:38:48.081  INFO 14696 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 14:38:48.190  INFO 14696 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 14:38:48.191  INFO 14696 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2139 ms
-2022-06-19 14:38:48.319  WARN 14696 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 14:38:48.691  INFO 14696 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 14:38:48.785  INFO 14696 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 14:38:49.043  INFO 14696 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 14:38:49.238  INFO 14696 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 14:38:49.549  INFO 14696 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 14:38:49.585  INFO 14696 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 14:38:51.106  INFO 14696 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 14:38:51.131  INFO 14696 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 14:38:52.703  INFO 14696 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@14237e5, org.springframework.security.web.context.SecurityContextPersistenceFilter@63893cf6, org.springframework.security.web.header.HeaderWriterFilter@741f8cf, org.springframework.web.filter.CorsFilter@33ed6546, org.springframework.security.web.authentication.logout.LogoutFilter@54632794, com.naicson.yugioh.data.security.AuthTokenFilter@2703785e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@20673498, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@509bf2d5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@54d62c35, org.springframework.security.web.session.SessionManagementFilter@1df8ea34, org.springframework.security.web.access.ExceptionTranslationFilter@37e0614e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@c53dfb2]
-2022-06-19 14:38:52.726  INFO 14696 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 14:38:52.841  INFO 14696 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 14:38:53.352  INFO 14696 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 14:38:53.354  INFO 14696 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 14:38:53.380  INFO 14696 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 14:38:53.412  INFO 14696 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 14:38:53.749  INFO 14696 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 14:38:53.847  INFO 14696 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 8.229 seconds (JVM running for 9.177)
-2022-06-19 14:39:01.898  INFO 14696 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 14:39:01.899  INFO 14696 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 14:39:01.906  INFO 14696 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
-2022-06-19 14:39:33.838 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:42:56.046 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:43:05.668 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:46:17.039 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:46:35.332 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:46:40.113 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:47:05.933 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:47:11.246 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:48:02.989 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:48:08.921 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:48:26.728 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:48:41.105 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:49:54.471 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:50:39.462 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:50:44.897 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:57:22.000 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:57:31.267 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:58:16.753 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:58:23.402 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 14:58:59.251 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 14:59:30.405 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:03:32.157 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:03:39.127 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:06:46.878 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:06:52.117 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:07:23.650 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:07:54.173 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:09:20.577 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:11:55.952 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:12:35.720 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:16:29.753 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:20:52.684 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:21:37.782 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:21:42.415 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:27:20.437 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:27:23.528 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:30:49.228 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:30:53.363 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:31:39.713 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 15:31:44.344 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:32:13.536 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 15:38:23.593 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 16:31:13.173  WARN 14696 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m21s846ms376µs700ns).
-2022-06-19 16:34:53.285 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 16:37:58.536 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 16:48:58.552 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:02:23.523 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:04:00.223 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:04:36.761 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:04:43.750 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:06:45.776 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:07:01.325 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:07:53.285 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:10:04.592 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:10:34.557 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:10:55.290 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:07.293 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:20.786 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:23.530 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:23.700 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:23.878 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.056 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.230 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.394 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.577 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.752 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:24.927 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:25.108 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:25.298 ERROR 14696 --- [http-nio-8080-exec-8] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:25.512 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:25.736 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:25.934 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:26.145 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:26.335 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:26.545 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:11:26.725 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:12:13.910 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:12:37.611 ERROR 14696 --- [http-nio-8080-exec-10] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:13:54.120 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:14:05.550 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:15:10.515 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:16:10.783 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 17:18:50.723 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 18:36:31.897  WARN 14696 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47m17s597ms353µs300ns).
-2022-06-19 19:30:59.015 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 19:34:14.615 ERROR 14696 --- [http-nio-8080-exec-6] c.n.yugioh.service.HomeServiceImpl       : LAST CARDS ADDED TO USER LIST IS EMPTY
-2022-06-19 19:34:14.636 ERROR 14696 --- [http-nio-8080-exec-6] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: Last cards added to user  list is empty
-2022-06-19 19:47:53.327 ERROR 14696 --- [http-nio-8080-exec-5] c.n.yugioh.service.HomeServiceImpl       : LAST CARDS ADDED TO USER LIST IS EMPTY
-2022-06-19 19:47:53.334 ERROR 14696 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: Last cards added to user  list is empty
-2022-06-19 19:47:55.471 ERROR 14696 --- [http-nio-8080-exec-7] c.n.yugioh.service.HomeServiceImpl       : LAST CARDS ADDED TO USER LIST IS EMPTY
-2022-06-19 19:47:55.472 ERROR 14696 --- [http-nio-8080-exec-7] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: Last cards added to user  list is empty
-2022-06-19 19:47:57.355 ERROR 14696 --- [http-nio-8080-exec-9] c.n.yugioh.service.HomeServiceImpl       : LAST CARDS ADDED TO USER LIST IS EMPTY
-2022-06-19 19:47:57.356 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: Last cards added to user  list is empty
-2022-06-19 19:47:58.975 ERROR 14696 --- [http-nio-8080-exec-1] c.n.yugioh.service.HomeServiceImpl       : LAST CARDS ADDED TO USER LIST IS EMPTY
-2022-06-19 19:47:58.976 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: Last cards added to user  list is empty
-2022-06-19 19:48:00.762 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : NoSuchElementException: No elements found with this parameters
-2022-06-19 19:49:05.425 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Bad credentials
-2022-06-19 19:49:26.807 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 20:02:27.235 ERROR 14696 --- [http-nio-8080-exec-4] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
-2022-06-19 20:44:00.518  INFO 14696 --- [http-nio-8080-exec-3] c.n.y.controller.ArchetypeController     : Started consulting all archetypes...2022-06-19T20:44:00.517995300
-2022-06-19 20:54:05.164 ERROR 14696 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Cards quantity don't match relation quantity.Param received: deckId = 45 setType = User
-2022-06-19 20:54:20.666 ERROR 14696 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Cards quantity don't match relation quantity.Param received: deckId = 45 setType = User
-2022-06-19 20:56:31.431  INFO 14696 --- [http-nio-8080-exec-4] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 43
-2022-06-19 20:56:35.493  INFO 14696 --- [http-nio-8080-exec-6] c.n.yugioh.service.deck.DeckServiceImpl  : User Deck was saved! ID: 43
-2022-06-19 21:07:06.721  WARN 14696 --- [http-nio-8080-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
-2022-06-19 21:07:06.721 ERROR 14696 --- [http-nio-8080-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'card_id' doesn't have a default value
-2022-06-19 21:07:06.736 ERROR 14696 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement
-2022-06-19 21:09:21.495  WARN 14696 --- [http-nio-8080-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
-2022-06-19 21:09:21.495 ERROR 14696 --- [http-nio-8080-exec-9] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'card_id' doesn't have a default value
-2022-06-19 21:09:21.498 ERROR 14696 --- [http-nio-8080-exec-9] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement
-2022-06-19 21:10:21.283  INFO 3024 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 3024 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 21:10:21.287  INFO 3024 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 21:10:22.612  INFO 3024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 21:10:22.801  INFO 3024 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128ms. Found 15 JPA repository interfaces.
-2022-06-19 21:10:23.477  INFO 3024 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 21:10:23.490  INFO 3024 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 21:10:23.490  INFO 3024 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 21:10:23.610  INFO 3024 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 21:10:23.611  INFO 3024 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2276 ms
-2022-06-19 21:10:23.687  WARN 3024 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 21:10:23.893  INFO 3024 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 21:10:23.974  INFO 3024 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 21:10:24.250  INFO 3024 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 21:10:24.415  INFO 3024 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 21:10:24.609  INFO 3024 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 21:10:24.636  INFO 3024 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 21:10:25.719  INFO 3024 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 21:10:25.728  INFO 3024 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 21:10:27.253  INFO 3024 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@14237e5, org.springframework.security.web.context.SecurityContextPersistenceFilter@63893cf6, org.springframework.security.web.header.HeaderWriterFilter@741f8cf, org.springframework.web.filter.CorsFilter@33ed6546, org.springframework.security.web.authentication.logout.LogoutFilter@54632794, com.naicson.yugioh.data.security.AuthTokenFilter@2c4e63b3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@20673498, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@509bf2d5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@54d62c35, org.springframework.security.web.session.SessionManagementFilter@1df8ea34, org.springframework.security.web.access.ExceptionTranslationFilter@37e0614e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@c53dfb2]
-2022-06-19 21:10:27.277  INFO 3024 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 21:10:27.406  INFO 3024 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 21:10:27.922  INFO 3024 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 21:10:27.923  INFO 3024 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 21:10:27.958  INFO 3024 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 21:10:27.992  INFO 3024 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 21:10:28.317  INFO 3024 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 21:10:28.412  INFO 3024 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 7.515 seconds (JVM running for 8.369)
-2022-06-19 21:10:34.358  INFO 3024 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 21:10:34.358  INFO 3024 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 21:10:34.372  INFO 3024 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
-2022-06-19 21:13:03.293  WARN 3024 --- [http-nio-8080-exec-5] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1364, SQLState: HY000
-2022-06-19 21:13:03.294 ERROR 3024 --- [http-nio-8080-exec-5] o.h.engine.jdbc.spi.SqlExceptionHelper   : Field 'card_id' doesn't have a default value
-2022-06-19 21:13:03.327 ERROR 3024 --- [http-nio-8080-exec-5] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement
-2022-06-19 21:13:11.663  INFO 3112 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 3112 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-06-19 21:13:11.668  INFO 3112 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-06-19 21:13:12.725  INFO 3112 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-06-19 21:13:12.890  INFO 3112 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 152ms. Found 15 JPA repository interfaces.
-2022-06-19 21:13:13.555  INFO 3112 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-06-19 21:13:13.565  INFO 3112 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-06-19 21:13:13.566  INFO 3112 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-06-19 21:13:13.672  INFO 3112 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-06-19 21:13:13.672  INFO 3112 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1945 ms
-2022-06-19 21:13:13.736  WARN 3112 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-06-19 21:13:13.933  INFO 3112 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-06-19 21:13:13.995  INFO 3112 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-06-19 21:13:14.163  INFO 3112 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-06-19 21:13:14.291  INFO 3112 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-06-19 21:13:14.459  INFO 3112 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-06-19 21:13:14.476  INFO 3112 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-06-19 21:13:15.433  INFO 3112 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-06-19 21:13:15.441  INFO 3112 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-06-19 21:13:16.873  INFO 3112 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c42ee90, org.springframework.security.web.context.SecurityContextPersistenceFilter@514eefc4, org.springframework.security.web.header.HeaderWriterFilter@4a66949a, org.springframework.web.filter.CorsFilter@70c2a046, org.springframework.security.web.authentication.logout.LogoutFilter@1e470a51, com.naicson.yugioh.data.security.AuthTokenFilter@5ce03a9d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@560e1459, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f45290f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3803bc1a, org.springframework.security.web.session.SessionManagementFilter@57d8d8e2, org.springframework.security.web.access.ExceptionTranslationFilter@12d24c43, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2c8469fe]
-2022-06-19 21:13:16.896  INFO 3112 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-06-19 21:13:17.006  INFO 3112 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-06-19 21:13:17.493  INFO 3112 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-06-19 21:13:17.494  INFO 3112 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-06-19 21:13:17.525  INFO 3112 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-06-19 21:13:17.570  INFO 3112 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-06-19 21:13:17.950  INFO 3112 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-06-19 21:13:18.044  INFO 3112 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.774 seconds (JVM running for 7.621)
-2022-06-19 21:13:23.733  INFO 3112 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-06-19 21:13:23.734  INFO 3112 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-06-19 21:13:23.743  INFO 3112 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
-2022-06-19 21:20:04.418 ERROR 3112 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Cards quantity don't match relation quantity.Param received: deckId = 45 setType = User
+2022-07-01 00:16:14.514  WARN 4316 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=59m10s920ms847µs100ns).
+2022-07-01 11:22:55.887  WARN 4316 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10h31m10s903ms466µs700ns).
+2022-07-01 16:57:06.900  WARN 4316 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m6s143ms553µs701ns).
+2022-07-01 20:12:47.752  WARN 4316 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h25m9s127ms791µs999ns).
+2022-07-01 20:58:48.165 ERROR 4316 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : IllegalArgumentException: The Inside Deck is empty
+2022-07-01 21:02:24.038  INFO 4316 --- [http-nio-8080-exec-8] c.n.y.controller.ArchetypeController     : Started consulting all archetypes...2022-07-01T21:02:24.035530300
+2022-07-01 21:06:46.078 ERROR 4316 --- [http-nio-8080-exec-3] c.n.y.u.exceptions.ApiExceptionHandler   : IllegalArgumentException: The Inside Deck is empty
+2022-07-01 21:25:10.020  INFO 14100 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 14100 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-07-01 21:25:10.025  INFO 14100 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-07-01 21:25:11.012  INFO 14100 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-01 21:25:11.159  INFO 14100 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 137ms. Found 16 JPA repository interfaces.
+2022-07-01 21:25:11.829  INFO 14100 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-01 21:25:11.842  INFO 14100 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-01 21:25:11.842  INFO 14100 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-07-01 21:25:11.967  INFO 14100 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-01 21:25:11.967  INFO 14100 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1883 ms
+2022-07-01 21:25:12.037  WARN 14100 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-07-01 21:25:12.254  INFO 14100 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-07-01 21:25:12.367  INFO 14100 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-07-01 21:25:12.593  INFO 14100 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-07-01 21:25:12.753  INFO 14100 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-07-01 21:25:12.944  INFO 14100 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-07-01 21:25:12.970  INFO 14100 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-07-01 21:25:14.091  INFO 14100 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-07-01 21:25:14.099  INFO 14100 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-07-01 21:25:15.622  INFO 14100 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@35c95587, org.springframework.security.web.context.SecurityContextPersistenceFilter@6c165921, org.springframework.security.web.header.HeaderWriterFilter@7725470b, org.springframework.web.filter.CorsFilter@828e2d8, org.springframework.security.web.authentication.logout.LogoutFilter@4163f505, com.naicson.yugioh.data.security.AuthTokenFilter@62aefc75, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7cecd959, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@c925ae1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@43e9eddf, org.springframework.security.web.session.SessionManagementFilter@318155b1, org.springframework.security.web.access.ExceptionTranslationFilter@63bb52ea, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6a28d987]
+2022-07-01 21:25:15.647  INFO 14100 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-07-01 21:25:15.767  INFO 14100 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-07-01 21:25:16.314  INFO 14100 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-01 21:25:16.316  INFO 14100 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-07-01 21:25:16.342  INFO 14100 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-07-01 21:25:16.382  INFO 14100 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-07-01 21:25:16.759  INFO 14100 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-07-01 21:25:16.871  INFO 14100 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 7.28 seconds (JVM running for 8.397)
+2022-07-01 21:27:58.710  INFO 14100 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-07-01 21:27:58.711  INFO 14100 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-07-01 21:27:58.721  INFO 14100 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2022-07-01 21:31:28.699  INFO 24148 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 24148 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-07-01 21:31:28.703  INFO 24148 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-07-01 21:31:29.652  INFO 24148 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-01 21:31:29.810  INFO 24148 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 147ms. Found 16 JPA repository interfaces.
+2022-07-01 21:31:30.555  INFO 24148 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-01 21:31:30.566  INFO 24148 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-01 21:31:30.567  INFO 24148 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-07-01 21:31:30.683  INFO 24148 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-01 21:31:30.683  INFO 24148 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1928 ms
+2022-07-01 21:31:30.755  WARN 24148 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-07-01 21:31:30.948  INFO 24148 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-07-01 21:31:31.009  INFO 24148 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-07-01 21:31:31.195  INFO 24148 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-07-01 21:31:31.357  INFO 24148 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-07-01 21:31:31.541  INFO 24148 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-07-01 21:31:31.563  INFO 24148 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-07-01 21:31:32.642  INFO 24148 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-07-01 21:31:32.653  INFO 24148 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-07-01 21:31:34.159  INFO 24148 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@b42d1c8, org.springframework.security.web.context.SecurityContextPersistenceFilter@2cf6dd4d, org.springframework.security.web.header.HeaderWriterFilter@7aac6d13, org.springframework.web.filter.CorsFilter@73983f07, org.springframework.security.web.authentication.logout.LogoutFilter@14941b06, com.naicson.yugioh.data.security.AuthTokenFilter@2f6352a3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2801ccb3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5339cdc6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@35fddea2, org.springframework.security.web.session.SessionManagementFilter@2a8eed58, org.springframework.security.web.access.ExceptionTranslationFilter@32ae890, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4a5dc126]
+2022-07-01 21:31:34.185  INFO 24148 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-07-01 21:31:34.306  INFO 24148 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-07-01 21:31:34.803  INFO 24148 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-01 21:31:34.804  INFO 24148 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-07-01 21:31:34.829  INFO 24148 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-07-01 21:31:34.861  INFO 24148 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-07-01 21:31:35.249  INFO 24148 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-07-01 21:31:35.359  INFO 24148 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 7.04 seconds (JVM running for 7.896)
+2022-07-01 21:36:35.127  INFO 14028 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 14028 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-07-01 21:36:35.133  INFO 14028 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-07-01 21:36:36.181  INFO 14028 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-01 21:36:36.330  INFO 14028 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 137ms. Found 16 JPA repository interfaces.
+2022-07-01 21:36:36.986  INFO 14028 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-01 21:36:36.998  INFO 14028 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-01 21:36:36.999  INFO 14028 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-07-01 21:36:37.120  INFO 14028 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-01 21:36:37.120  INFO 14028 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1933 ms
+2022-07-01 21:36:37.192  WARN 14028 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-07-01 21:36:37.413  INFO 14028 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-07-01 21:36:37.473  INFO 14028 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-07-01 21:36:37.639  INFO 14028 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-07-01 21:36:37.767  INFO 14028 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-07-01 21:36:37.971  INFO 14028 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-07-01 21:36:37.989  INFO 14028 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-07-01 21:36:38.986  INFO 14028 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-07-01 21:36:38.996  INFO 14028 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-07-01 21:36:40.499  INFO 14028 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@59d8a968, org.springframework.security.web.context.SecurityContextPersistenceFilter@7aac6d13, org.springframework.security.web.header.HeaderWriterFilter@1a44ad96, org.springframework.web.filter.CorsFilter@14cd8dfa, org.springframework.security.web.authentication.logout.LogoutFilter@3a3f1703, com.naicson.yugioh.data.security.AuthTokenFilter@77902ed6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a8eed58, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4b024fb2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5a438c0a, org.springframework.security.web.session.SessionManagementFilter@32ae890, org.springframework.security.web.access.ExceptionTranslationFilter@6c80b1d2, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@293988dc]
+2022-07-01 21:36:40.523  INFO 14028 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-07-01 21:36:40.643  INFO 14028 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-07-01 21:36:41.355  INFO 14028 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-01 21:36:41.356  INFO 14028 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-07-01 21:36:41.395  INFO 14028 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-07-01 21:36:41.436  INFO 14028 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-07-01 21:36:41.769  INFO 14028 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-07-01 21:36:41.879  INFO 14028 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 7.17 seconds (JVM running for 8.142)
+2022-07-01 21:37:23.223  INFO 14028 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-07-01 21:37:23.224  INFO 14028 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-07-01 21:37:23.233  INFO 14028 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2022-07-01 21:42:17.858  INFO 2492 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 2492 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-07-01 21:42:17.862  INFO 2492 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-07-01 21:42:18.819  INFO 2492 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-01 21:42:18.963  INFO 2492 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 135ms. Found 16 JPA repository interfaces.
+2022-07-01 21:42:19.595  INFO 2492 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-01 21:42:19.605  INFO 2492 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-01 21:42:19.605  INFO 2492 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-07-01 21:42:19.719  INFO 2492 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-01 21:42:19.720  INFO 2492 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1810 ms
+2022-07-01 21:42:19.803  WARN 2492 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-07-01 21:42:19.990  INFO 2492 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-07-01 21:42:20.046  INFO 2492 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-07-01 21:42:20.201  INFO 2492 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-07-01 21:42:20.329  INFO 2492 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-07-01 21:42:20.505  INFO 2492 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-07-01 21:42:20.525  INFO 2492 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-07-01 21:42:21.505  INFO 2492 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-07-01 21:42:21.513  INFO 2492 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-07-01 21:42:22.974  INFO 2492 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3f4fd0dc, org.springframework.security.web.context.SecurityContextPersistenceFilter@8ba7408, org.springframework.security.web.header.HeaderWriterFilter@64657b13, org.springframework.web.filter.CorsFilter@3723de42, org.springframework.security.web.authentication.logout.LogoutFilter@4b4a3114, com.naicson.yugioh.data.security.AuthTokenFilter@64096a41, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@58e46572, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6acdca3a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@293988dc, org.springframework.security.web.session.SessionManagementFilter@4fc00158, org.springframework.security.web.access.ExceptionTranslationFilter@548e70f0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@12830e23]
+2022-07-01 21:42:23.004  INFO 2492 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-07-01 21:42:23.118  INFO 2492 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-07-01 21:42:23.605  INFO 2492 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-01 21:42:23.606  INFO 2492 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-07-01 21:42:23.630  INFO 2492 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-07-01 21:42:23.662  INFO 2492 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-07-01 21:42:24.002  INFO 2492 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-07-01 21:42:24.107  INFO 2492 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.636 seconds (JVM running for 7.515)
+2022-07-01 21:42:40.864  INFO 2492 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-07-01 21:42:40.865  INFO 2492 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-07-01 21:42:40.881  INFO 2492 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2022-07-01 21:43:01.930 ERROR 2492 --- [http-nio-8080-exec-4] c.n.y.u.exceptions.ApiExceptionHandler   : RuntimeException: Cannot invoke "java.lang.Integer.longValue()" because the return value of "com.naicson.yugioh.entity.sets.SetCollection.getId()" is null
+2022-07-01 21:44:34.134  INFO 884 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 884 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-07-01 21:44:34.140  INFO 884 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-07-01 21:44:35.253  INFO 884 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-07-01 21:44:35.408  INFO 884 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 143ms. Found 16 JPA repository interfaces.
+2022-07-01 21:44:36.102  INFO 884 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-07-01 21:44:36.115  INFO 884 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-07-01 21:44:36.115  INFO 884 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-07-01 21:44:36.224  INFO 884 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-07-01 21:44:36.224  INFO 884 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2027 ms
+2022-07-01 21:44:36.306  WARN 884 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-07-01 21:44:36.497  INFO 884 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-07-01 21:44:36.558  INFO 884 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-07-01 21:44:36.721  INFO 884 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-07-01 21:44:36.854  INFO 884 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-07-01 21:44:37.030  INFO 884 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-07-01 21:44:37.051  INFO 884 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-07-01 21:44:38.018  INFO 884 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-07-01 21:44:38.029  INFO 884 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-07-01 21:44:39.503  INFO 884 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5911dd25, org.springframework.security.web.context.SecurityContextPersistenceFilter@64657b13, org.springframework.security.web.header.HeaderWriterFilter@828e2d8, org.springframework.web.filter.CorsFilter@6d8cbd1a, org.springframework.security.web.authentication.logout.LogoutFilter@5b9ed77b, com.naicson.yugioh.data.security.AuthTokenFilter@64096a41, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4fc00158, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62525579, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3725242e, org.springframework.security.web.session.SessionManagementFilter@548e70f0, org.springframework.security.web.access.ExceptionTranslationFilter@791dcda7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3dfb1626]
+2022-07-01 21:44:39.532  INFO 884 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-07-01 21:44:39.649  INFO 884 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-07-01 21:44:40.145  INFO 884 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-01 21:44:40.146  INFO 884 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-07-01 21:44:40.171  INFO 884 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-07-01 21:44:40.203  INFO 884 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-07-01 21:44:40.539  INFO 884 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-07-01 21:44:40.659  INFO 884 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 6.997 seconds (JVM running for 7.902)
+2022-07-01 21:45:06.282  INFO 884 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-07-01 21:45:06.284  INFO 884 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-07-01 21:45:06.298  INFO 884 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
+2022-07-01 22:24:04.253  INFO 884 --- [http-nio-8080-exec-6] c.n.y.service.deck.UserDeckServiceImpl   : Starting removing Set from user collection. ID 2470
+2022-07-01 22:24:04.275  INFO 884 --- [http-nio-8080-exec-6] c.n.y.service.deck.UserDeckServiceImpl   : Cards removed from User Deck: 2470
+2022-07-01 22:24:07.051  INFO 884 --- [http-nio-8080-exec-8] c.n.y.service.deck.UserDeckServiceImpl   : Starting removing Set from user collection. ID 2472
+2022-07-01 22:24:07.060  INFO 884 --- [http-nio-8080-exec-8] c.n.y.service.deck.UserDeckServiceImpl   : Cards removed from User Deck: 2472
+2022-07-01 22:24:09.600  INFO 884 --- [http-nio-8080-exec-10] c.n.y.service.deck.UserDeckServiceImpl   : Starting removing Set from user collection. ID 2473
+2022-07-01 22:24:09.605  INFO 884 --- [http-nio-8080-exec-10] c.n.y.service.deck.UserDeckServiceImpl   : Cards removed from User Deck: 2473
+2022-07-01 22:24:12.265  INFO 884 --- [http-nio-8080-exec-2] c.n.y.service.deck.UserDeckServiceImpl   : Starting removing Set from user collection. ID 2469
+2022-07-01 22:24:12.270  INFO 884 --- [http-nio-8080-exec-2] c.n.y.service.deck.UserDeckServiceImpl   : Cards removed from User Deck: 2469

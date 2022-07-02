@@ -21,6 +21,7 @@ import com.naicson.yugioh.repository.HomeRepository;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.service.interfaces.HomeDetailService;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;

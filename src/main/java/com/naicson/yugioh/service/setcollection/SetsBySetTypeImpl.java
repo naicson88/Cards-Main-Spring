@@ -1,5 +1,6 @@
 package com.naicson.yugioh.service.setcollection;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,43 +9,49 @@ import org.springframework.stereotype.Component;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.repository.DeckRepository;
+import com.naicson.yugioh.entity.sets.UserDeck;
+import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.SetCollectionRepository;
-import com.naicson.yugioh.service.interfaces.DeckDetailService;
+import com.naicson.yugioh.repository.UserSetCollectionRepository;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.enums.SetType;
-
-import ch.qos.logback.core.pattern.Converter;
 
 @Component
 public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	
 	@Autowired
-	DeckDetailService deckService;
+	UserDeckServiceImpl userDeckService;	
+	@Autowired
+	UserSetCollectionRepository userSetRepository ;
 	
+	@Autowired
+	DeckServiceImpl deckService;	
 	@Autowired
 	SetCollectionRepository setRepository;
 	
+	Page<DeckSummaryDTO> pageDTO  = null;
+	
 	@Override
-	public Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String informedSetType) {
+	public Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType) {
 		Page<SetCollection> pageSet = null;
 		Page<Deck> pageDeck;
-		Page<DeckSummaryDTO> pageDTO  = null;
 		
-		SetType setType = SetType.valueOf(informedSetType);
+		SetType type = SetType.valueOf(setType);
 		
-		if(setType.equals(SetType.DECK)) {
-			 pageDeck = deckService.findAll(pageable);		
+		if(type.equals(SetType.DECK)) {
+			 pageDeck = deckService.findAllBySetType(pageable, setType);		
 			 pageDTO = convertPageDeck(pageDeck);
-		} 
-		
-		else {
-			pageSet =  setRepository.findAllBySetType(pageable, setType.toString());
+			 
+		} else {
+			pageSet =  setRepository.findAllBySetType(pageable, type.toString());
 			pageDTO = this.convertPageSetToPageDeck(pageSet);
 		}
 					
 		 return pageDTO;
 	}
 	
+
 	private Page<DeckSummaryDTO> convertPageSetToPageDeck(Page<SetCollection> pageSet){
 		
 		Page<DeckSummaryDTO> pageDeck = pageSet.map(originalPage -> {
@@ -90,9 +97,71 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setNomePortugues(originalDeck.getNomePortugues());
 		
 		Long[] idEntity = {originalDeck.getId()};
-		 if(deckService.searchForDecksUserHave(idEntity) != null && deckService.searchForDecksUserHave(idEntity).size() > 0)
-			 deck.setQuantityUserHave(deckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
+		 if(userDeckService.searchForDecksUserHave(idEntity) != null && userDeckService.searchForDecksUserHave(idEntity).size() > 0)
+			 deck.setQuantityUserHave(userDeckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
 		
 		return deck;
 	}
+
+
+	@Override
+	public Page<DeckSummaryDTO> findAllUserSetsByType(Pageable pageable, String setType) {
+		Page<UserSetCollection> pageSet = null;
+		Page<UserDeck> pageDeck;
+		
+		SetType type = SetType.valueOf(setType);
+		
+		if(type.equals(SetType.DECK)) {
+			 pageDeck = userDeckService.findAllBySetType(pageable, setType);		
+			 pageDTO = convertPageUserDeck(pageDeck);
+			 
+		} else {			
+			pageSet =  userSetRepository.findAllBySetCollectionType(pageable, type);
+			pageDTO = this.convertPageUserSetToPageDeck(pageSet);
+		}
+					
+		 return pageDTO;
+	}
+	
+	
+	private Page<DeckSummaryDTO> convertPageUserSetToPageDeck(Page<UserSetCollection> pageSet){
+		
+		Page<DeckSummaryDTO> pageDeck = pageSet.map(originalPage -> {
+			DeckSummaryDTO deck =  this.convertSetCollectionToDTO(originalPage);
+			return deck;
+		});
+		
+		return pageDeck;		
+	}
+	
+	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {
+		
+		DeckSummaryDTO deck = new DeckSummaryDTO();
+		deck.setId(set.getId().longValue());
+		deck.setLancamento(set.getReleaseDate());
+		deck.setNome(set.getName());
+		deck.setSetType(set.getSetCollectionType().toString());
+		deck.setImagem(set.getImgurUrl());
+		deck.setNomePortugues(set.getPortugueseName());
+		deck.setQuantityUserHave(0);
+		
+		return deck;
+	}
+
+
+	private Page<DeckSummaryDTO> convertPageUserDeck(Page<UserDeck> userDeck){
+		
+		Page<DeckSummaryDTO> pageDeck = userDeck.map(originalPage -> {
+			DeckSummaryDTO deckDTO = new DeckSummaryDTO();
+			
+			BeanUtils.copyProperties(originalPage, deckDTO);
+			
+			return deckDTO;
+		});
+		
+		return pageDeck;		
+	}
+
+
+
 }

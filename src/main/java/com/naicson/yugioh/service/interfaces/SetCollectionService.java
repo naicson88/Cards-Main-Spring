@@ -10,4 +10,5 @@ public interface SetCollectionService {
 	public SetCollection saveSetCollection(SetCollection setCollection)  throws Exception;
 	
 	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
+
 }

@@ -180,7 +180,7 @@ public class DeckDAO {
 	public List<RelUserDeckDTO> searchForDecksUserHave(long userId, String decksIds) {		
 		Query query = em.createNativeQuery(
 				" SELECT DK.id, DK.user_id, KONAMI_DECK_COPIED AS deck_id, COUNT(KONAMI_DECK_COPIED) AS qtd " +
-				" FROM TAB_DECK_USERS DK " + 
+				" FROM tab_user_deck DK " + 
 				" WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (" +  decksIds + ")" +
 				" GROUP BY (KONAMI_DECK_COPIED) ", RelUserDeckDTO.class)
 				
@@ -196,8 +196,8 @@ public class DeckDAO {
 		int result = 0;
 	
 		if(originalDeckId != null && generatedDeckId != null) {
-			Query query = em.createNativeQuery(" INSERT INTO tab_rel_deckusers_cards (DECK_ID, CARD_NUMERO,CARD_RARIDADE,CARD_SET_CODE,CARD_PRICE, DT_CRIACAO, is_side_deck, CARD_ID, IS_SPEED_DUEL) "+
-											  " SELECT " + generatedDeckId + " , CARD_NUMERO,CARD_RARIDADE,CARD_SET_CODE,CARD_PRICE, CURDATE(),0, CARD_ID, IS_SPEED_DUEL FROM TAB_REL_DECK_CARDS " +
+			Query query = em.createNativeQuery(" INSERT INTO tab_rel_deckusers_cards (DECK_ID, CARD_NUMERO,CARD_RARIDADE,CARD_SET_CODE,CARD_PRICE, DT_CRIACAO, is_side_deck, CARD_ID, IS_SPEED_DUEL, QUANTITY) "+
+											  " SELECT " + generatedDeckId + " , CARD_NUMERO,CARD_RARIDADE,CARD_SET_CODE,CARD_PRICE, CURDATE(),0, CARD_ID, IS_SPEED_DUEL, QUANTITY  FROM TAB_REL_DECK_CARDS " +
 											  " where deck_id = " + originalDeckId  );
 			
 			 result = query.executeUpdate();
@@ -302,8 +302,8 @@ public class DeckDAO {
 	public int saveRelDeckUserCard(RelDeckCards rel, Long deckId) {
 		int id = 0;
 			
-			Query query = em.createNativeQuery("insert into tab_rel_deckusers_cards (deck_id, card_numero, card_raridade, card_set_code, card_price, dt_criacao, is_side_deck, card_id, is_speed_duel )" 
-					+ " values (:deck_id,:card_numero, :card_raridade, :card_set_code, :card_price, :dt_criacao, :is_side_deck, :card_id, :is_speed_duel )")
+			Query query = em.createNativeQuery("insert into tab_rel_deckusers_cards (deck_id, card_numero, card_raridade, card_set_code, card_price, dt_criacao, is_side_deck, card_id, is_speed_duel, quantity )" 
+					+ " values (:deck_id,:card_numero, :card_raridade, :card_set_code, :card_price, :dt_criacao, :is_side_deck, :card_id, :is_speed_duel, :quantity )")
 			.setParameter("deck_id", deckId)
 			.setParameter("card_numero", rel.getCardNumber())
 			.setParameter("card_raridade", rel.getCard_raridade())
@@ -312,7 +312,8 @@ public class DeckDAO {
 			.setParameter("dt_criacao", new Date())
 			.setParameter("is_side_deck", rel.getIsSideDeck())
 			.setParameter("card_id", rel.getCardId())
-			.setParameter("is_speed_duel", rel.getIsSpeedDuel());
+			.setParameter("is_speed_duel", rel.getIsSpeedDuel())
+			.setParameter("quantity", rel.getQuantity());
 				
 			 id = query.executeUpdate();	
 			 

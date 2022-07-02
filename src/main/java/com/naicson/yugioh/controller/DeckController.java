@@ -1,9 +1,7 @@
 package com.naicson.yugioh.controller;
 
 import java.util.List;
-import java.util.Map;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -11,32 +9,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.sets.DeckUsers;
 import com.naicson.yugioh.repository.DeckRepository;
-import com.naicson.yugioh.repository.sets.DeckUsersRepository;
-import com.naicson.yugioh.service.UserDetailsImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
-import com.naicson.yugioh.util.GeneralFunctions;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -58,11 +44,8 @@ public class DeckController<T> {
 	@Autowired
 	ISetsByType<T> setsBySetType;
 	
-	@Autowired
-	DeckUsersRepository deckUserRepository;
-
 	Page<DeckSummaryDTO> setList = null;
-	Page<DeckUsers> deckUserList = null;
+	
 
 	@GetMapping("/todos")
 	public List<Deck> consultar() {
@@ -81,33 +64,9 @@ public class DeckController<T> {
 
 	}
 
-	@GetMapping("/sets-of-user")
-	@ApiOperation(value="Return Sets of a User", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<Page<DeckUsers>> setsOfUser(
-			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-			@RequestParam String setType) {
-		
-			switch(setType) {
-				case "UD": setType =  "D"; break;
-				case "UB": setType =  "B"; break;
-				case "UT": setType =  "T"; break;				
-			}
-
-			UserDetailsImpl user = GeneralFunctions.userLogged();
-			
-			deckUserList = deckUserRepository.findAllByUserIdAndSetType(user.getId(), setType, pageable);
-
-		if (deckUserList == null) {
-
-			return new ResponseEntity<Page<DeckUsers>>(HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<>(deckUserList, HttpStatus.OK);
-	}
-
 	@GetMapping("/set-details")
 	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
-	@Cacheable(value = "setDetails")
+	//@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		SetDetailsDTO deck = null;	
 		
@@ -115,18 +74,9 @@ public class DeckController<T> {
 			deck = deckService.deckAndCards(id, source);		
 		else 
 			deck = setCollService.setCollectionDetailsAsDeck(id, source);
-
-				
+			
 		return new ResponseEntity<>(deck, HttpStatus.OK) ;
-	}
-	
-	@GetMapping("/edit-deck")
-	@ApiOperation(value="Edit a Set by its ID and Source type", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
-		Deck deck = deckService.editUserDeck(deckId);
-		
-		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
-	}
+	}	
 	
 	@GetMapping("/search-by-set-name")
 	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
@@ -136,45 +86,7 @@ public class DeckController<T> {
 		return new ResponseEntity<List<Deck>>(setsFound, HttpStatus.OK);
 	}
 
-	@GetMapping(path = { "/add-deck-to-user-collection/{deckId}" })
-	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
+
 	
-		Integer qtdAdded = deckService.addSetToUserCollection(deckId);
-		
-		return new ResponseEntity<Integer>(qtdAdded, HttpStatus.OK);
-					
-	}
-
-	@GetMapping(path = { "/remove-set-to-user-collection/{deckId}" })
-	@ApiOperation(value="Remove a Set from User collection", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<String> removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) {
-		
-		 deckService.removeSetFromUsersCollection(deckId);
-		
-		return new ResponseEntity<String>("Set was successfully removed from your collection", HttpStatus.OK);
-
-	}
-
-	@GetMapping("/rel-user-decks")
-	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
-	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
-
-		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
-		
-		return rel;
-	}
-	
-	@PostMapping(path = "/save-userdeck")
-	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
-//		ObjectMapper mapper = new ObjectMapper();
-//		Deck deck = mapper.readValue(json, Deck.class);
-		
-		this.deckService.saveUserdeck(deck);
-		
-		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
-
-	}
 
 }
