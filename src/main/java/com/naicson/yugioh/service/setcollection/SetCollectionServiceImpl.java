@@ -21,7 +21,9 @@ import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.SetCollectionRepository;
+import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.util.enums.SetType;
@@ -31,6 +33,9 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 	
 	@Autowired
 	SetCollectionRepository setColRepository;
+	
+	@Autowired
+	UserSetCollectionRepository userSetRepository;
 	
 	@Autowired
 	DeckServiceImpl deckService;
@@ -50,33 +55,6 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		return collectionSaved;
 	}
-	
-	private void validSetCollection(SetCollection setCollection) {
-		
-		if(setCollection == null)
-			throw new IllegalArgumentException("Invalid Set Collection.");
-		
-		if(setCollection.getIsSpeedDuel() == null)
-			throw new IllegalArgumentException("Invalid Speed Duel definition.");
-		
-		if(setCollection.getOnlyDefaultDeck() == null)
-			throw new IllegalArgumentException("Invalid Only default Deck definition.");
-		
-		if(StringUtils.isEmpty(setCollection.getImgPath()))
-			throw new IllegalArgumentException("Invalid Image path for Set Collection.");
-		
-		if(StringUtils.isEmpty(setCollection.getName()))
-			throw new IllegalArgumentException("Invalid Name for Set Collection.");
-		
-		if(setCollection.getRegistrationDate() == null)
-			throw new IllegalArgumentException("Invalid Registration Date for Set Collection.");
-		
-		if(setCollection.getReleaseDate() == null)
-			throw new IllegalArgumentException("Invalid Release Date for Set Collection.");
-		
-		SetType.valueOf(setCollection.getSetCollectionType().toString());
-		
-	}
 
 	@Override
 	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source) {
@@ -90,31 +68,35 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		SetCollection set = new SetCollection();
 		SetDetailsDTO deck = new SetDetailsDTO();
 		
-		if("konami".equalsIgnoreCase(source)) {
+		if("KONAMI".equalsIgnoreCase(source)) {
 			set = setColRepository.findById(setId.intValue())
 				.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
 			
 			deck = this.convertSetCollectionToDeck(set);			
-		}
+		} 
 		
-		deck = utils.getSetStatistics(deck);
+		else {
+			UserSetCollection userSet = userSetRepository.findById(setId)
+					.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));;
+			
+			BeanUtils.copyProperties(userSet, set);			
+			set.setId(userSet.getId().intValue());
+			
+			if(set.getDecks() != null && set.getDecks().size() > 0)			
+				deck = this.convertSetCollectionToDeck(set);	
+			else
+				deck = convertBasicSetToSetDetailsDTO(set);
+		}	
+		
+		if(set.getDecks() != null && set.getDecks().size() > 0)	
+			deck = utils.getSetStatistics(deck);
 		
 		return deck;
 	}
 	
 	private SetDetailsDTO convertSetCollectionToDeck(SetCollection set) {
 		
-		SetDetailsDTO deck = new SetDetailsDTO();
-				
-		deck.setDt_criacao(set.getRegistrationDate());
-		deck.setId(set.getId().longValue());
-		deck.setImagem(set.getImgPath());
-		deck.setIsSpeedDuel(set.getIsSpeedDuel());
-		deck.setLancamento(set.getReleaseDate());
-		deck.setNome(set.getName());
-		deck.setNomePortugues(set.getPortugueseName());
-		deck.setSetType(set.getSetCollectionType().toString());
-		deck.setImgurUrl(set.getImgurUrl());
+		SetDetailsDTO deck = convertBasicSetToSetDetailsDTO(set);
 		
 		List<InsideDeckDTO> listInsideDeck = new ArrayList<>();
 		
@@ -163,6 +145,24 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 				
 	}
 
+
+
+	private SetDetailsDTO convertBasicSetToSetDetailsDTO(SetCollection set) {
+		SetDetailsDTO deck = new SetDetailsDTO();
+				
+		deck.setDt_criacao(set.getRegistrationDate());
+		deck.setId(set.getId().longValue());
+		deck.setImagem(set.getImgurUrl());
+		deck.setIsSpeedDuel(set.getIsSpeedDuel());
+		deck.setLancamento(set.getReleaseDate());
+		deck.setNome(set.getName());
+		deck.setNomePortugues(set.getPortugueseName());
+		deck.setSetType(set.getSetCollectionType().toString());
+		deck.setImgurUrl(set.getImgurUrl());
+		return deck;
+		
+	}
+
 	private SetCollection getCardsForEachDeck(SetCollection set) {
 		
 		set.getDecks().stream().forEach(d -> { 		
@@ -180,7 +180,32 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		SetCollection col = setColRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("SetCollection not found"));		
 		return col;
 	}
-
-
+	
+	private void validSetCollection(SetCollection setCollection) {
+		
+		if(setCollection == null)
+			throw new IllegalArgumentException("Invalid Set Collection.");
+		
+		if(setCollection.getIsSpeedDuel() == null)
+			throw new IllegalArgumentException("Invalid Speed Duel definition.");
+		
+		if(setCollection.getOnlyDefaultDeck() == null)
+			throw new IllegalArgumentException("Invalid Only default Deck definition.");
+		
+		if(StringUtils.isEmpty(setCollection.getImgPath()))
+			throw new IllegalArgumentException("Invalid Image path for Set Collection.");
+		
+		if(StringUtils.isEmpty(setCollection.getName()))
+			throw new IllegalArgumentException("Invalid Name for Set Collection.");
+		
+		if(setCollection.getRegistrationDate() == null)
+			throw new IllegalArgumentException("Invalid Registration Date for Set Collection.");
+		
+		if(setCollection.getReleaseDate() == null)
+			throw new IllegalArgumentException("Invalid Release Date for Set Collection.");
+		
+		SetType.valueOf(setCollection.getSetCollectionType().toString());
+		
+	}
 
 }

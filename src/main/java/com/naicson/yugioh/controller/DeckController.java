@@ -66,7 +66,7 @@ public class DeckController<T> {
 
 	@GetMapping("/set-details")
 	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
-	@Cacheable(value = "setDetails")
+	//@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		SetDetailsDTO deck = null;	
 		
