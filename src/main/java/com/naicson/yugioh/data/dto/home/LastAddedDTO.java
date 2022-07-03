@@ -1,5 +1,7 @@
 package com.naicson.yugioh.data.dto.home;
 
+import java.util.Date;
+
 public class LastAddedDTO {
 	
 	private Long id;
@@ -8,12 +10,11 @@ public class LastAddedDTO {
 	private Double price;
 	private String img;
 	private Long cardNumber;
+	private Date registeredDate;
 	
 	public LastAddedDTO() {
 		
 	}
-	
-	
 	
 	public Long getId() {
 		return id;
@@ -65,6 +66,18 @@ public class LastAddedDTO {
 
 	public void setCardNumber(Long cardNumber) {
 		this.cardNumber = cardNumber;
+	}
+
+
+
+	public Date getRegisteredDate() {
+		return registeredDate;
+	}
+
+
+
+	public void setRegisteredDate(Date registeredDate) {
+		this.registeredDate = registeredDate;
 	}
 	
 	

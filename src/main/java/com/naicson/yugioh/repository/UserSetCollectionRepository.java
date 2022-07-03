@@ -1,5 +1,6 @@
 package com.naicson.yugioh.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 	@Modifying
 	@Query(value = "delete from tab_user_setcollection_deck where user_set_collection_id = :setId",nativeQuery = true)		
 	public void deleteSetUserDeckRelation(Long setId);
+	
+	@Query(value = "select deck_id from tab_user_setcollection_deck where user_set_collection_id = :setId",nativeQuery = true)		
+	public List<Long> consultSetUserDeckRelation(Long setId);
 	
 	public Optional<UserSetCollection> findById(Long id);
 

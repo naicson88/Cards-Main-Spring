@@ -23,7 +23,10 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 			+ " where du.user_id = :userId ", nativeQuery = true)
 	long returnQuantityCardsUserHave(long userId);
 	
-	@Query(value = "select distinct * from tab_user_deck where user_id = :userId order by dt_criacao desc limit 10", nativeQuery = true)
+	@Query(value = "select distinct * from tab_user_deck where user_id = :userId  and set_type = 'DECK' order by dt_criacao desc limit 10", nativeQuery = true)
+	List<Tuple> returnLastDecksAddedToUser(long userId);
+	
+	@Query(value = "SELECT * FROM yugioh.tab_user_set_collection where user_id = :userId  order by registration_date desc limit 10", nativeQuery = true)
 	List<Tuple> returnLastSetsAddedToUser(long userId);
 	
 	@Query(value = 	
@@ -35,10 +38,18 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 			+ " limit 10 ", nativeQuery = true)
 	List<Tuple> lastCardsAddedToUser(Long userId);
 	
-	@Query(value = "select * from tab_decks order by dt_criacao desc limit 5", nativeQuery = true)
+	@Query(value = " select * from ( "
+			+ " select d1.id, d1.nome, d1.imgur_url, d1.dt_criacao as dt_reg from tab_decks d1 where set_type = 'DECK' "
+			+ " UNION "
+			+ " select us.id, us.name, us.imgur_url, us.registration_date as dt_reg from tab_user_set_collection us) as u "
+			+ " order by u.dt_reg desc "
+			+ " limit 5 ", nativeQuery = true)
 	List<Tuple> getHotNews();
 	
-	@Query(value = "select ROUND(sum(card_price),2) as total from tab_rel_deckusers_cards where deck_id = :setId", nativeQuery = true)
+	@Query(value = "select IFNULL(ROUND(sum(card_price),2), 0.0) as total from tab_rel_deckusers_cards where deck_id = :setId", nativeQuery = true)
+	Double findTotalDeckPrice(Long setId);
+	
+	@Query(value = "select IFNULL(ROUND(sum(card_price * quantity),2), 0.0) as total from tab_rel_deckusers_cards where deck_id = :setId", nativeQuery = true)
 	Double findTotalSetPrice(Long setId);
 	
 	
