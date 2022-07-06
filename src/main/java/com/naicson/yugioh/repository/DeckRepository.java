@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.UserDeck;
 
@@ -33,6 +34,14 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 	List<RelUserDeckDTO> searchForDecksUserHave(Long userId, String deckId);
 
 	Page<Deck> findAllBySetType(Pageable pageable, String setType);
+	
+	@Query(value = "select c.id, rel.card_numero as numero, c.categoria, c.nome, c.atributo, c.propriedade, c.nivel, c.atk, c.def, c.descricao, " +
+			   " c.imagem, c.escala, c.descr_pendulum, c.qtd_link, c.generic_type as genericType, c.registry_date as registryDate, " +
+			   " rel.card_set_code as cardSetCode, rel.card_price, rel.card_raridade, rel.is_side_deck as isSideDeck, rel.is_speed_duel as isSpeedDuel " +				  
+			   " from tab_cards c " +
+			   " inner join tab_rel_deck_cards rel on rel.card_id = c.id "+
+			   " where deck_id = :deckId ",  nativeQuery = true)	
+	List<CardSetDetailsDTO> findAllCardSetDetailsDTOByDeckId(Long deckId);
 	
 	
 }

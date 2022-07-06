@@ -279,7 +279,7 @@ public class CardServiceImpl implements CardDetailService {
 		Page<Card> list = cardRepository.getByGenericType(page, genericType, userId);
 		
 		if( list == null || list.isEmpty())
-			throw new NoSuchElementException("No elements found with this parameters");
+			return Collections.emptyList();
 		
 		List<CardsSearchDTO> dtoList = list.stream()
 				.filter(card -> card != null)

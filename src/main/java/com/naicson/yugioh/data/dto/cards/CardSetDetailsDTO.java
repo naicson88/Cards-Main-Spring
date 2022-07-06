@@ -47,6 +47,50 @@ public class CardSetDetailsDTO {
 	private Boolean isSideDeck;
 	private Boolean isSpeedDuel;
 	
+	public CardSetDetailsDTO() {}
+	
+	
+	
+	public CardSetDetailsDTO(Integer id, Long numero, String categoria, String nome, String nomePortugues,
+			Atributo atributo, String propriedade, Integer nivel, Integer atk, Integer def, String descricao,
+			String descricaoPortugues, String imagem, Integer escala, String descr_pendulum, String descr_pendulum_pt,
+			String qtd_link, List<Deck> sets, String genericType, TipoCard tipo, Archetype archetype, Date registryDate,
+			List<CardAlternativeNumber> alternativeCardNumber, Long cardNumber, String cardSetCode, Double card_price,
+			String card_raridade, Boolean isSideDeck, Boolean isSpeedDuel) {
+		
+		this.id = id;
+		this.numero = numero;
+		this.categoria = categoria;
+		this.nome = nome;
+		this.nomePortugues = nomePortugues;
+		this.atributo = atributo;
+		this.propriedade = propriedade;
+		this.nivel = nivel;
+		this.atk = atk;
+		this.def = def;
+		this.descricao = descricao;
+		this.descricaoPortugues = descricaoPortugues;
+		this.imagem = imagem;
+		this.escala = escala;
+		this.descr_pendulum = descr_pendulum;
+		this.descr_pendulum_pt = descr_pendulum_pt;
+		this.qtd_link = qtd_link;
+		this.sets = sets;
+		this.genericType = genericType;
+		this.tipo = tipo;
+		this.archetype = archetype;
+		this.registryDate = registryDate;
+		this.alternativeCardNumber = alternativeCardNumber;
+		this.cardNumber = cardNumber;
+		this.cardSetCode = cardSetCode;
+		this.card_price = card_price;
+		this.card_raridade = card_raridade;
+		this.isSideDeck = isSideDeck;
+		this.isSpeedDuel = isSpeedDuel;
+	}
+
+
+
 	public Integer getId() {
 		return id;
 	}

@@ -125,8 +125,7 @@ public class HomeServiceImpl implements HomeDetailService {
 			}).collect(Collectors.toList());
 
 		} else {
-			logger.error("Last cards added to user list is empty".toUpperCase());
-			throw new NoSuchElementException("Last cards added to user  list is empty");
+			return Collections.emptyList();
 		}
 
 		return lastCardsAdded;

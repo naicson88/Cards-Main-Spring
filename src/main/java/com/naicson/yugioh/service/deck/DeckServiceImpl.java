@@ -2,6 +2,7 @@ package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.DeckDAO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
@@ -302,28 +304,30 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
-
-		BeanUtils.copyProperties(deck, dto);
-
-		Map<Long, CardSetDetailsDTO> mapCardSetDetails = new HashMap<>();
-
-		List<CardSetDetailsDTO> cardDetailsList = deck.getCards().stream().map(c -> {
-			CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();
+		
+		BeanUtils.copyProperties(deck, dto);		
+		
+		List<CardSetDetailsDTO> cardDetailsList = deck.getCards().stream().map(c -> {			
+			CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();		
 			BeanUtils.copyProperties(c, cardDetail);
-
-			mapCardSetDetails.put(cardDetail.getNumero(), cardDetail);
+			
+			//Seta os dados do RelDeckCards
+			for(RelDeckCards rel: deck.getRel_deck_cards()) {
+				if(c.getId().equals(rel.getCardId())) {
+					c.setNumero(rel.getCardNumber());
+					
+					BeanUtils.copyProperties(rel, cardDetail);
+					deck.getRel_deck_cards().remove(rel);
+					break;
+				}
+			}
 
 			return cardDetail;
 
-		}).collect(Collectors.toList());
-
-		deck.getRel_deck_cards().forEach(r -> {
-			CardSetDetailsDTO detail = mapCardSetDetails.get(r.getCardNumber());
-			BeanUtils.copyProperties(r, detail);
-		});
-
+		})//.sorted(Comparator.comparingInt(CardSetDetailsDTO::getId))
+		  .collect(Collectors.toList());
+		
 		insideDeck.setCards(cardDetailsList);
-
 		dto.setInsideDecks(List.of(insideDeck));
 
 		return dto;
