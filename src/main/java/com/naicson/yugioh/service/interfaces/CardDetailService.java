@@ -25,8 +25,7 @@ import com.naicson.yugioh.util.search.SearchCriteria;
 public interface CardDetailService {
 	
 	Card cardDetails(Integer id);
-	
-	List<Deck> cardDecks(Long cardNumero);	
+
 	
 	List<CardOfArchetypeDTO> findCardByArchetype(Integer archId);
 	

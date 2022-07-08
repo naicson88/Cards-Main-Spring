@@ -242,7 +242,7 @@ public class CardServiceImplTest {
 		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
-		doReturn(listDeck).when(cardService).cardDecks(anyLong());
+		doReturn(listDeck).when(dao).cardDecks(anyInt());
 		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
 		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
 		

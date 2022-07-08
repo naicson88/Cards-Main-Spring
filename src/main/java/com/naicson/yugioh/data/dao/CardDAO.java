@@ -12,6 +12,9 @@ import javax.persistence.Tuple;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.KonamiSetsWithCardDTO;
+import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.sets.SetCollection;
 
 @Repository
 public class CardDAO {
@@ -44,5 +47,27 @@ public class CardDAO {
 		return resultCards;
 	}
 	
+	public List<Deck> cardDecks(Integer cardId) {
+		Query query = em.createNativeQuery("SELECT *  FROM tab_decks deck "
+				+ " inner join TAB_REL_DECK_CARDS rel on deck.id = rel.deck_id " 
+				+ " where rel.card_id = :cardId ", Deck.class);
+		
+		List<Deck> decks_set = (List<Deck>) query.setParameter("cardId", cardId).getResultList();
+		
+		return decks_set;
+	}
+	
+
+	public List<SetCollection> cardSetCollection(Integer cardId) {
+		Query query = em.createNativeQuery("select * from tab_set_collection sc "
+				+ " inner join tab_setcollection_deck scd on scd.set_collection_id = sc.id "
+				+ " inner join tab_decks decks on decks.id = scd.deck_id "
+				+ " inner join TAB_REL_DECK_CARDS rel on decks.id = rel.deck_id"
+				+ " where rel.card_id = :cardId", SetCollection.class);
+		
+		List<SetCollection> decks_set = (List<SetCollection>) query.setParameter("cardId", cardId).getResultList();
+		
+		return decks_set;
+	}
 	
 }
