@@ -1,30 +1,32 @@
 package com.naicson.yugioh.service.deck;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.DeckDAO;
-import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
@@ -477,43 +479,39 @@ public class DeckServiceImpl implements DeckDetailService {
 //	}
 
 	@Override
-	public List<Deck> searchByDeckName(String setName, String source) {
+	public Page<DeckSummaryDTO> searchBySetName(String setName) {		
 
-		this.validSearchByDeckName(setName, source);
-
-		List<Deck> setsFound = null;
-
-		if ("KONAMI".equals(source)) {
-			setsFound = this.deckRepository.findTop30ByNomeContaining(setName);
-
-		} else if ("USER".equals(source)) {
-			List<UserDeck> deckUser = this.userDeckRepository.findTop30ByNomeContaining(setName);
-
-			setsFound = deckUser.stream().map(du -> {
-				Deck deck = Deck.deckFromDeckUser(du);
-				return deck;
-			}).collect(Collectors.toList());
-
-		}
-
-		if (setsFound == null || setsFound.isEmpty())
-			return Collections.emptyList();
-
-		return setsFound;
-	}
-
-	private void validSearchByDeckName(String setName, String source) {
-
-		if (setName.isEmpty() || setName.length() <= 5) {
-			logger.error("Invalid set name for searching. Set name was = " + setName);
+		if (setName.isEmpty() || setName.length() <= 3) 
 			throw new IllegalArgumentException("Invalid set name for searching");
-		}
+		
+		setName = setName.trim();
 
-		if (!"K".equals(source) && !"U".equals(source)) {
-			logger.error("Invalid source for search a Set".toUpperCase());
-			throw new IllegalAccessError("Invalid source for search a Set");
-		}
+		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName);
+		
+		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
+							
+			Long id = Long.parseLong(String.valueOf(set.get(0)));
+			Integer qtd = Integer.parseInt(String.valueOf(set.get(6)));
+			
+			DeckSummaryDTO summary = new DeckSummaryDTO(
+					id,
+					set.get(1, String.class),
+					set.get(2, String.class),
+					set.get(3, String.class),
+					set.get(4, Date.class),
+					set.get(5, String.class),
+					qtd);
+					
+					return summary;	
+						
+		}).collect(Collectors.toList());
+		
+		Page<DeckSummaryDTO> summaryPage = new PageImpl<>(summaryList);
+
+		return summaryPage;
+
 	}
+
 
 	@Override
 	public Deck countQtdCardRarityInTheDeck(Deck deck) {
@@ -543,11 +541,9 @@ public class DeckServiceImpl implements DeckDetailService {
 
 			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
 				kDeck = deckRepository.save(kDeck);
-			} else {
-				logger.error(
-						"Deck is already registered! Deck ID: ".toUpperCase() + isAlreadyRegistered.get(0).getId());
+			} else 
 				throw new Exception("Deck is already registered");
-			}
+			
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -566,6 +562,17 @@ public class DeckServiceImpl implements DeckDetailService {
 		Page<Deck> decks = deckRepository.findAllBySetType(pageable, setType);
 
 		return decks;
+	}
+
+	public List<AutocompleteSetDTO> autocompleteSet() {
+		List<Tuple> tuple = deckRepository.autocompleteSet();
+		
+		List<AutocompleteSetDTO> listSetNames = tuple.stream().map(c -> new AutocompleteSetDTO(
+				c.get(0, BigInteger.class),
+				c.get(1, String.class)
+				)).collect(Collectors.toList());
+		
+		return listSetNames;
 	}
 
 }

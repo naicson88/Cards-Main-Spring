@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
@@ -80,13 +81,23 @@ public class DeckController<T> {
 	
 	@GetMapping("/search-by-set-name")
 	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<List<Deck>> searchByDeckName(@RequestParam("setName") String setName, @RequestParam("source") String source) {
-		List<Deck> setsFound = this.deckService.searchByDeckName(setName, source);
+	public ResponseEntity<Page<DeckSummaryDTO>> searchBySetName(@RequestParam("setName") String setName) {
+		Page<DeckSummaryDTO> setsFound = this.deckService.searchBySetName(setName);
 		
-		return new ResponseEntity<List<Deck>>(setsFound, HttpStatus.OK);
+		return new ResponseEntity<Page<DeckSummaryDTO>>(setsFound, HttpStatus.OK);
 	}
 
+	
 
+	@GetMapping("/autocomplete-sets")
+	@ApiOperation(value="Return All Sets Name for Autocomplete ", authorizations = { @Authorization(value="JWT") })
+	@Cacheable(value = "autocompleteSets")
+	public ResponseEntity<List<AutocompleteSetDTO>> autocompleteSets(@RequestParam("source") String source) {
+		
+		List<AutocompleteSetDTO> autocompleteDto = deckService.autocompleteSet();
+			
+		return new ResponseEntity<>(autocompleteDto, HttpStatus.OK) ;
+	}
 	
 
 }

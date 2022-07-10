@@ -46,6 +46,7 @@ public class UserSetCollection {
 	private String imgurUrl;
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date DtUpdate;
+	private Integer konamiSetCopied;
 	
 //	@ManyToMany()
 //	@JoinTable(name="tab_user_setcollection_deck",
@@ -161,6 +162,15 @@ public class UserSetCollection {
 	public void setSetCollectionType(SetType setCollectionType) {
 		this.setCollectionType = setCollectionType;
 	}
+
+	public Integer getKonamiSetCopied() {
+		return konamiSetCopied;
+	}
+
+	public void setKonamiSetCopied(Integer konamiSetCopied) {
+		this.konamiSetCopied = konamiSetCopied;
+	}
+	
 	
 	
 }

@@ -7,15 +7,32 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class DeckSummaryDTO {
 	private Long id;
 	private String nome;
+	private String nomePortugues;
 	private String imagem;
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date lancamento;
 	private String setType;
-	private String nomePortugues;
+
 	private int quantityUserHave;
 	
 	public DeckSummaryDTO() {}
 	
+	
+	
+	public DeckSummaryDTO(Long id, String nome, String nomePortugues, String imagem, Date lancamento, String setType,
+			int quantityUserHave) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.nomePortugues = nomePortugues;
+		this.imagem = imagem;
+		this.lancamento = lancamento;
+		this.setType = setType;
+		this.quantityUserHave = quantityUserHave;
+	}
+
+
+
 	public String getNome() {
 		return nome;
 	}
