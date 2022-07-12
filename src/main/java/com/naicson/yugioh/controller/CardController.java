@@ -156,9 +156,9 @@ public class CardController {
 	
 	@GetMapping(path = {"/card-user-details"})
 	@ApiOperation(value="Get details of a card that user have", authorizations = { @Authorization(value="JWT") })	
-	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Long cardNumber) {
-		
-		CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardNumber);	
+	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Integer cardId) {
+
+		CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardId);	
 		
 		return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);	
 	}

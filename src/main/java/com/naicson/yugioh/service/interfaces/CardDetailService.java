@@ -31,7 +31,7 @@ public interface CardDetailService {
 	
 	List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers);
 	
-	CardOfUserDetailDTO cardOfUserDetails(Long cardNumber);
+	CardOfUserDetailDTO cardOfUserDetails(Integer Integer);
 	
 	CardDetailsDTO findCardByNumberWithDecks(Long cardNumero);
 	

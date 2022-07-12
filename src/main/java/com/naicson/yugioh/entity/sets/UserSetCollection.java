@@ -71,6 +71,7 @@ public class UserSetCollection {
 		userSet.setRegistrationDate(new Date());
 		userSet.setUserId(GeneralFunctions.userLogged().getId());
 		userSet.setImgPath(set.getImgurUrl());
+		userSet.setKonamiSetCopied(set.getId());
 		
 		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
 			UserDeck du = UserDeck.userDeckFromDeck(d);		

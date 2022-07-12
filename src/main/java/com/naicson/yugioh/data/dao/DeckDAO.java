@@ -176,21 +176,21 @@ public class DeckDAO {
 		
 		return changed;
 	}
-
-	public List<RelUserDeckDTO> searchForDecksUserHave(long userId, String decksIds) {		
-		Query query = em.createNativeQuery(
-				" SELECT DK.id, DK.user_id, KONAMI_DECK_COPIED AS deck_id, COUNT(KONAMI_DECK_COPIED) AS qtd " +
-				" FROM tab_user_deck DK " + 
-				" WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (" +  decksIds + ")" +
-				" GROUP BY (KONAMI_DECK_COPIED) ", RelUserDeckDTO.class)
-				
-				.setParameter("userId", userId);
-		
-		@SuppressWarnings("unchecked")
-		List<RelUserDeckDTO> relList = query.getResultList();
-		
-		return relList;
-	}
+//
+//	public List<RelUserDeckDTO> searchForDecksUserHave(long userId, String decksIds) {		
+//		Query query = em.createNativeQuery(
+//				" SELECT DK.id, DK.user_id, KONAMI_DECK_COPIED AS deck_id, COUNT(KONAMI_DECK_COPIED) AS qtd " +
+//				" FROM tab_user_deck DK " + 
+//				" WHERE USER_ID = :userId and KONAMI_DECK_COPIED IN (" +  decksIds + ")" +
+//				" GROUP BY (KONAMI_DECK_COPIED) ", RelUserDeckDTO.class)
+//				
+//				.setParameter("userId", userId);
+//		
+//		@SuppressWarnings("unchecked")
+//		List<RelUserDeckDTO> relList = query.getResultList();
+//		
+//		return relList;
+//	}
 
 	public int addCardsToDeck(Long originalDeckId, Long generatedDeckId) {
 		int result = 0;

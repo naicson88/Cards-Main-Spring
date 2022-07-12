@@ -141,27 +141,34 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public CardOfUserDetailDTO cardOfUserDetails(Long cardNumber) {
+	public CardOfUserDetailDTO cardOfUserDetails(Integer cardId) {
+		
+			if(cardId == null || cardId == 0)
+				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
-
 			UserDetailsImpl user = GeneralFunctions.userLogged();
 						
-			Card card = cardRepository.findByNumero(cardNumber);
+			Card card = cardRepository.findById(cardId)
+					.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
+						
 			cardUserDTO = new CardOfUserDetailDTO();
 			cardUserDTO.setCardImage(card.getImagem());
 			cardUserDTO.setCardName(card.getNome());
 			cardUserDTO.setCardNumber(card.getNumero());
 			
-			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardNumber, user.getId());
+			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
 			
 			if(cardsDetails != null ) {
 				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
 				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(
+					
 						c.get(0, String.class),
 						c.get(1, String.class),
 						c.get(2, String.class),
 						c.get(3, Double.class),
-						c.get(4, BigInteger.class)
+						c.get(4, BigInteger.class),
+						Integer.parseInt(String.valueOf(c.get(5))),
+						c.get(6, String.class)
 						)).collect(Collectors.toList());
 				
 				Map<String, Integer> mapRarity = new HashMap<>();

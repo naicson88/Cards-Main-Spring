@@ -134,9 +134,9 @@ public class CardServiceImplTest {
 		List<Tuple> tupleList = List.of(mockedTuple);
 		  
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);
-		Mockito.when(dao.listCardOfUserDetails(anyLong(), anyLong())).thenReturn(tupleList);
+		Mockito.when(dao.listCardOfUserDetails(anyInt(), anyLong())).thenReturn(tupleList);
 		
-		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1L);
+		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1);
 		
 		assertEquals(dto.getCardName(), card.getNome());
 		assertEquals(dto.getCardNumber(), card.getNumero());

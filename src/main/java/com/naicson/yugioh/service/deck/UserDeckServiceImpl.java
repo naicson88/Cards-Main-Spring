@@ -407,24 +407,24 @@ public class UserDeckServiceImpl {
 
 	}
 	
-
-	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
-
-		if (decksIds == null || decksIds.length == 0)
-			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
-
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-
-		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
-
-		if (decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
-			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
-
-		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
-
-		return relUserDeckList;
-
-	}
+//
+//	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
+//
+//		if (decksIds == null || decksIds.length == 0)
+//			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
+//
+//		UserDetailsImpl user = GeneralFunctions.userLogged();
+//
+//		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
+//
+//		if (decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
+//			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
+//
+//		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
+//
+//		return relUserDeckList;
+//
+//	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
@@ -487,6 +487,14 @@ public class UserDeckServiceImpl {
 	public Page<UserDeck> findAllBySetType(Pageable pageable, String setType) {
 		Page<UserDeck> decks = userDeckRepository.findAllBySetType(pageable, setType);
 		return decks;
+	}
+	
+	public Integer countQuantityOfADeckUserHave(Long konamiDeckId) {
+		if(konamiDeckId == null || konamiDeckId == 0)
+			throw new IllegalArgumentException("Invalid Deck ID for consulting Quantity of a Deck");
+		
+		return userDeckRepository.countQuantityOfADeckUserHave(konamiDeckId, GeneralFunctions.userLogged().getId());
+		
 	}
 
 

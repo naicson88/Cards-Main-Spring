@@ -15,13 +15,11 @@ import com.naicson.yugioh.entity.Card;
 
 
 @Repository
-public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificationExecutor<Card> {
+public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecificationExecutor<Card> {
 	
 	List<Card> findAll();
 	
 	Page<Card> findAll(Pageable pageable);
-	
-	Card findById(int id);
 	
 	Card save (Card card);
 	

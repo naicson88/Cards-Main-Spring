@@ -99,9 +99,8 @@ public class HomeServiceImpl implements HomeDetailService {
 	private Double totalSetCollectionPrice(List<Long> deckOfSetCollectionId) {
 
 		if (deckOfSetCollectionId == null || deckOfSetCollectionId.size() == 0)
-			throw new IllegalArgumentException("Invalid Set Id to get total price.");
-		
-		
+			return 0.0;
+			//throw new IllegalArgumentException("Invalid Set Id to get total price.");	
 
 		Double totalPrice = deckOfSetCollectionId.stream()
 				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();

@@ -32,13 +32,23 @@ public class CardDAO {
 		return relList;
 	}
 	
-	public List<Tuple> listCardOfUserDetails(Long cardNumber, long userId) {
-		Query query = em.createNativeQuery("select du.nome , rel.card_set_code , rel.card_raridade as rarity,\r\n"
-			+ " rel.card_price as price, count(rel.card_set_code) as quantity\r\n"
-			+ "from tab_user_deck du \r\n"
-			+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = du.id \r\n"
-			+ "where rel.card_numero = :cardNumber and du.user_id = :userId", Tuple.class)
-				.setParameter("cardNumber", cardNumber)
+	public List<Tuple> listCardOfUserDetails(Integer cardId, long userId) {
+		Query query = em.createNativeQuery("select du.nome, rel.card_set_code , rel.card_raridade as rarity, "
+				+ "rel.card_price as price, count(rel.card_set_code) as quantity, du.id, du.set_type "
+				+ "from tab_user_deck du  "
+				+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = du.id  "
+				+ "where rel.card_id = :cardId and du.user_id = :userId "
+				+ "group by rel.card_set_code "
+				+ "union "
+				+ "select usc.name , rel.card_set_code , rel.card_raridade as rarity, "
+				+ "rel.card_price as price, count(rel.card_set_code) as quantity, du.id, usc.set_collection_type "
+				+ "from tab_user_set_collection usc "
+				+ "inner join tab_user_setcollection_deck usdeck on usdeck.user_set_collection_id = usc.id "
+				+ "inner join tab_user_deck du on du.id = usdeck.deck_id "
+				+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = usdeck.deck_id "
+				+ "where rel.card_id = :cardId and du.user_id = :userId "
+				+ "group by rel.card_set_code", Tuple.class)
+				.setParameter("cardId", cardId)
 				.setParameter("userId", userId);
 		
 		@SuppressWarnings("unchecked")
