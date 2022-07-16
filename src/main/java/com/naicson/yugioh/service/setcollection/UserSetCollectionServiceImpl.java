@@ -45,16 +45,16 @@ public class UserSetCollectionServiceImpl {
 //		});
 //		
 		UserSetCollection userSet = UserSetCollection.convertToUserSetCollection(set);
-//		
-//		userSet.getUserDeck().forEach(deck -> {
-//			deck.setId(userDeckService.saveUserDeck(deck).getId());}
-//		);
+		
+		userSet.getUserDeck().forEach(deck -> {
+			deck.setId(userDeckService.saveUserDeck(deck).getId());}
+		);
 				
 		UserSetCollection setSaved = userSetRepository.save(userSet);
 		
-//		setSaved.getUserDeck().stream().forEach(deck -> {
-//			userSetRepository.saveSetUserDeckRelation(setSaved.getId(), deck.getId());
-//		});
+		setSaved.getUserDeck().stream().forEach(deck -> {
+			userSetRepository.saveSetUserDeckRelation(setSaved.getId(), deck.getId());
+		});
 		
 		if(setSaved == null || setSaved.getId() == null || setSaved.getId() == 0)
 			throw new ErrorMessage("It was not possible save User SetCollection");
