@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,15 @@ public class UserSetCollectionController {
 		
 		service.removeSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>("SetCollection has been removed Successfully!", HttpStatus.CREATED);
+		return new ResponseEntity<String>("SetCollection has been removed Successfully!", HttpStatus.OK);
+	}
+	
+	@GetMapping("/consult/{setId}")
+	@ApiOperation(value="Consults DTO to User Set Collection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<UserSetCollectionDTO> consultUserSetCollection(@PathVariable("setId") Long setId){
+		
+		UserSetCollectionDTO dto = service.consultUserSetCollection(setId);
+		
+		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
 	}
 }

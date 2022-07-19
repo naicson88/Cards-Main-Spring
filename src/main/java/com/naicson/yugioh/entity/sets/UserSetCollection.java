@@ -72,13 +72,15 @@ public class UserSetCollection {
 		userSet.setUserId(GeneralFunctions.userLogged().getId());
 		userSet.setImgPath(set.getImgurUrl());
 		userSet.setKonamiSetCopied(set.getId());
+		UserDeck ud = UserDeck.userDeckFromDeck(set.getDecks().get(0));		
+		ud.setNome(set.getName()+"_"+GeneralFunctions.momentAsString());
 		
-		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
-			UserDeck du = UserDeck.userDeckFromDeck(d);		
-			return du;
-		}).collect(Collectors.toList());
+//		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
+//			UserDeck du = UserDeck.userDeckFromDeck(d);		
+//			return du;
+//		}).collect(Collectors.toList());
 		
-		userSet.setUserDeck(listDeckUser);
+		userSet.setUserDeck(List.of(ud));
 		
 		return userSet;
 	
