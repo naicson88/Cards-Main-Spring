@@ -26,4 +26,7 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Inte
 
 	//RelDeckCards findByCard_set_code(String card_set_code);	 
 	 List<RelDeckCards> findByCardSetCode(String card_set_code);
+	 
+	 @Query(value = "SELECT * FROM yugioh.tab_rel_deck_cards where card_id = :cardId", nativeQuery = true)
+	 List<RelDeckCards> findByCardId(Integer cardId);
 }

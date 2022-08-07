@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
@@ -123,7 +124,7 @@ public class UserSetCollectionServiceImpl {
 		
 		Double totalPrice = cards.stream()
 				.filter(c -> c.getQuantityUserHave() > 0)
-				.mapToDouble(c -> c.getPrice() * c.getQuantityUserHave())
+				.mapToDouble(c -> c.getRelDeckCards().getCard_price() * c.getQuantityUserHave())
 				.sum();
 		
 		return new BigDecimal(totalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -132,9 +133,9 @@ public class UserSetCollectionServiceImpl {
 	private List<String> listSetCodes(List<CardSetCollectionDTO> cards) {
 		
 		List<String> listSetCodes = new ArrayList<>();		
-			cards.stream().filter(c -> !"Not Defined".equalsIgnoreCase(c.getCardSetCode()))				
+			cards.stream().filter(c -> !"Not Defined".equalsIgnoreCase(c.getRelDeckCards().getCardSetCode()))				
 			.forEach(c -> {
-				String setCode = c.getCardSetCode().split("-")[0];	
+				String setCode = c.getRelDeckCards().getCardSetCode().split("-")[0];	
 				
 				if(!listSetCodes.contains(setCode))
 					listSetCodes.add(setCode);
@@ -148,7 +149,7 @@ public class UserSetCollectionServiceImpl {
 		Map<String, Integer> mapRarity = new HashMap<>();
 		
 		cards.stream().forEach(c -> {
-			String rarity = c.getRarity();
+			String rarity = c.getRelDeckCards().getCard_raridade();
 			rarity = rarity.replace(" ", "_");
 			
 			if(rarity != null && !rarity.isEmpty()) {
@@ -174,17 +175,18 @@ public class UserSetCollectionServiceImpl {
 		
 		List<CardSetCollectionDTO> cardsList = tuple.stream().map(c -> {
 			
-			CardSetCollectionDTO card = new CardSetCollectionDTO(
-					
-			Integer.parseInt(String.valueOf(c.get(0))),
-			Integer.parseInt(String.valueOf(c.get(1))),
-			c.get(2, String.class), 
-			Double.parseDouble(String.valueOf(c.get(3))),
-			c.get(4, String.class), 
-			c.get(5, String.class), 
-			Integer.parseInt(String.valueOf(c.get(6))), 
-			Integer.parseInt(String.valueOf(c.get(7)))
-			);			
+			RelDeckCards rel = new RelDeckCards(c.get(4, String.class),Double.parseDouble(String.valueOf(c.get(3))),c.get(5, String.class));
+			
+			CardSetCollectionDTO card = new CardSetCollectionDTO(					
+					Integer.parseInt(String.valueOf(c.get(0))),
+					Integer.parseInt(String.valueOf(c.get(1))),
+					c.get(2, String.class), 
+					Integer.parseInt(String.valueOf(c.get(6))), 
+					Integer.parseInt(String.valueOf(c.get(7))),
+					rel
+					);	
+			
+			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
 			return card;
 					
 		}).collect(Collectors.toList());

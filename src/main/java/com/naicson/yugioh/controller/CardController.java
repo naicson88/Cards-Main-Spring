@@ -177,8 +177,8 @@ public class CardController {
 	
 	@GetMapping(path = {"/search-cardSetcodes"})
 	@ApiOperation(value="Find all decks of a card by its Number", authorizations = { @Authorization(value="JWT") })	
-	public ResponseEntity<List<RelDeckCards>> findAllRelDeckCardsByCardNumber(@RequestParam Long cardNumber){
-		List<RelDeckCards> relation = this.cardService.findAllRelDeckCardsByCardNumber(cardNumber);
+	public ResponseEntity<List<RelDeckCards>> findAllRelDeckCardsByCardNumber(@RequestParam Integer cardId){
+		List<RelDeckCards> relation = this.cardService.findAllRelDeckCardsByCardNumber(cardId);
 		
 		return new ResponseEntity<List<RelDeckCards>>(relation, HttpStatus.OK);
 	}

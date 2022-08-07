@@ -386,12 +386,12 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber) {
+	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Integer cardId) {
 		
-		if(cardNumber == null || cardNumber == 0)
-			throw new IllegalArgumentException("Card number is invalid");
+		if(cardId == null || cardId == 0)
+			throw new IllegalArgumentException("Card Id is invalid: " + cardId);
 		
-		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardNumber(cardNumber);
+		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
 		
 		if(list == null)
 			list = Collections.emptyList();
