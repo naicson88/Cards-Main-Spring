@@ -40,7 +40,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 	Integer countQuantityOfASetUserHave(Integer konamiSetId, Long userId);
 	
 	@Query(value = "select c.id, c.numero, c.nome, rdc.card_price, rdc.card_set_code, rdc.card_raridade,"
-			+ " ifnull(counter.qtd,0) as quantityUserHave, ifnull(counterTwo.qtd, 0) as hasInOtherCollection "
+			+ " ifnull(counter.qtd,0) as quantityUserHave, ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rdc.is_speed_duel "
 			+ "from tab_cards c "
 			+ "inner join tab_rel_deck_cards rdc on rdc.card_id = c.id "
 			+ "left join ( "

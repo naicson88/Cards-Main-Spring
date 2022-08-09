@@ -1,12 +1,8 @@
 package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +31,6 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 		if(listRelDeckCards == null || listRelDeckCards.size() == 0) 
 			throw new IllegalArgumentException("Invalid list of Rel Deck Cards");		
 		
-//				listRelDeckCards.stream().forEach(rel -> {
-//					
-//					if(relDeckCardsRepository.findByCardSetCode(rel.getCard_set_code()) == null ||
-//							relDeckCardsRepository.findByCardSetCode(rel.getCard_set_code()).isEmpty()	) {
-//						relSaved.add(relDeckCardsRepository.save(rel));
-//						
-//					} else {
-//						throw new IllegalArgumentException(" Card set code already registered: " + rel.getCard_set_code());
-//					}
-//
-//				});
-		
 				relSaved = relDeckCardsRepository.saveAll(listRelDeckCards);
 				
 				if(listRelDeckCards.size() != relSaved.size()) {
@@ -59,6 +43,29 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 	public List<RelDeckCards> findRelByDeckId(Long deckId){
 		List<RelDeckCards> list = relDeckCardsRepository.findByDeckId(deckId);	
 		return list;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void removeRelUserDeckByDeckId(Long deckId) {
+		if(deckId == null || deckId == 0)
+			throw new IllegalArgumentException("Invalid Deck Id to remove Relation");
+		
+		relDeckCardsRepository.deleteRelUserDeckByDeckId(deckId);
+	}
+	
+	public void saveAllRelDeckUserCards(List<RelDeckCards> listRel) {
+		
+		if(listRel != null && listRel.size() > 0) {
+			listRel.stream().forEach(rel -> {
+				try {
+					relDeckCardsRepository.saveRelUserDeckCards(rel.getDeckId(), rel.getCardNumber(), rel.getCard_raridade(), rel.getCard_set_code(),
+							rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), rel.getQuantity());
+					
+				}catch (Exception e) {
+					logger.error("It was not possible save Rel: {} ", rel.toString());
+				}
+			});
+		}	
 	}
 	
 }

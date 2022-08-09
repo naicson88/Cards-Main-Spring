@@ -1,11 +1,14 @@
 package com.naicson.yugioh.controller;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +51,13 @@ public class UserSetCollectionController {
 		UserSetCollectionDTO dto = service.consultUserSetCollection(setId);
 		
 		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/save-set-collection")
+	@ApiOperation(value="Save a SetCollection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> saveSetCollection(@RequestBody UserSetCollectionDTO userCollection){
+		String msg = service.saveUserSetCollection(userCollection);
+		
+		return new ResponseEntity<String>(JSONObject.quote(msg), HttpStatus.OK);
 	}
 }

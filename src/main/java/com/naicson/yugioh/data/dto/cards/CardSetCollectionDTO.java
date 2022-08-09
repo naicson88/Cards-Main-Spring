@@ -16,10 +16,12 @@ public class CardSetCollectionDTO {
 	private List<String> listSetCode;
 	private RelDeckCards relDeckCards;
 	private List<RelDeckCards> searchedRelDeckCards = Collections.emptyList();
+	private boolean isSpeedDuel;
 	
 	private CardSetCollectionDTO() {}
 	
-	public CardSetCollectionDTO(Integer cardId, Integer number, String name,int quantityUserHave, int quantityOtherCollections, RelDeckCards rel) {
+	public CardSetCollectionDTO(Integer cardId, Integer number, String name,int quantityUserHave,
+			int quantityOtherCollections, RelDeckCards rel, boolean isSpeedDuel) {
 		super();
 		this.cardId = cardId;
 		this.number = number;
@@ -27,9 +29,8 @@ public class CardSetCollectionDTO {
 		this.quantityUserHave = quantityUserHave;
 		this.quantityOtherCollections = quantityOtherCollections;
 		this.relDeckCards = rel;
+		this.isSpeedDuel = isSpeedDuel;
 	}
-
-
 
 	public Integer getCardId() {
 		return cardId;
@@ -93,6 +94,14 @@ public class CardSetCollectionDTO {
 
 	public void setListSetCode(List<String> listSetCode) {
 		this.listSetCode = listSetCode;
+	}
+
+	public boolean isSpeedDuel() {
+		return isSpeedDuel;
+	}
+
+	public void setSpeedDuel(boolean isSpeedDuel) {
+		this.isSpeedDuel = isSpeedDuel;
 	}
 	
 	

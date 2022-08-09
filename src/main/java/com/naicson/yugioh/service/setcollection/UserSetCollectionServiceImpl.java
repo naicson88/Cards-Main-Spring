@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -28,7 +28,6 @@ import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.CardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
@@ -53,11 +52,7 @@ public class UserSetCollectionServiceImpl {
 	public UserSetCollection addSetCollectionInUsersCollection(Integer setId) {
 			
 		SetCollection set = setService.findById(setId);
-		
-//		set.getDecks().stream().forEach(deck -> {
-//			deck.setRel_deck_cards(relService.findRelByDeckId(deck.getId()));
-//		});
-//		
+
 		UserSetCollection userSet = UserSetCollection.convertToUserSetCollection(set);
 		
 		userSet.getUserDeck().forEach(deck -> {
@@ -183,7 +178,8 @@ public class UserSetCollectionServiceImpl {
 					c.get(2, String.class), 
 					Integer.parseInt(String.valueOf(c.get(6))), 
 					Integer.parseInt(String.valueOf(c.get(7))),
-					rel
+					rel,
+					Boolean.parseBoolean(String.valueOf(c.get(8)))
 					);	
 			
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
@@ -193,4 +189,68 @@ public class UserSetCollectionServiceImpl {
 		
 		return cardsList;
 	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public String saveUserSetCollection(UserSetCollectionDTO userCollection) {
+		if(userCollection == null)
+			throw new IllegalArgumentException("Invalid User SetCollection to be saved!");
+		
+		UserSetCollection set = userSetRepository
+				.findById(userCollection.getId()).orElseThrow(() -> new  EntityNotFoundException("Set not found with ID: " + userCollection.getId()));
+		
+		Long deckId = userSetRepository.consultSetUserDeckRelation(set.getId()).get(0);
+		
+		relService.removeRelUserDeckByDeckId(deckId);
+		
+		List<RelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
+		
+		if(listRel != null && listRel.size() > 0)
+			relService.saveAllRelDeckUserCards(listRel);
+		
+		return "User SetCollection was successfully saved!";
+			
+	}
+	
+	private List<RelDeckCards> createRelDeckCardsOfSetCollection(UserSetCollectionDTO set, Long deckId) {
+		
+		List<RelDeckCards> listRel =  new ArrayList<>();
+		
+		for(int i = 0; i < set.getCards().size(); i++) {
+			
+			CardSetCollectionDTO cardSet = set.getCards().get(i);
+			
+			if(set.getCards().get(i).getQuantityUserHave() > 0) {
+				
+				List<RelDeckCards> listFilter = listRel.stream()
+						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
+						.collect(Collectors.toList());
+				
+				if(listFilter != null && listFilter.size() >= 2) {
+					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
+						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
+					});
+				} else {
+					RelDeckCards rel = createRelObject(deckId, cardSet);					
+					listRel.add(rel);				
+				}
+			}
+		}				
+		return listRel;
+	}
+
+	private RelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {
+		RelDeckCards rel = new RelDeckCards();
+		rel.setCard_price(cardSet.getRelDeckCards().getCard_price());
+		rel.setCard_raridade(cardSet.getRelDeckCards().getCard_raridade().trim());
+		rel.setCard_set_code(cardSet.getRelDeckCards().getCard_set_code().trim());
+		rel.setCardId(cardSet.getCardId());
+		rel.setCardNumber(cardSet.getNumber().longValue());
+		rel.setDeckId(deckId);
+		rel.setDt_criacao(new Date());
+		rel.setIsSpeedDuel(cardSet.isSpeedDuel());
+		rel.setQuantity(cardSet.getQuantityUserHave());
+		rel.setIsSideDeck(false);
+		return rel;
+	}
+	
 }
