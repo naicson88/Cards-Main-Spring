@@ -393,6 +393,8 @@ public class CardServiceImpl implements CardDetailService {
 		
 		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
 		
+		
+		
 		if(list == null)
 			list = Collections.emptyList();
 		

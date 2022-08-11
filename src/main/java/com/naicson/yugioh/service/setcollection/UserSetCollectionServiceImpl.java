@@ -225,7 +225,7 @@ public class UserSetCollectionServiceImpl {
 						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
 						.collect(Collectors.toList());
 				
-				if(listFilter != null && listFilter.size() >= 2) {
+				if(listFilter != null && listFilter.size() >= 1) {
 					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
 						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
 					});
