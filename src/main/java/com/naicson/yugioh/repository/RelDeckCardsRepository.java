@@ -1,8 +1,10 @@
 package com.naicson.yugioh.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +27,20 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Inte
 	List<RelDeckCards> findByCardNumber(Long cardNumber);
 
 	//RelDeckCards findByCard_set_code(String card_set_code);	 
-	 List<RelDeckCards> findByCardSetCode(String card_set_code);
+	List<RelDeckCards> findByCardSetCode(String card_set_code);
+	 
+	@Query(value = "SELECT * FROM yugioh.tab_rel_deck_cards where card_id = :cardId", nativeQuery = true)
+	List<RelDeckCards> findByCardId(Integer cardId);
+	
+	@Modifying
+	@Query(value = "delete from tab_rel_deckusers_cards where deck_id = :deckId", nativeQuery = true)
+	void deleteRelUserDeckByDeckId(Long deckId);
+	
+	@Modifying
+	@Query(value = "insert into tab_rel_deckusers_cards ("
+			+ " deck_id, card_numero, card_raridade, card_set_code, card_price, dt_criacao, is_side_deck, card_id, is_speed_duel, quantity) "
+			+ " values (:deckId, :cardNumber, :card_raridade, :card_set_code, :card_price, :dt_criacao, :isSideDeck, :cardId, :isSpeedDuel, :quantity)" , nativeQuery = true)
+	void saveRelUserDeckCards(Long deckId, Long cardNumber, String card_raridade, String card_set_code,
+			Double card_price, Date dt_criacao, Boolean isSideDeck, Integer cardId, Boolean isSpeedDuel,
+			Integer quantity);
 }

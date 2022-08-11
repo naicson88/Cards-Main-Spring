@@ -1,5 +1,6 @@
 package com.naicson.yugioh.service.card;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,10 +29,12 @@ import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.data.dto.cards.KonamiSetsWithCardDTO;
 import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.DeckRepository;
@@ -81,17 +84,8 @@ public class CardServiceImpl implements CardDetailService {
 		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :deckId", Card.class);
 		Card card = (Card) query.setParameter("deckId", id).getSingleResult();
 		return card;
-	}	
-	
-	@Override
-	public List<Deck> cardDecks(Long cardNumero) {
-		Query query = em.createNativeQuery("SELECT *  FROM tab_decks deck "
-				+ "inner join TAB_REL_DECK_CARDS decks on deck.id = decks.deck_id " 
-				+ " where decks.card_numero = :cardNumero ", Deck.class);
-		
-		List<Deck> decks_set = (List<Deck>) query.setParameter("cardNumero", cardNumero).getResultList();
-		return decks_set;
 	}
+	
 	
 	@Override
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
@@ -147,27 +141,34 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public CardOfUserDetailDTO cardOfUserDetails(Long cardNumber) {
+	public CardOfUserDetailDTO cardOfUserDetails(Integer cardId) {
+		
+			if(cardId == null || cardId == 0)
+				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
-
 			UserDetailsImpl user = GeneralFunctions.userLogged();
 						
-			Card card = cardRepository.findByNumero(cardNumber);
+			Card card = cardRepository.findById(cardId)
+					.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
+						
 			cardUserDTO = new CardOfUserDetailDTO();
 			cardUserDTO.setCardImage(card.getImagem());
 			cardUserDTO.setCardName(card.getNome());
 			cardUserDTO.setCardNumber(card.getNumero());
 			
-			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardNumber, user.getId());
+			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
 			
 			if(cardsDetails != null ) {
 				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
 				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(
+					
 						c.get(0, String.class),
 						c.get(1, String.class),
 						c.get(2, String.class),
 						c.get(3, Double.class),
-						c.get(4, BigInteger.class)
+						c.get(4, BigInteger.class),
+						Integer.parseInt(String.valueOf(c.get(5))),
+						c.get(6, String.class)
 						)).collect(Collectors.toList());
 				
 				Map<String, Integer> mapRarity = new HashMap<>();
@@ -200,11 +201,12 @@ public class CardServiceImpl implements CardDetailService {
 		
 		if (card == null || card.getId() == null) 
 			throw new EntityNotFoundException("It was not possible find card with number: " + cardNumero);
-				
-		card = this.setAllDecksAndAlternativeNumbers(cardNumero, card);
+		
+		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));	
 		
 		CardDetailsDTO dto = new CardDetailsDTO();
 		
+		dto.setKonamiSets(this.setAllSetsWithThisCard(card));
 		dto.setCard(card);
 		dto.setQtdUserHaveByKonamiCollection(this.findQtdCardUserHaveByCollection(card.getId(), "konami"));
 		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId(), "user"));
@@ -216,16 +218,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-//	private CardViewsInformation updateQtdCardViews(Long cardNumero) {
-//		
-//		CardViewsInformation views = viewsService.updateCardViewsOrInsertInDB(cardNumero);
-//		
-//		if(views != null)
-//			logger.info("Card views successfully updated!");
-//		
-//		return views;
-//	}
-	
 	@Override
 	public Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
 		UserDetailsImpl user = GeneralFunctions.userLogged();
@@ -254,21 +246,38 @@ public class CardServiceImpl implements CardDetailService {
 		return mapCardSetAndQuantity;
 	
 	}
+	
+	private List<KonamiSetsWithCardDTO> setAllSetsWithThisCard(Card card) {
+		
+		List<Tuple> listKonamiSets = cardRepository.setsOfCard(card.getId());
+		
+		List<KonamiSetsWithCardDTO> listCardSets = listKonamiSets.stream().map(c -> new KonamiSetsWithCardDTO(
+				c.get(0, BigInteger.class),
+				c.get(1, String.class),
+				c.get(2, String.class),
+				c.get(3, String.class),
+				c.get(4, String.class),
+				c.get(5, String.class),
+				c.get(6, BigDecimal.class)
+				)).collect(Collectors.toList());
+	
+	return listCardSets;
+}
 
 	
-	private Card setAllDecksAndAlternativeNumbers(Long cardNumero, Card card) {
-		
-		card.setSets(this.cardDecks(cardNumero));
-					
-		if(card.getSets() != null && card.getSets().size() > 0) {			
-			card.getSets().stream().forEach(deck -> 
-				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
-		}
-		
-		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));
-		
-		return card;
-	}
+//	private Card setAllDecksAndAlternativeNumbers(Long cardNumero, Card card) {
+//		
+//		card.setSets(dao.cardDecks(card.getId()));
+//					
+//		if(card.getSets() != null && card.getSets().size() > 0) {			
+//			card.getSets().stream().forEach(deck -> 
+//				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
+//		}
+//		
+//		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));
+//		
+//		return card;
+//	}
 	
 	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
@@ -279,7 +288,7 @@ public class CardServiceImpl implements CardDetailService {
 		Page<Card> list = cardRepository.getByGenericType(page, genericType, userId);
 		
 		if( list == null || list.isEmpty())
-			throw new NoSuchElementException("No elements found with this parameters");
+			return Collections.emptyList();
 		
 		List<CardsSearchDTO> dtoList = list.stream()
 				.filter(card -> card != null)
@@ -377,12 +386,14 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber) {
+	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Integer cardId) {
 		
-		if(cardNumber == null || cardNumber == 0)
-			throw new IllegalArgumentException("Card number is invalid");
+		if(cardId == null || cardId == 0)
+			throw new IllegalArgumentException("Card Id is invalid: " + cardId);
 		
-		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardNumber(cardNumber);
+		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
+		
+		
 		
 		if(list == null)
 			list = Collections.emptyList();

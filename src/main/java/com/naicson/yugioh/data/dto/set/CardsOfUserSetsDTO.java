@@ -4,25 +4,48 @@ import java.math.BigInteger;
 
 public class CardsOfUserSetsDTO {
 	
+
 	private String setName;
 	private String cardSetCode;
 	private String rarity;
 	private Double price;
 	private BigInteger quantity;
+	private Integer id;
+	private String setType;
 	
-	public CardsOfUserSetsDTO() {
-		
-	}
 	
-	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, BigInteger quantity) {
+	
+	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, BigInteger quantity,
+			Integer id, String setType) {
 		super();
 		this.setName = setName;
 		this.cardSetCode = cardSetCode;
 		this.rarity = rarity;
 		this.price = price;
 		this.quantity = quantity;
+		this.id = id;
+		this.setType = setType;
 	}
 
+	public CardsOfUserSetsDTO() {
+		
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getSetType() {
+		return setType;
+	}
+
+	public void setSetType(String setType) {
+		this.setType = setType;
+	}
 
 	public String getSetName() {
 		return setName;

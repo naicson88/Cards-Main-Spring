@@ -15,4 +15,5 @@ public interface SetCollectionRepository extends JpaRepository<SetCollection, In
 			countQuery = "SELECT count(*) FROM yugioh.tab_set_collection", nativeQuery = true)
 	public Page<SetCollection> findAllBySetType(Pageable pageable, String setType);
 
+
 }

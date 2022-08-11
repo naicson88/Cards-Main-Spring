@@ -15,6 +15,7 @@ import com.naicson.yugioh.repository.SetCollectionRepository;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 
 @Component
@@ -65,13 +66,14 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	private DeckSummaryDTO convertSetCollectionToDTO(SetCollection set) {
 		
 		DeckSummaryDTO deck = new DeckSummaryDTO();
+		
 		deck.setId(set.getId().longValue());
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
 		deck.setSetType(set.getSetCollectionType().toString());
 		deck.setImagem(set.getImgurUrl());
 		deck.setNomePortugues(set.getPortugueseName());
-		deck.setQuantityUserHave(0);
+		deck.setQuantityUserHave(userSetRepository.countQuantityOfASetUserHave(set.getId(), GeneralFunctions.userLogged().getId()));
 		
 		return deck;
 	}
@@ -95,11 +97,12 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setSetType(originalDeck.getSetType().toString());
 		deck.setImagem(originalDeck.getImgurUrl() != null ? originalDeck.getImgurUrl() : originalDeck.getImagem());
 		deck.setNomePortugues(originalDeck.getNomePortugues());
+		deck.setQuantityUserHave(userDeckService.countQuantityOfADeckUserHave(originalDeck.getId()));
 		
-		Long[] idEntity = {originalDeck.getId()};
-		 if(userDeckService.searchForDecksUserHave(idEntity) != null && userDeckService.searchForDecksUserHave(idEntity).size() > 0)
-			 deck.setQuantityUserHave(userDeckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
-		
+//		Long[] idEntity = {originalDeck.getId()};
+//		 if(userDeckService.searchForDecksUserHave(idEntity) != null && userDeckService.searchForDecksUserHave(idEntity).size() > 0)
+//			 deck.setQuantityUserHave(userDeckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
+//		
 		return deck;
 	}
 

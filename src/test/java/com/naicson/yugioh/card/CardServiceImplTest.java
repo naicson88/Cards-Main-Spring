@@ -134,9 +134,9 @@ public class CardServiceImplTest {
 		List<Tuple> tupleList = List.of(mockedTuple);
 		  
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);
-		Mockito.when(dao.listCardOfUserDetails(anyLong(), anyLong())).thenReturn(tupleList);
+		Mockito.when(dao.listCardOfUserDetails(anyInt(), anyLong())).thenReturn(tupleList);
 		
-		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1L);
+		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1);
 		
 		assertEquals(dto.getCardName(), card.getNome());
 		assertEquals(dto.getCardNumber(), card.getNumero());
@@ -242,7 +242,7 @@ public class CardServiceImplTest {
 		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
-		doReturn(listDeck).when(cardService).cardDecks(anyLong());
+		doReturn(listDeck).when(dao).cardDecks(anyInt());
 		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
 		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
 		

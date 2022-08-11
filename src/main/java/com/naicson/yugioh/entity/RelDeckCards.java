@@ -37,6 +37,14 @@ public class RelDeckCards implements Serializable {
 	private Integer cardId;
 	private Integer quantity;
 	
+	public RelDeckCards(String cardSetCode, Double price, String rarity) {
+		this.cardSetCode = cardSetCode;
+		this.card_price = price;
+		this.card_raridade = rarity;
+	}
+	
+	public RelDeckCards() {}
+	
 	public Long getId() {
 		return id;
 	}

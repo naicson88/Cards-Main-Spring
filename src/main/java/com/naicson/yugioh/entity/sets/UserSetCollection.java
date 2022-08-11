@@ -46,6 +46,7 @@ public class UserSetCollection {
 	private String imgurUrl;
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date DtUpdate;
+	private Integer konamiSetCopied;
 	
 //	@ManyToMany()
 //	@JoinTable(name="tab_user_setcollection_deck",
@@ -70,13 +71,16 @@ public class UserSetCollection {
 		userSet.setRegistrationDate(new Date());
 		userSet.setUserId(GeneralFunctions.userLogged().getId());
 		userSet.setImgPath(set.getImgurUrl());
+		userSet.setKonamiSetCopied(set.getId());
+		UserDeck ud = UserDeck.userDeckFromDeck(set.getDecks().get(0));		
+		ud.setNome(set.getName()+"_"+GeneralFunctions.momentAsString());
 		
-		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
-			UserDeck du = UserDeck.userDeckFromDeck(d);		
-			return du;
-		}).collect(Collectors.toList());
+//		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
+//			UserDeck du = UserDeck.userDeckFromDeck(d);		
+//			return du;
+//		}).collect(Collectors.toList());
 		
-		userSet.setUserDeck(listDeckUser);
+		userSet.setUserDeck(List.of(ud));
 		
 		return userSet;
 	
@@ -161,6 +165,15 @@ public class UserSetCollection {
 	public void setSetCollectionType(SetType setCollectionType) {
 		this.setCollectionType = setCollectionType;
 	}
+
+	public Integer getKonamiSetCopied() {
+		return konamiSetCopied;
+	}
+
+	public void setKonamiSetCopied(Integer konamiSetCopied) {
+		this.konamiSetCopied = konamiSetCopied;
+	}
+	
 	
 	
 }

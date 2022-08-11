@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
@@ -27,7 +28,7 @@ public interface DeckDetailService {
 
 	SetDetailsDTO deckAndCards(Long deckId, String setType) throws Exception;
 
-	List<Deck> searchByDeckName(String setName, String source);
+	Page<DeckSummaryDTO> searchBySetName(String setName);
 	
 	Deck countQtdCardRarityInTheDeck(Deck deck);
 

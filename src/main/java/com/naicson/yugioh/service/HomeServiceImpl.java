@@ -3,9 +3,12 @@ package com.naicson.yugioh.service;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.Tuple;
 
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.data.dto.home.LastAddedDTO;
 import com.naicson.yugioh.repository.HomeRepository;
+import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.service.interfaces.HomeDetailService;
@@ -27,151 +31,205 @@ import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
-public class HomeServiceImpl implements HomeDetailService{
-	
+public class HomeServiceImpl implements HomeDetailService {
+
 	@Autowired
 	HomeRepository homeRepository;
-	
+	@Autowired
+	UserSetCollectionRepository userSetRepository;
 	@Autowired
 	CardPriceInformationServiceImpl cardInfoService;
 	@Autowired
 	CardViewsInformationServiceImpl cardViewService;
 
-	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);	
-	
+	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
+
 	@Value("${sets.imgs.path}")
 	private String setsImgPath;
-	
+
 	@Override
 	public HomeDTO getHomeDto() {
 		HomeDTO homeDto = new HomeDTO();
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-		
-		try {
-			
-		homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
-		homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
-		homeDto.setQtdTins(homeRepository.returnQuantitySetType(SetType.TIN.getType(), user.getId()));
-		homeDto.setQtdCards(homeRepository.returnQuantityCardsUserHave(user.getId()));	
+		 UserDetailsImpl user = GeneralFunctions.userLogged();
 
-		homeDto.setLastSets(this.lastSetsAddedToUser(homeRepository.returnLastSetsAddedToUser(user.getId())));
-		homeDto.setLastCards(this.lastCardsAddedToUsuer(homeRepository.lastCardsAddedToUser(user.getId())));
-		homeDto.setHotNews(this.hotNews(homeRepository.getHotNews()));	
-		
-		homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
-		homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
-		homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());	
-			
+		try {
+
+			homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
+			homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
+			homeDto.setQtdTins(homeRepository.returnQuantitySetType(SetType.TIN.getType(), user.getId()));
+			homeDto.setQtdCards(homeRepository.returnQuantityCardsUserHave(user.getId()));
+
+			homeDto.setLastSets(this.lastSetsAddedToUser());
+			homeDto.setLastCards(this.lastCardsAddedToUsuer(homeRepository.lastCardsAddedToUser(user.getId())));
+			homeDto.setHotNews(this.hotNews(homeRepository.getHotNews()));
+
+			homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
+			homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
+			homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());
+
 		} catch (ErrorMessage e) {
 			e.getMessage();
 		}
-		
+
 		return homeDto;
 	}
-	
-	private List<LastAddedDTO> lastSetsAddedToUser(List<Tuple> sets) throws ErrorMessage {
-		
-		List<LastAddedDTO> lastsSetsAdded = new ArrayList<>();
-		
-			if(sets != null && !sets.isEmpty()) {
-			//Lasts cards or decks added
-				lastsSetsAdded = sets.stream().map(set ->{
-					
-				LastAddedDTO lastSet = new LastAddedDTO();
-				String setFolder = set.get(6, String.class);
-				setFolder = GeneralFunctions.getFolderBySetType(setFolder)+"\\";
-				
-				lastSet.setId(set.get(0,BigInteger.class).longValue());
-				lastSet.setName(set.get(2, String.class));
-			    lastSet.setImg(set.get(1, String.class));
-				lastSet.setPrice(totalSetPrice(lastSet.getId()));
-				lastSet.setSetCode("WWW-EN001");
-				
-				return lastSet;
-			}).collect(Collectors.toList());
-			
-				if(lastsSetsAdded == null || lastsSetsAdded.isEmpty()) {
-					logger.error("LIST WITH LASTS ADDED IS EMPTY");
-					throw new ErrorMessage("List with lasts added is empty");
-				}
-								
-			} else {
-				 return Collections.emptyList();
-			}
-		
-		return lastsSetsAdded;
+
+	private List<LastAddedDTO> lastSetsAddedToUser() {
+
+		List<LastAddedDTO> lastsDecksAdded = this.lastDecksAdded();
+		List<LastAddedDTO> lastSetCollections = this.lastsSetCollectionAdded();
+
+		List<LastAddedDTO> lastsAdded = Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
+				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate))
+				.collect(Collectors.toList());
+
+		return lastsAdded;
 	}
-	
-	private Double totalSetPrice(Long setId) {
-		if(setId == null || setId == 0) {
-			logger.error("Invalid Set Id".toUpperCase());
-			throw new IllegalArgumentException("Invalid Set Id");
-		}
-		
-		Double totalPrice = homeRepository.findTotalSetPrice(setId);
-		
+
+	private Double totalDeckPrice(Long setId) {
+		if (setId == null || setId == 0)
+			throw new IllegalArgumentException("Invalid Set Id to get total price.");
+
+		Double totalPrice = homeRepository.findTotalDeckPrice(setId);
+
 		return totalPrice;
-			
+
 	}
-	
-	private List<LastAddedDTO> lastCardsAddedToUsuer(List<Tuple> lastCardsAddedTuple){
+
+	private Double totalSetCollectionPrice(List<Long> deckOfSetCollectionId) {
+
+		if (deckOfSetCollectionId == null || deckOfSetCollectionId.size() == 0)
+			return 0.0;
+			//throw new IllegalArgumentException("Invalid Set Id to get total price.");	
+
+		Double totalPrice = deckOfSetCollectionId.stream()
+				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();
+
+		return totalPrice;
+	}
+
+	private List<LastAddedDTO> lastCardsAddedToUsuer(List<Tuple> lastCardsAddedTuple) {
 		List<LastAddedDTO> lastCardsAdded = new ArrayList<>();
-		
-			if(lastCardsAddedTuple != null && !lastCardsAddedTuple.isEmpty()) {
-				
-				lastCardsAdded = lastCardsAddedTuple.stream().map(card -> {
-					LastAddedDTO lastCard = new LastAddedDTO();
-					lastCard.setCardNumber(card.get(0, Integer.class).longValue());
-					lastCard.setName(card.get(1, String.class));
-					lastCard.setSetCode(card.get(2, String.class));
-					lastCard.setPrice(card.get(3, Double.class));
-					
-					return lastCard;
-				}).collect(Collectors.toList());
-				
-			}else {
-				logger.error("Last cards added to user list is empty".toUpperCase());
-				throw new NoSuchElementException("Last cards added to user  list is empty");
-			}
-			
+
+		if (lastCardsAddedTuple != null && !lastCardsAddedTuple.isEmpty()) {
+
+			lastCardsAdded = lastCardsAddedTuple.stream().map(card -> {
+				LastAddedDTO lastCard = new LastAddedDTO();
+				lastCard.setCardNumber(card.get(0, Integer.class).longValue());
+				lastCard.setName(card.get(1, String.class));
+				lastCard.setSetCode(card.get(2, String.class));
+				lastCard.setPrice(card.get(3, Double.class));
+
+				return lastCard;
+			}).collect(Collectors.toList());
+
+		} else {
+			return Collections.emptyList();
+		}
+
 		return lastCardsAdded;
 	}
-	
-	private List<LastAddedDTO> hotNews(List<Tuple> hotNews){
+
+	private List<LastAddedDTO> hotNews(List<Tuple> hotNews) {
 		List<LastAddedDTO> hotNewsList = new ArrayList<>();
-		
-		if(hotNews != null && !hotNews.isEmpty()) {
+
+		if (hotNews != null && !hotNews.isEmpty()) {
 			hotNewsList = hotNews.stream().map(set -> {
 				LastAddedDTO lastAdded = new LastAddedDTO();
-				
+
 				lastAdded.setId(set.get(0, BigInteger.class).longValue());
-				lastAdded.setImg(set.get(14, String.class));
-				lastAdded.setName(set.get(2, String.class));
-				
+				lastAdded.setImg(set.get(2, String.class));
+				lastAdded.setName(set.get(1, String.class));
+
 				return lastAdded;
 			}).collect(Collectors.toList());
-			
-		} else {
-			logger.error("Hot News list is empty".toUpperCase());
+
+		} else 
 			throw new NoSuchElementException("Hot News list is empty");
-		}
 		
 		return hotNewsList;
 	}
-/*	private void saveInfoCard(LastAddedDTO lastCardAdded) {
-		CardExtraInformation info = new CardExtraInformation();
-		info.setCardNumber(String.valueOf(lastCardAdded.getCardNumber()));
-		info.setCardSetCode(lastCardAdded.getSetCode());
-		info.setCurrentPrice(lastCardAdded.getPrice());
-		info.setPrice2(0.1);
-		info.setPrice3(5.61);
-		info.setPrice4(3.63);
-		info.setPrice5(1.99);
-		info.setTotalQtdViews(70L);
-		info.setWeeklyPercentVariable(3.30);
-		info.setWeeklyQtdViews(10L);
-		
-		cardInfoRepository.save(info);
-	}*/
 	
+	
+	/*
+	 * private void saveInfoCard(LastAddedDTO lastCardAdded) { CardExtraInformation
+	 * info = new CardExtraInformation();
+	 * info.setCardNumber(String.valueOf(lastCardAdded.getCardNumber()));
+	 * info.setCardSetCode(lastCardAdded.getSetCode());
+	 * info.setCurrentPrice(lastCardAdded.getPrice()); info.setPrice2(0.1);
+	 * info.setPrice3(5.61); info.setPrice4(3.63); info.setPrice5(1.99);
+	 * info.setTotalQtdViews(70L); info.setWeeklyPercentVariable(3.30);
+	 * info.setWeeklyQtdViews(10L);
+	 * 
+	 * cardInfoRepository.save(info); }
+	 */
+
+	private List<LastAddedDTO> lastDecksAdded() {
+		 UserDetailsImpl user = GeneralFunctions.userLogged();
+
+		List<Tuple> sets = homeRepository.returnLastDecksAddedToUser(user.getId());
+		List<LastAddedDTO> lastDecksAdded = new ArrayList<>();
+
+		if (sets != null && !sets.isEmpty()) {
+			// Lasts cards or decks added
+			lastDecksAdded = sets.stream().map(set -> {
+
+				LastAddedDTO lastSet = new LastAddedDTO();
+
+				lastSet.setId(set.get(0, BigInteger.class).longValue());
+				lastSet.setName(set.get(2, String.class));
+				lastSet.setImg(set.get(1, String.class));
+				lastSet.setPrice(totalDeckPrice(lastSet.getId()));
+				lastSet.setRegisteredDate(set.get(5, Date.class));
+				lastSet.setSetCode("WWW-EN001");
+
+				return lastSet;
+			}).collect(Collectors.toList());
+
+			if (lastDecksAdded == null || lastDecksAdded.isEmpty()) {
+				logger.error("LIST WITH LASTS ADDED IS EMPTY");
+				throw new ErrorMessage("List with lasts added is empty");
+			}
+
+		} else {
+			return Collections.emptyList();
+		}
+
+		return lastDecksAdded;
+	}
+
+	private List<LastAddedDTO> lastsSetCollectionAdded() {
+	    UserDetailsImpl user = GeneralFunctions.userLogged();
+
+		List<Tuple> sets = homeRepository.returnLastSetsAddedToUser(user.getId());
+		List<LastAddedDTO> lastSetsAdded = new ArrayList<>();
+
+		if (sets != null && !sets.isEmpty()) {
+
+			lastSetsAdded = sets.stream().map(set -> {
+
+				LastAddedDTO lastSet = new LastAddedDTO();
+
+				lastSet.setId(set.get(0, BigInteger.class).longValue());
+				lastSet.setName(set.get(5, String.class));
+				lastSet.setImg(set.get(3, String.class));
+				lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
+				lastSet.setRegisteredDate(set.get(8, Date.class));
+				// lastSet.setSetCode("WWW-EN001");
+
+				return lastSet;
+			}).collect(Collectors.toList());
+
+			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) {
+				logger.error("LIST WITH LASTS ADDED IS EMPTY");
+				throw new ErrorMessage("List with lasts added is empty");
+			}
+
+		} else {
+			return Collections.emptyList();
+		}
+
+		return lastSetsAdded;
+	}
+
 }

@@ -14,6 +14,7 @@ public class CardDetailsDTO {
 	private Map<String,Integer> qtdUserHaveByUserCollection;
 	private List<CardPriceInformation> prices;
 	private CardViewsInformation views;
+	private List<KonamiSetsWithCardDTO> konamiSets;
 	
 
 	public Card getCard() {
@@ -55,7 +56,14 @@ public class CardDetailsDTO {
 	public void setViews(CardViewsInformation views) {
 		this.views = views;
 	}
-	
-	
+
+	public List<KonamiSetsWithCardDTO> getKonamiSets() {
+		return konamiSets;
+	}
+
+	public void setKonamiSets(List<KonamiSetsWithCardDTO> konamiSets) {
+		this.konamiSets = konamiSets;
+	}
+
 	
 }

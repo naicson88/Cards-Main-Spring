@@ -1,7 +1,5 @@
 package com.naicson.yugioh.controller;
 
-import java.util.List;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,15 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
-import com.naicson.yugioh.service.user.UserDetailsImpl;
-import com.naicson.yugioh.util.GeneralFunctions;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -99,14 +93,14 @@ public class UserDeckController<T> {
 	}
 	
 
-	@GetMapping("/rel-user-decks")
-	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
-	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
-
-		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
-		
-		return rel;
-	}
+//	@GetMapping("/rel-user-decks")
+//	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
+//	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
+//
+//		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
+//		
+//		return rel;
+//	}
 
 	
 }

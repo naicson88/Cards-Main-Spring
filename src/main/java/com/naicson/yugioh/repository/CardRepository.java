@@ -9,21 +9,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.util.search.CardSpecification;
 
 
 @Repository
-public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificationExecutor<Card> {
+public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecificationExecutor<Card> {
 	
 	List<Card> findAll();
 	
 	Page<Card> findAll(Pageable pageable);
-	
-	Card findById(int id);
 	
 	Card save (Card card);
 	
@@ -70,23 +66,36 @@ public interface CardRepository extends JpaRepository<Card, Long>, JpaSpecificat
 	Card findByNome(String nome);
 	
 	@Query(value = " SELECT count(rel.card_set_code) as total, CONCAT(decks.nome, ' (', rel.card_set_code,')' ) AS card_set "
-	+ " FROM yugioh.tab_rel_deckusers_cards as rel\r\n"
+	+ " FROM yugioh.tab_rel_deckusers_cards as rel "
 	+ " inner join tab_rel_deck_cards rdc on rdc.card_set_code = rel.card_set_code"
-	+ " inner join tab_decks decks on decks.id = rdc.deck_id\r\n"
-	+ " inner join tab_user_deck du on du.id = rel.deck_id\r\n"
+	+ " inner join tab_decks decks on decks.id = rdc.deck_id "
+	+ " inner join tab_user_deck du on du.id = rel.deck_id "
 	+ " where du.user_id = :userId "
 	+ " and  rel.card_numero in (select card_alternative_number from tab_card_alternative_numbers where card_id = :cardId) "
 	+ " group by rel.card_set_code, decks.nome", nativeQuery = true)
 	List<Tuple> findQtdUserHaveByKonamiCollection(Integer cardId, long userId);
 	
 	@Query(value = " SELECT count(rel.card_set_code) as total, CONCAT(du.nome, ' (', rel.card_set_code,')' ) AS card_set "
-	+ " FROM yugioh.tab_rel_deckusers_cards as rel\r\n"
+	+ " FROM yugioh.tab_rel_deckusers_cards as rel "
 	+ " inner join tab_rel_deck_cards rdc on rdc.card_set_code = rel.card_set_code"
-	+ " inner join tab_user_deck du on du.id = rel.deck_id\r\n"
+	+ " inner join tab_user_deck du on du.id = rel.deck_id "
 	+ " where du.user_id = :userId "
 	+ " and  rel.card_numero in (select card_alternative_number from tab_card_alternative_numbers where card_id = :cardId) "
 	+ " group by rel.card_set_code, du.nome", nativeQuery = true)
 	List<Tuple> findQtdUserHaveByUserCollection(Integer cardId, long userId);
+	
+	@Query(value = " select deck.id, deck.set_type as setType, deck.imgur_url as image, deck.nome as name, rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price as price "
+	+ " from tab_decks deck "
+	+ " inner join tab_rel_deck_cards rel on rel.deck_id = deck.id "
+	+ " where card_id = :cardId and deck.set_type = 'DECK' "
+	+ " UNION "
+	+ " select setcol.id, setcol.set_collection_type as setType, setcol.imgur_url as image, setcol.name, rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price  as price "
+	+ " from tab_set_collection setcol "
+	+ " inner join tab_setcollection_deck scd on scd.set_collection_id = setcol.id "
+	+ " inner join tab_decks decks on decks.id = scd.deck_id "
+	+ " inner join tab_rel_deck_cards rel on rel.deck_id = decks.id "
+	+ " where card_id = :cardId and decks.set_type != 'DECK'", nativeQuery = true)
+	List<Tuple> setsOfCard(Integer cardId);
 	
 	
 }

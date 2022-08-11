@@ -1,6 +1,7 @@
 package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -87,7 +88,7 @@ public class UserDeckServiceImpl {
 
 		if (sumDecks != deck.getRel_deck_cards().size())
 			throw new RuntimeException("Cards quantity don't match relation quantity." + "Param received: deckId = "
-					+ deckId + " setType = User");
+					+ deckId + " setType = User" + " SumDecks: " + sumDecks + " Deck Rel.Total: " + deck.getRel_deck_cards().size());
 
 		return deck;
 	}
@@ -180,7 +181,7 @@ public class UserDeckServiceImpl {
 		List<RelDeckCards> relation = dao.relDeckUserCards(deckUserId);
 
 		if (relation.isEmpty())
-			throw new NoSuchElementException("Can't find relation");
+			return Collections.emptyList();
 
 		return relation;
 	}
@@ -297,6 +298,7 @@ public class UserDeckServiceImpl {
 
 		UserDeck newDeck = new UserDeck();
 		newDeck.setImagem(deckOrigem.getImgurUrl());
+		newDeck.setImgurUrl(deckOrigem.getImgurUrl());
 		newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
 		newDeck.setKonamiDeckCopied(deckOrigem.getId());
 		newDeck.setUserId(user.getId());
@@ -405,24 +407,24 @@ public class UserDeckServiceImpl {
 
 	}
 	
-
-	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
-
-		if (decksIds == null || decksIds.length == 0)
-			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
-
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-
-		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
-
-		if (decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
-			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
-
-		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
-
-		return relUserDeckList;
-
-	}
+//
+//	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
+//
+//		if (decksIds == null || decksIds.length == 0)
+//			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
+//
+//		UserDetailsImpl user = GeneralFunctions.userLogged();
+//
+//		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
+//
+//		if (decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
+//			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
+//
+//		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
+//
+//		return relUserDeckList;
+//
+//	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
@@ -485,6 +487,14 @@ public class UserDeckServiceImpl {
 	public Page<UserDeck> findAllBySetType(Pageable pageable, String setType) {
 		Page<UserDeck> decks = userDeckRepository.findAllBySetType(pageable, setType);
 		return decks;
+	}
+	
+	public Integer countQuantityOfADeckUserHave(Long konamiDeckId) {
+		if(konamiDeckId == null || konamiDeckId == 0)
+			throw new IllegalArgumentException("Invalid Deck ID for consulting Quantity of a Deck");
+		
+		return userDeckRepository.countQuantityOfADeckUserHave(konamiDeckId, GeneralFunctions.userLogged().getId());
+		
 	}
 
 

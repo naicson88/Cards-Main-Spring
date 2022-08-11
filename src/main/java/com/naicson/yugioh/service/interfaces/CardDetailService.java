@@ -25,14 +25,13 @@ import com.naicson.yugioh.util.search.SearchCriteria;
 public interface CardDetailService {
 	
 	Card cardDetails(Integer id);
-	
-	List<Deck> cardDecks(Long cardNumero);	
+
 	
 	List<CardOfArchetypeDTO> findCardByArchetype(Integer archId);
 	
 	List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers);
 	
-	CardOfUserDetailDTO cardOfUserDetails(Long cardNumber);
+	CardOfUserDetailDTO cardOfUserDetails(Integer Integer);
 	
 	CardDetailsDTO findCardByNumberWithDecks(Long cardNumero);
 	
@@ -48,7 +47,7 @@ public interface CardDetailService {
 
 	Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable);
 
-	List<RelDeckCards> findAllRelDeckCardsByCardNumber(Long cardNumber);
+	List<RelDeckCards> findAllRelDeckCardsByCardNumber(Integer cardNumber);
 	
 	List<Long> findCardsNotRegistered(List<Long> cardsNumber);
 
