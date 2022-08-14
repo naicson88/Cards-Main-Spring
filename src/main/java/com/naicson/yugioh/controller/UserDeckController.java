@@ -1,5 +1,7 @@
 package com.naicson.yugioh.controller;
 
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
@@ -92,15 +95,12 @@ public class UserDeckController<T> {
 					
 	}
 	
-
-//	@GetMapping("/rel-user-decks")
-//	@ApiOperation(value="Search for a Set that User have", authorizations = { @Authorization(value="JWT") })	
-//	public List<RelUserDeckDTO> searchForDecksUserHave(@RequestParam Long[] decksIds) {
-//
-//		List<RelUserDeckDTO> rel = deckService.searchForDecksUserHave(decksIds);
-//		
-//		return rel;
-//	}
-
+	@GetMapping("/get-all-decksname")
+	@ApiOperation(value="Get all Decks Name of user", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(){
+		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName();
+		
+		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
+	}
 	
 }

@@ -74,4 +74,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 			+ " where rdc.deck_id in (select deck_id from tab_setcollection_deck where set_collection_id = :konamiCollectionId) "
 				, nativeQuery = true)
 	public List<Tuple> consultUserSetCollection(Long userDeckId, Long userId, Integer konamiCollectionId);
+	
+	@Query(value = "select usc.id, usc.name FROM yugioh.tab_user_set_collection usc where user_id = :userId and set_collection_type = :setType order by name asc", nativeQuery = true)
+	public List<Tuple> getAllSetsBySetType(String setType, Long userId);
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -252,5 +253,24 @@ public class UserSetCollectionServiceImpl {
 		rel.setIsSideDeck(false);
 		return rel;
 	}
+
+	public List<DeckAndSetsBySetTypeDTO> getAllSetsBySetType(String setType) {
+		if(setType == null || setType.isEmpty())
+			throw new IllegalArgumentException("#getAllSetsBySetType - Invalid SetType!");
+		
+		Long userId = GeneralFunctions.userLogged().getId();
+		
+		List<Tuple> tuple  = userSetRepository.getAllSetsBySetType(setType, userId);
+		
+		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(c-> {
+			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+					Long.parseLong(String.valueOf(c.get(0))),
+					String.valueOf(c.get(1))
+			);		
+			return dto;			
+		}).collect(Collectors.toList());
+		
+		return listDto;
+	}	
 	
 }

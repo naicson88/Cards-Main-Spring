@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
@@ -495,6 +497,21 @@ public class UserDeckServiceImpl {
 		
 		return userDeckRepository.countQuantityOfADeckUserHave(konamiDeckId, GeneralFunctions.userLogged().getId());
 		
+	}
+
+	public List<DeckAndSetsBySetTypeDTO> getAllDecksName() {
+		Long userId = GeneralFunctions.userLogged().getId();
+			List<Tuple> tuple =	userDeckRepository.getAllDecksName(userId);
+			
+			List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
+				DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+						Long.parseLong(String.valueOf(t.get(0))),
+						String.valueOf(t.get(1))
+				);
+				return dto;
+			}).collect(Collectors.toList());
+			
+			return listDto;
 	}
 
 

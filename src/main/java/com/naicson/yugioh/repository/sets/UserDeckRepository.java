@@ -2,6 +2,8 @@ package com.naicson.yugioh.repository.sets;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +23,7 @@ public interface UserDeckRepository extends JpaRepository<UserDeck, Long>{
 	
 	@Query(value = "select count(dk.konami_deck_copied) as qtd  from tab_user_deck dk where konami_deck_copied = :konamiDeckId and user_id = :userId", nativeQuery = true)
 	Integer countQuantityOfADeckUserHave(Long konamiDeckId, Long userId);
+	
+	@Query(value = "select ud.id, ud.nome  from tab_user_deck ud where user_id = :userId and set_type = 'DECK' order by nome asc", nativeQuery = true)
+	List<Tuple> getAllDecksName(Long userId);
 }
