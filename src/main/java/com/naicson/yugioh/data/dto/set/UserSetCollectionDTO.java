@@ -10,6 +10,7 @@ public class UserSetCollectionDTO {
 	private Long id;
 	private String name;
 	private Double totalPrice;
+	private String image;
 	private Map<String, Integer> rarities;
 	private List<String> setCodes;
 	private List<CardSetCollectionDTO> cards;
@@ -49,6 +50,12 @@ public class UserSetCollectionDTO {
 	}
 	public void setCards(List<CardSetCollectionDTO> cards) {
 		this.cards = cards;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

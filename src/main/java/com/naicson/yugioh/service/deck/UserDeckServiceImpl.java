@@ -27,11 +27,13 @@ import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
+import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
@@ -512,6 +514,25 @@ public class UserDeckServiceImpl {
 			}).collect(Collectors.toList());
 			
 			return listDto;
+	}
+
+
+	public UserSetCollectionDTO getDeckAndCardsForTransfer(Long deckId) {
+		UserDeck userDeck = userDeckRepository
+				.findById(deckId).orElseThrow(() -> new IllegalArgumentException("User Deck not found! ID: " + deckId));
+		
+		List<Tuple> tupleCards = userDeckRepository.consultCardsForTransfer(deckId);
+		
+		UserSetCollectionDTO dto = new UserSetCollectionDTO();
+		UserSetCollectionServiceImpl userSetService = new UserSetCollectionServiceImpl();
+		
+		dto.setId(userDeck.getId());
+		dto.setName(userDeck.getNome());
+		dto.setCards(userSetService.transformTupleInCardSetCollectionDTO(tupleCards));
+		dto.setRarities(userSetService.countRarities(dto.getCards()));
+		dto.setTotalPrice(userSetService.calculateTotalPrice(dto.getCards()));
+		
+		return dto;
 	}
 
 

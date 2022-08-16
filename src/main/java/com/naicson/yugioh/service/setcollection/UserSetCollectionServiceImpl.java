@@ -116,7 +116,7 @@ public class UserSetCollectionServiceImpl {
 			
 	}
 	
-	private Double calculateTotalPrice(List<CardSetCollectionDTO> cards) {
+	public Double calculateTotalPrice(List<CardSetCollectionDTO> cards) {
 		
 		Double totalPrice = cards.stream()
 				.filter(c -> c.getQuantityUserHave() > 0)
@@ -141,7 +141,7 @@ public class UserSetCollectionServiceImpl {
 
 	}
 
-	private Map<String, Integer> countRarities(List<CardSetCollectionDTO> cards) {
+	public Map<String, Integer> countRarities(List<CardSetCollectionDTO> cards) {
 		Map<String, Integer> mapRarity = new HashMap<>();
 		
 		cards.stream().forEach(c -> {
@@ -159,7 +159,7 @@ public class UserSetCollectionServiceImpl {
 		return mapRarity;
 	}
 
-	private List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set){
+	public List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set){
 		
 		List<Long> deckId = userSetRepository.consultSetUserDeckRelation(set.getId());
 		
@@ -169,7 +169,13 @@ public class UserSetCollectionServiceImpl {
 		List<Tuple> tuple = userSetRepository
 				.consultUserSetCollection(deckId.get(0), GeneralFunctions.userLogged().getId(), set.getKonamiSetCopied());
 		
-		List<CardSetCollectionDTO> cardsList = tuple.stream().map(c -> {
+		List<CardSetCollectionDTO> cardsList = transformTupleInCardSetCollectionDTO(tuple);
+		
+		return cardsList;
+	}
+
+	public List<CardSetCollectionDTO> transformTupleInCardSetCollectionDTO(List<Tuple> tuple) {
+		return tuple.stream().map(c -> {
 			
 			RelDeckCards rel = new RelDeckCards(c.get(4, String.class),Double.parseDouble(String.valueOf(c.get(3))),c.get(5, String.class));
 			
@@ -187,8 +193,6 @@ public class UserSetCollectionServiceImpl {
 			return card;
 					
 		}).collect(Collectors.toList());
-		
-		return cardsList;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

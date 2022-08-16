@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
@@ -101,6 +102,15 @@ public class UserDeckController<T> {
 		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName();
 		
 		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/deck-transfer")
+	@ApiOperation(value="Get a Deck and Cards for transfer", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<UserSetCollectionDTO> getDeckAndCardsForTransfer(@RequestParam("deckId") Integer deckId){
+		
+		UserSetCollectionDTO dto = deckService.getDeckAndCardsForTransfer(deckId.longValue());
+		
+		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
 	}
 	
 }
