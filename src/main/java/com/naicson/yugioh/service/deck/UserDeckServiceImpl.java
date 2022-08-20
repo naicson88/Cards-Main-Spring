@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
@@ -477,7 +476,7 @@ public class UserDeckServiceImpl {
 		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
 			throw new IllegalArgumentException("There is no card in this deck");
 		
-		SetType.valueOf(deck.getSetType());
+		SetType.valueOf(deck.getSetType().toUpperCase());
 		
 	}
 	

@@ -235,7 +235,7 @@ public class UserSetCollectionServiceImpl {
 						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
 						.collect(Collectors.toList());
 				
-				if(listFilter != null && listFilter.size() >= 1) {
+				if(listFilter != null && listFilter.size() >= 1 && !set.getSetType().equalsIgnoreCase("DECK")) {
 					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
 						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
 					});
@@ -327,6 +327,7 @@ public class UserSetCollectionServiceImpl {
 		Deck deck = new Deck();
 		deck.setNome(userSet.getName());
 		deck.setId(userSet.getId());
+		deck.setSetType(userSet.getSetType());
 		deck.setRel_deck_cards(this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
 		
 		userDeckService.saveUserdeck(deck);
