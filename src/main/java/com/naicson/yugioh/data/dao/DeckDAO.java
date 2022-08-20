@@ -1,8 +1,6 @@
 package com.naicson.yugioh.data.dao;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +16,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Repository
 @Transactional

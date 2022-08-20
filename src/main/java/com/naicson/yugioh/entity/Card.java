@@ -59,9 +59,7 @@ public class Card {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "cod_archetype",  referencedColumnName = "id")
 	private Archetype archetype;
-
 	private Date registryDate;
-	
 	@Transient
 	private List<CardAlternativeNumber> alternativeCardNumber;
 	
@@ -304,8 +302,5 @@ public class Card {
 				+ qtd_link + ", sets=" + sets + ", genericType=" + genericType + ", archetype=" + archetype
 				+ ", registryDate=" + registryDate + "]";
 	}
-	
-	
-	
 	
 }

@@ -17,11 +17,13 @@ public class CardSetCollectionDTO {
 	private RelDeckCards relDeckCards;
 	private List<RelDeckCards> searchedRelDeckCards = Collections.emptyList();
 	private boolean isSpeedDuel;
+	private String genericType;
+	private int sortOrder;
 	
 	private CardSetCollectionDTO() {}
 	
 	public CardSetCollectionDTO(Integer cardId, Integer number, String name,int quantityUserHave,
-			int quantityOtherCollections, RelDeckCards rel, boolean isSpeedDuel) {
+			int quantityOtherCollections, RelDeckCards rel, boolean isSpeedDuel, String genericType) {
 		super();
 		this.cardId = cardId;
 		this.number = number;
@@ -30,7 +32,9 @@ public class CardSetCollectionDTO {
 		this.quantityOtherCollections = quantityOtherCollections;
 		this.relDeckCards = rel;
 		this.isSpeedDuel = isSpeedDuel;
+		this.genericType = genericType;
 	}
+
 
 	public Integer getCardId() {
 		return cardId;
@@ -102,6 +106,22 @@ public class CardSetCollectionDTO {
 
 	public void setSpeedDuel(boolean isSpeedDuel) {
 		this.isSpeedDuel = isSpeedDuel;
+	}
+
+	public String getGenericType() {
+		return genericType;
+	}
+
+	public void setGenericType(String genericType) {
+		this.genericType = genericType;
+	}
+
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 	
 	

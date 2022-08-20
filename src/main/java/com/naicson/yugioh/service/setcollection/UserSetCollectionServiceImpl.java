@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
+import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
@@ -28,6 +31,7 @@ import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.enums.GenericTypesCards;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
@@ -110,12 +114,13 @@ public class UserSetCollectionServiceImpl {
 		dto.setRarities(this.countRarities(dto.getCards()));
 		dto.setSetCodes(this.listSetCodes(dto.getCards()));
 		dto.setTotalPrice(this.calculateTotalPrice(dto.getCards()));
+		dto.setImage(set.getImgurUrl());
 		
 		return dto;
 			
 	}
 	
-	private Double calculateTotalPrice(List<CardSetCollectionDTO> cards) {
+	public Double calculateTotalPrice(List<CardSetCollectionDTO> cards) {
 		
 		Double totalPrice = cards.stream()
 				.filter(c -> c.getQuantityUserHave() > 0)
@@ -140,7 +145,7 @@ public class UserSetCollectionServiceImpl {
 
 	}
 
-	private Map<String, Integer> countRarities(List<CardSetCollectionDTO> cards) {
+	public Map<String, Integer> countRarities(List<CardSetCollectionDTO> cards) {
 		Map<String, Integer> mapRarity = new HashMap<>();
 		
 		cards.stream().forEach(c -> {
@@ -158,7 +163,7 @@ public class UserSetCollectionServiceImpl {
 		return mapRarity;
 	}
 
-	private List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set){
+	public List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set){
 		
 		List<Long> deckId = userSetRepository.consultSetUserDeckRelation(set.getId());
 		
@@ -168,7 +173,13 @@ public class UserSetCollectionServiceImpl {
 		List<Tuple> tuple = userSetRepository
 				.consultUserSetCollection(deckId.get(0), GeneralFunctions.userLogged().getId(), set.getKonamiSetCopied());
 		
-		List<CardSetCollectionDTO> cardsList = tuple.stream().map(c -> {
+		List<CardSetCollectionDTO> cardsList = transformTupleInCardSetCollectionDTO(tuple);
+		
+		return cardsList;
+	}
+
+	public List<CardSetCollectionDTO> transformTupleInCardSetCollectionDTO(List<Tuple> tuple) {
+		return tuple.stream().map(c -> {
 			
 			RelDeckCards rel = new RelDeckCards(c.get(4, String.class),Double.parseDouble(String.valueOf(c.get(3))),c.get(5, String.class));
 			
@@ -179,15 +190,14 @@ public class UserSetCollectionServiceImpl {
 					Integer.parseInt(String.valueOf(c.get(6))), 
 					Integer.parseInt(String.valueOf(c.get(7))),
 					rel,
-					Boolean.parseBoolean(String.valueOf(c.get(8)))
+					Boolean.parseBoolean(String.valueOf(c.get(8))),
+					c.get(9, String.class)
 					);	
 			
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
 			return card;
 					
 		}).collect(Collectors.toList());
-		
-		return cardsList;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -225,7 +235,7 @@ public class UserSetCollectionServiceImpl {
 						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
 						.collect(Collectors.toList());
 				
-				if(listFilter != null && listFilter.size() >= 1) {
+				if(listFilter != null && listFilter.size() >= 1 && !set.getSetType().equalsIgnoreCase("DECK")) {
 					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
 						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
 					});
@@ -252,5 +262,74 @@ public class UserSetCollectionServiceImpl {
 		rel.setIsSideDeck(false);
 		return rel;
 	}
+
+	public List<DeckAndSetsBySetTypeDTO> getAllSetsBySetType(String setType) {
+		if(setType == null || setType.isEmpty())
+			throw new IllegalArgumentException("#getAllSetsBySetType - Invalid SetType!");
+		
+		Long userId = GeneralFunctions.userLogged().getId();
+		
+		List<Tuple> tuple  = userSetRepository.getAllSetsBySetType(setType, userId);
+		
+		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(c-> {
+			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+					Long.parseLong(String.valueOf(c.get(0))),
+					String.valueOf(c.get(1))
+			);		
+			return dto;			
+		}).collect(Collectors.toList());
+		
+		return listDto;
+	}
 	
+	public List<CardSetCollectionDTO> orderByGenericType(List<CardSetCollectionDTO> cards) {
+		
+		for(CardSetCollectionDTO card : cards) {
+			card.setSortOrder(GenericTypesCards.getOrderByGenerycType(card.getGenericType()));
+		}	
+		
+		List<CardSetCollectionDTO> cardsSorted = cards.stream()
+				.sorted(Comparator.comparingInt(CardSetCollectionDTO::getSortOrder))
+				.collect(Collectors.toList());	
+		
+		return cardsSorted;
+	}
+
+	public UserSetCollectionDTO getUserSetCollectionForTransfer(Integer setId) {
+		UserSetCollectionDTO setCollection = this.consultUserSetCollection(setId.longValue());
+		
+		List<CardSetCollectionDTO> cardsFiltered = setCollection.getCards().stream()
+				.filter(set -> set.getQuantityUserHave() > 0)
+				.collect(Collectors.toList());
+		
+		setCollection.setCards(this.orderByGenericType(cardsFiltered));
+		
+		return setCollection;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public String saveTransfer(List<UserSetCollectionDTO> setsToBeSaved) {
+		if(setsToBeSaved == null || setsToBeSaved.size() < 2)
+			throw new IllegalArgumentException("There is necessary TWO sets for transfer to be saved!");
+		
+		for(UserSetCollectionDTO userSet: setsToBeSaved) {
+			if(!userSet.getSetType().equalsIgnoreCase("Deck")) {
+				this.saveUserSetCollection(setsToBeSaved.get(0));
+			} else {
+				this.saveSetCollectionAsUserDeck(userSet);
+			}
+		}
+		
+		return "Sets were saved successfully!";
+	}
+	
+	private void saveSetCollectionAsUserDeck(UserSetCollectionDTO userSet) {
+		Deck deck = new Deck();
+		deck.setNome(userSet.getName());
+		deck.setId(userSet.getId());
+		deck.setSetType(userSet.getSetType());
+		deck.setRel_deck_cards(this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
+		
+		userDeckService.saveUserdeck(deck);
+	}
 }

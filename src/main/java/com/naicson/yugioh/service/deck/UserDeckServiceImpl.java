@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
+import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
@@ -473,7 +476,7 @@ public class UserDeckServiceImpl {
 		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
 			throw new IllegalArgumentException("There is no card in this deck");
 		
-		SetType.valueOf(deck.getSetType());
+		SetType.valueOf(deck.getSetType().toUpperCase());
 		
 	}
 	
@@ -497,5 +500,41 @@ public class UserDeckServiceImpl {
 		
 	}
 
+	public List<DeckAndSetsBySetTypeDTO> getAllDecksName() {
+		Long userId = GeneralFunctions.userLogged().getId();
+			List<Tuple> tuple =	userDeckRepository.getAllDecksName(userId);
+			
+			List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
+				DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+						Long.parseLong(String.valueOf(t.get(0))),
+						String.valueOf(t.get(1))
+				);
+				return dto;
+			}).collect(Collectors.toList());
+			
+			return listDto;
+	}
+
+
+	public UserSetCollectionDTO getDeckAndCardsForTransfer(Long deckId) {
+		UserDeck userDeck = userDeckRepository
+				.findById(deckId).orElseThrow(() -> new IllegalArgumentException("User Deck not found! ID: " + deckId));
+		
+		List<Tuple> tupleCards = userDeckRepository.consultCardsForTransfer(deckId);
+		
+		UserSetCollectionDTO dto = new UserSetCollectionDTO();
+		UserSetCollectionServiceImpl userSetService = new UserSetCollectionServiceImpl();
+		
+		dto.setId(userDeck.getId());
+		dto.setName(userDeck.getNome());
+		dto.setImage(userDeck.getImgurUrl());
+		dto.setCards(userSetService.transformTupleInCardSetCollectionDTO(tupleCards));
+		dto.setCards(userSetService.orderByGenericType(dto.getCards()));
+		dto.setRarities(userSetService.countRarities(dto.getCards()));
+		dto.setTotalPrice(userSetService.calculateTotalPrice(dto.getCards()));
+		
+		
+		return dto;
+	}
 
 }
