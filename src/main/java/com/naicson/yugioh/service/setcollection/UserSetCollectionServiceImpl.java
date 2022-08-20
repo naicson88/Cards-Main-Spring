@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
+import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
@@ -29,6 +31,7 @@ import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.enums.GenericTypesCards;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
@@ -111,6 +114,7 @@ public class UserSetCollectionServiceImpl {
 		dto.setRarities(this.countRarities(dto.getCards()));
 		dto.setSetCodes(this.listSetCodes(dto.getCards()));
 		dto.setTotalPrice(this.calculateTotalPrice(dto.getCards()));
+		dto.setImage(set.getImgurUrl());
 		
 		return dto;
 			
@@ -186,7 +190,8 @@ public class UserSetCollectionServiceImpl {
 					Integer.parseInt(String.valueOf(c.get(6))), 
 					Integer.parseInt(String.valueOf(c.get(7))),
 					rel,
-					Boolean.parseBoolean(String.valueOf(c.get(8)))
+					Boolean.parseBoolean(String.valueOf(c.get(8))),
+					c.get(9, String.class)
 					);	
 			
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
@@ -275,6 +280,55 @@ public class UserSetCollectionServiceImpl {
 		}).collect(Collectors.toList());
 		
 		return listDto;
-	}	
+	}
 	
+	public List<CardSetCollectionDTO> orderByGenericType(List<CardSetCollectionDTO> cards) {
+		
+		for(CardSetCollectionDTO card : cards) {
+			card.setSortOrder(GenericTypesCards.getOrderByGenerycType(card.getGenericType()));
+		}	
+		
+		List<CardSetCollectionDTO> cardsSorted = cards.stream()
+				.sorted(Comparator.comparingInt(CardSetCollectionDTO::getSortOrder))
+				.collect(Collectors.toList());	
+		
+		return cardsSorted;
+	}
+
+	public UserSetCollectionDTO getUserSetCollectionForTransfer(Integer setId) {
+		UserSetCollectionDTO setCollection = this.consultUserSetCollection(setId.longValue());
+		
+		List<CardSetCollectionDTO> cardsFiltered = setCollection.getCards().stream()
+				.filter(set -> set.getQuantityUserHave() > 0)
+				.collect(Collectors.toList());
+		
+		setCollection.setCards(this.orderByGenericType(cardsFiltered));
+		
+		return setCollection;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public String saveTransfer(List<UserSetCollectionDTO> setsToBeSaved) {
+		if(setsToBeSaved == null || setsToBeSaved.size() < 2)
+			throw new IllegalArgumentException("There is necessary TWO sets for transfer to be saved!");
+		
+		for(UserSetCollectionDTO userSet: setsToBeSaved) {
+			if(!userSet.getSetType().equalsIgnoreCase("Deck")) {
+				this.saveUserSetCollection(setsToBeSaved.get(0));
+			} else {
+				this.saveSetCollectionAsUserDeck(userSet);
+			}
+		}
+		
+		return "Sets were saved successfully!";
+	}
+	
+	private void saveSetCollectionAsUserDeck(UserSetCollectionDTO userSet) {
+		Deck deck = new Deck();
+		deck.setNome(userSet.getName());
+		deck.setId(userSet.getId());
+		deck.setRel_deck_cards(this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
+		
+		userDeckService.saveUserdeck(deck);
+	}
 }

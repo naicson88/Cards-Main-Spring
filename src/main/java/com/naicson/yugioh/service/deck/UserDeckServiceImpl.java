@@ -530,11 +530,12 @@ public class UserDeckServiceImpl {
 		dto.setName(userDeck.getNome());
 		dto.setImage(userDeck.getImgurUrl());
 		dto.setCards(userSetService.transformTupleInCardSetCollectionDTO(tupleCards));
+		dto.setCards(userSetService.orderByGenericType(dto.getCards()));
 		dto.setRarities(userSetService.countRarities(dto.getCards()));
 		dto.setTotalPrice(userSetService.calculateTotalPrice(dto.getCards()));
 		
+		
 		return dto;
 	}
-
 
 }

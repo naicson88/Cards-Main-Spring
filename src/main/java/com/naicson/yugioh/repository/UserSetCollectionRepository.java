@@ -40,11 +40,11 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 	Integer countQuantityOfASetUserHave(Integer konamiSetId, Long userId);
 	
 	@Query(value = " select card.id, card.numero, card.nome, rel.card_price, rel.card_set_code, rel.card_raridade, rel.quantity, "
-			+ " ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rel.is_speed_duel "
+			+ " ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rel.is_speed_duel,card.generic_type "
 			+ " from tab_rel_deckusers_cards rel "
 			+ " inner join tab_cards card on card.id = rel.card_id "
 			+ " left join ( "
-			+ "	select rel2.card_set_code , count(rel2.card_set_code) as qtd "
+			+ "	select rel2.card_set_code , sum(rel2.quantity) as qtd "
 			+ "    from tab_rel_deckusers_cards rel2 "
 			+ "    where deck_id in (select id from tab_user_deck where user_id = :userId and id != :userDeckId) "
 			+ "    group by rel2.card_set_code "
@@ -56,11 +56,11 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 			+ " union "
 			
 			+ " select c.id, c.numero, c.nome, rdc.card_price, rdc.card_set_code, rdc.card_raridade,"
-			+ " ifnull(counter.qtd,0) as quantityUserHave, ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rdc.is_speed_duel "
+			+ " ifnull(counter.qtd,0) as quantityUserHave, ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rdc.is_speed_duel, c.generic_type "
 			+ " from tab_cards c "
 			+ " inner join tab_rel_deck_cards rdc on rdc.card_id = c.id "
 			+ " left join ( "
-			+ "	select rel.card_set_code , count(rel.card_set_code) as qtd "
+			+ "	select rel.card_set_code , sum(rel.quantity) as qtd "
 			+ "    from tab_rel_deckusers_cards rel "
 			+ "    where deck_id = :userDeckId "
 			+ "    group by rel.card_set_code "

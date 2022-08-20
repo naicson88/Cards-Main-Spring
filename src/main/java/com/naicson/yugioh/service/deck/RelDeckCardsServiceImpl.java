@@ -58,8 +58,9 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 		if(listRel != null && listRel.size() > 0) {
 			listRel.stream().forEach(rel -> {
 				try {
+					Integer qtd = rel.getQuantity();
 					relDeckCardsRepository.saveRelUserDeckCards(rel.getDeckId(), rel.getCardNumber(), rel.getCard_raridade(), rel.getCard_set_code(),
-							rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), rel.getQuantity());
+							rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), qtd);
 					
 				}catch (Exception e) {
 					logger.error("It was not possible save Rel: {} ", rel.toString());

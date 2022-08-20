@@ -1,7 +1,5 @@
 package com.naicson.yugioh.data.dao;
 
-import java.lang.annotation.Native;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +10,6 @@ import javax.persistence.Tuple;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.cards.KonamiSetsWithCardDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 

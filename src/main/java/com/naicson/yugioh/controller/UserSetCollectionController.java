@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
@@ -70,6 +71,22 @@ public class UserSetCollectionController {
 		List<DeckAndSetsBySetTypeDTO> dto = service.getAllSetsBySetType(setType);
 		
 		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(dto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/set-collection-for-transfer")
+	@ApiOperation(value="Get Set Collection sorted for transfer Cards", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<UserSetCollectionDTO> getUserSetCollectionForTransfer(@RequestParam("setId") Integer setId){
+		UserSetCollectionDTO dto = service.getUserSetCollectionForTransfer(setId);
+		
+		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/save-transfer")
+	@ApiOperation(value="Save the transfer from a Set to another", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> saveTransfer(@RequestBody List<UserSetCollectionDTO> setsToBeSaved ){
+		String msg = service.saveTransfer(setsToBeSaved);
+		
+		return new ResponseEntity<String>(JSONObject.quote(msg), HttpStatus.OK);
 	}
 	
 }

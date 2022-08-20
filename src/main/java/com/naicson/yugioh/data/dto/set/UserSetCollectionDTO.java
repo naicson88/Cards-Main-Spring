@@ -11,6 +11,7 @@ public class UserSetCollectionDTO {
 	private String name;
 	private Double totalPrice;
 	private String image;
+	private String setType;
 	private Map<String, Integer> rarities;
 	private List<String> setCodes;
 	private List<CardSetCollectionDTO> cards;
@@ -56,6 +57,12 @@ public class UserSetCollectionDTO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public String getSetType() {
+		return setType;
+	}
+	public void setSetType(String setType) {
+		this.setType = setType;
 	}
 	
 	
