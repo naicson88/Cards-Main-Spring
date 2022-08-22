@@ -59,66 +59,73 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 	@Override
 	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source) {
 		
+		validSetSource(setId, source);
+		
+		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
+		
+		if(setDetailsDto.getInsideDeck() != null && setDetailsDto.getInsideDeck().size() > 0)	
+			setDetailsDto = utils.getSetStatistics(setDetailsDto);
+		
+		return setDetailsDto;
+	}
+	
+	private SetDetailsDTO userSetDetailsDTO(Long setId) {
+		SetCollection setCollection = new SetCollection();
+
+		UserSetCollection userSet = userSetRepository.findById(setId)
+				.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));;
+		
+		BeanUtils.copyProperties(userSet, setCollection);			
+		setCollection.setId(userSet.getId().intValue());		
+		setCollection.setDecks(List.of(Deck.deckFromDeckUser(userSet.getUserDeck().get(0))));
+
+		 SetDetailsDTO setDetailsDto = this.convertSetCollectionToDeck(setCollection, "USER");	
+		 
+		 return setDetailsDto;
+	}
+	
+	private SetDetailsDTO konamiSetDetailsDTO(Long setId) {
+		SetCollection setCollection = new SetCollection();
+		SetDetailsDTO setDetailsDto = new SetDetailsDTO();
+
+		setCollection = setColRepository.findById(setId.intValue())
+			.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
+		
+		setDetailsDto = this.convertSetCollectionToDeck(setCollection, "KONAMI");
+		
+		return setDetailsDto;
+	}
+
+	private void validSetSource(Long setId, String source) {
 		if(setId == null)
 			throw new IllegalArgumentException("Invalid Set Id");
 		
 		if(source == null || source.isBlank())
 			throw new IllegalArgumentException("Invalid Source");
-		
-		SetCollection set = new SetCollection();
-		SetDetailsDTO deck = new SetDetailsDTO();
-		
-		if("KONAMI".equalsIgnoreCase(source)) {
-			set = setColRepository.findById(setId.intValue())
-				.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
-			
-			deck = this.convertSetCollectionToDeck(set);			
-		} 
-		
-		else {
-			UserSetCollection userSet = userSetRepository.findById(setId)
-					.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));;
-			
-			BeanUtils.copyProperties(userSet, set);			
-			set.setId(userSet.getId().intValue());
-			
-			if(set.getDecks() != null && set.getDecks().size() > 0)			
-				deck = this.convertSetCollectionToDeck(set);	
-			else
-				deck = convertBasicSetToSetDetailsDTO(set);
-		}	
-		
-		if(set.getDecks() != null && set.getDecks().size() > 0)	
-			deck = utils.getSetStatistics(deck);
-		
-		return deck;
 	}
 	
-	private SetDetailsDTO convertSetCollectionToDeck(SetCollection set) {
+	private SetDetailsDTO convertSetCollectionToDeck(SetCollection set, String deckSource) {
 		
-		SetDetailsDTO deck = convertBasicSetToSetDetailsDTO(set);
+		SetDetailsDTO setDetailsDto = convertBasicSetToSetDetailsDTO(set);
 		
 		List<InsideDeckDTO> listInsideDeck = new ArrayList<>();
 		
-		set = getCardsForEachDeck(set);
+		set = getCardsForEachDeck(set, deckSource);
 		// Iterate over Deck	
-		set.getDecks().stream().forEach(d -> { 
-			
+		set.getDecks().stream().forEach(d -> { 			
 			InsideDeckDTO insideDeck = new InsideDeckDTO();	
 			Map<Integer, CardSetDetailsDTO> mapCardSetDetails = new HashMap<>();
 			
 			insideDeck.setInsideDeckName(d.getNome());
 			insideDeck.setInsideDeckImage(d.getImgurUrl());	
 			//Iterate over Cards
-			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {
-				
+			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {				
 				CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();				
 				BeanUtils.copyProperties(c, cardDetail);
 				mapCardSetDetails.put(cardDetail.getId(), cardDetail);
 				return cardDetail;	
 				
-			}).collect(Collectors.toList()); ;
-			
+			}).collect(Collectors.toList()); ;			
 			//Iterate over Rel. Deck Cards
 			d.getRel_deck_cards().forEach(r -> {
 				CardSetDetailsDTO detail =  mapCardSetDetails.get(r.getCardId());		
@@ -130,21 +137,20 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 			
 		});
 		
-		deck.setInsideDecks(listInsideDeck);
+		setDetailsDto.setInsideDecks(listInsideDeck);
 
 		set.getDecks().stream().forEach(d -> {
-			deck.setQtd_cards(deck.getQtd_cards() + d.getQtd_cards());
-			deck.setQtd_comuns(deck.getQtd_comuns() + d.getQtd_comuns());
-			deck.setQtd_raras(deck.getQtd_raras() + d.getQtd_raras());
-			deck.setQtd_secret_raras(deck.getQtd_secret_raras() + d.getQtd_secret_raras());
-			deck.setQtd_super_raras(deck.getQtd_super_raras() + d.getQtd_super_raras());
-			deck.setQtd_ultra_raras(deck.getQtd_ultra_raras() + d.getQtd_ultra_raras());
+			setDetailsDto.setQtd_cards(setDetailsDto.getQtd_cards() + d.getQtd_cards());
+			setDetailsDto.setQtd_comuns(setDetailsDto.getQtd_comuns() + d.getQtd_comuns());
+			setDetailsDto.setQtd_raras(setDetailsDto.getQtd_raras() + d.getQtd_raras());
+			setDetailsDto.setQtd_secret_raras(setDetailsDto.getQtd_secret_raras() + d.getQtd_secret_raras());
+			setDetailsDto.setQtd_super_raras(setDetailsDto.getQtd_super_raras() + d.getQtd_super_raras());
+			setDetailsDto.setQtd_ultra_raras(setDetailsDto.getQtd_ultra_raras() + d.getQtd_ultra_raras());
 		});
 			
-		return deck;
+		return setDetailsDto;
 				
 	}
-
 
 
 	private SetDetailsDTO convertBasicSetToSetDetailsDTO(SetCollection set) {
@@ -163,10 +169,10 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 	}
 
-	private SetCollection getCardsForEachDeck(SetCollection set) {
+	private SetCollection getCardsForEachDeck(SetCollection set, String deckSource) {
 		
 		set.getDecks().stream().forEach(d -> { 		
-			Deck deckAux = deckService.returnDeckWithCards(d.getId(), "konami");	
+			Deck deckAux = deckService.returnDeckWithCards(d.getId(), deckSource);	
 			d.setCards(deckAux.getCards());
 			d.setRel_deck_cards(deckAux.getRel_deck_cards());		
 		});

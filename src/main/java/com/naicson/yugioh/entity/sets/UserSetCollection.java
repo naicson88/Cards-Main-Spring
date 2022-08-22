@@ -48,11 +48,10 @@ public class UserSetCollection {
 	private Date DtUpdate;
 	private Integer konamiSetCopied;
 	
-//	@ManyToMany()
-//	@JoinTable(name="tab_user_setcollection_deck",
-//    joinColumns={@JoinColumn(name="user_set_collection_id")},
-//    inverseJoinColumns={@JoinColumn(name="deck_id")})
-	@Transient
+	@ManyToMany( fetch = FetchType.EAGER)
+	@JoinTable(name="tab_user_setcollection_deck",
+    joinColumns={@JoinColumn(name="user_set_collection_id")},
+    inverseJoinColumns={@JoinColumn(name="deck_id")})
 	private List<UserDeck> userDeck;
 	
 	@Enumerated(EnumType.STRING)
