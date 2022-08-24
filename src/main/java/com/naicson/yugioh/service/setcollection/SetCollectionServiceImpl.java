@@ -108,9 +108,9 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		SetDetailsDTO setDetailsDto = convertBasicSetToSetDetailsDTO(set);
 		
-		List<InsideDeckDTO> listInsideDeck = new ArrayList<>();
-		
+		List<InsideDeckDTO> listInsideDeck = new ArrayList<>();		
 		set = getCardsForEachDeck(set, deckSource);
+		
 		// Iterate over Deck	
 		set.getDecks().stream().forEach(d -> { 			
 			InsideDeckDTO insideDeck = new InsideDeckDTO();	
@@ -133,8 +133,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 			});	
 			
 			insideDeck.setCards(listSetDetails);
-			listInsideDeck.add(insideDeck);		
-			
+			listInsideDeck.add(insideDeck);				
 		});
 		
 		setDetailsDto.setInsideDecks(listInsideDeck);

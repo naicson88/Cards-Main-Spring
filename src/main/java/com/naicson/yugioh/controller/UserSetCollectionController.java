@@ -45,7 +45,7 @@ public class UserSetCollectionController {
 		
 		service.removeSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>("SetCollection has been removed Successfully!", HttpStatus.OK);
+		return new ResponseEntity<String>(JSONObject.quote("SetCollection has been removed Successfully!"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/consult/{setId}")

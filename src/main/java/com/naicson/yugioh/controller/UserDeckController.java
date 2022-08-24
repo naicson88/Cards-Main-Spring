@@ -82,7 +82,7 @@ public class UserDeckController<T> {
 		
 		 deckService.removeSetFromUsersCollection(deckId);
 		
-		return new ResponseEntity<String>("Set was successfully removed from your collection", HttpStatus.OK);
+		return new ResponseEntity<String>(JSONObject.quote("Set was successfully removed from your collection"), HttpStatus.OK);
 
 	}
 	
