@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.util.GeneralFunctions;
@@ -40,16 +41,28 @@ public class UserDeck {
 
 	public static UserDeck userDeckFromDeck(Deck deck) {
 		UserDeck userDeck = new UserDeck();
-		BeanUtils.copyProperties(deck, userDeck);
-		
+		BeanUtils.copyProperties(deck, userDeck);		
 		//userDeck.setNome(userDeck.getNome()+"_"+GeneralFunctions.momentAsString());
 		userDeck.setUserId(GeneralFunctions.userLogged().getId());
 		userDeck.setDtCriacao(new Date());
 		userDeck.setKonamiDeckCopied(deck.getId());
-		//userDeck.setRelDeckCards(deck.getRel_deck_cards());
-		
+		//userDeck.setRelDeckCards(deck.getRel_deck_cards());		
 		return userDeck;
 	
+	}
+	
+	public static UserDeck userDeckFromUserSetCollectionDTO(UserSetCollectionDTO userCollection) {
+		UserDeck userDeck = new UserDeck();
+		userDeck.setDtCriacao(new Date());
+		userDeck.setImagem(GeneralFunctions.getRandomDeckCase());
+		userDeck.setImgurUrl(userDeck.getImagem());
+		userDeck.setIsSpeedDuel(false);
+		userDeck.setKonamiDeckCopied(null);
+		userDeck.setNome(userCollection.getName()+"_"+GeneralFunctions.getRandomDeckCase());
+		userDeck.setSetType(userCollection.getSetType());
+		userDeck.setUserId(GeneralFunctions.userLogged().getId());
+		
+		return userDeck;
 	}
 	
 	public List<RelDeckCards> getRelDeckCards() {

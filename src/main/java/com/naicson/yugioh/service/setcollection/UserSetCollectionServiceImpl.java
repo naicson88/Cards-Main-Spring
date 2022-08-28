@@ -17,6 +17,7 @@ import javax.persistence.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +27,14 @@ import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
+import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
@@ -205,6 +208,35 @@ public class UserSetCollectionServiceImpl {
 		if(userCollection == null)
 			throw new IllegalArgumentException("Invalid User SetCollection to be saved!");
 		
+		Long deckId = userCollection.getId() > 0 ? this.saveExistingDeck(userCollection) : this.createNewSetCollection(userCollection);
+				
+		List<RelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
+		
+		if(listRel != null && listRel.size() > 0)
+			relService.saveAllRelDeckUserCards(listRel);
+		
+		return "User SetCollection was successfully saved!";			
+	}
+	
+	private Long createNewSetCollection(UserSetCollectionDTO userCollection) {		
+		UserDeck userDeck = UserDeck.userDeckFromUserSetCollectionDTO(userCollection);
+		userDeck = userDeckService.saveUserDeck(userDeck);
+		
+		if(userDeck == null || userDeck.getId() ==0)
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create the Set User Deck");
+		
+		UserSetCollection userSet = UserSetCollection.convertFromUserSetCollectionDTO(userCollection, userDeck);
+		
+		userSet = userSetRepository.save(userSet);
+		
+		if(userSet == null || userSet.getId() ==0)
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create the Set Collection");
+		
+		return userDeck.getId();			
+	}
+
+	private Long saveExistingDeck(UserSetCollectionDTO userCollection) {
+		
 		UserSetCollection set = userSetRepository
 				.findById(userCollection.getId()).orElseThrow(() -> new  EntityNotFoundException("Set not found with ID: " + userCollection.getId()));
 		
@@ -212,13 +244,7 @@ public class UserSetCollectionServiceImpl {
 		
 		relService.removeRelUserDeckByDeckId(deckId);
 		
-		List<RelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
-		
-		if(listRel != null && listRel.size() > 0)
-			relService.saveAllRelDeckUserCards(listRel);
-		
-		return "User SetCollection was successfully saved!";
-			
+		return deckId;
 	}
 	
 	private List<RelDeckCards> createRelDeckCardsOfSetCollection(UserSetCollectionDTO set, Long deckId) {

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,5 +95,22 @@ public abstract class GeneralFunctions {
 			return "box";
     	
     	return null;
+    }
+    
+    public static String getRandomDeckCase() {
+     String[] arrayBoxCases = {"https://i.imgur.com/6aq3xPy.png", "https://i.imgur.com/3pyZ4U9.png","https://i.imgur.com/cMb2tTF.png",
+    			"https://i.imgur.com/ZZvw3oo.png","https://i.imgur.com/389kGKl.png","https://i.imgur.com/7E3tMCA.png"};
+    	Random random = new Random();
+    	int randomIndex = random.nextInt(arrayBoxCases.length);
+    	return arrayBoxCases[randomIndex];
+    }
+    
+    
+    public static String getRandomCollectionCase() {
+     String[] arrayBoxCases = {"https://i.imgur.com/1obzCUB.png", "https://i.imgur.com/Lnxe5WI.png","https://i.imgur.com/s4yGaCe.png",
+    			"https://i.imgur.com/bK2lgrq.png"};
+    	Random random = new Random();
+    	int randomIndex = random.nextInt(arrayBoxCases.length);
+    	return arrayBoxCases[randomIndex];
     }
 }

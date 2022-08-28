@@ -72,7 +72,7 @@ public class UserDeckServiceImpl {
 			throw new RuntimeException("This Deck dont belong to user: " + user.getId());
 
 		deck.setNome(deckUser.getNome());
-		deck.setImagem(deckUser.getImagem());
+		deck.setImagem(deckUser.getImgurUrl());
 		deck.setDt_criacao(deckUser.getDtCriacao());
 		deck.setId(deckUser.getId());
 
@@ -199,17 +199,21 @@ public class UserDeckServiceImpl {
 		if (deck.getId() != null && deck.getId() != 0) {
 			dao.deleteCardsDeckuserByDeckId(deck.getId());
 			userDeck = userDeckRepository.getOne(deck.getId());
+			userDeck.setNome(deck.getNome());
 
 		} else {
 			UserDetailsImpl user = GeneralFunctions.userLogged();
+			userDeck.setId(null);
 			userDeck.setUserId(user.getId());
 			userDeck.setDtCriacao(new Date());
 			userDeck.setSetType("DECK");
-
+			userDeck.setNome(deck.getNome()+"_"+GeneralFunctions.momentAsString());
+			userDeck.setImagem(GeneralFunctions.getRandomDeckCase());
+			userDeck.setImgurUrl(userDeck.getImagem());
 		}
 
 		// FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
-		userDeck.setNome(deck.getNome());
+		
 		userDeck = userDeckRepository.save(userDeck);
 
 		if (userDeck == null)

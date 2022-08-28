@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 
@@ -85,6 +86,22 @@ public class UserSetCollection {
 	
 	}
 	
+	public static UserSetCollection convertFromUserSetCollectionDTO(UserSetCollectionDTO userCollection, UserDeck userDeck) {
+		UserSetCollection userSetCollection = new UserSetCollection();
+		userSetCollection.setDtUpdate(new Date());
+		userSetCollection.setImgPath(GeneralFunctions.getRandomCollectionCase());
+		userSetCollection.setImgurUrl(userSetCollection.getImgPath());
+		userSetCollection.setIsSpeedDuel(false);
+		userSetCollection.setName(userCollection.getName()+"_"+GeneralFunctions.getRandomDeckCase());
+		userSetCollection.setOnlyDefaultDeck(true);
+		userSetCollection.setRegistrationDate(new Date());
+		userSetCollection.setReleaseDate(new Date());
+		userSetCollection.setSetCollectionType(SetType.valueOf(userCollection.getSetType()));
+		userSetCollection.setUserDeck(List.of(userDeck));
+		userSetCollection.setUserId(GeneralFunctions.userLogged().getId());
+		
+		return userSetCollection;
+	}
 	
 	public Long getId() {
 		return id;
