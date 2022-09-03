@@ -11,6 +11,7 @@ public class LastAddedDTO {
 	private String img;
 	private Long cardNumber;
 	private Date registeredDate;
+	private String setType;
 	
 	public LastAddedDTO() {
 		
@@ -78,6 +79,14 @@ public class LastAddedDTO {
 
 	public void setRegisteredDate(Date registeredDate) {
 		this.registeredDate = registeredDate;
+	}
+
+	public String getSetType() {
+		return setType;
+	}
+
+	public void setSetType(String setType) {
+		this.setType = setType;
 	}
 	
 	

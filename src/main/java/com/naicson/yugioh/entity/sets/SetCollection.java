@@ -42,7 +42,7 @@ public class SetCollection {
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
 	
-	@ManyToMany( fetch = FetchType.LAZY)
+	@ManyToMany( fetch = FetchType.EAGER)
 	@JoinTable(name="tab_setcollection_deck",
     joinColumns={@JoinColumn(name="set_collection_id")},
     inverseJoinColumns={@JoinColumn(name="deck_id")})

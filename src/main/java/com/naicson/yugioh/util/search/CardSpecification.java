@@ -2,16 +2,20 @@ package com.naicson.yugioh.util.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.TipoCard;
 
 public class CardSpecification implements Specification<Card> {
 
@@ -84,7 +88,17 @@ public class CardSpecification implements Specification<Card> {
             } 
 			
 			else if (criteria.getOperation().equals(SearchOperation.IN)) {
-                predicates.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
+				Predicate predicate = null;
+				
+				if(criteria.getKey().equals("tipo"))
+					 predicate = getPredicateTipoCard(root, builder, criteria);
+				else if(criteria.getKey().equals("atributo"))
+					predicate = getPredicateAtributos(root, builder, criteria);
+				else
+					predicate = builder.in(root.get(criteria.getKey())).value(criteria.getValue());
+				
+				
+				predicates.add(predicate);
             }
 			
 			else if (criteria.getOperation().equals(SearchOperation.NOT_IN)) {
@@ -94,6 +108,25 @@ public class CardSpecification implements Specification<Card> {
 		
         return builder.and(predicates.toArray(new Predicate[0]));
     }
+	
+	
+	private Predicate getPredicateAtributos(Root<Card> root, CriteriaBuilder builder, SearchCriteria criteria) {
+		Join<Card, Atributo> joinTipo = root.join("atributo");
+		Path<Long> tipoId = joinTipo.get("id");
+		ArrayList<String> arr = (ArrayList<String>) criteria.getValue();
+		List<String> ids = arr.stream().filter(id -> !id.isBlank()).collect(Collectors.toList()); //new ArrayList<>();
+		Predicate predTipo = builder.isTrue(tipoId.in(ids));
+		return predTipo;
+	}
+
+	private Predicate getPredicateTipoCard(Root<Card> root, CriteriaBuilder builder, SearchCriteria criteria) {
+		Join<Card, TipoCard> joinTipo = root.join("tipo");
+		Path<Long> tipoId = joinTipo.get("id");
+		ArrayList<String> arr = (ArrayList<String>) criteria.getValue();
+		List<String> ids = arr.stream().filter(id -> !id.isBlank()).collect(Collectors.toList()); //new ArrayList<>();
+		Predicate predTipo = builder.isTrue(tipoId.in(ids));
+		return predTipo;
+	}
 			
 }
 

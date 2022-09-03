@@ -38,7 +38,7 @@ public class CardDAO {
 				+ "group by rel.card_set_code "
 				+ "union "
 				+ "select usc.name , rel.card_set_code , rel.card_raridade as rarity, "
-				+ "rel.card_price as price, count(rel.card_set_code) as quantity, du.id, usc.set_collection_type "
+				+ "rel.card_price as price, count(rel.card_set_code) as quantity, usc.id, usc.set_collection_type "
 				+ "from tab_user_set_collection usc "
 				+ "inner join tab_user_setcollection_deck usdeck on usdeck.user_set_collection_id = usc.id "
 				+ "inner join tab_user_deck du on du.id = usdeck.deck_id "

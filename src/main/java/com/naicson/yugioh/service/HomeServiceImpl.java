@@ -50,7 +50,7 @@ public class HomeServiceImpl implements HomeDetailService {
 	@Override
 	public HomeDTO getHomeDto() {
 		HomeDTO homeDto = new HomeDTO();
-		 UserDetailsImpl user = GeneralFunctions.userLogged();
+		UserDetailsImpl user = GeneralFunctions.userLogged();
 
 		try {
 
@@ -140,7 +140,8 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastAdded.setId(set.get(0, BigInteger.class).longValue());
 				lastAdded.setImg(set.get(2, String.class));
 				lastAdded.setName(set.get(1, String.class));
-
+				lastAdded.setSetType(set.get(4, String.class));
+				
 				return lastAdded;
 			}).collect(Collectors.toList());
 
@@ -150,20 +151,6 @@ public class HomeServiceImpl implements HomeDetailService {
 		return hotNewsList;
 	}
 	
-	
-	/*
-	 * private void saveInfoCard(LastAddedDTO lastCardAdded) { CardExtraInformation
-	 * info = new CardExtraInformation();
-	 * info.setCardNumber(String.valueOf(lastCardAdded.getCardNumber()));
-	 * info.setCardSetCode(lastCardAdded.getSetCode());
-	 * info.setCurrentPrice(lastCardAdded.getPrice()); info.setPrice2(0.1);
-	 * info.setPrice3(5.61); info.setPrice4(3.63); info.setPrice5(1.99);
-	 * info.setTotalQtdViews(70L); info.setWeeklyPercentVariable(3.30);
-	 * info.setWeeklyQtdViews(10L);
-	 * 
-	 * cardInfoRepository.save(info); }
-	 */
-
 	private List<LastAddedDTO> lastDecksAdded() {
 		 UserDetailsImpl user = GeneralFunctions.userLogged();
 
@@ -181,8 +168,7 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastSet.setImg(set.get(1, String.class));
 				lastSet.setPrice(totalDeckPrice(lastSet.getId()));
 				lastSet.setRegisteredDate(set.get(5, Date.class));
-				lastSet.setSetCode("WWW-EN001");
-
+				lastSet.setSetType("DECK");
 				return lastSet;
 			}).collect(Collectors.toList());
 
@@ -215,6 +201,7 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastSet.setImg(set.get(3, String.class));
 				lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
 				lastSet.setRegisteredDate(set.get(8, Date.class));
+				lastSet.setSetType(set.get(10, String.class));
 				// lastSet.setSetCode("WWW-EN001");
 
 				return lastSet;

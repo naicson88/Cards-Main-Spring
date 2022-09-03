@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 
@@ -48,11 +49,10 @@ public class UserSetCollection {
 	private Date DtUpdate;
 	private Integer konamiSetCopied;
 	
-//	@ManyToMany()
-//	@JoinTable(name="tab_user_setcollection_deck",
-//    joinColumns={@JoinColumn(name="user_set_collection_id")},
-//    inverseJoinColumns={@JoinColumn(name="deck_id")})
-	@Transient
+	@ManyToMany( fetch = FetchType.EAGER)
+	@JoinTable(name="tab_user_setcollection_deck",
+    joinColumns={@JoinColumn(name="user_set_collection_id")},
+    inverseJoinColumns={@JoinColumn(name="deck_id")})
 	private List<UserDeck> userDeck;
 	
 	@Enumerated(EnumType.STRING)
@@ -86,6 +86,22 @@ public class UserSetCollection {
 	
 	}
 	
+	public static UserSetCollection convertFromUserSetCollectionDTO(UserSetCollectionDTO userCollection, UserDeck userDeck) {
+		UserSetCollection userSetCollection = new UserSetCollection();
+		userSetCollection.setDtUpdate(new Date());
+		userSetCollection.setImgPath(GeneralFunctions.getRandomCollectionCase());
+		userSetCollection.setImgurUrl(userSetCollection.getImgPath());
+		userSetCollection.setIsSpeedDuel(false);
+		userSetCollection.setName(userCollection.getName()+"_"+GeneralFunctions.momentAsString());
+		userSetCollection.setOnlyDefaultDeck(true);
+		userSetCollection.setRegistrationDate(new Date());
+		userSetCollection.setReleaseDate(new Date());
+		userSetCollection.setSetCollectionType(SetType.USER_NEW_COLLECTION);
+		userSetCollection.setUserDeck(List.of(userDeck));
+		userSetCollection.setUserId(GeneralFunctions.userLogged().getId());
+		
+		return userSetCollection;
+	}
 	
 	public Long getId() {
 		return id;

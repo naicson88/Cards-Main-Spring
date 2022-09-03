@@ -69,10 +69,11 @@ public class UserDeckServiceImpl {
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 
 		if (user.getId() != deckUser.getUserId())
-			throw new RuntimeException("This Deck dont belong to user: " + user.getId());
+			throw new RuntimeException("This Deck dont belong to user: " + user.getId() + " Deck ID: " + deckUser.getId());
 
 		deck.setNome(deckUser.getNome());
 		deck.setImagem(deckUser.getImagem());
+		deck.setImgurUrl(deckUser.getImagem());
 		deck.setDt_criacao(deckUser.getDtCriacao());
 		deck.setId(deckUser.getId());
 
@@ -139,7 +140,7 @@ public class UserDeckServiceImpl {
 		Optional<UserDeck> dk = userDeckRepository.findById(setId);
 
 		if (dk.isEmpty())
-			throw new NoSuchElementException("Set not found with this code. Id = " + setId);
+			throw new NoSuchElementException("Set not found with this code. ID = " + setId);
 
 		UserDeck setOrigem = dk.get();
 		
@@ -199,17 +200,21 @@ public class UserDeckServiceImpl {
 		if (deck.getId() != null && deck.getId() != 0) {
 			dao.deleteCardsDeckuserByDeckId(deck.getId());
 			userDeck = userDeckRepository.getOne(deck.getId());
+			userDeck.setNome(deck.getNome());
 
 		} else {
 			UserDetailsImpl user = GeneralFunctions.userLogged();
+			userDeck.setId(null);
 			userDeck.setUserId(user.getId());
 			userDeck.setDtCriacao(new Date());
 			userDeck.setSetType("DECK");
-
+			userDeck.setNome(deck.getNome()+"_"+GeneralFunctions.momentAsString());
+			userDeck.setImagem(GeneralFunctions.getRandomDeckCase());
+			userDeck.setImgurUrl(userDeck.getImagem());
 		}
 
 		// FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
-		userDeck.setNome(deck.getNome());
+		
 		userDeck = userDeckRepository.save(userDeck);
 
 		if (userDeck == null)
@@ -259,7 +264,8 @@ public class UserDeckServiceImpl {
 		if (userDeck.getIsSpeedDuel() == null)
 			throw new IllegalArgumentException("UserDeck IsSpeedDuel cannot be null or empty");
 		
-		SetType.valueOf(userDeck.getSetType());
+	     if(SetType.getByType(userDeck.getSetType()) == null)
+	    	 throw new IllegalArgumentException("Invalid SetType: " + userDeck.getSetType());
 		
 	}
 

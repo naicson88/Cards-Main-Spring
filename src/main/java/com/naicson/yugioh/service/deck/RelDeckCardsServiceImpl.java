@@ -60,7 +60,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 				try {
 					Integer qtd = rel.getQuantity();
 					relDeckCardsRepository.saveRelUserDeckCards(rel.getDeckId(), rel.getCardNumber(), rel.getCard_raridade(), rel.getCard_set_code(),
-							rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), qtd);
+					rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), qtd);
 					
 				}catch (Exception e) {
 					logger.error("It was not possible save Rel: {} ", rel.toString());
