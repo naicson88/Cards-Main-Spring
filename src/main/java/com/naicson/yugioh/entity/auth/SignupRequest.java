@@ -1,5 +1,6 @@
 package com.naicson.yugioh.entity.auth;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -22,8 +23,7 @@ public class SignupRequest {
 	    @NotBlank
 	    @Size(min = 6, max = 40)
 	    private String password;
-	  
-	    
+	      
 	    public SignupRequest() {
 	    	
 	    }

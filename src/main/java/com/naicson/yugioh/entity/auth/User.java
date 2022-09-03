@@ -1,7 +1,10 @@
 package com.naicson.yugioh.entity.auth;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -26,7 +28,10 @@ public class User {
 	private int id;
 	private String userName;
 	private String email;
-	private String password;
+	private String password;  
+    private Boolean isEmailConfirmed;  
+    private String verificationToken; 
+    private LocalDateTime maxDateValidation;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
@@ -42,6 +47,9 @@ public class User {
 		this.userName = username;
 		this.email = email;
 		this.password = password;
+		this.isEmailConfirmed = false;
+		this.verificationToken = UUID.randomUUID().toString();
+		this.maxDateValidation = LocalDateTime.now().plusDays(1);
 	}
 
 	public int getId() {
