@@ -68,6 +68,7 @@ public class Deck implements Serializable {
 		deck.setId(deckUser.getId());
 		deck.setNome(deckUser.getNome());
 		deck.setImagem(deckUser.getImgurUrl());
+		deck.setImgurUrl(deckUser.getImgurUrl());
 		return deck;		
 	}
 	

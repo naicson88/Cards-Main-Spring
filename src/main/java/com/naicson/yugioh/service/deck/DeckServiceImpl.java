@@ -110,10 +110,10 @@ public class DeckServiceImpl implements DeckDetailService {
 	public List<Card> cardsOfDeck(Long deckId, String table) {
 
 		List<Card> cards = dao.cardsOfDeck(deckId, table);
-
-		if (cards == null || cards.size() == 0)
-			throw new IllegalArgumentException("Can't find cards of this Set.");
-
+		
+		if(cards == null || cards.size() == 0)
+			return Collections.emptyList();
+					
 		return cards;
 	}
 

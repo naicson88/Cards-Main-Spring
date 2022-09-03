@@ -68,9 +68,9 @@ public class UserSetCollectionServiceImpl {
 				
 		UserSetCollection setSaved = userSetRepository.save(userSet);
 		
-		setSaved.getUserDeck().stream().forEach(deck -> {
-			userSetRepository.saveSetUserDeckRelation(setSaved.getId(), deck.getId());
-		});
+//		setSaved.getUserDeck().stream().forEach(deck -> {
+//			userSetRepository.saveSetUserDeckRelation(setSaved.getId(), deck.getId());
+//		});
 		
 		if(setSaved == null || setSaved.getId() == null || setSaved.getId() == 0)
 			throw new ErrorMessage("It was not possible save User SetCollection");
@@ -215,17 +215,22 @@ public class UserSetCollectionServiceImpl {
 		if(listRel != null && listRel.size() > 0)
 			relService.saveAllRelDeckUserCards(listRel);
 		
+		logger.info("User SetCollection was successfully saved!");
+		
 		return "User SetCollection was successfully saved!";			
 	}
 	
 	private Long createNewSetCollection(UserSetCollectionDTO userCollection) {		
 		UserDeck userDeck = UserDeck.userDeckFromUserSetCollectionDTO(userCollection);
+		userDeck.setSetType(SetType.USER_NEW_COLLECTION.getType());
 		userDeck = userDeckService.saveUserDeck(userDeck);
 		
 		if(userDeck == null || userDeck.getId() ==0)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create the Set User Deck");
 		
 		UserSetCollection userSet = UserSetCollection.convertFromUserSetCollectionDTO(userCollection, userDeck);
+		userSet.setImgPath(GeneralFunctions.getRandomCollectionCase());
+		userSet.setImgurUrl(userSet.getImgPath());
 		
 		userSet = userSetRepository.save(userSet);
 		
@@ -240,6 +245,12 @@ public class UserSetCollectionServiceImpl {
 		UserSetCollection set = userSetRepository
 				.findById(userCollection.getId()).orElseThrow(() -> new  EntityNotFoundException("Set not found with ID: " + userCollection.getId()));
 		
+//		if(!set.getName().equals(userCollection.getName())) {
+//			set.setName(userCollection.getName());
+//			userSetRepository.save(set);
+//			logger.info("Set Name changed. ID: {}", set.getId());
+//		}
+				
 		Long deckId = userSetRepository.consultSetUserDeckRelation(set.getId()).get(0);
 		
 		relService.removeRelUserDeckByDeckId(deckId);
@@ -249,29 +260,50 @@ public class UserSetCollectionServiceImpl {
 	
 	private List<RelDeckCards> createRelDeckCardsOfSetCollection(UserSetCollectionDTO set, Long deckId) {
 		
-		List<RelDeckCards> listRel =  new ArrayList<>();
+		Map<String, RelDeckCards> mapCards = new HashMap<String, RelDeckCards>();
 		
-		for(int i = 0; i < set.getCards().size(); i++) {
-			
-			CardSetCollectionDTO cardSet = set.getCards().get(i);
-			
-			if(set.getCards().get(i).getQuantityUserHave() > 0) {
+		set.getCards().stream()
+			.filter(card -> card.getQuantityUserHave() > 0)
+			.forEach(card -> {
 				
-				List<RelDeckCards> listFilter = listRel.stream()
-						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
-						.collect(Collectors.toList());
+				String setCode = card.getRelDeckCards().getCard_set_code()+"-"+card.getCardId();
 				
-				if(listFilter != null && listFilter.size() >= 1 && !set.getSetType().equalsIgnoreCase("DECK")) {
-					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
-						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
-					});
-				} else {
-					RelDeckCards rel = createRelObject(deckId, cardSet);					
-					listRel.add(rel);				
+				if(!mapCards.containsKey(setCode)) {
+					RelDeckCards rel = this.createRelObject(deckId, card);
+					mapCards.put(setCode, rel);
+				}				
+				else {
+					RelDeckCards rel = mapCards.get(setCode);
+					rel.setQuantity(rel.getQuantity() + card.getQuantityUserHave());				
+					mapCards.put(setCode, rel);
 				}
-			}
-		}				
+			});
+			
+		List<RelDeckCards> listRel =  new ArrayList<RelDeckCards>(mapCards.values());
+		
 		return listRel;
+		
+//		for(int i = 0; i < set.getCards().size(); i++) {
+//			
+//			CardSetCollectionDTO cardSet = set.getCards().get(i);
+//			
+//			if(cardSet.getQuantityUserHave() > 0) {
+//				
+//				List<RelDeckCards> listFilter = listRel.stream()
+//						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
+//						.collect(Collectors.toList());
+//				
+//				if(listFilter != null && listFilter.size() >= 1 && !("DECK").equalsIgnoreCase(set.getSetType())) {
+//					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
+//						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
+//					});
+//				} else {
+//					RelDeckCards rel = createRelObject(deckId, cardSet);					
+//					listRel.add(rel);				
+//				}
+//			}
+//		}				
+	
 	}
 
 	private RelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {

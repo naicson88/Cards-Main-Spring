@@ -92,11 +92,11 @@ public class UserSetCollection {
 		userSetCollection.setImgPath(GeneralFunctions.getRandomCollectionCase());
 		userSetCollection.setImgurUrl(userSetCollection.getImgPath());
 		userSetCollection.setIsSpeedDuel(false);
-		userSetCollection.setName(userCollection.getName()+"_"+GeneralFunctions.getRandomDeckCase());
+		userSetCollection.setName(userCollection.getName()+"_"+GeneralFunctions.momentAsString());
 		userSetCollection.setOnlyDefaultDeck(true);
 		userSetCollection.setRegistrationDate(new Date());
 		userSetCollection.setReleaseDate(new Date());
-		userSetCollection.setSetCollectionType(SetType.valueOf(userCollection.getSetType()));
+		userSetCollection.setSetCollectionType(SetType.USER_NEW_COLLECTION);
 		userSetCollection.setUserDeck(List.of(userDeck));
 		userSetCollection.setUserId(GeneralFunctions.userLogged().getId());
 		

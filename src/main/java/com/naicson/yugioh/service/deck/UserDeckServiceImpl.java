@@ -139,7 +139,7 @@ public class UserDeckServiceImpl {
 		Optional<UserDeck> dk = userDeckRepository.findById(setId);
 
 		if (dk.isEmpty())
-			throw new NoSuchElementException("Set not found with this code. Id = " + setId);
+			throw new NoSuchElementException("Set not found with this code. ID = " + setId);
 
 		UserDeck setOrigem = dk.get();
 		
@@ -263,7 +263,8 @@ public class UserDeckServiceImpl {
 		if (userDeck.getIsSpeedDuel() == null)
 			throw new IllegalArgumentException("UserDeck IsSpeedDuel cannot be null or empty");
 		
-		SetType.valueOf(userDeck.getSetType());
+	     if(SetType.getByType(userDeck.getSetType()) == null)
+	    	 throw new IllegalArgumentException("Invalid SetType: " + userDeck.getSetType());
 		
 	}
 

@@ -36,7 +36,7 @@ public class UserSetCollectionController {
 		
 		service.addSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>("SetCollection Added Successfully!", HttpStatus.CREATED);
+		return new ResponseEntity<String>(JSONObject.quote("SetCollection Added Successfully!"), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/remove/{setId}")

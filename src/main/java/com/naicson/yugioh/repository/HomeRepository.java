@@ -38,12 +38,16 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 			+ " limit 10 ", nativeQuery = true)
 	List<Tuple> lastCardsAddedToUser(Long userId);
 	
-	@Query(value = " select * from ( "
-			+ " select d1.id, d1.nome, d1.imgur_url, d1.dt_criacao as dt_reg from tab_decks d1 where set_type = 'DECK' "
+	@Query(value = " select * from (  "
+			+ " select d1.id, d1.nome, d1.imgur_url, d1.dt_criacao, d1.set_type  as dt_reg  "
+			+ " from tab_decks d1 where set_type = 'DECK' "
 			+ " UNION "
-			+ " select us.id, us.name, us.imgur_url, us.registration_date as dt_reg from tab_user_set_collection us) as u "
+			+ " select us.id, us.name, us.imgur_url, us.registration_date, us.set_collection_type  as dt_reg "
+			+ " from tab_set_collection as us "
+			+ " ) as u "
 			+ " order by u.dt_reg desc "
-			+ " limit 5 ", nativeQuery = true)
+			+ " limit 5 ",
+			nativeQuery = true)
 	List<Tuple> getHotNews();
 	
 	@Query(value = "select IFNULL(ROUND(sum(card_price),2), 0.0) as total from tab_rel_deckusers_cards where deck_id = :setId", nativeQuery = true)

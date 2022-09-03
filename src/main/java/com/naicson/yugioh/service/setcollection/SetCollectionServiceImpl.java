@@ -73,7 +73,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		SetCollection setCollection = new SetCollection();
 
 		UserSetCollection userSet = userSetRepository.findById(setId)
-				.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));;
+				.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));
 		
 		BeanUtils.copyProperties(userSet, setCollection);			
 		setCollection.setId(userSet.getId().intValue());		
@@ -158,6 +158,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		deck.setDt_criacao(set.getRegistrationDate());
 		deck.setId(set.getId().longValue());
 		deck.setImagem(set.getImgurUrl());
+		deck.setImgurUrl(set.getImgurUrl());
 		deck.setIsSpeedDuel(set.getIsSpeedDuel());
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
