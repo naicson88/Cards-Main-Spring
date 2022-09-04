@@ -25,12 +25,16 @@ public class EmailService {
 	Logger logger = LoggerFactory.getLogger(EmailService.class);
 	
 	public void sendEmail(User user) {
+		
+		String url = "http://localhost:8080/yugiohAPI/auth/token-validation?token="+user.getVerificationToken();
+		
 		MimeMessagePreparator messagePreparator = mimeMessage -> {
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 			helper.setFrom("no-reply-yugihub@yugihub.com");
 			helper.setTo(user.getEmail());
 			helper.setSubject("Confirm your registration on YugiHub!");
-			helper.setText(builder.build("Email de Teste"));
+			helper.setText(builder.build(url), true);
+			
 		};
 		
 		try {
@@ -41,4 +45,5 @@ public class EmailService {
 		}
 	
 	}
+	
 }

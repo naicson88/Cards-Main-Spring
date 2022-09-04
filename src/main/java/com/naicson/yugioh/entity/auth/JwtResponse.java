@@ -1,5 +1,6 @@
 package com.naicson.yugioh.entity.auth;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JwtResponse {
@@ -10,13 +11,22 @@ public class JwtResponse {
 	private String username;
 	private String email;
 	private List<String> roles;
+	private boolean isEmailConfirmed;
+	private LocalDateTime maxDateValidation;
+	private String verificationToken;  
 
-	public JwtResponse(String accessToken, long id, String username, String email, List<String> roles) {
+
+	public JwtResponse(String accessToken, long id, String username, String email,
+			List<String> roles, boolean isEmailConfirmed, 
+			LocalDateTime maxDateValidation, String verificationToken ) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+		this.isEmailConfirmed = isEmailConfirmed;
+		this.maxDateValidation = maxDateValidation;
+		this.verificationToken = verificationToken;
 	}
 
 	public String getAccessToken() {
@@ -61,5 +71,30 @@ public class JwtResponse {
 
 	public List<String> getRoles() {
 		return roles;
+	}
+	
+
+	public boolean isEmailConfirmed() {
+		return isEmailConfirmed;
+	}
+
+	public void setEmailConfirmed(boolean isEmailConfirmed) {
+		this.isEmailConfirmed = isEmailConfirmed;
+	}
+
+	public LocalDateTime getMaxDateValidation() {
+		return maxDateValidation;
+	}
+
+	public void setMaxDateValidation(LocalDateTime maxDateValidation) {
+		this.maxDateValidation = maxDateValidation;
+	}
+
+	public String getVerificationToken() {
+		return verificationToken;
+	}
+
+	public void setVerificationToken(String verificationToken) {
+		this.verificationToken = verificationToken;
 	}
 }

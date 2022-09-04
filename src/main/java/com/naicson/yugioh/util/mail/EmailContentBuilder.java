@@ -11,9 +11,12 @@ public class EmailContentBuilder {
 	@Autowired
 	private TemplateEngine template;
 	
-	public String build(String message) {
+	public String build(String url) {
 		Context context = new Context();
-		context.setVariable("message", message);
-		return template.process("EmailTemplate", context);
+		context.setVariable("url", url);
+		String process = template.process("EmailTemplate", context);
+		
+		return process;
+		 
 	}
 }

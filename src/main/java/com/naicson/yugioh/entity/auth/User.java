@@ -1,19 +1,15 @@
 package com.naicson.yugioh.entity.auth;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -32,12 +28,16 @@ public class User {
     private Boolean isEmailConfirmed;  
     private String verificationToken; 
     private LocalDateTime maxDateValidation;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles  = new HashSet<>();
+//	@ManyToMany(fetch = FetchType.LAZY)
+//	@JoinTable(	name = "user_roles", 
+//				joinColumns = @JoinColumn(name = "user_id"), 
+//				inverseJoinColumns = @JoinColumn(name = "role_id"))
+//	private Set<Role> roles  = new HashSet<>();
 	
 	public User() {
 		
@@ -84,13 +84,36 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
-	
-	
+
+	public Boolean getIsEmailConfirmed() {
+		return isEmailConfirmed;
+	}
+
+	public void setIsEmailConfirmed(Boolean isEmailConfirmed) {
+		this.isEmailConfirmed = isEmailConfirmed;
+	}
+
+	public String getVerificationToken() {
+		return verificationToken;
+	}
+
+	public void setVerificationToken(String verificationToken) {
+		this.verificationToken = verificationToken;
+	}
+
+	public LocalDateTime getMaxDateValidation() {
+		return maxDateValidation;
+	}
+
+	public void setMaxDateValidation(LocalDateTime maxDateValidation) {
+		this.maxDateValidation = maxDateValidation;
+	}
+		
 }
