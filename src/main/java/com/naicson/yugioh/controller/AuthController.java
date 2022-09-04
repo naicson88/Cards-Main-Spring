@@ -38,6 +38,8 @@ import com.naicson.yugioh.repository.UserRepository;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
+import com.naicson.yugioh.util.mail.EmailService;
+
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = "${angular.path}", maxAge = 3600)
@@ -55,6 +57,8 @@ public class AuthController {
 	PasswordEncoder encoder;
 	@Autowired
 	JwtUtils jwtUtils;
+	@Autowired
+	EmailService emailService;
 	
 	private static String regexEmailPattern = "^(.+)@(.+)$";
 	
@@ -124,6 +128,8 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 		logger.info("New User registered! {}", LocalDateTime.now());
+		emailService.sendEmail(user);
+		
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	
