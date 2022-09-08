@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body style="font-family: sans-serif;">
+    <div style="display: block; margin: auto; max-width: 600px;" class="main">
+      <h1>Hello <b> <span th:text="${userName}"> </span> </b> </h1><br>
+      <h2 style="font-size: 18px; font-weight: bold; margin-top: 20px">Forgot your password?!</h2>
+      <p>Click in the button below to change your password.</p>
+	       <div style="float: right; height: 200px; width: 250px;">
+	          <img src="https://i.imgur.com/YVM8lF5.png" alt="" width="200px" height="250x">
+	       </div>
+            <!-- <button class="button-37" onclick="location.href='http://www.stackoverflow.com'">Confirm Email!</button> -->  
+           <div class="button-37"> 
+              <a th:href="${url}" style="color: white; font-weight: 600;" target="_blank"> Click here to change your password! </a>  
+           </div>
+           
+       
+    </div>
+    <!-- Example of invalid for email html/css, will be detected by Mailtrap: -->
+    <style>
+      .main { background-color: white; }
+      a:hover { border-left-width: 1em; min-height: 2em; }
+      span {
+			color:#7B68EE
+	  }
+      /* CSS */
+        .button-37 {
+        background-color:#FA8072;
+        border: 1px solid #FA8072;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        }
+
+        .button-37:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+        }
+
+        @media (min-width: 768px) {
+        .button-37 {
+            padding: 10px 30px;
+        }
+    }
+
+    </style>
+  </body>
+</html>

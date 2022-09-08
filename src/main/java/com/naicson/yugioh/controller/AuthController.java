@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.entity.auth.LoginRequest;
 import com.naicson.yugioh.entity.auth.SignupRequest;
+import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.service.AuthServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
@@ -47,5 +48,22 @@ public class AuthController {
 		return authService.tokenValidation(token);
 	}
 	
+	@ApiOperation(value = "Send a email to reset password")
+	@GetMapping("/resend-password")
+	public ResponseEntity<?> resendPassword(@RequestParam("email") String email){
+		return authService.resendPassword(email);
+	}
+	
+	@ApiOperation(value = "Check token for change password")
+	@GetMapping("/check-token-password")
+	public ResponseEntity<?> checkTokenToChangePassword(@RequestParam("token") String token){
+		return authService.checkTokenToChangePassword(token);
+	}
+	
+	@ApiOperation(value = "Change User password")
+	@PostMapping("/change-password")
+	public ResponseEntity<?> changeUserPassword(@RequestBody User user){
+		return authService.changeUserPassword(user);
+	}
 
 }

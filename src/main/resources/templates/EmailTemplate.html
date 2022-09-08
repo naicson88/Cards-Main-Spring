@@ -5,15 +5,16 @@
   </head>
   <body style="font-family: sans-serif;">
     <div style="display: block; margin: auto; max-width: 600px;" class="main">
-      <h1 style="font-size: 18px; font-weight: bold; margin-top: 20px">Thanks for joining YugiHub!</h1>
+      <h1>Welcome <b> <span th:text="${userName}"> </span> </b> </h1><br>
+      <h2 style="font-size: 18px; font-weight: bold; margin-top: 20px">Thanks for joining YugiHub!</h2>
       <p>Click in the button below to confirm your email account.</p>
 	       <div style="float: right; height: 200px; width: 250px;">
-	            <img src="https://i.imgur.com/UMTFSXo.png" alt="" width="200px" height="250x">
-	        </div>
+	          <img src="https://i.imgur.com/UMTFSXo.png" alt="" width="200px" height="250x">
+	       </div>
             <!-- <button class="button-37" onclick="location.href='http://www.stackoverflow.com'">Confirm Email!</button> -->  
-            <div class="button-37"> 
+           <div class="button-37"> 
               <a th:href="${url}" style="color: white; font-weight: 600;" target="_blank"> Click here to confirm your email </a>  
-            </div>
+           </div>
            
        
     </div>
@@ -21,6 +22,9 @@
     <style>
       .main { background-color: white; }
       a:hover { border-left-width: 1em; min-height: 2em; }
+      span {
+			color:red
+	  }
       /* CSS */
         .button-37 {
         background-color: #13aa52;
