@@ -1,10 +1,10 @@
 package com.naicson.yugioh.service.user;
 
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +22,10 @@ public class UserDetailsImpl implements UserDetails{
 	@JsonIgnore
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
+	private boolean isEmailConfirmed;  
+	private LocalDateTime maxDateValidation;
+	@JsonIgnore
+    private String verificationToken; 
 	
 	public UserDetailsImpl() {
 		
@@ -37,13 +41,32 @@ public class UserDetailsImpl implements UserDetails{
 		this.authorities = authorities;
 	}
 	
+	public UserDetailsImpl(long id, String userName, String email, String password,
+			Collection<? extends GrantedAuthority> authorities, boolean isEmailConfirmed, 
+			LocalDateTime maxDateValidation, String verificationToken) {
+		super();
+		this.id = id;
+		this.username = userName;
+		this.email = email;
+		this.password = password;
+		this.authorities = authorities;
+		this.isEmailConfirmed = isEmailConfirmed;
+		this.maxDateValidation = maxDateValidation;
+		this.verificationToken = verificationToken;
+	}
+	
 	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-				.collect(Collectors.toList());
+//		List<GrantedAuthority> authorities = user.getRole().stream()
+//				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
+//				.collect(Collectors.toList());
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().getRoleName().name()));
+		
+		//GrantedAuthority authoritie = new SimpleGrantedAuthority(user.getRole().getRoleName().name());
 		
 		
-		return new UserDetailsImpl(user.getId(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
+		return new UserDetailsImpl(user.getId(), user.getUserName(), user.getEmail(),
+				user.getPassword(), authorities, user.getIsEmailConfirmed(),
+				user.getMaxDateValidation(), user.getVerificationToken());
 	}
 
 	public long getId() {
@@ -77,13 +100,18 @@ public class UserDetailsImpl implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+	
 
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	@Override
@@ -118,6 +146,35 @@ public class UserDetailsImpl implements UserDetails{
 			return false;
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(id, user.id);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return (Collection<? extends GrantedAuthority>) authorities;
+	}
+
+	public Boolean getIsEmailConfirmed() {
+		return isEmailConfirmed;
+	}
+
+	public void setIsEmailConfirmed(Boolean isEmailConfirmed) {
+		this.isEmailConfirmed = isEmailConfirmed;
+	}
+
+	public LocalDateTime getMaxDateValidation() {
+		return maxDateValidation;
+	}
+
+	public void setMaxDateValidation(LocalDateTime maxDateValidation) {
+		this.maxDateValidation = maxDateValidation;
+	}
+	
+	public String getVerificationToken() {
+		return verificationToken;
+	}
+
+	public void setVerificationToken(String verificationToken) {
+		this.verificationToken = verificationToken;
 	}
 	
 }

@@ -1,34 +1,67 @@
-2022-09-03 00:06:11.042  WARN 15868 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=48m30s892ms926µs600ns).
-2022-09-03 00:49:52.437  WARN 15868 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m40s851ms811µs200ns).
-2022-09-03 01:11:11.786  INFO 15868 --- [http-nio-8080-exec-3] c.n.y.controller.ArchetypeController     : Started consulting all archetypes...2022-09-03T01:11:11.786927800
-2022-09-03 10:13:05.729  WARN 15868 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=8h46m12s821ms546µs400ns).
-2022-09-03 10:35:20.513  INFO 3208 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 3208 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
-2022-09-03 10:35:20.518  INFO 3208 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
-2022-09-03 10:35:22.311  INFO 3208 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-09-03 10:35:22.517  INFO 3208 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 192ms. Found 16 JPA repository interfaces.
-2022-09-03 10:35:23.227  INFO 3208 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2022-09-03 10:35:23.246  INFO 3208 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-09-03 10:35:23.246  INFO 3208 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
-2022-09-03 10:35:23.596  INFO 3208 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-09-03 10:35:23.597  INFO 3208 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3020 ms
-2022-09-03 10:35:23.748  WARN 3208 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-09-03 10:35:24.062  INFO 3208 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-09-03 10:35:24.212  INFO 3208 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
-2022-09-03 10:35:24.530  INFO 3208 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-09-03 10:35:24.722  INFO 3208 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-09-03 10:35:24.933  INFO 3208 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-09-03 10:35:24.973  INFO 3208 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2022-09-03 10:35:26.517  INFO 3208 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-09-03 10:35:26.526  INFO 3208 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-09-03 10:35:28.372  INFO 3208 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c64ee53, org.springframework.security.web.context.SecurityContextPersistenceFilter@47bcd95a, org.springframework.security.web.header.HeaderWriterFilter@67629872, org.springframework.web.filter.CorsFilter@77c7d3f4, org.springframework.security.web.authentication.logout.LogoutFilter@30a8ac50, com.naicson.yugioh.data.security.AuthTokenFilter@f943847, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@331fe6d4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2b01be54, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@162c89ac, org.springframework.security.web.session.SessionManagementFilter@4c2812aa, org.springframework.security.web.access.ExceptionTranslationFilter@2df79942, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@22cbbe87]
-2022-09-03 10:35:28.399  INFO 3208 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2022-09-03 10:35:28.545  INFO 3208 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-09-03 10:35:29.271  INFO 3208 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2022-09-03 10:35:29.274  INFO 3208 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2022-09-03 10:35:29.316  INFO 3208 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2022-09-03 10:35:29.363  INFO 3208 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2022-09-03 10:35:29.819  INFO 3208 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
-2022-09-03 10:35:29.988  INFO 3208 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 9.927 seconds (JVM running for 11.11)
-2022-09-03 10:37:58.246  INFO 3208 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-09-03 10:37:58.247  INFO 3208 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2022-09-03 10:37:58.270  INFO 3208 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 22 ms
+2022-09-08 00:00:27.941  INFO 8176 --- [http-nio-8080-exec-10] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:00:27.952  INFO 8176 --- [http-nio-8080-exec-10] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:04:11.807  INFO 23376 --- [main] com.naicson.yugioh.YugiohApplication     : Starting YugiohApplication on DESKTOP-K8HK1IE with PID 23376 (C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\target\classes started by USER in C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS)
+2022-09-08 00:04:11.811  INFO 23376 --- [main] com.naicson.yugioh.YugiohApplication     : The following profiles are active: dev
+2022-09-08 00:04:13.032  INFO 23376 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-08 00:04:13.193  INFO 23376 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 151ms. Found 16 JPA repository interfaces.
+2022-09-08 00:04:14.042  INFO 23376 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-09-08 00:04:14.054  INFO 23376 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-09-08 00:04:14.055  INFO 23376 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2022-09-08 00:04:14.229  INFO 23376 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-09-08 00:04:14.229  INFO 23376 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2367 ms
+2022-09-08 00:04:14.313  WARN 23376 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-08 00:04:14.503  INFO 23376 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-08 00:04:14.566  INFO 23376 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2022-09-08 00:04:14.728  INFO 23376 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-09-08 00:04:14.856  INFO 23376 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-09-08 00:04:15.061  INFO 23376 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-09-08 00:04:15.080  INFO 23376 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-09-08 00:04:16.133  INFO 23376 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-08 00:04:16.142  INFO 23376 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-08 00:04:17.736  INFO 23376 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@66d9c846, org.springframework.security.web.context.SecurityContextPersistenceFilter@72d2470, org.springframework.security.web.header.HeaderWriterFilter@24032706, org.springframework.web.filter.CorsFilter@2b6d9650, org.springframework.security.web.authentication.logout.LogoutFilter@7719b257, com.naicson.yugioh.data.security.AuthTokenFilter@5101b9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@609f136b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@43851574, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2287bbd1, org.springframework.security.web.session.SessionManagementFilter@6d13cd6d, org.springframework.security.web.access.ExceptionTranslationFilter@521032a6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@28f5a003]
+2022-09-08 00:04:17.762  INFO 23376 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-09-08 00:04:17.886  INFO 23376 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-09-08 00:04:18.384  INFO 23376 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-09-08 00:04:18.385  INFO 23376 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2022-09-08 00:04:18.414  INFO 23376 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2022-09-08 00:04:18.444  INFO 23376 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2022-09-08 00:04:18.830  INFO 23376 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: consultarUsingGET_1
+2022-09-08 00:04:18.962  INFO 23376 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 7.564 seconds (JVM running for 8.468)
+2022-09-08 00:10:31.919  INFO 23376 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-09-08 00:10:31.919  INFO 23376 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-09-08 00:10:31.930  INFO 23376 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 11 ms
+2022-09-08 00:10:32.012  INFO 23376 --- [http-nio-8080-exec-1] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:10:32.204  INFO 23376 --- [http-nio-8080-exec-1] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:11:25.909  INFO 23376 --- [http-nio-8080-exec-2] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:11:25.914  INFO 23376 --- [http-nio-8080-exec-2] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:11:26.191  INFO 23376 --- [http-nio-8080-exec-3] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:11:26.193  INFO 23376 --- [http-nio-8080-exec-3] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:11:48.216  INFO 23376 --- [http-nio-8080-exec-4] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:11:48.221  INFO 23376 --- [http-nio-8080-exec-4] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:11:48.782  INFO 23376 --- [http-nio-8080-exec-5] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:11:48.785  INFO 23376 --- [http-nio-8080-exec-5] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:12:21.453  INFO 23376 --- [http-nio-8080-exec-6] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:12:21.456  INFO 23376 --- [http-nio-8080-exec-6] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:12:22.117  INFO 23376 --- [http-nio-8080-exec-7] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:12:22.120  INFO 23376 --- [http-nio-8080-exec-7] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:14:13.987  INFO 23376 --- [http-nio-8080-exec-9] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:14:13.992  INFO 23376 --- [http-nio-8080-exec-9] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:14:29.950  INFO 23376 --- [http-nio-8080-exec-10] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:14:29.955  INFO 23376 --- [http-nio-8080-exec-10] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:15:39.285  INFO 23376 --- [http-nio-8080-exec-2] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:15:39.290  INFO 23376 --- [http-nio-8080-exec-2] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:15:39.421  INFO 23376 --- [http-nio-8080-exec-3] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:15:39.425  INFO 23376 --- [http-nio-8080-exec-3] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:19:09.516 ERROR 23376 --- [http-nio-8080-exec-1] c.n.y.data.security.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
+2022-09-08 00:19:54.483  INFO 23376 --- [http-nio-8080-exec-2] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 65b031fe-1d3e-495c-953a-b70bb333dcf8 
+2022-09-08 00:19:54.489 ERROR 23376 --- [http-nio-8080-exec-2] c.n.y.u.exceptions.ApiExceptionHandler   : EntityNotFoundException: It was not possible change password with this email! Try making another request
+2022-09-08 00:20:50.554  INFO 23376 --- [http-nio-8080-exec-3] c.naicson.yugioh.util.mail.EmailService  : Email sent for change password! 2022-09-08T00:20:50.554784200
+2022-09-08 00:20:50.555  INFO 23376 --- [http-nio-8080-exec-3] c.n.yugioh.service.AuthServiceImpl       : Email to change password was sent successfuly: qweqweqwe 
+2022-09-08 00:21:51.662  INFO 23376 --- [http-nio-8080-exec-5] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: a83ff8bf-362f-4ac0-bc86-c47fc77670d1 
+2022-09-08 00:21:51.667  INFO 23376 --- [http-nio-8080-exec-5] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:23:15.469  INFO 23376 --- [http-nio-8080-exec-8] c.naicson.yugioh.util.mail.EmailService  : Email sent for change password! 2022-09-08T00:23:15.469991
+2022-09-08 00:23:15.469  INFO 23376 --- [http-nio-8080-exec-8] c.n.yugioh.service.AuthServiceImpl       : Email to change password was sent successfuly: qweqweqwe 
+2022-09-08 00:23:34.022  INFO 23376 --- [http-nio-8080-exec-9] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 5d6b4ab6-1041-4f40-984b-13c0d15963c0 
+2022-09-08 00:23:34.027  INFO 23376 --- [http-nio-8080-exec-9] c.n.yugioh.service.AuthServiceImpl       : User was validated successfully: qweqweqwe 
+2022-09-08 00:24:08.364  INFO 23376 --- [http-nio-8080-exec-1] c.n.yugioh.service.AuthServiceImpl       : Validating Token to change password: 5d6b4ab6-1041-4f40-984b-13c0d15963c0 
+2022-09-08 00:24:08.367 ERROR 23376 --- [http-nio-8080-exec-1] c.n.y.u.exceptions.ApiExceptionHandler   : EntityNotFoundException: It was not possible change password with this email! Try making another request
