@@ -1,5 +1,6 @@
 package com.naicson.yugioh.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -7,11 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.apache.commons.lang3.arch.Processor.Arch;
 
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 
@@ -24,6 +22,7 @@ public class Archetype {
 	private Integer id;
 	@Column(name = "arc_name")
 	private String arcName;
+	private Date registrationDate;
 	
 	@Transient
 	private List<CardOfArchetypeDTO> arrayCards;
@@ -36,6 +35,7 @@ public class Archetype {
 	
 	public Archetype(String arcName) {
 		this.arcName = arcName;
+		this.registrationDate = new Date();
 	}
 	
 	public Integer getId() {
@@ -74,6 +74,14 @@ public class Archetype {
 	public String toString() {
 		return "Archetype [id=" + id + ", arcName=" + arcName + ", arrayCards=" + arrayCards + ", arrayDecks="
 				+ arrayDecks + "]";
+	}
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 	
 }

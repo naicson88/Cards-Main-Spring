@@ -10,12 +10,10 @@ public class SetCollectionDto {
 	private String name;
 	private String portugueseName;
 	private String imgPath;
-	private Boolean onlyDefaultDeck;
-	private String deckParameters;
+	private String requestSource;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date releaseDate;
 	private String setType;
-	private List<Integer> decks;
 	private Boolean isSpeedDuel;
 
 	
@@ -37,12 +35,7 @@ public class SetCollectionDto {
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
-	public Boolean getOnlyDefaultDeck() {
-		return onlyDefaultDeck;
-	}
-	public void setOnlyDefaultDeck(Boolean onlyDefaultDeck) {
-		this.onlyDefaultDeck = onlyDefaultDeck;
-	}
+
 	public Date getReleaseDate() {
 		return releaseDate;
 	}
@@ -56,19 +49,6 @@ public class SetCollectionDto {
 		this.setType = setType;
 	}
 	
-	public String getDeckParameters() {
-		return deckParameters;
-	}
-	public void setDeckParameters(String deckParameters) {
-		this.deckParameters = deckParameters;
-	}
-
-	public List<Integer> getDecks() {
-		return decks;
-	}
-	public void setDecks(List<Integer> decks) {
-		this.decks = decks;
-	}
 	public void setIsSpeedDuel(Boolean isSpeedDuel) {
 		this.isSpeedDuel = isSpeedDuel;
 	}
@@ -79,11 +59,11 @@ public class SetCollectionDto {
 		this.isSpeedDuel = isSpeedDuel;
 	}
 	
-	@Override
-	public String toString() {
-		return "SetCollectionDto [name=" + name + ", portugueseName=" + portugueseName + ", imgPath=" + imgPath
-				+ ", onlyDefaultDeck=" + onlyDefaultDeck + ", isSpeedDuel=" + isSpeedDuel + ", deckParameters="
-				+ deckParameters + ", releaseDate=" + releaseDate + ", setType=" + setType + ", decks=" + decks + "]";
+	public String getRequestSource() {
+		return requestSource;
+	}
+	public void setRequestSource(String requestSource) {
+		this.requestSource = requestSource;
 	}
 
 }

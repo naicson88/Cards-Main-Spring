@@ -494,7 +494,7 @@ public class UserDeckServiceImpl {
 
 
 	public Page<UserDeck> findAllBySetType(Pageable pageable, String setType) {
-		Page<UserDeck> decks = userDeckRepository.findAllBySetType(pageable, setType);
+		Page<UserDeck> decks = userDeckRepository.findAllBySetTypeOrderByDtCriacaoDesc(pageable, setType);
 		return decks;
 	}
 	

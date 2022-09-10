@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
@@ -38,11 +37,9 @@ public class SetCollectionConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 		
-	//@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
+	@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumerSetCollectionQueue(String json) {
-		
-		try {	
 			
 			logger.info("Start consuming new Set Collection: {}" , json);
 			
@@ -75,9 +72,6 @@ public class SetCollectionConsumerRabbitMQ {
 			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );
 //			
 			
-		}catch (Exception e) {
-			logger.error("Error consuming Set Collection: {} " , e.getMessage());
-		}
 	}
 
 	private SetCollectionDto convertJsonToSetCollectionDto(String json) {

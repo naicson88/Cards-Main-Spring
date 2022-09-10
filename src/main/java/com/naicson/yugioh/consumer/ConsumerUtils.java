@@ -43,8 +43,7 @@ public class ConsumerUtils {
 		
 		if(deckId == null || deckId == 0) {
 			throw new IllegalArgumentException("Generated Deck Id is invalid.");
-		}
-		
+		}		
 		newDeck.getRel_deck_cards().stream().forEach(rel -> {
 			rel.setDeckId(deckId);
 			rel.setQuantity(1);			

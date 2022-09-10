@@ -88,7 +88,7 @@ public class CardRegistry {
 		cardToBeRegistered.setNome(apiCard.getName().trim());
 		cardToBeRegistered.setRegistryDate(new Date());
 		cardToBeRegistered.setArchetype(apiCard.getRace() != null ? this.getCardArchetype(apiCard.getArchetype()) : null);			
-		cardToBeRegistered.setAtributo(apiCard.getAttribute() != null ? this.getCardAttribute(apiCard.getAttribute()) : null);
+		cardToBeRegistered.setAtributo(this.getCardAttribute(apiCard));
 				
 		if (StringUtils.containsIgnoreCase("spell", apiCard.getType())
 				|| StringUtils.containsIgnoreCase("trap", apiCard.getType())) {
@@ -230,12 +230,19 @@ public class CardRegistry {
 		return race;
 	}
 
-	private Atributo getCardAttribute(String attribute) {
+	private Atributo getCardAttribute(CardYuGiOhAPI card) {
 		
-		Atributo att = attRepository.findByName(attribute.trim());
+		String attr = null;
+		
+		if(card.getType().contains("Spell") || card.getType().contains("Trap"))
+			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
+		else
+			attr = card.getAttribute();
+		
+		Atributo att = attRepository.findByName(attr.trim());
 
 		if (att == null) {
-			throw new EntityNotFoundException("Cant found Attribute: " + attribute);
+			throw new EntityNotFoundException("Cant found Attribute: " + attr);
 		}
 
 		return att;

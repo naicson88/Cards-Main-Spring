@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
@@ -195,9 +197,6 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		if(setCollection.getIsSpeedDuel() == null)
 			throw new IllegalArgumentException("Invalid Speed Duel definition.");
 		
-		if(setCollection.getOnlyDefaultDeck() == null)
-			throw new IllegalArgumentException("Invalid Only default Deck definition.");
-		
 		if(StringUtils.isEmpty(setCollection.getImgPath()))
 			throw new IllegalArgumentException("Invalid Image path for Set Collection.");
 		
@@ -212,6 +211,24 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		SetType.valueOf(setCollection.getSetCollectionType().toString());
 		
+	}
+
+	@Override
+	public List<DeckAndSetsBySetTypeDTO> getAllSetsBySetType(String setType) {
+		if(setType == null || setType.isEmpty())
+			throw new IllegalArgumentException("#getAllSetsBySetType - Invalid SetType!");
+		
+		List<Tuple> tuple = setColRepository.getAllSetsBySetType(setType);
+		
+		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(c-> {
+			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+					Long.parseLong(String.valueOf(c.get(0))),
+					String.valueOf(c.get(1))
+			);		
+			return dto;			
+		}).collect(Collectors.toList());
+		
+		return listDto;
 	}
 
 }
