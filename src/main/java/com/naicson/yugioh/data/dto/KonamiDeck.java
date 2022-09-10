@@ -20,7 +20,7 @@ public class KonamiDeck implements Serializable{
 	private String imagem;
 	private String nome;
 	private String nomePortugues;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date lancamento;
 	private String setType;
 	private List<CardYuGiOhAPI> cardsToBeRegistered;

@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.arch.Processor.Arch;
+
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 
 @Entity
@@ -30,6 +32,10 @@ public class Archetype {
 
 	public Archetype() {
 		
+	}
+	
+	public Archetype(String arcName) {
+		this.arcName = arcName;
 	}
 	
 	public Integer getId() {

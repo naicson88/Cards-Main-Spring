@@ -186,7 +186,7 @@ public class CardController {
 	@ApiOperation(value="Search Cards by its Numbers", authorizations = { @Authorization(value="JWT") })	
 	public ResponseEntity<List<Long>> searchCardsByCardNumbers(@RequestBody List<Long> cardNumbers){
 		
-		logger.info("Start request for cards not registered...".toUpperCase());
+		logger.info("Start request for cards not registered...");
 		
 		List<Long> cardsNotRegistered = this.cardService.findCardsNotRegistered(cardNumbers);
 		

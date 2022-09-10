@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class DeckServiceImpl implements DeckDetailService {
@@ -276,17 +278,13 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public Deck saveKonamiDeck(Deck kDeck) {
 
-		try {
 			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());
 
 			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
 				kDeck = deckRepository.save(kDeck);
 			} else 
-				throw new Exception("Deck is already registered");
+				throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
 			
-		} catch (Exception e) {
-			e.getMessage();
-		}
 
 		return kDeck;
 	}

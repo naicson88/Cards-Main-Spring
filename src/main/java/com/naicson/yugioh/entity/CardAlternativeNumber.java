@@ -1,5 +1,7 @@
 package com.naicson.yugioh.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,9 +22,7 @@ public class CardAlternativeNumber {
 	@Column(name = "card_id")
 	private int cardId;
 	private Long cardAlternativeNumber;
-	/*@ManyToOne()
-	@JoinColumn(name = "card_id",  referencedColumnName = "id")
-	private Card card;*/
+	private LocalDateTime registrationDate;
 	
 	public CardAlternativeNumber() {}
 
@@ -31,6 +31,7 @@ public class CardAlternativeNumber {
 		this.id = id;
 		this.cardId = cardId;
 		this.cardAlternativeNumber = cardAlternativeNumber;
+		this.registrationDate = LocalDateTime.now();
 	}
 	
 	public Long getId() {
@@ -50,6 +51,14 @@ public class CardAlternativeNumber {
 	}
 	public void setCardAlternativeNumber(Long cardAlternativeNumber) {
 		this.cardAlternativeNumber = cardAlternativeNumber;
+	}
+
+	public LocalDateTime getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(LocalDateTime registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 	
 	

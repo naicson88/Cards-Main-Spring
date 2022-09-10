@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.KonamiDeck;
-import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
@@ -24,44 +23,40 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 public class DeckConsumerRabbitMQ {
 	
 	@Autowired
-	RelDeckCardsServiceImpl relDeckCardsService;
-	
+	RelDeckCardsServiceImpl relDeckCardsService;	
 	@Autowired
-	DeckServiceImpl deckService;
-	
+	DeckServiceImpl deckService;	
 	@Autowired
 	CardRegistry cardRegistry;
+	@Autowired
+	ConsumerUtils consumerUtils;
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
-	//@RabbitListener(queues = "${rabbitmq.queue.deck}")
+	@RabbitListener(queues = "${rabbitmq.queue.deck}")
 	@Transactional(rollbackFor = Exception.class)
-	private void consumer(String json) {
+	private void consumer(String json) {		
+			
+		logger.info("Start consuming new KonamiDeck: {}" , json);
 		
-		try {
-			
-			logger.info("Start consuming new KonamiDeck: {}" , json);
-			
-			KonamiDeck kDeck = convertJsonToSetCollectionDto(json);
-			
-			cardRegistry.RegistryCardFromYuGiOhAPI(kDeck);
-			
-			Deck newDeck = ConsumerUtils.createNewDeck(kDeck);
-			
-			newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
-			
-			Long deckId = deckService.saveKonamiDeck(newDeck).getId();
-			
-			newDeck = ConsumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
-			
-			relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
-			
-			logger.info("Deck successfully saved!");
-			
-		} catch(Exception e) {
-			logger.error("DeckConsumer: " + e.getLocalizedMessage());
-			throw e;
-		}			
+		KonamiDeck kDeck = convertJsonToSetCollectionDto(json);
+		if(kDeck.getSetType().equals("D"))
+			kDeck.setSetType("DECK");
+		
+		cardRegistry.registryCardFromYuGiOhAPI(kDeck);
+		
+		Deck newDeck = consumerUtils.createNewDeck(kDeck);
+		
+		newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
+		
+		Long deckId = deckService.saveKonamiDeck(newDeck).getId();
+		
+		newDeck = consumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
+		
+		relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
+		
+		logger.info("Deck successfully saved!");
+						
 	}
 	
 	private KonamiDeck convertJsonToSetCollectionDto(String json) {

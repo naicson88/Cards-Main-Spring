@@ -14,5 +14,4 @@ public interface CardAlternativeNumberRepository extends JpaRepository<CardAlter
 
 	List<CardAlternativeNumber> findAllByCardId(Integer id);
 
-
 }
