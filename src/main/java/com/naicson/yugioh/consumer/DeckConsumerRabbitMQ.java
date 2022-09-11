@@ -40,10 +40,8 @@ public class DeckConsumerRabbitMQ {
 		logger.info("Start consuming new KonamiDeck: {}" , json);
 		
 		KonamiDeck kDeck = convertJsonToSetCollectionDto(json);
-		if(kDeck.getSetType().equals("D"))
-			kDeck.setSetType("DECK");
 		
-		cardRegistry.registryCardFromYuGiOhAPI(kDeck);
+		cardRegistry.registryCardFromYuGiOhAPI(kDeck.getCardsToBeRegistered());
 		
 		Deck newDeck = consumerUtils.createNewDeck(kDeck);
 		
@@ -55,7 +53,7 @@ public class DeckConsumerRabbitMQ {
 		
 		relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
 		
-		logger.info("Deck successfully saved!");
+		logger.info("Deck successfully saved! {}", newDeck.getNome());
 						
 	}
 	
@@ -79,51 +77,6 @@ public class DeckConsumerRabbitMQ {
 			e.printStackTrace();
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
-		}
-	
-//	private Deck createNewDeck(KonamiDeck kDeck) {
-//		
-//		if(kDeck == null) 
-//			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
-//		
-//		
-//		Deck deck = new Deck();
-//		deck.setDt_criacao(new Date());
-//		deck.setImagem(kDeck.getImagem());
-//		deck.setLancamento(kDeck.getLancamento());
-//		deck.setNome(this.adjustDeckName(kDeck.getNome()));
-//		deck.setNomePortugues(kDeck.getNomePortugues());
-//		deck.setRel_deck_cards(kDeck.getListRelDeckCards());
-//		deck.setSetType(kDeck.getSetType());
-//		
-//		logger.info("Deck created!");
-//		return deck;
-//	}
-	
-//	private Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
-//		
-//		if(deckId == null || deckId == 0) {
-//			throw new IllegalArgumentException("Generated Deck Id is invalid.");
-//		}
-//		
-//		newDeck.getRel_deck_cards().stream().forEach(rel -> {rel.setDeckId(deckId);});
-//		logger.info("Deck's Id setted");
-//		return newDeck;
-//	}
-	
-//	private String adjustDeckName(String rawName) {
-//		
-//		if(StringUtils.containsIgnoreCase(rawName,"Structure" )) {
-//			rawName = rawName.replace("Structure", "");
-//
-//			if(StringUtils.containsIgnoreCase(rawName,"Deck"))
-//				rawName = rawName.replace("Deck", "");
-//	
-//			if(StringUtils.containsIgnoreCase(rawName,":"))
-//				rawName = rawName.replace(":", "");
-//		}
-//					
-//		return rawName.trim();
-//	}
+	}
 	
 }

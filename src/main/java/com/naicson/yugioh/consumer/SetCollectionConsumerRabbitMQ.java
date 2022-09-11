@@ -48,29 +48,8 @@ public class SetCollectionConsumerRabbitMQ {
 			SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 		
 			setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
-			
-//			setCollection.getDecks().stream()
-//			.filter(deck -> deck.getCardsToBeRegistered().size() > 0)
-//			.forEach(deck -> cardRegistry.RegistryCardFromYuGiOhAPI(deck));
-//			
-//			setCollection.getDecks().stream().forEach(konamiDeck -> {
-//				
-//				Deck newDeck = ConsumerUtils.createNewDeck(konamiDeck);
-//				
-//				newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
-//				
-//				Long deckId = deckService.saveKonamiDeck(newDeck).getId();
-//				
-//				newDeck = ConsumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
-//				
-//				relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
-//				
-//				logger.info("Deck successfully saved! Deck: {}" , newDeck.toString());
-//				
-//			});
-			
-			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );
-//			
+				
+			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
 			
 	}
 

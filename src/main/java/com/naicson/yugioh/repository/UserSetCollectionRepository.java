@@ -77,4 +77,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 	
 	@Query(value = "select usc.id, usc.name FROM yugioh.tab_user_set_collection usc where user_id = :userId and set_collection_type = :setType order by name asc", nativeQuery = true)
 	public List<Tuple> getAllSetsBySetType(String setType, Long userId);
+	
+
+	
 }

@@ -185,7 +185,8 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 			
 	@Override
 	public SetCollection findById(Integer id) {	
-		SetCollection col = setColRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("SetCollection not found"));		
+		SetCollection col = setColRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("SetCollection not found"));		
 		return col;
 	}
 	
@@ -229,6 +230,14 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		}).collect(Collectors.toList());
 		
 		return listDto;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void saveSetDeckRelation(Long setId, Long deckId) {
+		if(setId == null || deckId == null)
+			throw new IllegalArgumentException("Invalid date to save relation Set - Deck");
+		
+		this.setColRepository.saveSetDeckRelation(setId, deckId);				
 	}
 
 }

@@ -277,7 +277,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
 
 			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());

@@ -37,7 +37,7 @@ public class ConsumerUtils {
 			deck.setImgurUrl(kDeck.getImagem());
 			
 			return deck;
-		}
+	}
 	
 	public  Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
 		

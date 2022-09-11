@@ -1,6 +1,7 @@
 package com.naicson.yugioh.service.card;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -45,16 +46,11 @@ public class CardRegistry {
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
 
 	@Transactional
-	public void registryCardFromYuGiOhAPI(KonamiDeck kDeck) {
+	public void registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
 
-		if (kDeck == null) {
-			logger.error("Invalid Konami Deck");
-			throw new IllegalArgumentException("Invalid Konami Deck.");
-		}
+		if (cardsToBeRegistered != null && cardsToBeRegistered.size() > 0) {
 
-		if (kDeck.getCardsToBeRegistered() != null && kDeck.getCardsToBeRegistered().size() > 0) {
-
-			kDeck.getCardsToBeRegistered().stream().forEach(apiCard -> {
+			cardsToBeRegistered.stream().forEach(apiCard -> {
 
 				if (!this.checkIfCardAlreadyRegisteredWithAlternativeNumber(apiCard)) {
 					
@@ -74,8 +70,7 @@ public class CardRegistry {
 					
 					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());									
 				}
-			} );
-		
+			} );	
 		}
 	}
 
