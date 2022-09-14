@@ -2,7 +2,6 @@ package com.naicson.yugioh.entity.sets;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.util.enums.SetType;
@@ -35,7 +33,6 @@ public class SetCollection {
 	private String name;
 	private String portugueseName;
 	private String imgPath;
-	private Boolean onlyDefaultDeck;
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date releaseDate;
 	private Date registrationDate;
@@ -51,7 +48,6 @@ public class SetCollection {
 	@Enumerated(EnumType.STRING)
 	private SetType setCollectionType;
 
-
 	public SetCollection() {
 		
 	}
@@ -60,17 +56,13 @@ public class SetCollection {
 		
 		SetCollection collection = new SetCollection();
 		collection.setImgurUrl(dto.getImgPath());
+		collection.setImgPath(dto.getImgPath());
 		collection.setIsSpeedDuel(dto.getIsSpeedDuel());
 		collection.setName(dto.getName());
-		collection.setOnlyDefaultDeck(dto.getOnlyDefaultDeck());
 		collection.setPortugueseName(dto.getPortugueseName());
 		collection.setRegistrationDate(new Date());
 		collection.setReleaseDate(dto.getReleaseDate());
 		collection.setSetCollectionType(SetType.valueOf(dto.getSetType()));
-		
-		List<Deck> decks = dto.getDecks().stream().map(id -> new Deck(id.longValue())).collect(Collectors.toList());
-		
-		collection.setDecks(decks);
 		
 		return collection;
 	}
@@ -124,28 +116,12 @@ public class SetCollection {
 		this.registrationDate = registrationDate;
 	}
 
-	public Boolean getOnlyDefaultDeck() {
-		return onlyDefaultDeck;
-	}
-
-	public void setOnlyDefaultDeck(Boolean onlyDefaultDeck) {
-		this.onlyDefaultDeck = onlyDefaultDeck;
-	}
-
 	public Boolean getIsSpeedDuel() {
 		return isSpeedDuel;
 	}
 
 	public void setIsSpeedDuel(Boolean isSpeedDuel) {
 		this.isSpeedDuel = isSpeedDuel;
-	}
-
-	@Override
-	public String toString() {
-		return "SetCollection [id=" + id + ", name=" + name + ", portugueseName=" + portugueseName + ", imgPath="
-				+ imgPath + ", onlyDefaultDeck=" + onlyDefaultDeck + ", releaseDate=" + releaseDate
-				+ ", registrationDate=" + registrationDate + ", isSpeedDuel=" + isSpeedDuel + ", decks=" + decks
-				+ ", setCollectionType=" + setCollectionType + "]";
 	}
 
 	public String getImgurUrl() {

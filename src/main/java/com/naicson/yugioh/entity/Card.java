@@ -28,7 +28,7 @@ public class Card {
 	private String nome;
 	@JsonIgnore
 	private String nomePortugues;
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "atributo_id",  referencedColumnName = "id")
 	private Atributo atributo;
 	private String propriedade;

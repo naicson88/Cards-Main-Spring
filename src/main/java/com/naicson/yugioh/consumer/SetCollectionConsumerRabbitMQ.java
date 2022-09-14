@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
@@ -38,11 +37,9 @@ public class SetCollectionConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 		
-	//@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
+	@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumerSetCollectionQueue(String json) {
-		
-		try {	
 			
 			logger.info("Start consuming new Set Collection: {}" , json);
 			
@@ -51,33 +48,9 @@ public class SetCollectionConsumerRabbitMQ {
 			SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 		
 			setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
+				
+			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
 			
-//			setCollection.getDecks().stream()
-//			.filter(deck -> deck.getCardsToBeRegistered().size() > 0)
-//			.forEach(deck -> cardRegistry.RegistryCardFromYuGiOhAPI(deck));
-//			
-//			setCollection.getDecks().stream().forEach(konamiDeck -> {
-//				
-//				Deck newDeck = ConsumerUtils.createNewDeck(konamiDeck);
-//				
-//				newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
-//				
-//				Long deckId = deckService.saveKonamiDeck(newDeck).getId();
-//				
-//				newDeck = ConsumerUtils.setDeckIdInRelDeckCards(newDeck, deckId);
-//				
-//				relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
-//				
-//				logger.info("Deck successfully saved! Deck: {}" , newDeck.toString());
-//				
-//			});
-			
-			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );
-//			
-			
-		}catch (Exception e) {
-			logger.error("Error consuming Set Collection: {} " , e.getMessage());
-		}
 	}
 
 	private SetCollectionDto convertJsonToSetCollectionDto(String json) {

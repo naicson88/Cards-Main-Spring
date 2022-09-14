@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
@@ -87,8 +88,6 @@ public class DeckController<T> {
 		return new ResponseEntity<Page<DeckSummaryDTO>>(setsFound, HttpStatus.OK);
 	}
 
-	
-
 	@GetMapping("/autocomplete-sets")
 	@ApiOperation(value="Return All Sets Name for Autocomplete ", authorizations = { @Authorization(value="JWT") })
 	@Cacheable(value = "autocompleteSets")
@@ -97,6 +96,14 @@ public class DeckController<T> {
 		List<AutocompleteSetDTO> autocompleteDto = deckService.autocompleteSet();
 			
 		return new ResponseEntity<>(autocompleteDto, HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/get-all-decksname")
+	@ApiOperation(value="Get all Decks Name", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(){
+		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName();
+		
+		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
 	}
 	
 

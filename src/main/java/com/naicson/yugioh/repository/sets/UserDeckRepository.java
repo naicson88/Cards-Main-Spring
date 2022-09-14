@@ -19,7 +19,7 @@ public interface UserDeckRepository extends JpaRepository<UserDeck, Long>{
 
 	List<UserDeck> findTop30ByNomeContaining(String setName);
 
-	Page<UserDeck> findAllBySetType(Pageable pageable, String setType);
+	Page<UserDeck> findAllBySetTypeOrderByDtCriacaoDesc(Pageable pageable, String setType);
 	
 	@Query(value = "select count(dk.konami_deck_copied) as qtd  from tab_user_deck dk where konami_deck_copied = :konamiDeckId and user_id = :userId", nativeQuery = true)
 	Integer countQuantityOfADeckUserHave(Long konamiDeckId, Long userId);

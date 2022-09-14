@@ -20,12 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
@@ -38,7 +40,9 @@ import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
+import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class DeckServiceImpl implements DeckDetailService {
@@ -273,20 +277,16 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
 
-		try {
 			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());
 
 			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
 				kDeck = deckRepository.save(kDeck);
 			} else 
-				throw new Exception("Deck is already registered");
+				throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
 			
-		} catch (Exception e) {
-			e.getMessage();
-		}
 
 		return kDeck;
 	}
@@ -299,7 +299,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	public Page<Deck> findAllBySetType(Pageable pageable, String setType) {
-		Page<Deck> decks = deckRepository.findAllBySetType(pageable, setType);
+		Page<Deck> decks = deckRepository.findAllBySetTypeOrderByLancamentoDesc(pageable, setType);
 
 		return decks;
 	}
@@ -313,6 +313,21 @@ public class DeckServiceImpl implements DeckDetailService {
 				)).collect(Collectors.toList());
 		
 		return listSetNames;
+	}
+
+	public List<DeckAndSetsBySetTypeDTO> getAllDecksName() {
+
+		List<Tuple> tuple =	deckRepository.getAllDecksName();
+		
+		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
+			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+					Long.parseLong(String.valueOf(t.get(0))),
+					String.valueOf(t.get(1))
+			);
+			return dto;
+		}).collect(Collectors.toList());
+		
+		return listDto;
 	}
 
 }

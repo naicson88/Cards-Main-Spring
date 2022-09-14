@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserDeck;
@@ -28,6 +26,7 @@ public class Deck implements Serializable {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(unique = true)
 	private String nome;
 	private String imagem;
 	private String nomePortugues;	

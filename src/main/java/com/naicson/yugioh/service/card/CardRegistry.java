@@ -1,6 +1,8 @@
 package com.naicson.yugioh.service.card;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
@@ -18,7 +20,6 @@ import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.TipoCard;
-import com.naicson.yugioh.entity.stats.CardPriceInformation;
 import com.naicson.yugioh.repository.ArchetypeRepository;
 import com.naicson.yugioh.repository.AtributoRepository;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
@@ -45,39 +46,31 @@ public class CardRegistry {
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
 
 	@Transactional
-	public void RegistryCardFromYuGiOhAPI(KonamiDeck kDeck) {
+	public void registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
 
-		if (kDeck == null) {
-			logger.error("Invalid Konami Deck");
-			throw new IllegalArgumentException("Invalid Konami Deck.");
-		}
+		if (cardsToBeRegistered != null && cardsToBeRegistered.size() > 0) {
 
-		if (kDeck.getCardsToBeRegistered() != null && kDeck.getCardsToBeRegistered().size() > 0) {
-
-			kDeck.getCardsToBeRegistered().stream().forEach(apiCard -> {
+			cardsToBeRegistered.stream().forEach(apiCard -> {
 
 				if (!this.checkIfCardAlreadyRegisteredWithAlternativeNumber(apiCard)) {
 					
 					Card cardToBeRegistered = createCardTobeRegistered(apiCard);
-
+	
 					this.validCardBeforeSave(cardToBeRegistered);
-					
-					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());
 					
 					Card cardSaved = cardRepository.save(cardToBeRegistered);
 					
-					if (cardSaved == null) {						
-						logger.error("It was not possible save the card: " + cardToBeRegistered.getNumero());
+					if (cardRepository.save(cardToBeRegistered).getId() < 1) 					
 						throw new IllegalArgumentException("It was not possible save the card: " + cardToBeRegistered.getNumero());
-								
-					} else {
-						CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(), cardSaved.getNumero());
-						alternativeRepository.save(alternative);
-						logger.info("Card successfuly saved!");
-					}
+					
+					CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(), cardSaved.getNumero());
+					alternativeRepository.save(alternative);
+					
+					logger.info("Card successfuly saved! {}", cardSaved.getNome());
+					
+					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());									
 				}
-
-			});
+			} );	
 		}
 	}
 
@@ -89,11 +82,9 @@ public class CardRegistry {
 		cardToBeRegistered.setCategoria(apiCard.getType());
 		cardToBeRegistered.setNome(apiCard.getName().trim());
 		cardToBeRegistered.setRegistryDate(new Date());
-		cardToBeRegistered.setArchetype(
-				apiCard.getRace() != null ? this.getCardArchetype(apiCard.getArchetype()) : null);
-		cardToBeRegistered.setAtributo(
-				apiCard.getAttribute() != null ? this.getCardAttribute(apiCard.getAttribute()) : null);
-
+		cardToBeRegistered.setArchetype(apiCard.getRace() != null ? this.getCardArchetype(apiCard.getArchetype()) : null);			
+		cardToBeRegistered.setAtributo(this.getCardAttribute(apiCard));
+				
 		if (StringUtils.containsIgnoreCase("spell", apiCard.getType())
 				|| StringUtils.containsIgnoreCase("trap", apiCard.getType())) {
 
@@ -101,16 +92,12 @@ public class CardRegistry {
 					apiCard.getRace() != null ? this.getCardProperty(apiCard.getRace()) : null);
 
 		} else {
-
 			cardToBeRegistered.setNivel(apiCard.getLevel());
 			cardToBeRegistered.setAtk(apiCard.getAtk());
 			cardToBeRegistered.setDef(apiCard.getDef());
-			cardToBeRegistered
-					.setQtd_link(apiCard.getLinkval() > 0 ? String.valueOf(apiCard.getLinkval()) : null); // validar
-			cardToBeRegistered
-					.setEscala(apiCard.getScale() != null ? Integer.parseInt(apiCard.getScale()) : null); // validar
-			cardToBeRegistered
-					.setTipo(apiCard.getRace() != null ? this.getCardType(apiCard.getRace()) : null);
+			cardToBeRegistered.setQtd_link(apiCard.getLinkval() > 0 ? String.valueOf(apiCard.getLinkval()) : null); // validar
+			cardToBeRegistered.setEscala(apiCard.getScale() != null ? Integer.parseInt(apiCard.getScale()) : null); // validar
+			cardToBeRegistered.setTipo(apiCard.getRace() != null ? this.getCardType(apiCard.getRace()) : null);
 
 		}
 
@@ -238,11 +225,19 @@ public class CardRegistry {
 		return race;
 	}
 
-	private Atributo getCardAttribute(String attribute) {
-		Atributo att = attRepository.findByName(attribute.trim());
+	private Atributo getCardAttribute(CardYuGiOhAPI card) {
+		
+		String attr = null;
+		
+		if(card.getType().contains("Spell") || card.getType().contains("Trap"))
+			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
+		else
+			attr = card.getAttribute();
+		
+		Atributo att = attRepository.findByName(attr.trim());
 
 		if (att == null) {
-			throw new EntityNotFoundException("Cant found Attribute: " + attribute);
+			throw new EntityNotFoundException("Cant found Attribute: " + attr);
 		}
 
 		return att;
@@ -251,8 +246,13 @@ public class CardRegistry {
 	private Archetype getCardArchetype(String archetype) {
 		Archetype arch = new Archetype();
 
-		if (archetype != null && !archetype.isEmpty())
-			arch = archRepository.findByArcName(archetype != null ? archetype.trim() : null);
+		if (archetype != null && !archetype.isEmpty()) {
+			arch = archRepository.findByArcName(archetype.trim());
+			
+			if(arch == null || arch.getId() < 1) {
+				arch = archRepository.save(new Archetype(archetype));
+			}
+		}			
 		else
 			arch = null;
 

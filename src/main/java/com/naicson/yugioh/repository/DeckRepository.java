@@ -35,7 +35,7 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 				   " GROUP BY (KONAMI_DECK_COPIED) ", nativeQuery = true)	
 	List<RelUserDeckDTO> searchForDecksUserHave(Long userId, String deckId);
 
-	Page<Deck> findAllBySetType(Pageable pageable, String setType);
+	Page<Deck> findAllBySetTypeOrderByLancamentoDesc(Pageable pageable, String setType);
 	
 	@Query(value = "select c.id, rel.card_numero as numero, c.categoria, c.nome, c.atributo, c.propriedade, c.nivel, c.atk, c.def, c.descricao, " +
 			   " c.imagem, c.escala, c.descr_pendulum, c.qtd_link, c.generic_type as genericType, c.registry_date as registryDate, " +
@@ -65,6 +65,9 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 			+ " group by usc.konami_set_copied"
 			,  nativeQuery = true)
 	List<Tuple> searchSetsByName(String setName);
+	
+	@Query(value = "select ud.id, ud.nome  from tab_decks ud where set_type = 'DECK' order by 1 desc", nativeQuery = true)	
+	List<Tuple> getAllDecksName();
 	
 	
 }

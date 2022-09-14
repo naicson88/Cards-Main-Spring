@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 
 @Component
@@ -20,13 +19,12 @@ public class KonamiDeck implements Serializable{
 	private String imagem;
 	private String nome;
 	private String nomePortugues;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date lancamento;
 	private String setType;
 	private List<CardYuGiOhAPI> cardsToBeRegistered;
 	@JsonProperty("relDeckCards")
 	private List<RelDeckCards> relDeckCards;
-	private Integer setCollectionId;
 	private Boolean isSpeedDuel;
 	
 	public Long getId() {
@@ -79,13 +77,6 @@ public class KonamiDeck implements Serializable{
 	public void setCardsToBeRegistered(List<CardYuGiOhAPI> cardsToBeRegistered) {
 		this.cardsToBeRegistered = cardsToBeRegistered;
 	}
-
-	public Integer getSetCollectionId() {
-		return setCollectionId;
-	}
-	public void setSetCollectionId(Integer setCollectionId) {
-		this.setCollectionId = setCollectionId;
-	}
 	
 	public String getRequestSource() {
 		return requestSource;
@@ -105,7 +96,7 @@ public class KonamiDeck implements Serializable{
 		return "KonamiDeck [id=" + id + ", requestSource=" + requestSource + ", imagem=" + imagem + ", nome=" + nome
 				+ ", nomePortugues=" + nomePortugues + ", lancamento=" + lancamento + ", setType=" + setType
 				+ ", cardsToBeRegistered=" + cardsToBeRegistered + ", relDeckCards=" + relDeckCards
-				+ ", setCollectionId=" + setCollectionId + ", isSpeedDuel=" + isSpeedDuel + "]";
+				+ ", isSpeedDuel=" + isSpeedDuel + "]";
 	}
 	
 	
