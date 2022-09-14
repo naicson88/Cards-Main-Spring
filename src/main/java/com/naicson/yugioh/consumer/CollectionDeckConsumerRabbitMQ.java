@@ -39,7 +39,7 @@ public class CollectionDeckConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
-	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}")
+	//@RabbitListener(queues = "${rabbitmq.queue.deckcollection}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
