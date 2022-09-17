@@ -8,7 +8,7 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
-import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.enums.ECardRarity;
 
 public abstract class ValidObjects {
 	
@@ -40,7 +40,7 @@ public abstract class ValidObjects {
 		
 		relDeckCards.setCardNumber(9999999L);
 		relDeckCards.setCard_price(90.58);
-		relDeckCards.setCard_raridade(CardRarity.RARE.getCardRarity());
+		relDeckCards.setCard_raridade(ECardRarity.RARE.getCardRarity());
 		relDeckCards.setCard_set_code("YYYY-1111");
 		relDeckCards.setDeckId(1L);
 		relDeckCards.setDt_criacao(new Date());

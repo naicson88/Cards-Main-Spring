@@ -21,7 +21,6 @@ import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
-import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
@@ -39,7 +38,7 @@ public class CollectionDeckConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
-	//@RabbitListener(queues = "${rabbitmq.queue.deckcollection}")
+	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
@@ -49,6 +48,8 @@ public class CollectionDeckConsumerRabbitMQ {
 		cardRegistry.registryCardFromYuGiOhAPI(cDeck.getCardsToBeRegistered());
 		
 		Deck newDeck = this.crateNewDeckOfCollection(cDeck);
+		
+		newDeck.setRel_deck_cards(consumerUtils.setRarity(newDeck.getRel_deck_cards()));
 		
 		newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
 		

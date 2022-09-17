@@ -36,6 +36,8 @@ public class RelDeckCards implements Serializable {
 	@Column(nullable = false)
 	private Integer cardId;
 	private Integer quantity;
+	private String setRarityCode;
+	private String rarityDetails;
 	
 	public RelDeckCards(String cardSetCode, Double price, String rarity) {
 		this.cardSetCode = cardSetCode;
@@ -144,6 +146,22 @@ public class RelDeckCards implements Serializable {
 	}
 	public void setCardId(Integer cardId) {
 		this.cardId = cardId;
+	}
+
+	public String getSetRarityCode() {
+		return setRarityCode;
+	}
+
+	public void setSetRarityCode(String setRarityCode) {
+		this.setRarityCode = setRarityCode;
+	}
+
+	public String getRarityDetails() {
+		return rarityDetails;
+	}
+
+	public void setRarityDetails(String rarityDetails) {
+		this.rarityDetails = rarityDetails;
 	}	
 
 	

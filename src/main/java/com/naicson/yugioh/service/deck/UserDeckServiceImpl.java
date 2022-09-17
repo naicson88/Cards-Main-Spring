@@ -35,7 +35,7 @@ import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
@@ -278,7 +278,7 @@ public class UserDeckServiceImpl {
 				rel.setCard_price(0.00);
 
 			if (rel.getCard_raridade() == null || rel.getCard_raridade().isEmpty())
-				rel.setCard_raridade(CardRarity.NOT_DEFINED.getCardRarity());
+				rel.setCard_raridade(ECardRarity.UNKNOWN.getCardRarity());
 
 			if (rel.getCard_set_code() == null || rel.getCard_set_code().isEmpty())
 				rel.setCard_set_code("Not Defined");
@@ -291,8 +291,6 @@ public class UserDeckServiceImpl {
 				throw new ErrorMessage("It was not possible save the card " + rel.getCard_set_code());
 		}
 	}
-
-
 
 	@Transactional(rollbackFor = Exception.class)
 	public int addSetToUserCollection(Long originalDeckId) {

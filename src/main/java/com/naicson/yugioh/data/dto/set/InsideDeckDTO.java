@@ -3,7 +3,6 @@ package com.naicson.yugioh.data.dto.set;
 import java.util.List;
 
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
-import com.naicson.yugioh.entity.RelDeckCards;
 
 public class InsideDeckDTO {
 	

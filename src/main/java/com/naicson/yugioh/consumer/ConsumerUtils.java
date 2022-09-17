@@ -1,6 +1,7 @@
 package com.naicson.yugioh.consumer;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
+import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
 
 @Component
@@ -51,5 +54,19 @@ public class ConsumerUtils {
 		});
 		
 		return newDeck;
+	}
+	
+	public List<RelDeckCards> setRarity(List<RelDeckCards> listRelDeckCards) {
+		
+		if(listRelDeckCards == null)
+			throw new IllegalArgumentException("Invalid list of Rel DeckCards");
+		
+		listRelDeckCards.stream()
+			.filter(rel -> !ECardRarity.DEFAULT_RARITIES.contains(rel.getCard_raridade())).forEach(rel -> {
+				ECardRarity rarity = ECardRarity.getRarityByRarityCode(rel.getSetRarityCode());
+			rel.setCard_raridade(rarity.getCardRarity());
+		});
+		
+		return listRelDeckCards;
 	}
 }
