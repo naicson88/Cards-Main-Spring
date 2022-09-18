@@ -1,14 +1,19 @@
 package com.naicson.yugioh.service.setcollection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.dto.cards.CardRarityDTO;
+import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.util.enums.CardAttributes;
 import com.naicson.yugioh.util.enums.CardProperty;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
@@ -207,6 +212,20 @@ public class SetsUtils {
 		});
 		
 		return mapDef;
+	}
+	
+	public List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
+		List<CardRarityDTO> listRarity = new ArrayList<>();	
+		
+		listRelDeckCards.stream()
+				.filter(rel -> rel.getCardId().equals(cardDetail.getId()))
+				.forEach(rel -> {
+						CardRarityDTO rarityDTO = new CardRarityDTO();
+						BeanUtils.copyProperties(rel, rarityDTO);
+						listRarity.add(rarityDTO);
+						
+			});
+			return listRarity;
 	}
 		
 }

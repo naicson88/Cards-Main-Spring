@@ -183,18 +183,24 @@ public class UserSetCollectionServiceImpl {
 
 	public List<CardSetCollectionDTO> transformTupleInCardSetCollectionDTO(List<Tuple> tuple) {
 		return tuple.stream().map(c -> {
+			String vlr = String.valueOf(c.get(3));
 			
-			RelDeckCards rel = new RelDeckCards(c.get(4, String.class),Double.parseDouble(String.valueOf(c.get(3))),c.get(5, String.class));
+			RelDeckCards rel = new RelDeckCards(
+					c.get(4, String.class),
+					Double.parseDouble(vlr),
+					c.get(5, String.class),
+					c.get(6, String.class),
+					c.get(7, String.class));
 			
 			CardSetCollectionDTO card = new CardSetCollectionDTO(					
 					Integer.parseInt(String.valueOf(c.get(0))),
 					Integer.parseInt(String.valueOf(c.get(1))),
 					c.get(2, String.class), 
-					Integer.parseInt(String.valueOf(c.get(6))), 
-					Integer.parseInt(String.valueOf(c.get(7))),
+					Integer.parseInt(String.valueOf(c.get(8))), 
+					Integer.parseInt(String.valueOf(c.get(9))),
 					rel,
-					Boolean.parseBoolean(String.valueOf(c.get(8))),
-					c.get(9, String.class)
+					Boolean.parseBoolean(String.valueOf(c.get(10))),
+					c.get(11, String.class)
 					);	
 			
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));

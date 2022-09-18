@@ -102,7 +102,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			throw new IllegalArgumentException("Informed Set Source is invalid!" + setSource);
 
 		if (relation == null || relation.size() == 0) 
-			throw new NoSuchElementException("Relation of cards is empty. Deck id: " + deckId);
+			return Collections.emptyList();
 
 		return relation;
 
@@ -145,7 +145,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetsUtils utils = new SetsUtils();
 
 		deck = this.returnDeckWithCards(deckId, deckSource);
-		deck = this.countQtdCardRarityInTheDeck(deck);
+		//deck = this.countQtdCardRarityInTheDeck(deck);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -158,6 +158,7 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
+		SetsUtils setsUtils = new SetsUtils();
 		
 		BeanUtils.copyProperties(deck, dto);		
 		
@@ -165,16 +166,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();		
 			BeanUtils.copyProperties(c, cardDetail);
 			
-			//Seta os dados do RelDeckCards
-			for(RelDeckCards rel: deck.getRel_deck_cards()) {
-				if(c.getId().equals(rel.getCardId())) {
-					c.setNumero(rel.getCardNumber());
-					
-					BeanUtils.copyProperties(rel, cardDetail);
-					deck.getRel_deck_cards().remove(rel);
-					break;
-				}
-			}
+			cardDetail.setListCardRarity(setsUtils.listCardRarity(cardDetail, deck.getRel_deck_cards()));
 
 			return cardDetail;
 

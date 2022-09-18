@@ -47,6 +47,9 @@ public class UserDeckServiceImpl {
 	
 	@Autowired
 	DeckServiceImpl deckService;
+	
+	@Autowired
+	RelDeckCardsServiceImpl relDeckCardsService;
 
 	@Autowired
 	DeckDAO dao;
@@ -319,14 +322,12 @@ public class UserDeckServiceImpl {
 			throw new EntityNotFoundException(
 					"It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
 
-		// Adiciona os cards do Deck original ao novo Deck.
 		int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
 
 		if (addCardsOnNewDeck < 1)
 			throw new NoSuchElementException(
 					"It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
 
-		// Adiciona os cards a coleção do usuário.
 		int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
 
 		if (addCardsToUsersCollection < 1)
@@ -353,7 +354,7 @@ public class UserDeckServiceImpl {
 
 		if (originalDeckId == null && generatedDeckId == null)
 			new IllegalArgumentException("Original deck or generated deck is invalid.");
-
+		
 		int cardsAddedToDeck = dao.addCardsToDeck(originalDeckId, generatedDeckId);
 
 		return cardsAddedToDeck;
@@ -413,25 +414,6 @@ public class UserDeckServiceImpl {
 		return qtdCardsAddedOrRemoved;
 
 	}
-	
-//
-//	public List<RelUserDeckDTO> searchForDecksUserHave(Long[] decksIds) {
-//
-//		if (decksIds == null || decksIds.length == 0)
-//			throw new IllegalArgumentException("Invalid Array with Deck's Ids");
-//
-//		UserDetailsImpl user = GeneralFunctions.userLogged();
-//
-//		String decksIdsString = GeneralFunctions.transformArrayInStringForLong(decksIds);
-//
-//		if (decksIdsString == null || decksIdsString.isBlank() || decksIdsString.equals("0"))
-//			throw new RuntimeException("String with deck Ids is invalid: " + decksIdsString);
-//
-//		List<RelUserDeckDTO> relUserDeckList = dao.searchForDecksUserHave(user.getId(), decksIdsString);
-//
-//		return relUserDeckList;
-//
-//	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {

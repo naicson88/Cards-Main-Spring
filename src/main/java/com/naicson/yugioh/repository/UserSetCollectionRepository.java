@@ -39,7 +39,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 			+ " where konami_set_copied = :konamiSetId and user_id = :userId", nativeQuery = true)
 	Integer countQuantityOfASetUserHave(Integer konamiSetId, Long userId);
 	
-	@Query(value = " select card.id, card.numero, card.nome, rel.card_price, rel.card_set_code, rel.card_raridade, rel.quantity, "
+	@Query(value = " select card.id, card.numero, card.nome, rel.card_price, rel.card_set_code, rel.card_raridade, rel.set_rarity_code, rel.rarity_details, rel.quantity, "
 			+ " ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rel.is_speed_duel,card.generic_type "
 			+ " from tab_rel_deckusers_cards rel "
 			+ " inner join tab_cards card on card.id = rel.card_id "
@@ -55,7 +55,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 			
 			+ " union "
 			
-			+ " select c.id, c.numero, c.nome, rdc.card_price, rdc.card_set_code, rdc.card_raridade,"
+			+ " select c.id, c.numero, c.nome, rdc.card_price, rdc.card_set_code, rdc.card_raridade,  rdc.set_rarity_code, rdc.rarity_details,"
 			+ " ifnull(counter.qtd,0) as quantityUserHave, ifnull(counterTwo.qtd, 0) as hasInOtherCollection, rdc.is_speed_duel, c.generic_type "
 			+ " from tab_cards c "
 			+ " inner join tab_rel_deck_cards rdc on rdc.card_id = c.id "

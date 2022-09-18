@@ -45,7 +45,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 	DeckServiceImpl deckService;
 	
 	@Autowired
-	SetsUtils utils;
+	SetsUtils setsUtils;
 	
 	Logger logger = LoggerFactory.getLogger(SetCollectionServiceImpl.class);
 
@@ -68,7 +68,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
 		
 		if(setDetailsDto.getInsideDeck() != null && setDetailsDto.getInsideDeck().size() > 0)	
-			setDetailsDto = utils.getSetStatistics(setDetailsDto);
+			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
 		
 		return setDetailsDto;
 	}
@@ -126,7 +126,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 				CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();	
 				BeanUtils.copyProperties(c, cardDetail);
 				
-				cardDetail.setListCardRarity(this.listCardRarity(cardDetail, d.getRel_deck_cards()));
+				cardDetail.setListCardRarity(setsUtils.listCardRarity(cardDetail, d.getRel_deck_cards()));
 				
 				return cardDetail;		
 				
@@ -151,19 +151,19 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 				
 	}
 	
-	private List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
-		List<CardRarityDTO> listRarity = new ArrayList<>();	
-		
-		listRelDeckCards.stream()
-				.filter(rel -> rel.getCardId().equals(cardDetail.getId()))
-				.forEach(rel -> {
-						CardRarityDTO rarityDTO = new CardRarityDTO();
-						BeanUtils.copyProperties(rel, rarityDTO);
-						listRarity.add(rarityDTO);
-						
-			});
-			return listRarity;
-	}
+//	private List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
+//		List<CardRarityDTO> listRarity = new ArrayList<>();	
+//		
+//		listRelDeckCards.stream()
+//				.filter(rel -> rel.getCardId().equals(cardDetail.getId()))
+//				.forEach(rel -> {
+//						CardRarityDTO rarityDTO = new CardRarityDTO();
+//						BeanUtils.copyProperties(rel, rarityDTO);
+//						listRarity.add(rarityDTO);
+//						
+//			});
+//			return listRarity;
+//	}
 
 	private SetDetailsDTO convertBasicSetToSetDetailsDTO(SetCollection set) {
 		SetDetailsDTO deck = new SetDetailsDTO();

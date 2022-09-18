@@ -27,7 +27,7 @@ public interface UserDeckRepository extends JpaRepository<UserDeck, Long>{
 	@Query(value = "select ud.id, ud.nome  from tab_user_deck ud where user_id = :userId and set_type = 'DECK' order by nome asc", nativeQuery = true)
 	List<Tuple> getAllDecksName(Long userId);
 	
-	@Query(value = "select card.id, card.numero, card.nome, rel.card_price, rel.card_set_code, rel.card_raridade, "
+	@Query(value = "select card.id, card.numero, card.nome, rel.card_price, rel.card_set_code, rel.card_raridade, rel.set_rarity_code, rel.rarity_details,"
 					+ "rel.quantity, rel.quantity as hasInOtherCollection, rel.is_speed_duel, card.generic_type "
 					+ "from tab_rel_deckusers_cards rel "
 					+ "inner join tab_cards card on card.id = rel.card_id "
