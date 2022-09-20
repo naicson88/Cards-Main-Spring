@@ -17,7 +17,7 @@ public enum ECardRarity {
 	PARALLEL_RARE("Parallel Rare",
 			List.of("(NPR)", "(SFR)", "(MSR)", "(SHR)", "(CR)", "(HGPR)", "(KCC)", "(KCR)", "(KCUR)")),
 	GHOST_RARE("Ghost Rare", List.of("(GR)")),
-	UNKNOWN("UNKNOWN", List.of(""));
+	UNKNOWN("Not Defined", List.of(""));
 	
 	private final String name;
 	private final List<String> listRarityCode;

@@ -13,6 +13,7 @@ import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.controller.UserRelDeckCards;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
@@ -50,6 +52,9 @@ public class UserDeckServiceImpl {
 	
 	@Autowired
 	RelDeckCardsServiceImpl relDeckCardsService;
+	
+	@Autowired
+	UserRelDeckCardsServiceImpl userRelService;
 
 	@Autowired
 	DeckDAO dao;
@@ -272,31 +277,33 @@ public class UserDeckServiceImpl {
 		
 	}
 
-
-	private void saveRelDeckCardsFromUserDeck(Deck deck, UserDeck userDeck) {
+	
+	@Transactional(rollbackFor = Exception.class)
+	private List<UserRelDeckCards> saveRelDeckCardsFromUserDeck(Deck deck, UserDeck userDeck) {
 		
-		for (RelDeckCards rel : deck.getRel_deck_cards()) {
-
-			if (rel.getCard_price() == null)
-				rel.setCard_price(0.00);
-
-			if (rel.getCard_raridade() == null || rel.getCard_raridade().isEmpty())
-				rel.setCard_raridade(ECardRarity.UNKNOWN.getCardRarity());
-
-			if (rel.getCard_set_code() == null || rel.getCard_set_code().isEmpty())
-				rel.setCard_set_code("Not Defined");
+		List<UserRelDeckCards> listUserRel = deck.getRel_deck_cards().stream().map(rel ->{
+			UserRelDeckCards userRel = new UserRelDeckCards();
+			BeanUtils.copyProperties(rel, userRel);
 			
-			rel.setQuantity(1);
-
-			int isSaved = dao.saveRelDeckUserCard(rel, userDeck.getId());
-
-			if (isSaved == 0)
-				throw new ErrorMessage("It was not possible save the card " + rel.getCard_set_code());
-		}
+			userRel.setCard_price(rel.getCard_price() == null ? 0.00 : rel.getCard_price());
+			userRel.setCard_raridade(rel.getCard_raridade() == null ? ECardRarity.UNKNOWN.getCardRarity() : rel.getCard_raridade());
+			userRel.setCardSetCode(rel.getCard_set_code() == null  ? "Not Defined" : rel.getCard_set_code());			
+			userRel.setQuantity(1);
+			userRel.setDeckId(userDeck.getId());
+			userRel.setId(null);
+			userRel.setDt_criacao(new Date());
+			
+			return userRel;
+			
+		}).collect(Collectors.toList());
+		
+		return userRelService.saveAll(listUserRel);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public int addSetToUserCollection(Long originalDeckId) {
+	public UserDeck addSetToUserCollection(Long originalDeckId) {
+		
+		logger.info("Starting copy Konami Deck to User's collection");
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
@@ -307,34 +314,24 @@ public class UserDeckServiceImpl {
 		Deck deckOrigem = deckService.findById(originalDeckId);
 
 		UserDeck newDeck = new UserDeck();
-		newDeck.setImagem(deckOrigem.getImgurUrl());
-		newDeck.setImgurUrl(deckOrigem.getImgurUrl());
+		newDeck = newDeck.userDeckCopiedFromKonamiDeck(deckOrigem);
 		newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
-		newDeck.setKonamiDeckCopied(deckOrigem.getId());
-		newDeck.setUserId(user.getId());
-		newDeck.setDtCriacao(new Date());
-		newDeck.setSetType(deckOrigem.getSetType());
-		newDeck.setIsSpeedDuel(deckOrigem.getIsSpeedDuel());
-
 		UserDeck generatedDeckUser = userDeckRepository.save(newDeck);
 
 		if (generatedDeckUser == null)
-			throw new EntityNotFoundException(
-					"It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
+			throw new EntityNotFoundException("It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
 
-		int addCardsOnNewDeck = this.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
+		List<UserRelDeckCards> listUserRelCards = userRelService.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
 
-		if (addCardsOnNewDeck < 1)
-			throw new NoSuchElementException(
-					"It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
+		if (listUserRelCards == null || listUserRelCards.size() <= 0)
+				throw new NoSuchElementException("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
 
-		int addCardsToUsersCollection = this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A");
+		if (this.addOrRemoveCardsToUserCollection(originalDeckId, user.getId(), "A") < 1)
+				throw new RuntimeException("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
+		
+		logger.info("Konami Deck has been copied to User's collection: {}", deckOrigem.getNome());
 
-		if (addCardsToUsersCollection < 1)
-			throw new RuntimeException(
-					"Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
-
-		return addCardsToUsersCollection;
+		return newDeck;
 
 	}
 	

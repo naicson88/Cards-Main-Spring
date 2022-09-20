@@ -48,7 +48,19 @@ public class UserDeck {
 		userDeck.setKonamiDeckCopied(deck.getId());
 		//userDeck.setRelDeckCards(deck.getRel_deck_cards());		
 		return userDeck;
+	}
 	
+	public UserDeck userDeckCopiedFromKonamiDeck(Deck deckOrigem) {
+		UserDeck newDeck = new UserDeck();
+		newDeck.setImagem(deckOrigem.getImgurUrl());
+		newDeck.setImgurUrl(deckOrigem.getImgurUrl());
+		newDeck.setKonamiDeckCopied(deckOrigem.getId());
+		newDeck.setUserId(GeneralFunctions.userLogged().getId());
+		newDeck.setDtCriacao(new Date());
+		newDeck.setSetType(deckOrigem.getSetType());
+		newDeck.setIsSpeedDuel(deckOrigem.getIsSpeedDuel());
+		
+		return newDeck;
 	}
 	
 	public static UserDeck userDeckFromUserSetCollectionDTO(UserSetCollectionDTO userCollection) {

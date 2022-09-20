@@ -90,9 +90,9 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
 		
-		Integer qtdAdded = deckService.addSetToUserCollection(deckId);
+		 deckService.addSetToUserCollection(deckId);
 		
-		return new ResponseEntity<Integer>(qtdAdded, HttpStatus.OK);
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 					
 	}
 	
