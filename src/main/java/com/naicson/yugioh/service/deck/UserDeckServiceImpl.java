@@ -199,7 +199,7 @@ public class UserDeckServiceImpl {
 	}
 	
 	@Transactional
-	public void saveUserdeck(Deck deck) {
+	public void saveUserdeck(Deck deck, List<UserRelDeckCards> listRel) {
 		UserDeck userDeck = new UserDeck();
 		
 		this.validUserDeck(deck);
@@ -227,8 +227,18 @@ public class UserDeckServiceImpl {
 
 		if (userDeck == null)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the Deck");
+		
+		if(listRel == null) {
+			listRel = new ArrayList<>();
+			listRel = deck.getRel_deck_cards().stream().map(rel -> {
+				UserRelDeckCards userRel = new UserRelDeckCards();
+				BeanUtils.copyProperties(rel, userRel);
+				return userRel;
+			}).collect(Collectors.toList());
 			
-		this.saveRelDeckCardsFromUserDeck(deck, userDeck);
+		}
+			
+		userRelService.saveAll(listRel);
 
 		logger.info("User Deck was saved! ID: {}", deck.getId());
 
@@ -243,12 +253,9 @@ public class UserDeckServiceImpl {
 	 if (userDeckSaved == null)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the User Deck");
 	 	
-	 if(userDeck.getRelDeckCards() != null && userDeck.getRelDeckCards().size() > 0) {
-		 userDeck.getRelDeckCards().stream().forEach(rel -> {
-		 		dao.saveRelDeckUserCard(rel, userDeckSaved.getId());
-		 	});
-	 }
-	 	 	
+	 if(userDeck.getRelDeckCards() != null && userDeck.getRelDeckCards().size() > 0) 
+			 userRelService.saveAll(userDeck.getRelDeckCards());
+	
 	 	logger.info("Save User Deck and RelDeckCards of UserDeck: {}", userDeckSaved.getId());
 		
 	 	return userDeckSaved;

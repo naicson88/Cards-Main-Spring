@@ -80,7 +80,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		List<LastAddedDTO> lastSetCollections = this.lastsSetCollectionAdded();
 
 		List<LastAddedDTO> lastsAdded = Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
-				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate))
+				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate)).limit(10)
 				.collect(Collectors.toList());
 
 		return lastsAdded;
@@ -171,12 +171,7 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastSet.setSetType("DECK");
 				return lastSet;
 			}).collect(Collectors.toList());
-
-			if (lastDecksAdded == null || lastDecksAdded.isEmpty()) {
-				logger.error("LIST WITH LASTS ADDED IS EMPTY");
-				throw new ErrorMessage("List with lasts added is empty");
-			}
-
+			
 		} else {
 			return Collections.emptyList();
 		}

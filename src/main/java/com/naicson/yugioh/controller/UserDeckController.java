@@ -70,7 +70,7 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
 		
-		this.deckService.saveUserdeck(deck);
+		this.deckService.saveUserdeck(deck, null);
 		
 		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
 

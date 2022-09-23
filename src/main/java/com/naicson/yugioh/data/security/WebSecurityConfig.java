@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers(
 					"/yugiohAPI/auth/**",
+					"/actuator/**",
 				    // -- Swagger UI v2
 		            "/v2/api-docs",
 		            "/swagger-resources",

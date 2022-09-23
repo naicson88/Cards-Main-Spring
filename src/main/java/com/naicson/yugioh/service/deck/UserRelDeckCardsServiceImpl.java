@@ -1,6 +1,7 @@
 package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -56,8 +57,9 @@ public class UserRelDeckCardsServiceImpl {
 	
 	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class})
 	public List<UserRelDeckCards> saveAll(List<UserRelDeckCards> list){
+		
 		if(list == null || list.size() == 0)
-			throw new IllegalArgumentException("List of UserRelDeckCards is empty, can't be saved!");
+			return Collections.emptyList();
 		
 		List<UserRelDeckCards> listSaved = userRelRepository.saveAll(list);
 		

@@ -313,9 +313,9 @@ public class DeckServiceImpl implements DeckDetailService {
 		return listSetNames;
 	}
 
-	public List<DeckAndSetsBySetTypeDTO> getAllDecksName() {
-
-		List<Tuple> tuple =	deckRepository.getAllDecksName();
+	public List<DeckAndSetsBySetTypeDTO> getAllDecksName(boolean includeCollectionsDeck) {
+			
+		List<Tuple> tuple =	includeCollectionsDeck == false ?  deckRepository.getAllDecksName() : deckRepository.getAllDecksNameIncludeCollections();
 		
 		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
 			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(

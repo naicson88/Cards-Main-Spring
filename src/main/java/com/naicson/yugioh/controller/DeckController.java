@@ -100,8 +100,8 @@ public class DeckController<T> {
 	
 	@GetMapping("/get-all-decksname")
 	@ApiOperation(value="Get all Decks Name", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(){
-		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName();
+	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(@RequestParam("collectionDeck") boolean collectionDeck){
+		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName(collectionDeck);
 		
 		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
 	}
