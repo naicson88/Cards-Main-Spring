@@ -1,5 +1,6 @@
 package com.naicson.yugioh.service.card;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,15 +44,15 @@ public class CardRegistry {
 	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 
+
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
 
 	@Transactional
-	public void registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
+	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {			
+		List<Card> cardsSaved = new ArrayList<>();
 
 		if (cardsToBeRegistered != null && cardsToBeRegistered.size() > 0) {
-
 			cardsToBeRegistered.stream().forEach(apiCard -> {
-
 				if (!this.checkIfCardAlreadyRegisteredWithAlternativeNumber(apiCard)) {
 					
 					Card cardToBeRegistered = createCardTobeRegistered(apiCard);
@@ -68,10 +69,13 @@ public class CardRegistry {
 					
 					logger.info("Card successfuly saved! {}", cardSaved.getNome());
 					
-					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());									
+					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());	
+					
+					cardsSaved.add(cardSaved);
 				}
 			} );	
-		}
+		}		
+		return cardsSaved;
 	}
 
 	private Card createCardTobeRegistered(CardYuGiOhAPI apiCard) {

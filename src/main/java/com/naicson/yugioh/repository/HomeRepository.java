@@ -39,13 +39,13 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 	List<Tuple> lastCardsAddedToUser(Long userId);
 	
 	@Query(value = " select * from (  "
-			+ " select d1.id, d1.nome, d1.imgur_url, d1.dt_criacao, d1.set_type  as dt_reg  "
+			+ " select d1.id, d1.nome, d1.imgur_url, d1.dt_criacao as dt_criacao, d1.set_type  as dt_reg  "
 			+ " from tab_decks d1 where set_type = 'DECK' "
 			+ " UNION "
-			+ " select us.id, us.name, us.imgur_url, us.registration_date, us.set_collection_type  as dt_reg "
+			+ " select us.id, us.name, us.imgur_url, us.registration_date as dt_criacao, us.set_collection_type  as dt_reg "
 			+ " from tab_set_collection as us "
 			+ " ) as u "
-			+ " order by u.dt_reg desc "
+			+ " order by u.dt_criacao desc "
 			+ " limit 5 ",
 			nativeQuery = true)
 	List<Tuple> getHotNews();
