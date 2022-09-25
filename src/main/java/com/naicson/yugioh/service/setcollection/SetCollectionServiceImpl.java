@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.dto.cards.CardRarityDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.SetCollectionRepository;
@@ -43,7 +45,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 	DeckServiceImpl deckService;
 	
 	@Autowired
-	SetsUtils utils;
+	SetsUtils setsUtils;
 	
 	Logger logger = LoggerFactory.getLogger(SetCollectionServiceImpl.class);
 
@@ -66,7 +68,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
 		
 		if(setDetailsDto.getInsideDeck() != null && setDetailsDto.getInsideDeck().size() > 0)	
-			setDetailsDto = utils.getSetStatistics(setDetailsDto);
+			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
 		
 		return setDetailsDto;
 	}
@@ -115,25 +117,21 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		// Iterate over Deck	
 		set.getDecks().stream().forEach(d -> { 			
-			InsideDeckDTO insideDeck = new InsideDeckDTO();	
-			Map<Integer, CardSetDetailsDTO> mapCardSetDetails = new HashMap<>();
-			
+			InsideDeckDTO insideDeck = new InsideDeckDTO();			
 			insideDeck.setInsideDeckName(d.getNome());
-			insideDeck.setInsideDeckImage(d.getImgurUrl());	
+			insideDeck.setInsideDeckImage(d.getImgurUrl());
+			
 			//Iterate over Cards
-			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {				
-				CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();				
+			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {			
+				CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();	
 				BeanUtils.copyProperties(c, cardDetail);
-				mapCardSetDetails.put(cardDetail.getId(), cardDetail);
-				return cardDetail;	
+				
+				cardDetail.setListCardRarity(setsUtils.listCardRarity(cardDetail, d.getRel_deck_cards()));
+				
+				return cardDetail;		
 				
 			}).collect(Collectors.toList()); ;			
-			//Iterate over Rel. Deck Cards
-			d.getRel_deck_cards().forEach(r -> {
-				CardSetDetailsDTO detail =  mapCardSetDetails.get(r.getCardId());		
-				BeanUtils.copyProperties(r, detail);
-			});	
-			
+		
 			insideDeck.setCards(listSetDetails);
 			listInsideDeck.add(insideDeck);				
 		});
@@ -152,7 +150,20 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		return setDetailsDto;
 				
 	}
-
+	
+//	private List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
+//		List<CardRarityDTO> listRarity = new ArrayList<>();	
+//		
+//		listRelDeckCards.stream()
+//				.filter(rel -> rel.getCardId().equals(cardDetail.getId()))
+//				.forEach(rel -> {
+//						CardRarityDTO rarityDTO = new CardRarityDTO();
+//						BeanUtils.copyProperties(rel, rarityDTO);
+//						listRarity.add(rarityDTO);
+//						
+//			});
+//			return listRarity;
+//	}
 
 	private SetDetailsDTO convertBasicSetToSetDetailsDTO(SetCollection set) {
 		SetDetailsDTO deck = new SetDetailsDTO();

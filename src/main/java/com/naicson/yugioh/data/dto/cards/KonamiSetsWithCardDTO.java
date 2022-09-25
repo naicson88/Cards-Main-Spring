@@ -2,6 +2,7 @@ package com.naicson.yugioh.data.dto.cards;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 public class KonamiSetsWithCardDTO {
 	
@@ -10,13 +11,13 @@ public class KonamiSetsWithCardDTO {
 	private String image;
 	private String name;
 	private String cardSetCode;
-	private String rarity;
-	private BigDecimal price;
+	private List<String> rarity;
+	private List<BigDecimal> price;
 	
 	public KonamiSetsWithCardDTO() {}
 	
 	public KonamiSetsWithCardDTO(BigInteger id, String setType, String image, String name, String cardSetCode,
-			String rarity, BigDecimal price) {
+			List<String> rarity, List<BigDecimal> price) {
 		super();
 		this.id = id;
 		this.setType = setType;
@@ -57,18 +58,21 @@ public class KonamiSetsWithCardDTO {
 	public void setCardSetCode(String cardSetCode) {
 		this.cardSetCode = cardSetCode;
 	}
-	public String getRarity() {
+
+	public List<String> getRarity() {
 		return rarity;
 	}
-	public void setRarity(String rarity) {
+
+	public void setRarity(List<String> rarity) {
 		this.rarity = rarity;
 	}
-	public BigDecimal getPrice() {
+
+	public List<BigDecimal> getPrice() {
 		return price;
 	}
-	public void setPrice(BigDecimal price) {
+
+	public void setPrice(List<BigDecimal> price) {
 		this.price = price;
 	}
-	
 	
 }

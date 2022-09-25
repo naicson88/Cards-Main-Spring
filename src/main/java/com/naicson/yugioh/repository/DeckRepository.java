@@ -69,5 +69,8 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 	@Query(value = "select ud.id, ud.nome  from tab_decks ud where set_type = 'DECK' order by 1 desc", nativeQuery = true)	
 	List<Tuple> getAllDecksName();
 	
+	@Query(value = "select ud.id, ud.nome  from tab_decks ud order by 1 desc", nativeQuery = true)	
+	List<Tuple> getAllDecksNameIncludeCollections();
+	
 	
 }

@@ -250,17 +250,39 @@ public class CardServiceImpl implements CardDetailService {
 	private List<KonamiSetsWithCardDTO> setAllSetsWithThisCard(Card card) {
 		
 		List<Tuple> listKonamiSets = cardRepository.setsOfCard(card.getId());
+		List<KonamiSetsWithCardDTO> listCardSets = new ArrayList<>();
+			
+		listKonamiSets.stream().forEach(c -> {	
+			Boolean hasOnList = false;
+			BigInteger id = c.get(0, BigInteger.class);
+			
+			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
+				if(cardSet.getId().equals(id)) {
+					hasOnList = true;
+					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
+					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
+					cardSet.setPrice(listDecimals);
+					
+					List<String> listRarity = new ArrayList<>(cardSet.getRarity());
+					listRarity.addAll(List.of(c.get(5, String.class)));
+					cardSet.setRarity(listRarity);
+				}
+			}
+			
+			if(!hasOnList) {
+				listCardSets.add(new KonamiSetsWithCardDTO(
+						c.get(0, BigInteger.class),
+						c.get(1, String.class),
+						c.get(2, String.class),
+						c.get(3, String.class),
+						c.get(4, String.class),
+						List.of(c.get(5, String.class)),
+						List.of(c.get(6, BigDecimal.class))));
+				
+				};
+			});
 		
-		List<KonamiSetsWithCardDTO> listCardSets = listKonamiSets.stream().map(c -> new KonamiSetsWithCardDTO(
-				c.get(0, BigInteger.class),
-				c.get(1, String.class),
-				c.get(2, String.class),
-				c.get(3, String.class),
-				c.get(4, String.class),
-				c.get(5, String.class),
-				c.get(6, BigDecimal.class)
-				)).collect(Collectors.toList());
-	
+					
 	return listCardSets;
 }
 
@@ -407,18 +429,16 @@ public class CardServiceImpl implements CardDetailService {
 		
 		if(cardsNumber == null || cardsNumber.isEmpty()) 
 			throw new IllegalArgumentException("List with card numbers is invalid");
-		
-		
+				
 		List<Long> cardsRegistered = cardRepository.findAllCardsByListOfCardNumbers(cardsNumber);
 		
 		List<Long> cardsNotRegistered = new ArrayList<>();
 		
-		if(cardsRegistered == null || cardsRegistered.isEmpty()) {
-			cardsNotRegistered = cardsNumber;
-			
-		}else {
+		if(cardsRegistered == null || cardsRegistered.isEmpty()) 
+			cardsNotRegistered = cardsNumber;			
+		else 
 			cardsNotRegistered = this.verifyCardsNotRegistered(cardsNumber, cardsRegistered);
-		}
+		
 		
 		return cardsNotRegistered;
 	}
@@ -440,6 +460,15 @@ public class CardServiceImpl implements CardDetailService {
 			allCards.removeAll(cardsRegistered);
 			
 			return allCards;		
+	}
+	
+	public Card findByCardNome(String nome) {
+		if(nome == null || nome.isBlank())
+			throw new IllegalArgumentException("Invalid Card name to find by");
+		
+		Card card = cardRepository.findByNome(nome.trim());
+		
+		return card;
 	}
 
 

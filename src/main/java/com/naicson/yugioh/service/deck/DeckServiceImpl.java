@@ -41,7 +41,7 @@ import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.CardRarity;
+import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
@@ -101,10 +101,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		else
 			throw new IllegalArgumentException("Informed Set Source is invalid!" + setSource);
 
-		if (relation == null || relation.size() == 0) {
-			logger.error("Relation of cards is empty. Deck id: ".toUpperCase() + deckId);
-			throw new NoSuchElementException("Relation of cards is empty. Deck id: " + deckId);
-		}
+		if (relation == null || relation.size() == 0) 
+			return Collections.emptyList();
 
 		return relation;
 
@@ -147,7 +145,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetsUtils utils = new SetsUtils();
 
 		deck = this.returnDeckWithCards(deckId, deckSource);
-		deck = this.countQtdCardRarityInTheDeck(deck);
+		//deck = this.countQtdCardRarityInTheDeck(deck);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -160,6 +158,7 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
+		SetsUtils setsUtils = new SetsUtils();
 		
 		BeanUtils.copyProperties(deck, dto);		
 		
@@ -167,16 +166,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			CardSetDetailsDTO cardDetail = new CardSetDetailsDTO();		
 			BeanUtils.copyProperties(c, cardDetail);
 			
-			//Seta os dados do RelDeckCards
-			for(RelDeckCards rel: deck.getRel_deck_cards()) {
-				if(c.getId().equals(rel.getCardId())) {
-					c.setNumero(rel.getCardNumber());
-					
-					BeanUtils.copyProperties(rel, cardDetail);
-					deck.getRel_deck_cards().remove(rel);
-					break;
-				}
-			}
+			cardDetail.setListCardRarity(setsUtils.listCardRarity(cardDetail, deck.getRel_deck_cards()));
 
 			return cardDetail;
 
@@ -261,17 +251,25 @@ public class DeckServiceImpl implements DeckDetailService {
 	public Deck countQtdCardRarityInTheDeck(Deck deck) {
 
 		deck.setQtd_cards(deck.getRel_deck_cards().stream().count());
-
+		
 		deck.setQtd_comuns(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(CardRarity.COMMON.getCardRarity())).count());
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.COMMON.getCardRarity())).count());
 		deck.setQtd_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(CardRarity.RARE.getCardRarity())).count());
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.RARE.getCardRarity())).count());
 		deck.setQtd_super_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(CardRarity.SUPER_RARE.getCardRarity())).count());
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.SUPER_RARE.getCardRarity())).count());
 		deck.setQtd_ultra_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(CardRarity.ULTRA_RARE.getCardRarity())).count());
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTRA_RARE.getCardRarity())).count());
 		deck.setQtd_secret_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(CardRarity.SECRET_RARE.getCardRarity())).count());
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.SECRET_RARE.getCardRarity())).count());
+		deck.setQtd_ultimate_raras(deck.getRel_deck_cards().stream()
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTIMATE_RARE.getCardRarity())).count());
+		deck.setQtd_gold_raras(deck.getRel_deck_cards().stream()
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.GOLD_RARE.getCardRarity())).count());
+		deck.setQtd_parallel_raras(deck.getRel_deck_cards().stream()
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.PARALLEL_RARE.getCardRarity())).count());
+		deck.setQtd_ghost_raras(deck.getRel_deck_cards().stream()
+				.filter(card -> card.getCard_raridade().equals(ECardRarity.GHOST_RARE.getCardRarity())).count());
 
 		return deck;
 	}
@@ -315,9 +313,9 @@ public class DeckServiceImpl implements DeckDetailService {
 		return listSetNames;
 	}
 
-	public List<DeckAndSetsBySetTypeDTO> getAllDecksName() {
-
-		List<Tuple> tuple =	deckRepository.getAllDecksName();
+	public List<DeckAndSetsBySetTypeDTO> getAllDecksName(boolean includeCollectionsDeck) {
+			
+		List<Tuple> tuple =	includeCollectionsDeck == false ?  deckRepository.getAllDecksName() : deckRepository.getAllDecksNameIncludeCollections();
 		
 		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
 			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(

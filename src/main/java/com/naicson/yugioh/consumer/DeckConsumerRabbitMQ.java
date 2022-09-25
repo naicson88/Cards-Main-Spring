@@ -33,7 +33,7 @@ public class DeckConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
-	//@RabbitListener(queues = "${rabbitmq.queue.deck}")
+	@RabbitListener(queues = "${rabbitmq.queue.deck}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumer(String json) {		
 			
@@ -44,6 +44,8 @@ public class DeckConsumerRabbitMQ {
 		cardRegistry.registryCardFromYuGiOhAPI(kDeck.getCardsToBeRegistered());
 		
 		Deck newDeck = consumerUtils.createNewDeck(kDeck);
+		
+		newDeck.setRel_deck_cards(consumerUtils.setRarity(kDeck.getListRelDeckCards()));
 		
 		newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
 		

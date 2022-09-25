@@ -30,13 +30,6 @@ public class Deck implements Serializable {
 	private String nome;
 	private String imagem;
 	private String nomePortugues;	
-	@Column(name = "qtd_cards")
-	private long qtd_cards;
-	private long qtd_comuns;
-	private long qtd_raras;
-	private long qtd_super_raras;
-	private long qtd_ultra_raras;
-	private long qtd_secret_raras;
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date lancamento;	
 	@Column(name = "set_type")
@@ -47,8 +40,7 @@ public class Deck implements Serializable {
 	private String imgurUrl;
 	
 	@ManyToMany(mappedBy = "decks")
-	private List<SetCollection> setCollection;
-	
+	private List<SetCollection> setCollection;	
 	@Transient
 	private List<Card> cards;
 	@Transient
@@ -57,6 +49,18 @@ public class Deck implements Serializable {
 	private List<Card> extraDeckCards;
 	@Transient
 	private List<RelDeckCards> rel_deck_cards;
+	
+	@Column(name = "qtd_cards")
+	private long qtd_cards;
+	private long qtd_comuns;
+	private long qtd_raras;
+	private long qtd_super_raras;
+	private long qtd_ultra_raras;
+	private long qtd_secret_raras;
+	private long qtd_ultimate_raras;
+	private long qtd_gold_raras;
+	private long qtd_parallel_raras;
+	private long qtd_ghost_raras;
 		
 	public Deck() {
 		
@@ -242,6 +246,44 @@ public class Deck implements Serializable {
 	public void setImgurUrl(String imgurUrl) {
 		this.imgurUrl = imgurUrl;
 	}
+
+	public long getQtd_ultimate_raras() {
+		return qtd_ultimate_raras;
+	}
+
+	public void setQtd_ultimate_raras(long qtd_ultimate_raras) {
+		this.qtd_ultimate_raras = qtd_ultimate_raras;
+	}
+
+	public long getQtd_gold_raras() {
+		return qtd_gold_raras;
+	}
+
+	public void setQtd_gold_raras(long qtd_gold_raras) {
+		this.qtd_gold_raras = qtd_gold_raras;
+	}
+
+	public long getQtd_parallel_raras() {
+		return qtd_parallel_raras;
+	}
+
+	public void setQtd_parallel_raras(long qtd_parallel_raras) {
+		this.qtd_parallel_raras = qtd_parallel_raras;
+	}
+
+	public long getQtd_ghost_raras() {
+		return qtd_ghost_raras;
+	}
+
+	public void setQtd_ghost_raras(long qtd_ghost_raras) {
+		this.qtd_ghost_raras = qtd_ghost_raras;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 
 		
 }

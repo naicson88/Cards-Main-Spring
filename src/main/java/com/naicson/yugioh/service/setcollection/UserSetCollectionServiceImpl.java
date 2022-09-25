@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.controller.UserRelDeckCards;
 import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
@@ -32,6 +33,7 @@ import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.service.deck.UserRelDeckCardsServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
 import com.naicson.yugioh.util.enums.SetType;
@@ -52,6 +54,9 @@ public class UserSetCollectionServiceImpl {
 	
 	@Autowired
 	private UserDeckServiceImpl userDeckService;
+	
+	@Autowired
+	private UserRelDeckCardsServiceImpl userRelDeckCardsService;
 	
 	Logger logger = LoggerFactory.getLogger(UserSetCollectionServiceImpl.class);
 	
@@ -183,18 +188,24 @@ public class UserSetCollectionServiceImpl {
 
 	public List<CardSetCollectionDTO> transformTupleInCardSetCollectionDTO(List<Tuple> tuple) {
 		return tuple.stream().map(c -> {
+			String vlr = String.valueOf(c.get(3));
 			
-			RelDeckCards rel = new RelDeckCards(c.get(4, String.class),Double.parseDouble(String.valueOf(c.get(3))),c.get(5, String.class));
+			RelDeckCards rel = new RelDeckCards(
+					c.get(4, String.class),
+					Double.parseDouble(vlr),
+					c.get(5, String.class),
+					c.get(6, String.class),
+					c.get(7, String.class));
 			
 			CardSetCollectionDTO card = new CardSetCollectionDTO(					
 					Integer.parseInt(String.valueOf(c.get(0))),
 					Integer.parseInt(String.valueOf(c.get(1))),
 					c.get(2, String.class), 
-					Integer.parseInt(String.valueOf(c.get(6))), 
-					Integer.parseInt(String.valueOf(c.get(7))),
+					Integer.parseInt(String.valueOf(c.get(8))), 
+					Integer.parseInt(String.valueOf(c.get(9))),
 					rel,
-					Boolean.parseBoolean(String.valueOf(c.get(8))),
-					c.get(9, String.class)
+					Boolean.parseBoolean(String.valueOf(c.get(10))),
+					c.get(11, String.class)
 					);	
 			
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
@@ -210,12 +221,11 @@ public class UserSetCollectionServiceImpl {
 		
 		Long deckId = userCollection.getId() > 0 ? this.saveExistingDeck(userCollection) : this.createNewSetCollection(userCollection);
 				
-		List<RelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
+		List<UserRelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
 		
-		if(listRel != null && listRel.size() > 0)
-			relService.saveAllRelDeckUserCards(listRel);
+	     userRelDeckCardsService.saveAll(listRel);
 		
-		logger.info("User SetCollection was successfully saved!");
+		logger.info("User SetCollection was successfully saved! {} ", userCollection.getName());
 		
 		return "User SetCollection was successfully saved!";			
 	}
@@ -258,9 +268,9 @@ public class UserSetCollectionServiceImpl {
 		return deckId;
 	}
 	
-	private List<RelDeckCards> createRelDeckCardsOfSetCollection(UserSetCollectionDTO set, Long deckId) {
+	private List<UserRelDeckCards> createRelDeckCardsOfSetCollection(UserSetCollectionDTO set, Long deckId) {
 		
-		Map<String, RelDeckCards> mapCards = new HashMap<String, RelDeckCards>();
+		Map<String, UserRelDeckCards> mapCards = new HashMap<String, UserRelDeckCards>();
 		
 		set.getCards().stream()
 			.filter(card -> card.getQuantityUserHave() > 0)
@@ -269,48 +279,26 @@ public class UserSetCollectionServiceImpl {
 				String setCode = card.getRelDeckCards().getCard_set_code()+"-"+card.getCardId();
 				
 				if(!mapCards.containsKey(setCode)) {
-					RelDeckCards rel = this.createRelObject(deckId, card);
+					UserRelDeckCards rel = this.createRelObject(deckId, card);
 					mapCards.put(setCode, rel);
 				}				
 				else {
-					RelDeckCards rel = mapCards.get(setCode);
+					UserRelDeckCards rel = mapCards.get(setCode);
 					rel.setQuantity(rel.getQuantity() + card.getQuantityUserHave());				
 					mapCards.put(setCode, rel);
 				}
 			});
 			
-		List<RelDeckCards> listRel =  new ArrayList<RelDeckCards>(mapCards.values());
+		List<UserRelDeckCards> listRel = new ArrayList<UserRelDeckCards>(mapCards.values());
 		
-		return listRel;
-		
-//		for(int i = 0; i < set.getCards().size(); i++) {
-//			
-//			CardSetCollectionDTO cardSet = set.getCards().get(i);
-//			
-//			if(cardSet.getQuantityUserHave() > 0) {
-//				
-//				List<RelDeckCards> listFilter = listRel.stream()
-//						.filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code()))
-//						.collect(Collectors.toList());
-//				
-//				if(listFilter != null && listFilter.size() >= 1 && !("DECK").equalsIgnoreCase(set.getSetType())) {
-//					listRel.stream().filter(r -> r.getCard_set_code().equals(cardSet.getRelDeckCards().getCard_set_code())).forEach(r ->{
-//						r.setQuantity(r.getQuantity() + cardSet.getQuantityUserHave());
-//					});
-//				} else {
-//					RelDeckCards rel = createRelObject(deckId, cardSet);					
-//					listRel.add(rel);				
-//				}
-//			}
-//		}				
-	
+		return listRel;					
 	}
 
-	private RelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {
-		RelDeckCards rel = new RelDeckCards();
+	private UserRelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {
+		UserRelDeckCards rel = new UserRelDeckCards();
 		rel.setCard_price(cardSet.getRelDeckCards().getCard_price());
 		rel.setCard_raridade(cardSet.getRelDeckCards().getCard_raridade().trim());
-		rel.setCard_set_code(cardSet.getRelDeckCards().getCard_set_code().trim());
+		rel.setCardSetCode(cardSet.getRelDeckCards().getCard_set_code().trim());
 		rel.setCardId(cardSet.getCardId());
 		rel.setCardNumber(cardSet.getNumber().longValue());
 		rel.setDeckId(deckId);
@@ -318,6 +306,8 @@ public class UserSetCollectionServiceImpl {
 		rel.setIsSpeedDuel(cardSet.isSpeedDuel());
 		rel.setQuantity(cardSet.getQuantityUserHave());
 		rel.setIsSideDeck(false);
+		rel.setSetRarityCode(cardSet.getRelDeckCards().getSetRarityCode());
+		rel.setRarityDetails(cardSet.getRelDeckCards().getRarityDetails());
 		return rel;
 	}
 
@@ -386,8 +376,7 @@ public class UserSetCollectionServiceImpl {
 		deck.setNome(userSet.getName());
 		deck.setId(userSet.getId());
 		deck.setSetType(userSet.getSetType());
-		deck.setRel_deck_cards(this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
 		
-		userDeckService.saveUserdeck(deck);
+		userDeckService.saveUserdeck(deck, this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
 	}
 }
