@@ -11,7 +11,8 @@ public enum GenericTypesCards {
 	LINK(7),
 	SPELL(8),
 	TRAP(9),
-	TOKEN(10);
+	TOKEN(10),
+	SKILL(11);
 	
 	private int id;
 	

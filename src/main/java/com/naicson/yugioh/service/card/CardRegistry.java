@@ -216,6 +216,8 @@ public class CardRegistry {
 			generic = GenericTypesCards.TOKEN.toString();
 		else if (StringUtils.containsIgnoreCase(type, "monster"))
 			generic = GenericTypesCards.MONSTER.toString();
+		else if (StringUtils.containsIgnoreCase(type, "skill"))
+			generic = GenericTypesCards.SKILL.toString();
 		else
 			throw new IllegalArgumentException("Invalid monster type");
 
@@ -235,6 +237,8 @@ public class CardRegistry {
 		
 		if(card.getType().contains("Spell") || card.getType().contains("Trap"))
 			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
+		else if(card.getType().equalsIgnoreCase("Skill Card"))
+			attr = "SKILL";
 		else
 			attr = card.getAttribute();
 		

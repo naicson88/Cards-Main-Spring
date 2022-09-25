@@ -9,5 +9,6 @@ public enum CardAttributes {
 	WIND,
 	SPELL_CARD,
 	TRAP_CARD,
-	DIVINE
+	DIVINE,
+	SKILL
 }
