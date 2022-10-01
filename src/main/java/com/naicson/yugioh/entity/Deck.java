@@ -38,6 +38,7 @@ public class Deck implements Serializable {
 	private Date dt_criacao;
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
+	private boolean isBasedDeck;
 	
 	@ManyToMany(mappedBy = "decks")
 	private List<SetCollection> setCollection;	
@@ -281,6 +282,14 @@ public class Deck implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public boolean isBasedDeck() {
+		return isBasedDeck;
+	}
+
+	public void setBasedDeck(boolean isBasedDeck) {
+		this.isBasedDeck = isBasedDeck;
 	}
 	
 	

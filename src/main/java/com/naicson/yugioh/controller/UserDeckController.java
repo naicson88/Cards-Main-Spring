@@ -39,7 +39,7 @@ public class UserDeckController<T> {
 	UserDeckRepository deckUserRepository;
 	
 	@Autowired
-	UserDeckServiceImpl deckService;
+	UserDeckServiceImpl userDeckService;
 	
 	@Autowired
 	ISetsByType<T> setsBySetType;
@@ -61,7 +61,7 @@ public class UserDeckController<T> {
 	@GetMapping("/edit-deck")
 	@ApiOperation(value="Edit a Set by its ID and Source type", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
-		Deck deck = deckService.editUserDeck(deckId);
+		Deck deck = userDeckService.editUserDeck(deckId);
 		
 		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
 	}
@@ -70,7 +70,7 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
 		
-		this.deckService.saveUserdeck(deck, null);
+		this.userDeckService.saveUserdeck(deck, null);
 		
 		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
 
@@ -80,7 +80,7 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Remove a Set from User collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) {
 		
-		 deckService.removeSetFromUsersCollection(deckId);
+		 userDeckService.removeSetFromUsersCollection(deckId);
 		
 		return new ResponseEntity<String>(JSONObject.quote("Set was successfully removed from your collection"), HttpStatus.OK);
 
@@ -90,7 +90,7 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
 		
-		 deckService.addSetToUserCollection(deckId);
+		 userDeckService.addSetToUserCollection(deckId);
 		
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 					
@@ -99,7 +99,7 @@ public class UserDeckController<T> {
 	@GetMapping("/get-all-decksname")
 	@ApiOperation(value="Get all Decks Name of user", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(){
-		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName();
+		List<DeckAndSetsBySetTypeDTO> listDto = userDeckService.getAllDecksName();
 		
 		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
 	}
@@ -108,9 +108,17 @@ public class UserDeckController<T> {
 	@ApiOperation(value="Get a Deck and Cards for transfer", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<UserSetCollectionDTO> getDeckAndCardsForTransfer(@RequestParam("deckId") Integer deckId){
 		
-		UserSetCollectionDTO dto = deckService.getDeckAndCardsForTransfer(deckId.longValue());
+		UserSetCollectionDTO dto = userDeckService.getDeckAndCardsForTransfer(deckId.longValue());
 		
 		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/create-based-deck")
+	@ApiOperation(value="Create a Based Deck", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<Long> createBasedDeck(@RequestBody Integer konamiDeckId){
+		Long createdDeckId = userDeckService.createBasedDeck(konamiDeckId.longValue());
+		
+		return new ResponseEntity<Long>(createdDeckId, HttpStatus.CREATED);
 	}
 	
 }

@@ -323,6 +323,7 @@ public class UserDeckServiceImpl {
 		UserDeck newDeck = new UserDeck();
 		newDeck = newDeck.userDeckCopiedFromKonamiDeck(deckOrigem);
 		newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
+		newDeck.setSetType(SetType.DECK.toString());
 		UserDeck generatedDeckUser = userDeckRepository.save(newDeck);
 
 		if (generatedDeckUser == null)
@@ -338,7 +339,7 @@ public class UserDeckServiceImpl {
 		
 		logger.info("Konami Deck has been copied to User's collection: {}", deckOrigem.getNome());
 
-		return newDeck;
+		return generatedDeckUser;
 
 	}
 	
@@ -525,6 +526,17 @@ public class UserDeckServiceImpl {
 		
 		
 		return dto;
+	}
+
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	public Long createBasedDeck(Long konamiDeckId) {
+		if(konamiDeckId == null)
+			throw new IllegalArgumentException("Invalid Konamid Deck ID for create a Based Deck");
+		
+		UserDeck generatedDeckUser = this.addSetToUserCollection(konamiDeckId);
+		
+		return generatedDeckUser.getId();
+		
 	}
 
 }

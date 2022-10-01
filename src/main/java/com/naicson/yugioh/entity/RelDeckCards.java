@@ -166,9 +166,6 @@ public class RelDeckCards implements Serializable {
 
 	public void setRarityDetails(String rarityDetails) {
 		this.rarityDetails = rarityDetails;
-	}	
-
-	
-	
+	}
 	
 }

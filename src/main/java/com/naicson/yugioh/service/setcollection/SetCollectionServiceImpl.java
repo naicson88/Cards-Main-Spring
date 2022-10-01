@@ -151,20 +151,6 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 				
 	}
 	
-//	private List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
-//		List<CardRarityDTO> listRarity = new ArrayList<>();	
-//		
-//		listRelDeckCards.stream()
-//				.filter(rel -> rel.getCardId().equals(cardDetail.getId()))
-//				.forEach(rel -> {
-//						CardRarityDTO rarityDTO = new CardRarityDTO();
-//						BeanUtils.copyProperties(rel, rarityDTO);
-//						listRarity.add(rarityDTO);
-//						
-//			});
-//			return listRarity;
-//	}
-
 	private SetDetailsDTO convertBasicSetToSetDetailsDTO(SetCollection set) {
 		SetDetailsDTO deck = new SetDetailsDTO();
 				
@@ -249,6 +235,12 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 			throw new IllegalArgumentException("Invalid date to save relation Set - Deck");
 		
 		this.setColRepository.saveSetDeckRelation(setId, deckId);				
+	}
+	
+	public List<Long> getSetDeckRelationId(Integer setId){
+		if(setId == null)
+			throw new IllegalArgumentException("Invalid date to save relation Set - Deck");		
+		return this.setColRepository.getSetDeckRelationId(setId);
 	}
 
 }
