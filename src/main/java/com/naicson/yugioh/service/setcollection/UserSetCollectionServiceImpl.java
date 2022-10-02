@@ -141,7 +141,7 @@ public class UserSetCollectionServiceImpl {
 			List<Deck> listDecks = deckService.findAllByIds(deckIds);
 
 			if (listDecks != null && !listDecks.isEmpty()) {
-				listDecks.stream().filter(deck -> deck.isBasedDeck()).forEach(deck -> {
+				listDecks.stream().filter(deck -> deck.getIsBasedDeck()).forEach(deck -> {
 					mapBasedDecks.put(deck.getId(), deck.getNome());
 				});
 

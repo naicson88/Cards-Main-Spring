@@ -284,11 +284,11 @@ public class Deck implements Serializable {
 		return serialVersionUID;
 	}
 
-	public boolean isBasedDeck() {
+	public boolean getIsBasedDeck() {
 		return isBasedDeck;
 	}
 
-	public void setBasedDeck(boolean isBasedDeck) {
+	public void setIsBasedDeck(boolean isBasedDeck) {
 		this.isBasedDeck = isBasedDeck;
 	}
 	
