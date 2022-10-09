@@ -26,6 +26,7 @@ public class KonamiDeck implements Serializable{
 	@JsonProperty("relDeckCards")
 	private List<RelDeckCards> relDeckCards;
 	private Boolean isSpeedDuel;
+	private boolean isBasedDeck;
 	
 	public Long getId() {
 		return id;
@@ -97,6 +98,12 @@ public class KonamiDeck implements Serializable{
 				+ ", nomePortugues=" + nomePortugues + ", lancamento=" + lancamento + ", setType=" + setType
 				+ ", cardsToBeRegistered=" + cardsToBeRegistered + ", relDeckCards=" + relDeckCards
 				+ ", isSpeedDuel=" + isSpeedDuel + "]";
+	}
+	public boolean getIsBasedDeck() {
+		return isBasedDeck;
+	}
+	public void setIsBasedDeck(boolean isBasedDeck) {
+		this.isBasedDeck = isBasedDeck;
 	}
 	
 	

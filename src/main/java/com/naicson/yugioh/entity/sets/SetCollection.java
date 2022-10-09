@@ -130,8 +130,6 @@ public class SetCollection {
 
 	public void setImgurUrl(String imgurUrl) {
 		this.imgurUrl = imgurUrl;
-	}
-	
-	
+	}	
 		
 }

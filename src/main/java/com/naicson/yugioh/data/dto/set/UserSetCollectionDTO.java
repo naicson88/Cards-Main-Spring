@@ -15,6 +15,7 @@ public class UserSetCollectionDTO {
 	private Map<String, Integer> rarities;
 	private List<String> setCodes;
 	private List<CardSetCollectionDTO> cards;
+	private Map<Long, String> basedDeck;
 	
 	public Long getId() {
 		return id;
@@ -63,6 +64,12 @@ public class UserSetCollectionDTO {
 	}
 	public void setSetType(String setType) {
 		this.setType = setType;
+	}
+	public Map<Long, String> getBasedDeck() {
+		return basedDeck;
+	}
+	public void setBasedDeck(Map<Long, String> basedDeck) {
+		this.basedDeck = basedDeck;
 	}
 	
 	

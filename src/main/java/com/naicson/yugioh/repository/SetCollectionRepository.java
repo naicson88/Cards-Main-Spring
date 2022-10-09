@@ -28,6 +28,9 @@ public interface SetCollectionRepository extends JpaRepository<SetCollection, In
 	@Query(value = "insert into tab_setcollection_deck (set_collection_id, deck_id) values (:setId, :deckId)",
 			nativeQuery = true)
 	public void saveSetDeckRelation(Long setId, Long deckId);
+	
+	@Query(value = "select deck_id from tab_setcollection_deck where set_collection_id = :setId",nativeQuery = true)	
+	public List<Long> getSetDeckRelationId(Integer setId);
 
 
 }

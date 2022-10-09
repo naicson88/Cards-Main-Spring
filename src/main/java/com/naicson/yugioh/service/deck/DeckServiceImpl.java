@@ -301,7 +301,16 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		return decks;
 	}
-
+	
+	public List<Deck> findAllByIds(List<Long> ids){
+		if(ids == null)
+			throw new IllegalArgumentException("Invalid IDs for consulting Decks");
+		
+		List<Deck> decks = deckRepository.findAllById(ids);
+		
+		return decks;
+	}
+	
 	public List<AutocompleteSetDTO> autocompleteSet() {
 		List<Tuple> tuple = deckRepository.autocompleteSet();
 		

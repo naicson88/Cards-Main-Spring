@@ -38,6 +38,7 @@ public class ConsumerUtils {
 			deck.setSetType(SetType.valueOf(kDeck.getSetType()).toString());
 			deck.setIsSpeedDuel(kDeck.getIsSpeedDuel());
 			deck.setImgurUrl(kDeck.getImagem());
+			deck.setIsBasedDeck(kDeck.getIsBasedDeck());
 			
 			return deck;
 	}
