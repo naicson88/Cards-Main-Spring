@@ -291,8 +291,5 @@ public class Deck implements Serializable {
 	public void setIsBasedDeck(boolean isBasedDeck) {
 		this.isBasedDeck = isBasedDeck;
 	}
-	
-	
-
 		
 }

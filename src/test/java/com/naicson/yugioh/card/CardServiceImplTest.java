@@ -125,25 +125,25 @@ public class CardServiceImplTest {
 		
 	}	
 	
-	@Test
-	public void cardOfUserDetail() throws SQLException, Exception {
-		this.mockAuth();
-		Card card = ValidObjects.generateValidCard(1);
-	
-		Tuple mockedTuple = Mockito.mock(Tuple.class); 
-		List<Tuple> tupleList = List.of(mockedTuple);
-		  
-		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);
-		Mockito.when(dao.listCardOfUserDetails(anyInt(), anyLong())).thenReturn(tupleList);
-		
-		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1);
-		
-		assertEquals(dto.getCardName(), card.getNome());
-		assertEquals(dto.getCardNumber(), card.getNumero());
-		assertNotNull(dto.getSetsWithThisCard());
-		assertNotNull(dto.getRarity());
-		
-	}
+//	@Test
+//	public void cardOfUserDetail() throws SQLException, Exception {
+//		this.mockAuth();
+//		Card card = ValidObjects.generateValidCard(1);
+//	
+//		Tuple mockedTuple = Mockito.mock(Tuple.class); 
+//		List<Tuple> tupleList = List.of(mockedTuple);
+//		  
+//		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);
+//		Mockito.when(dao.listCardOfUserDetails(anyInt(), anyLong())).thenReturn(tupleList);
+//		
+//		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1);
+//		
+//		assertEquals(dto.getCardName(), card.getNome());
+//		assertEquals(dto.getCardNumber(), card.getNumero());
+//		assertNotNull(dto.getSetsWithThisCard());
+//		assertNotNull(dto.getRarity());
+//		
+//	}
 	
 	@Test
 	public void getByGenericType() {
@@ -223,37 +223,37 @@ public class CardServiceImplTest {
 		assertTrue(actual.contains(expected));
 	}
 	
-	@Test
-	public void findCardByItsNumberAndRespectiveDecks() {
-		
-		Card card = ValidObjects.generateValidCard(1);
-		
-		List<CardPriceInformation> priceInfo = List.of(CardPriceInformationMock.generateValidCardPriceInfo(1L));
-		
-		List<Deck> listDeck = List.of(ValidObjects.generateValidDeck(), ValidObjects.generateValidDeck());
-		List<CardAlternativeNumber> listAlternativeNumber = List.of(CardAlternativeNumberMock.generateValidCardAlternativeNumber(1L));
-		
-		Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
-		Map<String, Integer> mapUser = Map.of("CCC",1 ,"DDD",2);
-		
-		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);		
-		Mockito.when(relDeckCardsRepository.findByDeckIdAndCardNumber(any(), any()))
-			.thenReturn(List.of(ValidObjects.generateRelDeckCards()));		
-		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
-		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
-		
-		doReturn(listDeck).when(dao).cardDecks(anyInt());
-		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
-		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
-		
-		CardDetailsDTO dto = cardService.findCardByNumberWithDecks(1L);
-		
-		assertNotNull(dto.getCard());
-		assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
-		assertNotNull(dto.getQtdUserHaveByUserCollection().get("CCC"));
-					
-	}
-	
+//	@Test
+//	public void findCardByItsNumberAndRespectiveDecks() {
+//		
+//		Card card = ValidObjects.generateValidCard(1);
+//		
+//		List<CardPriceInformation> priceInfo = List.of(CardPriceInformationMock.generateValidCardPriceInfo(1L));
+//		
+//		List<Deck> listDeck = List.of(ValidObjects.generateValidDeck(), ValidObjects.generateValidDeck());
+//		List<CardAlternativeNumber> listAlternativeNumber = List.of(CardAlternativeNumberMock.generateValidCardAlternativeNumber(1L));
+//		
+//		Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
+//		Map<String, Integer> mapUser = Map.of("CCC",1 ,"DDD",2);
+//		
+//		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(card);		
+//		Mockito.when(relDeckCardsRepository.findByDeckIdAndCardNumber(any(), any()))
+//			.thenReturn(List.of(ValidObjects.generateRelDeckCards()));		
+//		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
+//		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
+//		
+//		doReturn(listDeck).when(dao).cardDecks(anyInt());
+//		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
+//		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
+//		
+//		CardDetailsDTO dto = cardService.findCardByNumberWithDecks(1L);
+//		
+//		assertNotNull(dto.getCard());
+//		assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
+//		assertNotNull(dto.getQtdUserHaveByUserCollection().get("CCC"));
+//					
+//	}
+//	
 	@Test
 	public void findQtdCardUserHaveByCollectionKONAMI() {
 		this.mockAuth();
