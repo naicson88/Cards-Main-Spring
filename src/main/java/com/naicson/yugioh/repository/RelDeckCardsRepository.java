@@ -42,4 +42,6 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Inte
 			+ " values (:deckId, :cardNumber, :card_raridade, :card_set_code, :card_price, :dt_criacao, :isSideDeck, :cardId, :isSpeedDuel, :quantity)" , nativeQuery = true)
 	void saveRelUserDeckCards(Long deckId, Long cardNumber, String card_raridade, String card_set_code,
 			Double card_price, Date dt_criacao, Boolean isSideDeck, Integer cardId, Boolean isSpeedDuel,Integer quantity);
+
+	List<RelDeckCards> findByCardSetCodeLike(String setCode);
 }

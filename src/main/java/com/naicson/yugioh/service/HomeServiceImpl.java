@@ -197,7 +197,6 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
 				lastSet.setRegisteredDate(set.get(8, Date.class));
 				lastSet.setSetType(set.get(10, String.class));
-				// lastSet.setSetCode("WWW-EN001");
 
 				return lastSet;
 			}).collect(Collectors.toList());

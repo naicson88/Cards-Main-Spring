@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
+import org.apache.commons.lang3.SerializationUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -335,6 +339,49 @@ public class DeckServiceImpl implements DeckDetailService {
 		}).collect(Collectors.toList());
 		
 		return listDto;
+	}
+
+	public void updateCardsQuantity(String setCodes) {
+		if(setCodes == null)
+			throw new IllegalArgumentException("Invalid Set Codes Payload");
+		
+		JSONArray array = new JSONArray(setCodes); 
+		logger.info("Starting update Cards Quantity...");
+		
+		for(Object obj: array) {
+			JSONObject setAndQuantity = (JSONObject) obj;
+			
+			if(!JSONObject.NULL.equals(setAndQuantity.get("setcode")) && !JSONObject.NULL.equals(setAndQuantity.get("quantity"))) {
+				String setCode = (String) setAndQuantity.get("setcode");
+				String quantity = (String) setAndQuantity.get("quantity");
+				Integer qtd = Integer.parseInt(quantity);	
+				
+				if(!setCode.isBlank() && qtd > 1) {
+					this.updateSetCodeQuantity(setCode, qtd);
+				}
+			}			
+		}	
+		
+		logger.info("Ending update Cards Quantity");		
+	}
+	
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	private void updateSetCodeQuantity(String setCode, Integer quantity) {	
+		if(quantity == null || setCode == null)
+			throw new IllegalAccessError("Invalid information to update SetCode Quantity");
+		
+		List<RelDeckCards> rel = relDeckCardsRepository.findByCardSetCodeLike(setCode);
+		
+		if(rel == null)
+			throw new ErrorMessage("Cannot find SetCode: " + setCode);
+		
+		if(rel.size() < quantity) {
+			for(int i = rel.size(); i < quantity; i++) {
+				RelDeckCards relCopied = SerializationUtils.clone(rel.get(0)); 
+				relCopied.setId(null);
+				relDeckCardsRepository.save(relCopied);
+			}	
+		}
 	}
 
 }
