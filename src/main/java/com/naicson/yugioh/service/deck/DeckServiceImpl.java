@@ -345,6 +345,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if(setCodes == null)
 			throw new IllegalArgumentException("Invalid Set Codes Payload");
 		
+		int counter = 0;
 		JSONArray array = new JSONArray(setCodes); 
 		logger.info("Starting update Cards Quantity...");
 		
@@ -354,15 +355,16 @@ public class DeckServiceImpl implements DeckDetailService {
 			if(!JSONObject.NULL.equals(setAndQuantity.get("setcode")) && !JSONObject.NULL.equals(setAndQuantity.get("quantity"))) {
 				String setCode = (String) setAndQuantity.get("setcode");
 				String quantity = (String) setAndQuantity.get("quantity");
-				Integer qtd = Integer.parseInt(quantity);	
-				
+				Integer qtd = GeneralFunctions.parseValueToInt(quantity);	
+							
 				if(!setCode.isBlank() && qtd > 1) {
 					this.updateSetCodeQuantity(setCode, qtd);
+					counter++;
 				}
 			}			
 		}	
 		
-		logger.info("Ending update Cards Quantity");		
+		logger.info("Ending update Cards Quantity. " + counter + " cards were updated!");		
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})

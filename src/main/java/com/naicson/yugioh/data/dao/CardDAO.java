@@ -31,20 +31,20 @@ public class CardDAO {
 	
 	public List<Tuple> listCardOfUserDetails(Integer cardId, long userId) {
 		Query query = em.createNativeQuery("select du.nome, rel.card_set_code , rel.card_raridade as rarity, "
-				+ "rel.card_price as price, count(rel.card_set_code) as quantity, du.id, du.set_type "
-				+ "from tab_user_deck du  "
-				+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = du.id  "
-				+ "where rel.card_id = :cardId and du.user_id = :userId "
-				+ "group by rel.card_set_code "
-				+ "union "
-				+ "select usc.name , rel.card_set_code , rel.card_raridade as rarity, "
-				+ "rel.card_price as price, count(rel.card_set_code) as quantity, usc.id, usc.set_collection_type "
-				+ "from tab_user_set_collection usc "
-				+ "inner join tab_user_setcollection_deck usdeck on usdeck.user_set_collection_id = usc.id "
-				+ "inner join tab_user_deck du on du.id = usdeck.deck_id "
-				+ "inner join tab_rel_deckusers_cards rel on rel.deck_id = usdeck.deck_id "
-				+ "where rel.card_id = :cardId and du.user_id = :userId "
-				+ "group by rel.card_set_code", Tuple.class)
+				+ " rel.card_price as price, sum(quantity) as quantity, du.id, du.set_type "
+				+ " from tab_user_deck du  "
+				+ " inner join tab_rel_deckusers_cards rel on rel.deck_id = du.id  "
+				+ " where rel.card_id = :cardId and du.user_id = :userId and set_type = 'DECK' "
+				+ " group by rel.card_set_code, nome "
+				+ " union "
+				+ " select usc.name , rel.card_set_code , rel.card_raridade as rarity, "
+				+ " rel.card_price as price, sum(quantity) as quantity, usc.id, usc.set_collection_type "
+				+ " from tab_user_set_collection usc "
+				+ " inner join tab_user_setcollection_deck usdeck on usdeck.user_set_collection_id = usc.id "
+				+ " inner join tab_user_deck du on du.id = usdeck.deck_id "
+				+ " inner join tab_rel_deckusers_cards rel on rel.deck_id = usdeck.deck_id "
+				+ " where rel.card_id = :cardId and du.user_id = :userId and set_type != 'DECK' "
+				+ " group by rel.card_set_code,nome ", Tuple.class)
 				.setParameter("cardId", cardId)
 				.setParameter("userId", userId);
 		
