@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -115,17 +116,16 @@ public class CardServiceImpl implements CardDetailService {
 
 	@Override
 	public Card listarNumero(Long numero) {
-		return cardRepository.findByNumero(numero);
+		return cardRepository.findByNumero(numero)
+				.orElseThrow(() -> new EntityNotFoundException("Card not found with number: " + numero));
 	}
 	
 
 	@Override
 	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
 		
-		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId);
-		
-		if(cardsOfArchetype == null || cardsOfArchetype.isEmpty())
-			throw new NoSuchElementException("It was not possible found cards of Archetype: " + archId);
+		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
+				.orElseThrow(() -> new NoSuchElementException("It was not possible found cards of Archetype: " + archId));
 		
 		List<CardOfArchetypeDTO> listDTO = new ArrayList<>();
 		
@@ -152,10 +152,7 @@ public class CardServiceImpl implements CardDetailService {
 			
 			if(cardsDetails != null ) {
 				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
-				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(
-						
-						
-					
+				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
 						c.get(0, String.class),
 						c.get(1, String.class),
 						c.get(2, String.class),
@@ -203,10 +200,8 @@ public class CardServiceImpl implements CardDetailService {
 	@Override
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
-		Card card = cardRepository.findByNumero(cardNumero);
-		
-		if (card == null || card.getId() == null) 
-			throw new EntityNotFoundException("It was not possible find card with number: " + cardNumero);
+		Card card = cardRepository.findByNumero(cardNumero)
+				.orElseThrow(() ->  new EntityNotFoundException("It was not possible find card with number: " + cardNumero));
 		
 		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));	
 		
@@ -261,9 +256,10 @@ public class CardServiceImpl implements CardDetailService {
 		listKonamiSets.stream().forEach(c -> {	
 			Boolean hasOnList = false;
 			BigInteger id = c.get(0, BigInteger.class);
+			String setType = c.get(1, String.class);
 			
 			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
-				if(cardSet.getId().equals(id)) {
+				if(cardSet.getId().equals(id) && cardSet.getSetType().equals(setType)) {
 					hasOnList = true;
 					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
 					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
@@ -277,8 +273,8 @@ public class CardServiceImpl implements CardDetailService {
 			
 			if(!hasOnList) {
 				listCardSets.add(new KonamiSetsWithCardDTO(
-						c.get(0, BigInteger.class),
-						c.get(1, String.class),
+						id,
+						setType,
 						c.get(2, String.class),
 						c.get(3, String.class),
 						c.get(4, String.class),

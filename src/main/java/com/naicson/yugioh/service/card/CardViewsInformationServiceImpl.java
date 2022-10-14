@@ -80,12 +80,8 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 			throw new IllegalArgumentException("#rankingViews: Invalid card number");
 		}
 		
-		Card card = cardRepository.findByNumero(cardNumber);
-		
-		if(card == null) {
-			logger.error("Card not found. Number: " + cardNumber + "".toUpperCase());
-			throw new EntityNotFoundException("Card not found. Number: " + cardNumber);
-		}
+		Card card = cardRepository.findByNumero(cardNumber)
+				.orElseThrow(() -> new EntityNotFoundException("Card not found. Number: " + cardNumber)) ;
 		
 		return card.getNome();
 	}

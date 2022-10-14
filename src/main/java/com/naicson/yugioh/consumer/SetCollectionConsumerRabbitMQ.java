@@ -37,7 +37,7 @@ public class SetCollectionConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 		
-	@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
+	@RabbitListener(queues = "${rabbitmq.queue.setcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = Exception.class)
 	private void consumerSetCollectionQueue(String json) {
 			

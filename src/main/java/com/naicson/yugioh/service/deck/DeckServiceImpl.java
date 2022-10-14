@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -73,7 +72,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		this.deckRepository = deckRepository;
 		this.relDeckCardsRepository = relDeckCardsRepository;
 		this.dao = dao;
-
 	}
 
 	public DeckServiceImpl() {
@@ -149,7 +147,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetsUtils utils = new SetsUtils();
 
 		deck = this.returnDeckWithCards(deckId, deckSource);
-		//deck = this.countQtdCardRarityInTheDeck(deck);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -372,10 +369,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		if(quantity == null || setCode == null)
 			throw new IllegalAccessError("Invalid information to update SetCode Quantity");
 		
-		List<RelDeckCards> rel = relDeckCardsRepository.findByCardSetCodeLike(setCode);
-		
-		if(rel == null)
-			throw new ErrorMessage("Cannot find SetCode: " + setCode);
+		List<RelDeckCards> rel = relDeckCardsRepository.findByCardSetCodeLike(setCode)
+				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
 		
 		if(rel.size() < quantity) {
 			for(int i = rel.size(); i < quantity; i++) {

@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,7 +101,6 @@ public class HomeServiceImpl implements HomeDetailService {
 
 		if (deckOfSetCollectionId == null || deckOfSetCollectionId.size() == 0)
 			return 0.0;
-			//throw new IllegalArgumentException("Invalid Set Id to get total price.");	
 
 		Double totalPrice = deckOfSetCollectionId.stream()
 				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();
@@ -185,9 +185,9 @@ public class HomeServiceImpl implements HomeDetailService {
 		List<Tuple> sets = homeRepository.returnLastSetsAddedToUser(user.getId());
 		List<LastAddedDTO> lastSetsAdded = new ArrayList<>();
 
-		if (sets != null && !sets.isEmpty()) {
+		if (!sets.isEmpty()) {
 
-			lastSetsAdded = sets.stream().map(set -> {
+				lastSetsAdded = sets.stream().map(set -> {
 
 				LastAddedDTO lastSet = new LastAddedDTO();
 
@@ -201,11 +201,8 @@ public class HomeServiceImpl implements HomeDetailService {
 				return lastSet;
 			}).collect(Collectors.toList());
 
-			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) {
-				logger.error("LIST WITH LASTS ADDED IS EMPTY");
+			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) 
 				throw new ErrorMessage("List with lasts added is empty");
-			}
-
 		} else {
 			return Collections.emptyList();
 		}
