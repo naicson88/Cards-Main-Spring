@@ -256,7 +256,7 @@ public class DeckDAO {
 			
 		} else if (userOrKonamiDeck.equalsIgnoreCase("Konami")) {
 			
-		}else {
+		} else {
 			throw new IllegalArgumentException("Type of deck not informed");
 		}
 		

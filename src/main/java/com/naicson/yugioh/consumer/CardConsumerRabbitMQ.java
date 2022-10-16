@@ -42,7 +42,7 @@ public class CardConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
 	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public void consumer(String json) {
 		logger.info("Start saving Card on Deck: {}" , json);
 		

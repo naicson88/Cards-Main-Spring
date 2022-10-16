@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.CardDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
@@ -33,6 +37,7 @@ import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.data.dto.cards.KonamiSetsWithCardDTO;
 import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
@@ -469,9 +474,62 @@ public class CardServiceImpl implements CardDetailService {
 			throw new IllegalArgumentException("Invalid Card name to find by");
 		
 		Card card = cardRepository.findByNome(nome.trim());
-		
+				
 		return card;
 	}
+	
+	
+	public void updateCardsImages(String cardImagesJson) {
+		logger.info("Start register new Alternative Card Numbers...");
+		
+		if(cardImagesJson == null || cardImagesJson.isBlank())
+			throw new IllegalArgumentException("JSON with card images is empty");
+		
+		JSONObject card = new JSONObject(cardImagesJson);
+		HashSet<Long> imagesList = transforJsonArrayInList(card.getJSONArray("images"));
+		System.out.println(imagesList);
+		String cardName = (String) Optional.ofNullable(card.get("cardName"))
+				.orElseThrow(() -> new IllegalArgumentException("Invalid Card Name to update Images"));
+		
+		Card cardEntity = Optional.ofNullable(this.findByCardNome(cardName.trim()))
+				.orElseThrow(() -> new EntityNotFoundException("Card Not Found with name: " + cardName));
+		
+		List<CardAlternativeNumber> alternativeNumbers = Optional.ofNullable(alternativeRepository.findAllByCardId(cardEntity.getId()))
+				.orElseThrow(() -> new EntityNotFoundException("Card Alternative Number not found with Card ID: " + cardEntity.getId()));
+		
+		alternativeNumbers.stream().forEach(alt -> {		
+			if(imagesList.contains(alt.getCardAlternativeNumber()))
+				imagesList.remove(alt.getCardAlternativeNumber());
+		});	
+		System.out.println(imagesList);
+		if(imagesList.size() > 0)
+			saveNewAlternativeImages(cardEntity.getId(), imagesList);
+		
+		logger.info("Finish register new Alternative Card Numbers for " + cardName);
+				
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	private void saveNewAlternativeImages(Integer cardId, HashSet<Long> numbers) {
+		numbers.stream().forEach(num -> {
+			CardAlternativeNumber alt = new CardAlternativeNumber(null, cardId, num);
+			alternativeRepository.save(alt);
+			logger.info("New Alternative Number Saved: " + num);
+		});
+	}
+	
+	private HashSet<Long> transforJsonArrayInList(JSONArray array) {		
+		if(array == null || array.isEmpty())
+			throw new IllegalArgumentException("Array with Card images is empty");
+		
+		HashSet<Long> list = new HashSet<Long>();		
+		for(int i = 0; i < array.length(); i++) { 
+			list.add(array.getLong(i));		
+		}		
+		return list;
+	}
+	
+	
 
 
 }

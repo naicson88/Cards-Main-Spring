@@ -26,8 +26,7 @@ public class CardAlternativeNumber {
 	
 	public CardAlternativeNumber() {}
 
-	public CardAlternativeNumber(Long id, int cardId, Long cardAlternativeNumber) {
-		
+	public CardAlternativeNumber(Long id, int cardId, Long cardAlternativeNumber) {		
 		this.id = id;
 		this.cardId = cardId;
 		this.cardAlternativeNumber = cardAlternativeNumber;

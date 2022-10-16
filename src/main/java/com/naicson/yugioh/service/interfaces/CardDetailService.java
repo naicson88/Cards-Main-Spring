@@ -51,4 +51,6 @@ public interface CardDetailService {
 	
 	 Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource);
 
+	void updateCardsImages(String cardImages);
+
 }

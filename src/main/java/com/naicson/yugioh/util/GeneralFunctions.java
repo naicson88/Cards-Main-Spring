@@ -1,11 +1,15 @@
 package com.naicson.yugioh.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -122,4 +126,39 @@ public abstract class GeneralFunctions {
 			return 0;
 		}
 	}
+	
+	public static void createNewFile(String fileName,  String fileExtension, String path, List<String> informations) {
+		
+		if(fileExtension == null || fileExtension.isBlank() || informations == null
+				|| fileName == null || fileName.isBlank())
+			throw new IllegalArgumentException("Invalid file extension or file name informed");
+
+		try {
+			logger.info("Starting creating a new File...");
+			
+			path = path == null || path.isBlank() ? "C:\\Cards\\" : path;
+			String fullPath = path+fileName+fileExtension;
+			File file = new File(fullPath);
+			
+			 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	         BufferedWriter bw = new BufferedWriter(fw);
+			
+			if(!file.exists()) {file.createNewFile();}
+			
+			informations.stream().forEach(n -> {try {
+				bw.write(n);
+				bw.newLine();
+			} catch (IOException e) {
+				logger.error("Error while writing information: " + n);
+			}});
+					
+			bw.close();	         
+			logger.info("File created successfully! " + fullPath);
+		}catch (Exception e) {
+			logger.error("Error while generaton File: " + e.getMessage());
+		} 
+		
+	}
+	
+	
 }
