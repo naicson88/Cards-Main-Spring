@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 
 
@@ -57,5 +58,16 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 	@Query(value = "select IFNULL(ROUND(sum(card_price * quantity),2), 0.0) as total from tab_rel_deckusers_cards where deck_id = :setId", nativeQuery = true)
 	Double findTotalSetPrice(Long setId);
 	
+	@Query(value = "select distinct card.id, card.nome, card.numero as img, \"\" as setCode, 'CARD' as entity_type "
+			+ "from tab_cards card "
+			+ "union "
+			+ "select d.id, d.nome, d.imagem, d.set_code, 'DECK' as entity_type "
+			+ "from tab_decks d "
+			+ "where d.set_type = 'DECK' "
+			+ "union "
+			+ "select sc.id, sc.name, sc.img_path, sc.set_code, 'COLLECTION' "
+			+ "from tab_set_collection sc ",
+			nativeQuery = true)
+	List<Tuple> generalSearch ();
 	
 }

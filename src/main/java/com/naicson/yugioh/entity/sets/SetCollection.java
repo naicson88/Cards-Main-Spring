@@ -38,6 +38,7 @@ public class SetCollection {
 	private Date registrationDate;
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
+	private String setCode;
 	
 	@ManyToMany( fetch = FetchType.EAGER)
 	@JoinTable(name="tab_setcollection_deck",
@@ -63,6 +64,7 @@ public class SetCollection {
 		collection.setRegistrationDate(new Date());
 		collection.setReleaseDate(dto.getReleaseDate());
 		collection.setSetCollectionType(SetType.valueOf(dto.getSetType()));
+		collection.setSetCode(dto.getSetCode());
 		
 		return collection;
 	}
@@ -130,6 +132,14 @@ public class SetCollection {
 
 	public void setImgurUrl(String imgurUrl) {
 		this.imgurUrl = imgurUrl;
+	}
+
+	public String getSetCode() {
+		return setCode;
+	}
+
+	public void setSetCode(String setCode) {
+		this.setCode = setCode;
 	}	
 		
 }

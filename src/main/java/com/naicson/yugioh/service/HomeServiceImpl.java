@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.data.dto.home.LastAddedDTO;
 import com.naicson.yugioh.repository.HomeRepository;
@@ -42,6 +42,9 @@ public class HomeServiceImpl implements HomeDetailService {
 	CardPriceInformationServiceImpl cardInfoService;
 	@Autowired
 	CardViewsInformationServiceImpl cardViewService;
+	
+	@Value("${yugioh.api.url.img}")
+	private String yugiohAPIUrlImg;
 
 	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
@@ -52,8 +55,6 @@ public class HomeServiceImpl implements HomeDetailService {
 	public HomeDTO getHomeDto() {
 		HomeDTO homeDto = new HomeDTO();
 		UserDetailsImpl user = GeneralFunctions.userLogged();
-
-		try {
 
 			homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
 			homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
@@ -67,10 +68,6 @@ public class HomeServiceImpl implements HomeDetailService {
 			homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
 			homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
 			homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());
-
-		} catch (ErrorMessage e) {
-			e.getMessage();
-		}
 
 		return homeDto;
 	}
@@ -203,11 +200,36 @@ public class HomeServiceImpl implements HomeDetailService {
 
 			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) 
 				throw new ErrorMessage("List with lasts added is empty");
+			
 		} else {
 			return Collections.emptyList();
 		}
 
 		return lastSetsAdded;
+	}
+
+	public List<GeneralSearchDTO> getEntitiesByParam() {	
+		
+		List<Tuple>  tuple = homeRepository.generalSearch();
+		
+		List<GeneralSearchDTO> listData = tuple.stream().map(data -> {
+			
+			GeneralSearchDTO dto = new GeneralSearchDTO(
+					data.get(0, BigInteger.class).longValue(),
+					data.get(1, String.class),
+					data.get(4, String.class),
+					data.get(2, String.class),
+					data.get(3, String.class)
+					);
+			
+			if(dto.getEntityType().equals("CARD"))
+				dto.setImg(yugiohAPIUrlImg+dto.getImg()+".jpg");
+			
+			return dto;
+			
+		}).collect(Collectors.toList());	
+		
+		return listData;		
 	}
 
 }

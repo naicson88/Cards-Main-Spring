@@ -83,6 +83,7 @@ public class CollectionDeckConsumerRabbitMQ {
 		deck.setIsSpeedDuel(set.getIsSpeedDuel());
 		deck.setImgurUrl(set.getImgurUrl());
 		deck.setIsBasedDeck(cDeck.getIsBasedDeck());
+		deck.setSetCode(set.getSetCode());
 		
 		return deck;
 	}

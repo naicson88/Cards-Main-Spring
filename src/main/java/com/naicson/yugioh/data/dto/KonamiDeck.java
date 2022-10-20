@@ -27,6 +27,7 @@ public class KonamiDeck implements Serializable{
 	private List<RelDeckCards> relDeckCards;
 	private Boolean isSpeedDuel;
 	private boolean isBasedDeck;
+	private String setCode;
 	
 	public Long getId() {
 		return id;
@@ -91,19 +92,18 @@ public class KonamiDeck implements Serializable{
 	public void setIsSpeedDuel(Boolean isSpeedDuel) {
 		this.isSpeedDuel = isSpeedDuel;
 	}
-	
-	@Override
-	public String toString() {
-		return "KonamiDeck [id=" + id + ", requestSource=" + requestSource + ", imagem=" + imagem + ", nome=" + nome
-				+ ", nomePortugues=" + nomePortugues + ", lancamento=" + lancamento + ", setType=" + setType
-				+ ", cardsToBeRegistered=" + cardsToBeRegistered + ", relDeckCards=" + relDeckCards
-				+ ", isSpeedDuel=" + isSpeedDuel + "]";
-	}
+
 	public boolean getIsBasedDeck() {
 		return isBasedDeck;
 	}
 	public void setIsBasedDeck(boolean isBasedDeck) {
 		this.isBasedDeck = isBasedDeck;
+	}
+	public String getSetCode() {
+		return setCode;
+	}
+	public void setSetCode(String setCode) {
+		this.setCode = setCode;
 	}
 	
 	
