@@ -13,6 +13,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
+import org.apache.commons.lang3.SerializationUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -69,7 +72,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		this.deckRepository = deckRepository;
 		this.relDeckCardsRepository = relDeckCardsRepository;
 		this.dao = dao;
-
 	}
 
 	public DeckServiceImpl() {
@@ -145,7 +147,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetsUtils utils = new SetsUtils();
 
 		deck = this.returnDeckWithCards(deckId, deckSource);
-		//deck = this.countQtdCardRarityInTheDeck(deck);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -335,6 +336,49 @@ public class DeckServiceImpl implements DeckDetailService {
 		}).collect(Collectors.toList());
 		
 		return listDto;
+	}
+
+	public void updateCardsQuantity(String setCodes) {
+		if(setCodes == null)
+			throw new IllegalArgumentException("Invalid Set Codes Payload");
+		
+		int counter = 0;
+		JSONArray array = new JSONArray(setCodes); 
+		logger.info("Starting update Cards Quantity...");
+		
+		for(Object obj: array) {
+			JSONObject setAndQuantity = (JSONObject) obj;
+			
+			if(!JSONObject.NULL.equals(setAndQuantity.get("setcode")) && !JSONObject.NULL.equals(setAndQuantity.get("quantity"))) {
+				String setCode = (String) setAndQuantity.get("setcode");
+				String quantity = (String) setAndQuantity.get("quantity");
+				Integer qtd = GeneralFunctions.parseValueToInt(quantity);	
+							
+				if(!setCode.isBlank() && qtd > 1) {
+					this.updateSetCodeQuantity(setCode, qtd);
+					counter++;
+				}
+			}			
+		}	
+		
+		logger.info("Ending update Cards Quantity. " + counter + " cards were updated!");		
+	}
+	
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	private void updateSetCodeQuantity(String setCode, Integer quantity) {	
+		if(quantity == null || setCode == null)
+			throw new IllegalAccessError("Invalid information to update SetCode Quantity");
+		
+		List<RelDeckCards> rel = relDeckCardsRepository.findByCardSetCodeLike(setCode)
+				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
+		
+		if(rel.size() < quantity) {
+			for(int i = rel.size(); i < quantity; i++) {
+				RelDeckCards relCopied = SerializationUtils.clone(rel.get(0)); 
+				relCopied.setId(null);
+				relDeckCardsRepository.save(relCopied);
+			}	
+		}
 	}
 
 }

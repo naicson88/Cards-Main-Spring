@@ -3,13 +3,15 @@ package com.naicson.yugioh.util.enums;
 import java.util.Arrays;
 import java.util.List;
 
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
+
 public enum ECardRarity {
 	
 	
 	COMMON("Common", List.of("(NR)","(SP)", "(HFR)", "(DNPR)")),
 	RARE("Rare", List.of("(R)","(DNRPR)", "(DRPR)")),
 	SUPER_RARE("Super Rare", List.of("(SPR)", "(DSPR)")),
-	ULTRA_RARE("Ultra Rare", List.of("(UR(PR))", "(UPR)", "(DUPR)")),
+	ULTRA_RARE("Ultra Rare", List.of("(UR(PR))", "(UPR)", "(DUPR)", "(PG)")),
 	SECRET_RARE("Secret Rare", 
 			List.of("(ScR)","(HGR)","(PlR)", "(StR)","(PScR)","(EScR)","(PlScR)", "(UScR)","(20ScR)", "(ScUR)","(10000ScR)", "(ScPR)", "(EScPR)", "(DScPR)")),
 	ULTIMATE_RARE("Ultimate Rare",List.of("(UtR)")),
@@ -31,7 +33,9 @@ public enum ECardRarity {
 	
 	public static ECardRarity getRarityByRarityCode(String rarityCode) {
 		return Arrays.stream(ECardRarity.values())
-				.filter(rarity -> rarity.listRarityCode.contains(rarityCode)).findFirst().orElse(UNKNOWN);
+				.filter(rarity -> rarity.listRarityCode
+				.contains(rarityCode))
+				.findFirst().orElseThrow(() -> new ErrorMessage("Rarity Not Found!"));
 	}
 	
 	public String getCardRarity() {

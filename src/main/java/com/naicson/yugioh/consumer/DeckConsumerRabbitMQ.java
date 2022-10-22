@@ -33,8 +33,8 @@ public class DeckConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
-	@RabbitListener(queues = "${rabbitmq.queue.deck}")
-	@Transactional(rollbackFor = Exception.class)
+	@RabbitListener(queues = "${rabbitmq.queue.deck}", autoStartup = "${rabbitmq.autostart.consumer}")
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	private void consumer(String json) {		
 			
 		logger.info("Start consuming new KonamiDeck: {}" , json);

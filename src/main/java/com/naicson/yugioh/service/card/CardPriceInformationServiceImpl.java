@@ -5,9 +5,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -150,12 +148,8 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	
 	private String getCardName(Long cardNumber) {
 		
-		Card card = cardRepository.findByNumero(cardNumber);
-		
-		if(card == null) {
-			logger.error("Card with number " + cardNumber + " not found.".toUpperCase());
-			throw new EntityNotFoundException("Card with number " + cardNumber + " not found.");
-		}
+		Card card = cardRepository.findByNumero(cardNumber)
+				.orElseThrow(() -> new EntityNotFoundException("Card with number " + cardNumber + " not found."));
 		
 		if(card.getNome() == null || card.getNome().isBlank()) {
 			logger.error("Invalid card name of card = " + card.getNumero());

@@ -9,13 +9,13 @@ public class CardsOfUserSetsDTO {
 	private String cardSetCode;
 	private String rarity;
 	private Double price;
-	private BigInteger quantity;
+	private Integer quantity;
 	private Integer id;
 	private String setType;
 	
 	
 	
-	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, BigInteger quantity,
+	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, Integer quantity,
 			Integer id, String setType) {
 		super();
 		this.setName = setName;
@@ -71,10 +71,10 @@ public class CardsOfUserSetsDTO {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	public BigInteger getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(BigInteger quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 	

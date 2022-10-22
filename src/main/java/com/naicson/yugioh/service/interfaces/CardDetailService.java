@@ -1,6 +1,5 @@
 package com.naicson.yugioh.service.interfaces;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,15 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.cards.CardAndSetsDTO;
 import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
 import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.CardSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
@@ -54,5 +50,7 @@ public interface CardDetailService {
 	Card listarNumero(Long numero);
 	
 	 Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource);
+
+	void updateCardsImages(String cardImages);
 
 }

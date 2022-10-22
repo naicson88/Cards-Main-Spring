@@ -1,7 +1,5 @@
 package com.naicson.yugioh.data.dto.cards;
 
-import java.util.List;
-
 import com.naicson.yugioh.entity.Card;
 
 public class CardOfArchetypeDTO {
@@ -10,6 +8,7 @@ public class CardOfArchetypeDTO {
 	private Long numero;
 	private String nome;
 	private String descricao;
+	private int qtdUserHave;
 	
 	public CardOfArchetypeDTO(Card card) {
 		this.id = card.getId();
@@ -41,6 +40,14 @@ public class CardOfArchetypeDTO {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public int getQtdUserHave() {
+		return qtdUserHave;
+	}
+
+	public void setQtdUserHave(int qtdUserHave) {
+		this.qtdUserHave = qtdUserHave;
 	}
 	
 	

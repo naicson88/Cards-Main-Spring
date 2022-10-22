@@ -38,8 +38,8 @@ public class CollectionDeckConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
-	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}")
-	@Transactional(rollbackFor = Exception.class)
+	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	private void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
 		
@@ -83,6 +83,7 @@ public class CollectionDeckConsumerRabbitMQ {
 		deck.setIsSpeedDuel(set.getIsSpeedDuel());
 		deck.setImgurUrl(set.getImgurUrl());
 		deck.setIsBasedDeck(cDeck.getIsBasedDeck());
+		deck.setSetCode(set.getSetCode());
 		
 		return deck;
 	}

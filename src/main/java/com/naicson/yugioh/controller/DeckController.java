@@ -2,6 +2,7 @@ package com.naicson.yugioh.controller;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -104,6 +107,14 @@ public class DeckController<T> {
 		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName(collectionDeck);
 		
 		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/update-cards-quantity")
+	@ApiOperation(value="Update cards quantity in a Deck", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> updateCardsQuantity(@RequestBody String setCodes){
+		deckService.updateCardsQuantity(setCodes);
+
+		return new ResponseEntity<String>(JSONObject.quote("Update received!"), HttpStatus.OK);
 	}
 	
 

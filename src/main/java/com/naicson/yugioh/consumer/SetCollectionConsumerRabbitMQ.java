@@ -37,19 +37,19 @@ public class SetCollectionConsumerRabbitMQ {
 	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 		
-	@RabbitListener(queues = "${rabbitmq.queue.setcollection}")
-	@Transactional(rollbackFor = Exception.class)
+	@RabbitListener(queues = "${rabbitmq.queue.setcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
+	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	private void consumerSetCollectionQueue(String json) {
 			
-			logger.info("Start consuming new Set Collection: {}" , json);
-			
-			SetCollectionDto setCollection = convertJsonToSetCollectionDto(json);
-			
-			SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
+		logger.info("Start consuming new Set Collection: {}" , json);
 		
-			setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
-				
-			logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
+		SetCollectionDto setCollection = convertJsonToSetCollectionDto(json);
+		
+		SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
+	
+		setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
+			
+		logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
 			
 	}
 

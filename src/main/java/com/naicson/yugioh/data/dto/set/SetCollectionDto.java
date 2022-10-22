@@ -15,6 +15,7 @@ public class SetCollectionDto {
 	private Date releaseDate;
 	private String setType;
 	private Boolean isSpeedDuel;
+	private String setCode;
 
 	
 	public String getName() {
@@ -64,6 +65,12 @@ public class SetCollectionDto {
 	}
 	public void setRequestSource(String requestSource) {
 		this.requestSource = requestSource;
+	}
+	public String getSetCode() {
+		return setCode;
+	}
+	public void setSetCode(String setCode) {
+		this.setCode = setCode;
 	}
 
 }

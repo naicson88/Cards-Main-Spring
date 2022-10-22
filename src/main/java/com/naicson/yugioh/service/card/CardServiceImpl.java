@@ -5,10 +5,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -16,12 +18,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dao.CardDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
@@ -32,9 +37,8 @@ import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.data.dto.cards.KonamiSetsWithCardDTO;
 import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.DeckRepository;
@@ -117,23 +121,22 @@ public class CardServiceImpl implements CardDetailService {
 
 	@Override
 	public Card listarNumero(Long numero) {
-		return cardRepository.findByNumero(numero);
+		return cardRepository.findByNumero(numero)
+				.orElseThrow(() -> new EntityNotFoundException("Card not found with number: " + numero));
 	}
 	
 
 	@Override
 	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
 		
-		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId);
-		
-		if(cardsOfArchetype == null || cardsOfArchetype.isEmpty())
-			throw new NoSuchElementException("It was not possible found cards of Archetype: " + archId);
+		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
+				.orElseThrow(() -> new NoSuchElementException("It was not possible found cards of Archetype: " + archId));
 		
 		List<CardOfArchetypeDTO> listDTO = new ArrayList<>();
 		
 		  cardsOfArchetype.stream().forEach(card -> {
 			CardOfArchetypeDTO dto = new CardOfArchetypeDTO(card);
-			
+			dto.setQtdUserHave(cardRepository.findQtdUserHave(card.getId()));
 			listDTO.add(dto);
 		});
 		
@@ -147,26 +150,19 @@ public class CardServiceImpl implements CardDetailService {
 				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
 			UserDetailsImpl user = GeneralFunctions.userLogged();
-						
-			Card card = cardRepository.findById(cardId)
-					.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
-						
-			cardUserDTO = new CardOfUserDetailDTO();
-			cardUserDTO.setCardImage(card.getImagem());
-			cardUserDTO.setCardName(card.getNome());
-			cardUserDTO.setCardNumber(card.getNumero());
+								
+			cardUserDTO = this.getCardOfUserDetailDTO(cardId);
 			
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
 			
 			if(cardsDetails != null ) {
 				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
-				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(
-					
+				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
 						c.get(0, String.class),
 						c.get(1, String.class),
 						c.get(2, String.class),
 						c.get(3, Double.class),
-						c.get(4, BigInteger.class),
+						Integer.parseInt(String.valueOf(c.get(4))),
 						Integer.parseInt(String.valueOf(c.get(5))),
 						c.get(6, String.class)
 						)).collect(Collectors.toList());
@@ -193,14 +189,24 @@ public class CardServiceImpl implements CardDetailService {
 			
 	}
 	
+	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
+		
+		Card card = cardRepository.findById(cardId)
+				.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
+					
+		cardUserDTO = new CardOfUserDetailDTO();
+		cardUserDTO.setCardImage(card.getImagem());
+		cardUserDTO.setCardName(card.getNome());
+		cardUserDTO.setCardNumber(card.getNumero());
+		
+		return cardUserDTO;
+	}
 
 	@Override
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
-		Card card = cardRepository.findByNumero(cardNumero);
-		
-		if (card == null || card.getId() == null) 
-			throw new EntityNotFoundException("It was not possible find card with number: " + cardNumero);
+		Card card = cardRepository.findByNumero(cardNumero)
+				.orElseThrow(() ->  new EntityNotFoundException("It was not possible find card with number: " + cardNumero));
 		
 		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));	
 		
@@ -255,9 +261,10 @@ public class CardServiceImpl implements CardDetailService {
 		listKonamiSets.stream().forEach(c -> {	
 			Boolean hasOnList = false;
 			BigInteger id = c.get(0, BigInteger.class);
+			String setType = c.get(1, String.class);
 			
 			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
-				if(cardSet.getId().equals(id)) {
+				if(cardSet.getId().equals(id) && cardSet.getSetType().equals(setType)) {
 					hasOnList = true;
 					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
 					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
@@ -271,8 +278,8 @@ public class CardServiceImpl implements CardDetailService {
 			
 			if(!hasOnList) {
 				listCardSets.add(new KonamiSetsWithCardDTO(
-						c.get(0, BigInteger.class),
-						c.get(1, String.class),
+						id,
+						setType,
 						c.get(2, String.class),
 						c.get(3, String.class),
 						c.get(4, String.class),
@@ -467,9 +474,62 @@ public class CardServiceImpl implements CardDetailService {
 			throw new IllegalArgumentException("Invalid Card name to find by");
 		
 		Card card = cardRepository.findByNome(nome.trim());
-		
+				
 		return card;
 	}
+	
+	
+	public void updateCardsImages(String cardImagesJson) {
+		logger.info("Start register new Alternative Card Numbers...");
+		
+		if(cardImagesJson == null || cardImagesJson.isBlank())
+			throw new IllegalArgumentException("JSON with card images is empty");
+		
+		JSONObject card = new JSONObject(cardImagesJson);
+		HashSet<Long> imagesList = transforJsonArrayInList(card.getJSONArray("images"));
+		System.out.println(imagesList);
+		String cardName = (String) Optional.ofNullable(card.get("cardName"))
+				.orElseThrow(() -> new IllegalArgumentException("Invalid Card Name to update Images"));
+		
+		Card cardEntity = Optional.ofNullable(this.findByCardNome(cardName.trim()))
+				.orElseThrow(() -> new EntityNotFoundException("Card Not Found with name: " + cardName));
+		
+		List<CardAlternativeNumber> alternativeNumbers = Optional.ofNullable(alternativeRepository.findAllByCardId(cardEntity.getId()))
+				.orElseThrow(() -> new EntityNotFoundException("Card Alternative Number not found with Card ID: " + cardEntity.getId()));
+		
+		alternativeNumbers.stream().forEach(alt -> {		
+			if(imagesList.contains(alt.getCardAlternativeNumber()))
+				imagesList.remove(alt.getCardAlternativeNumber());
+		});	
+		System.out.println(imagesList);
+		if(imagesList.size() > 0)
+			saveNewAlternativeImages(cardEntity.getId(), imagesList);
+		
+		logger.info("Finish register new Alternative Card Numbers for " + cardName);
+				
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	private void saveNewAlternativeImages(Integer cardId, HashSet<Long> numbers) {
+		numbers.stream().forEach(num -> {
+			CardAlternativeNumber alt = new CardAlternativeNumber(null, cardId, num);
+			alternativeRepository.save(alt);
+			logger.info("New Alternative Number Saved: " + num);
+		});
+	}
+	
+	private HashSet<Long> transforJsonArrayInList(JSONArray array) {		
+		if(array == null || array.isEmpty())
+			throw new IllegalArgumentException("Array with Card images is empty");
+		
+		HashSet<Long> list = new HashSet<Long>();		
+		for(int i = 0; i < array.length(); i++) { 
+			list.add(array.getLong(i));		
+		}		
+		return list;
+	}
+	
+	
 
 
 }

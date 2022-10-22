@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.persistence.Tuple;
 
@@ -197,7 +198,7 @@ public class CardServiceImplTest {
 	public void findWithSuccessArchetypeByItsName() {
 		List<Card> cardList = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
 		
-		Mockito.when(cardRepository.findByArchetype(anyInt())).thenReturn(cardList);
+		Mockito.when(cardRepository.findByArchetype(anyInt())).thenReturn(Optional.of(cardList));
 		
 		List<CardOfArchetypeDTO> dto = cardService.findCardByArchetype(1);
 		

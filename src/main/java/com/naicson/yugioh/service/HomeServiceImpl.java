@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.data.dto.home.LastAddedDTO;
 import com.naicson.yugioh.repository.HomeRepository;
@@ -41,6 +42,9 @@ public class HomeServiceImpl implements HomeDetailService {
 	CardPriceInformationServiceImpl cardInfoService;
 	@Autowired
 	CardViewsInformationServiceImpl cardViewService;
+	
+	@Value("${yugioh.api.url.img}")
+	private String yugiohAPIUrlImg;
 
 	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);
 
@@ -51,8 +55,6 @@ public class HomeServiceImpl implements HomeDetailService {
 	public HomeDTO getHomeDto() {
 		HomeDTO homeDto = new HomeDTO();
 		UserDetailsImpl user = GeneralFunctions.userLogged();
-
-		try {
 
 			homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
 			homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
@@ -66,10 +68,6 @@ public class HomeServiceImpl implements HomeDetailService {
 			homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
 			homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
 			homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());
-
-		} catch (ErrorMessage e) {
-			e.getMessage();
-		}
 
 		return homeDto;
 	}
@@ -100,7 +98,6 @@ public class HomeServiceImpl implements HomeDetailService {
 
 		if (deckOfSetCollectionId == null || deckOfSetCollectionId.size() == 0)
 			return 0.0;
-			//throw new IllegalArgumentException("Invalid Set Id to get total price.");	
 
 		Double totalPrice = deckOfSetCollectionId.stream()
 				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();
@@ -185,9 +182,9 @@ public class HomeServiceImpl implements HomeDetailService {
 		List<Tuple> sets = homeRepository.returnLastSetsAddedToUser(user.getId());
 		List<LastAddedDTO> lastSetsAdded = new ArrayList<>();
 
-		if (sets != null && !sets.isEmpty()) {
+		if (!sets.isEmpty()) {
 
-			lastSetsAdded = sets.stream().map(set -> {
+				lastSetsAdded = sets.stream().map(set -> {
 
 				LastAddedDTO lastSet = new LastAddedDTO();
 
@@ -197,21 +194,42 @@ public class HomeServiceImpl implements HomeDetailService {
 				lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
 				lastSet.setRegisteredDate(set.get(8, Date.class));
 				lastSet.setSetType(set.get(10, String.class));
-				// lastSet.setSetCode("WWW-EN001");
 
 				return lastSet;
 			}).collect(Collectors.toList());
 
-			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) {
-				logger.error("LIST WITH LASTS ADDED IS EMPTY");
+			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) 
 				throw new ErrorMessage("List with lasts added is empty");
-			}
-
+			
 		} else {
 			return Collections.emptyList();
 		}
 
 		return lastSetsAdded;
+	}
+
+	public List<GeneralSearchDTO> getEntitiesByParam() {	
+		
+		List<Tuple>  tuple = homeRepository.generalSearch();
+		
+		List<GeneralSearchDTO> listData = tuple.stream().map(data -> {
+			
+			GeneralSearchDTO dto = new GeneralSearchDTO(
+					data.get(0, BigInteger.class).longValue(),
+					data.get(1, String.class),
+					data.get(4, String.class),
+					data.get(2, String.class),
+					data.get(3, String.class)
+					);
+			
+			if(dto.getEntityType().equals("CARD"))
+				dto.setImg(yugiohAPIUrlImg+dto.getImg()+".jpg");
+			
+			return dto;
+			
+		}).collect(Collectors.toList());	
+		
+		return listData;		
 	}
 
 }

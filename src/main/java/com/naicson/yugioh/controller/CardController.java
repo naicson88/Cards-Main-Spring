@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +192,17 @@ public class CardController {
 		List<Long> cardsNotRegistered = this.cardService.findCardsNotRegistered(cardNumbers);
 		
 		return new ResponseEntity<List<Long>>(cardsNotRegistered, HttpStatus.OK);
+	}
+	
+	@PostMapping(path = {"/update-images"})
+	@ApiOperation(value="Update Card images passing the numbers", authorizations = { @Authorization(value="JWT") })	
+	public ResponseEntity<String> updateCardsImages(@RequestBody String cardImagesJson){
+		
+		cardService.updateCardsImages(cardImagesJson);
+		
+		//GeneralFunctions.createNewFile("all cards", ".txt", null, null);
+		
+		return new ResponseEntity<>(JSONObject.quote("Communication Success"), HttpStatus.OK);
 	}
 }
 

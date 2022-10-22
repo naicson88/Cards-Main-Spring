@@ -1,6 +1,7 @@
  package com.naicson.yugioh.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Tuple;
 
@@ -23,14 +24,14 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	
 	Card save (Card card);
 	
-	Card findByNumero(Long numero);
+	Optional<Card> findByNumero(Long numero);
 	
 	void delete (Card card);
 	
 	Card findByNumero(String numero);
 	
 	@Query(value = "SELECT * FROM tab_cards WHERE COD_ARCHETYPE = :archId",  nativeQuery = true)	
-	List<Card> findByArchetype(Integer archId);
+	Optional<List<Card>> findByArchetype(Integer archId);
 	
 	@Query(value = "SELECT * FROM tab_cards ORDER BY RAND() LIMIT 30",  nativeQuery = true)
 	List<Card> findRandomCards();
@@ -96,6 +97,10 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	+ " inner join tab_rel_deck_cards rel on rel.deck_id = decks.id "
 	+ " where card_id = :cardId and decks.set_type != 'DECK'", nativeQuery = true)
 	List<Tuple> setsOfCard(Integer cardId);
+	
+	
+	@Query(value = " SELECT COALESCE(sum(quantity),0) AS qtd FROM tab_rel_deckusers_cards WHERE card_id = :cardId", nativeQuery = true)
+	int findQtdUserHave(Integer cardId);
 	
 	
 }

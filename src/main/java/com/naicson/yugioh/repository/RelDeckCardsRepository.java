@@ -2,6 +2,7 @@ package com.naicson.yugioh.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -42,4 +43,6 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Inte
 			+ " values (:deckId, :cardNumber, :card_raridade, :card_set_code, :card_price, :dt_criacao, :isSideDeck, :cardId, :isSpeedDuel, :quantity)" , nativeQuery = true)
 	void saveRelUserDeckCards(Long deckId, Long cardNumber, String card_raridade, String card_set_code,
 			Double card_price, Date dt_criacao, Boolean isSideDeck, Integer cardId, Boolean isSpeedDuel,Integer quantity);
+
+	Optional<List<RelDeckCards>> findByCardSetCodeLike(String setCode);
 }

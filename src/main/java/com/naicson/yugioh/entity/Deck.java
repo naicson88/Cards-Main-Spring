@@ -39,6 +39,7 @@ public class Deck implements Serializable {
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
 	private boolean isBasedDeck;
+	private String setCode;
 	
 	@ManyToMany(mappedBy = "decks")
 	private List<SetCollection> setCollection;	
@@ -290,6 +291,14 @@ public class Deck implements Serializable {
 
 	public void setIsBasedDeck(boolean isBasedDeck) {
 		this.isBasedDeck = isBasedDeck;
+	}
+
+	public String getSetCode() {
+		return setCode;
+	}
+
+	public void setSetCode(String setCode) {
+		this.setCode = setCode;
 	}
 		
 }
