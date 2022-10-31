@@ -279,7 +279,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
 
-			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());
+			List<Deck> isAlreadyRegistered = deckRepository.findByNome(kDeck.getNome());
 
 			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
 				kDeck = deckRepository.save(kDeck);

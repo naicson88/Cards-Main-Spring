@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -156,16 +157,7 @@ public class CardServiceImpl implements CardDetailService {
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
 			
 			if(cardsDetails != null ) {
-				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
-				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
-						c.get(0, String.class),
-						c.get(1, String.class),
-						c.get(2, String.class),
-						c.get(3, Double.class),
-						Integer.parseInt(String.valueOf(c.get(4))),
-						Integer.parseInt(String.valueOf(c.get(5))),
-						c.get(6, String.class)
-						)).collect(Collectors.toList());
+				List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
 				
 				Map<String, Integer> mapRarity = new HashMap<>();
 						
@@ -187,6 +179,21 @@ public class CardServiceImpl implements CardDetailService {
 			
 			return cardUserDTO;
 			
+	}
+
+	protected List<CardsOfUserSetsDTO> createCardsOfUserDTOList(List<Tuple> cardsDetails) {
+		if(cardsDetails == null || cardsDetails.size() == 0)
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid Tuple List of CardsOfUserSetsDTO");
+		
+		return cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
+				c.get(0, String.class),
+				c.get(1, String.class),
+				c.get(2, String.class),
+				c.get(3, Double.class),
+				Integer.parseInt(String.valueOf(c.get(4))),
+				Integer.parseInt(String.valueOf(c.get(5))),
+				c.get(6, String.class)
+				)).collect(Collectors.toList());
 	}
 	
 	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
@@ -409,7 +416,7 @@ public class CardServiceImpl implements CardDetailService {
 		List<Card> cards = cardRepository.findRandomCards();
 		
 		if(cards == null || cards.isEmpty())
-			 new ErrorMessage("Can't find random cards");		
+			 throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Can't find Random cards");		
 	
 		return cards;		
 	}
@@ -487,7 +494,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 		JSONObject card = new JSONObject(cardImagesJson);
 		HashSet<Long> imagesList = transforJsonArrayInList(card.getJSONArray("images"));
-		System.out.println(imagesList);
+
 		String cardName = (String) Optional.ofNullable(card.get("cardName"))
 				.orElseThrow(() -> new IllegalArgumentException("Invalid Card Name to update Images"));
 		
@@ -501,7 +508,7 @@ public class CardServiceImpl implements CardDetailService {
 			if(imagesList.contains(alt.getCardAlternativeNumber()))
 				imagesList.remove(alt.getCardAlternativeNumber());
 		});	
-		System.out.println(imagesList);
+
 		if(imagesList.size() > 0)
 			saveNewAlternativeImages(cardEntity.getId(), imagesList);
 		
