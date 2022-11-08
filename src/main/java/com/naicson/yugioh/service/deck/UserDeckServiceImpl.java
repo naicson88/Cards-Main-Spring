@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.controller.UserRelDeckCards;
+import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
@@ -32,12 +29,11 @@ import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
-import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
@@ -61,13 +57,15 @@ public class UserDeckServiceImpl {
 
 	Logger logger = LoggerFactory.getLogger(UserDeckServiceImpl.class);
 
-	public Deck editUserDeck(Long deckId) {		
+	public Deck editUserDeck(Long deckId) {
+		
 		logger.info("Starting edit User Deck: " + deckId);
 		
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Invalid Deck Id: " + deckId);
 
-		 UserDeck deckUser = this.userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException("UserDeck id = " + deckId));
+		 UserDeck deckUser = this.userDeckRepository.findById(deckId)
+				 .orElseThrow(() -> new EntityNotFoundException("UserDeck id = " + deckId));
 
 		if (GeneralFunctions.userLogged().getId() != deckUser.getUserId())
 			throw new RuntimeException("This Deck dont belong to user: " + GeneralFunctions.userLogged().getId() + " Deck ID: " + deckUser.getId());
@@ -92,16 +90,28 @@ public class UserDeckServiceImpl {
 
 	private Deck createDeckObject(Long deckId, UserDeck deckUser) {
 		
-		Deck deck = new Deck();
-		deck.setNome(deckUser.getNome());
-		deck.setImagem(deckUser.getImagem());
-		deck.setImgurUrl(deckUser.getImagem());
-		deck.setDt_criacao(deckUser.getDtCriacao());
-		deck.setId(deckUser.getId());	
-		deck.setCards(this.consultMainDeck(deckId));
-		deck.setExtraDeck(this.consultExtraDeckCards(deckId, "User"));
-		deck.setSideDeckCards(this.consultSideDeckCards(deckId, "User"));
-		deck.setRel_deck_cards(this.relDeckUserCards(deckId));
+//		Deck deck = new Deck();
+//		deck.setNome(deckUser.getNome());
+//		deck.setImagem(deckUser.getImagem());
+//		deck.setImgurUrl(deckUser.getImagem());
+//		deck.setDt_criacao(deckUser.getDtCriacao());
+//		deck.setId(deckUser.getId());	
+//		deck.setCards(this.consultMainDeck(deckId));
+//		deck.setExtraDeck(this.consultExtraDeckCards(deckId, "User"));
+//		deck.setSideDeckCards(this.consultSideDeckCards(deckId, "User"));
+//		deck.setRel_deck_cards(this.relDeckUserCards(deckId));
+		
+		Deck deck = DeckBuilder.builder()
+				.addNome(deckUser.getNome())
+				.addCards(this.consultMainDeck(deckId))
+				.addDt_criacao()
+				.addExtraDeck(this.consultExtraDeckCards(deckId, "User"))
+				.addId(deckUser.getId())
+				.addImagem(deckUser.getImagem())
+				.addImgurUrl(deckUser.getImagem())
+				.addRel_deck_cards(this.relDeckUserCards(deckId))
+				.addSideDeckCards(this.consultSideDeckCards(deckId, "User"))
+				.build();
 		
 		return deck;
 	}
@@ -112,10 +122,8 @@ public class UserDeckServiceImpl {
 
 		List<Card> mainDeck = dao.consultMainDeck(deckId);
 
-		if (mainDeck == null || mainDeck.isEmpty())
-			throw new NoSuchElementException("No cards found for Main Deck");
-
-		mainDeck = this.sortMainDeckCards(mainDeck);
+		if (mainDeck != null && !mainDeck.isEmpty())
+			mainDeck = this.sortMainDeckCards(mainDeck);
 
 		return mainDeck;
 
@@ -155,19 +163,25 @@ public class UserDeckServiceImpl {
 
 	private List<Card> sortMainDeckCards(List<Card> cardList) {
 
-		if (cardList != null && cardList.isEmpty())
+		if (cardList == null || cardList.isEmpty())
 			throw new IllegalArgumentException("Card List is empty");
 
 		List<Card> sortedCardList = new ArrayList<>();
+		try {
+			// Insere primeiro os cards do tipo Monstro
+			cardList.stream().filter(card -> card.getNivel() != null || card.getGenericType() == null) // .sorted(Comparator.comparing(Card::getNome))
+					.collect(Collectors.toCollection(() -> sortedCardList));
 
-		// Insere primeiro os cards do tipo Monstro
-		cardList.stream().filter(card -> card.getNivel() != null) // .sorted(Comparator.comparing(Card::getNome))
-				.collect(Collectors.toCollection(() -> sortedCardList));
-
-		// Coloca o restante das cartas
-		cardList.stream().filter(card -> card.getNivel() == null)
-				.sorted((c1, c2) -> c1.getGenericType().compareTo(c2.getGenericType()))
-				.collect(Collectors.toCollection(() -> sortedCardList));
+			// Coloca o restante das cartas
+			cardList.stream().filter(card -> card.getNivel() == null)
+					.sorted((c1, c2) -> c1.getGenericType().compareTo(c2.getGenericType()))
+					.collect(Collectors.toCollection(() -> sortedCardList));
+			
+		} catch(Exception e) {
+			logger.error("Error when trying to sort Main Deck");
+			return cardList;
+		}
+		
 
 		return sortedCardList;
 	}

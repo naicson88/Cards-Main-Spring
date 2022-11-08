@@ -7,21 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockitoSession;
-import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,106 +23,86 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.naicson.yugioh.data.dao.DeckDAO;
-import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
-import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.mocks.RelUserDeckDTOMock;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.service.interfaces.DeckDetailService;
-import com.naicson.yugioh.service.user.UserDetailsImpl;
+import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.ValidObjects;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class) // Usado com Junit5 ao inves do RunWith
 public class DeckServiceImplTest {
 	
-//	@InjectMocks
-//	@Spy
-//	DeckServiceImpl deckService;
-//	
-//	@Mock
-//	DeckRepository deckRepository;
-//	@Mock
-//	RelDeckCardsRepository relDeckCardsRepository;
-//	@Mock
-//	UserDeckRepository deckUserRepository;
-//	@Mock
-//	DeckDAO dao;
-//	
-////	@BeforeEach
-////	public void setUp() {
-////		this.deckService = new DeckServiceImpl(deckRepository, relDeckCardsRepository, dao,  deckUserRepository);
-////		this.mockAuth();
-////		
-////	}
-//	
+	@InjectMocks
+	@Spy
+	DeckServiceImpl deckService;
+	
+	@Mock
+	DeckRepository deckRepository;
+	@Mock
+	RelDeckCardsRepository relDeckCardsRepository;
+	
+	
+	@Mock
+	SetsUtils utils;
+	
 //	@BeforeEach
-//	public void setup(){
-//	    MockitoAnnotations.initMocks(this); //without this you will get NPE
-//	}
-//	
-//	private UserDetailsImpl mockAuth() {
-//		UserDetailsImpl user = ValidObjects.generateValidUser();
-//		
-//		Authentication authentication = mock(Authentication.class);
-//        SecurityContext securityContext = mock(SecurityContext.class);
-//        when(securityContext.getAuthentication()).thenReturn(authentication);
-//        SecurityContextHolder.setContext(securityContext);
-//        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
-//        
-//        return user;
-//	}
-//	
-//	@Test
-//	public void findADeckByTheId() throws Exception {
-//		Deck deck = ValidObjects.generateValidDeck();
-//		deck.setId(1L);
-//		
-//		Mockito.when(deckRepository.findById(deck.getId())).thenReturn(Optional.of(deck));
-//		
-//		Deck deckFound = deckService.findById(deck.getId());
-//		
-//		assertThat(deckFound).isNotNull();
-//		assertThat(deck.getId()).isEqualTo(deck.getId());
-//		assertThat(deck.getNome()).isEqualTo("Deck Teste");
-//	}
-//	
-//	@Test
-//	public void returnCardsOfaDeck() {
-//		
-//		List<RelDeckCards> rels = new ArrayList<>();		
-//		RelDeckCards rel = ValidObjects.generateRelDeckCards();
-//		rel.setId(1L);
-//		rels.add(rel);
-//		
-//		Deck deck = ValidObjects.generateValidDeck();
-//		deck.setId(1L);
-//		
-//		Mockito.when(relDeckCardsRepository.findByDeckId(anyLong())).thenReturn(rels);
-//		
-//		List<RelDeckCards> relReturned = deckService.relDeckCards(deck.getId(), "konami");
-//		
-//		assertThat(relReturned).isNotEmpty();
-//		assertThat(relReturned).isNotNull();
-//		assertThat(relReturned.get(0).getId()).isEqualTo(rel.getId());
-//		assertTrue(relReturned.stream().anyMatch(item -> "YYYY-1111".equals(rel.getCard_set_code())));
+//	public void setUp() {
+//		this.deckService = new DeckServiceImpl(deckRepository, relDeckCardsRepository, dao,  deckUserRepository);
+//		this.mockAuth();
 //		
 //	}
-//
+	
+	@BeforeEach
+	public void setup(){
+	    MockitoAnnotations.initMocks(this); //without this you will get NPE
+	}
+	
+
+	
+	@Test
+	public void findADeckByTheId() throws Exception {
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setId(1L);
+		
+		Mockito.when(deckRepository.findById(deck.getId())).thenReturn(Optional.of(deck));
+		
+		Deck deckFound = deckService.findById(deck.getId());
+		
+		assertThat(deckFound).isNotNull();
+		assertThat(deck.getId()).isEqualTo(deck.getId());
+		assertThat(deck.getNome()).isEqualTo("Deck Teste");
+	}
+	
+	@Test
+	public void returnCardsOfDeck() {
+		
+		List<RelDeckCards> rels = new ArrayList<>();		
+		RelDeckCards rel = ValidObjects.generateRelDeckCards();
+		rel.setId(1L);
+		rels.add(rel);
+		
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setId(1L);
+		
+		Mockito.when(relDeckCardsRepository.findByDeckId(anyLong())).thenReturn(rels);
+		
+		List<RelDeckCards> relReturned = deckService.relDeckCards(deck.getId(), "konami");
+		
+		assertThat(relReturned).isNotEmpty();
+		assertThat(relReturned).isNotNull();
+		assertThat(relReturned.get(0).getId()).isEqualTo(rel.getId());
+		assertTrue(relReturned.stream().anyMatch(item -> "YYYY-1111".equals(rel.getCard_set_code())));
+		
+	}
+
 //	@Test
 //	public void addSetToUsersCollection() throws SQLException, ErrorMessage, Exception {
 //		this.mockAuth();
@@ -160,7 +130,7 @@ public class DeckServiceImplTest {
 //		assertThat(qtdCardsAdded == 40);
 //		
 //	}
-//	
+	
 //	@Test
 //	public void addingCardToUserCollection() throws SQLException, ErrorMessage {		
 //		this.mockAuth();
@@ -179,7 +149,7 @@ public class DeckServiceImplTest {
 //		assertThat(retorno >= 1);
 //		
 //	}
-//	
+	
 //	@Test
 //	public void validUserDontHaveDeckAndFlagAreRemove() throws SQLException, ErrorMessage {
 //		this.mockAuth();
@@ -190,7 +160,7 @@ public class DeckServiceImplTest {
 //		assertThat(retorno == 0);		
 //		
 //	}
-//	
+	
 //	@Test
 //	public void addCardToUserCollectionHavingCardFalse() throws SQLException, ErrorMessage {
 //	
@@ -214,7 +184,7 @@ public class DeckServiceImplTest {
 //		assertThat(qtdCardsAddedOrRemoved == 2);
 //		
 //	}
-//	
+	
 //	@Test
 //	public void addCardToUserCollectionHavingCardTrue() throws SQLException, ErrorMessage {
 //	
@@ -239,7 +209,7 @@ public class DeckServiceImplTest {
 //		assertThat(qtdCardsAddedOrRemoved == 2);
 //		
 //	}
-//	
+	
 //	@Test
 //	public void entityNotFoundWhenTryingAddSetToUserCollection() {
 //		this.mockAuth();
@@ -257,7 +227,7 @@ public class DeckServiceImplTest {
 //		
 //		assertTrue(actual.contains(expected));
 //	}
-//	
+	
 //	@Test
 //	public void invalidDeckInfoWhenTryingAddSetToUserCollection() {
 //		this.mockAuth();
@@ -279,7 +249,7 @@ public class DeckServiceImplTest {
 //		
 //		assertTrue(actual.contains(expected));
 //	}
-//	
+	
 //	@Test
 //	public void searchAllDecksUserHaveContainingOneOrMore() {
 //		this.mockAuth();
@@ -294,7 +264,7 @@ public class DeckServiceImplTest {
 //		assertEquals(2, rel.size());
 //		assertThat(dto.get(0).getQuantity() == rel.get(0).getQuantity());
 //	}
-//	
+	
 //	@Test
 //	public void removeSetFromUsersCollectionsSuccessfully() {
 //		
@@ -328,94 +298,101 @@ public class DeckServiceImplTest {
 //		assertTrue(actual.contains(expected));
 //		
 //	}
-//	
-//	@Test
-//	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsUser() {
-//		
-//		Long deckId = 1L;
-//		String deckSource = "user";	
-//		Optional<UserDeck> du = Optional.of(UserDeckMock.generateValidUserDeck());
-//		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
-//		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
-//		
-//		Mockito.when(deckUserRepository.findById(1L)).thenReturn(du);
-//		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_UserDeck_cards");
-//		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
-//		
-//		SetDetailsDTO deck = deckService.deckAndCards(deckId, deckSource);
-//		
-//		assertNotNull(deck);
-//		assertEquals(deck.getInsideDeck().size(), mainDeck.size());
-//		//assertEquals(deck.getCards().get(0).getRelDeckCards().size(), rel.size());
-//			
-//	}
-//	
-//	@Test
-//	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsKonami() {
-//		
-//		Long deckId = 1L;
-//		String deckSource = "konami";	
-//		Deck deck = ValidObjects.generateValidDeck();
-//		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
-//		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
-//		
-//		Mockito.doReturn(deck).when(deckService).findById(deckId);
-//		Mockito.doReturn(mainDeck).when(deckService).cardsOfDeck(deckId, "tab_rel_deck_cards");
-//		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
-//		
-//		SetDetailsDTO deckReturned = deckService.deckAndCards(deckId, deckSource);
-//		
-//		assertNotNull(deckReturned);
-//		assertEquals(deckReturned.getInsideDeck().size(), mainDeck.size());
-//		//assertEquals(deckReturned.getCards().get(0).getRelDeckCards().size(), rel.size());
-//			
-//	}
-//	
-//	@Test
-//	public void testDeckAndCardWithInvalidSource() {
-//		
-//		Long deckId = 1L;
-//		String deckSource = "Invalid Source";	
-//		
-//		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-//			deckService.deckAndCards(deckId, deckSource);	  
-//		});
-//		
-//		String expected = "Deck Source invalid: " + deckSource;
-//		String actual = exception.getMessage();
-//		
-//		assertTrue(actual.contains(expected));
-//			
-//	}
-//	
-//	@Test
-//	public void editUserDeckSuccessfully() {
-//		UserDetailsImpl user = this.mockAuth();
-//		user.setId(1);
-//		Long deckId = 1L;
-//		
-//		List<Card> mainDeck = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));
-//		List<Card> sideDeck = List.of(ValidObjects.generateValidCard(3), ValidObjects.generateValidCard(4));
-//		List<Card> extraDeck = Collections.emptyList();
-//		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards(),
-//				ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
-//		Optional<UserDeck> du = Optional.of(UserDeckMock.generateValidUserDeck());
-//		
-//		Mockito.when(deckUserRepository.findById(deckId)).thenReturn(du);
-//		doReturn(mainDeck).when(deckService).consultMainDeck(deckId);
-//		doReturn(sideDeck).when(deckService).consultSideDeckCards(deckId, "User");
-//		doReturn(extraDeck).when(deckService).consultExtraDeckCards(deckId, "User");
-//		doReturn(rel).when(deckService).relDeckUserCards(deckId);
-//		
-//		Deck deck = deckService.editUserDeck(deckId);
-//		
-//		assertNotNull(deck);
-//		assertThat(deck.getCards().contains(mainDeck.get(0)));
-//		assertThat(deck.getSideDeckCards().contains(sideDeck.get(0)));
-//		assertTrue(deck.getExtraDeck().isEmpty());
-//	}
-//	
-//	
+	
+	@Test
+	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsUser() {
+		
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
+	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
+		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
+		
+		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "user");
+		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
+		
+		
+		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "user");
+		
+		assertNotNull(deckReturned);
+			
+	}
+	
+	@Test
+	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsKonami() {
+		
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
+	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
+		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
+		
+		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "konami");
+		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
+		
+		
+		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "konami");
+		
+		assertNotNull(deckReturned);
+			
+	}
+	
+	@Test
+	public void testDeckAndCardWithInvalidSource() {
+		
+		Long deckId = 1L;
+		String deckSource = "Invalid Source";	
+		
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			deckService.deckAndCards(deckId, deckSource);	  
+		});
+		
+		String expected = "Deck Source invalid: " + deckSource;
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+			
+	}
+	
+	@Test
+	public void returnDeckWithCardsSucceffully() {
+		//Given
+		Long deckId = 1L;
+		String deckSource = "konami";
+		Deck d = ValidObjects.generateValidDeck();
+		List<Card> card = List.of(ValidObjects.generateValidCard(1));
+		List<RelDeckCards> rel = List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
+		//When
+		Mockito.doReturn(d).when(deckService).findById(deckId);
+		Mockito.doReturn(card).when(deckService).cardsOfDeck(deckId, "tab_rel_deck_cards");
+		Mockito.doReturn(rel).when(deckService).relDeckCards(deckId, deckSource);
+
+		Deck deck = deckService.returnDeckWithCards(deckId, deckSource);	
+		//Then
+		assertNotNull(deck);
+		assertEquals(card.get(0).getNome(), deck.getCards().get(0).getNome());
+		assertTrue(deck.getRel_deck_cards().size() == rel.size());	
+	}
+	
+	@Test
+	public void returnDeckWithCardsWrongDeckSource() {
+		//Given
+		Long deckId = 1L;
+		String deckSource = "wrong_source";
+		
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			deckService.returnDeckWithCards(deckId, deckSource);			  
+		});
+		
+		String expected = "Invalid Deck Source: " + deckSource;
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+
+	}
+
+	
+
+	
+	
 	
 
 }

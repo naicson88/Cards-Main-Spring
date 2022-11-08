@@ -84,7 +84,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	//Trazer o card para mostrar os detalhes;
 	public Card cardDetails(Integer id) {
 		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :deckId", Card.class);
 		Card card = (Card) query.setParameter("deckId", id).getSingleResult();
@@ -95,16 +94,9 @@ public class CardServiceImpl implements CardDetailService {
 	@Override
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
-		UserDetailsImpl user = GeneralFunctions.userLogged();
-		
-		if(user.getId() == 0) {
-			 new ErrorMessage("Unable to query user cards, user ID not entered");
-		}
-		
-		if(cardsNumbers == null || cardsNumbers.length == 0) {
+		if(cardsNumbers == null || cardsNumbers.length == 0) 
 			 new ErrorMessage("Unable to query user cards, decks IDs not entered");
-		}
-		
+				
 	     String cardsNumbersString = "";
 	     
 	     for(int id: cardsNumbers) {
@@ -113,7 +105,7 @@ public class CardServiceImpl implements CardDetailService {
 	     }	     
 	     cardsNumbersString += "0";
 	     
-	     List<RelUserCardsDTO> relUserCardsList = dao.searchForCardsUserHave(user.getId(), cardsNumbersString);
+	     List<RelUserCardsDTO> relUserCardsList = dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
 		
 	     return relUserCardsList;
 	     
@@ -248,7 +240,6 @@ public class CardServiceImpl implements CardDetailService {
 		if(total != null) {
 			
 			total.stream().forEach(relation -> {
-				System.out.println(relation.get(1));
 				mapCardSetAndQuantity.put(relation.get(1, String.class), relation.get(0, BigInteger.class).intValue());
 			});			
 			
@@ -300,21 +291,6 @@ public class CardServiceImpl implements CardDetailService {
 	return listCardSets;
 }
 
-	
-//	private Card setAllDecksAndAlternativeNumbers(Long cardNumero, Card card) {
-//		
-//		card.setSets(dao.cardDecks(card.getId()));
-//					
-//		if(card.getSets() != null && card.getSets().size() > 0) {			
-//			card.getSets().stream().forEach(deck -> 
-//				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
-//		}
-//		
-//		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));
-//		
-//		return card;
-//	}
-	
 	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
 		
@@ -327,7 +303,6 @@ public class CardServiceImpl implements CardDetailService {
 			return Collections.emptyList();
 		
 		List<CardsSearchDTO> dtoList = list.stream()
-				.filter(card -> card != null)
 				.map(card -> CardsSearchDTO.transformInDTO(card))
 				.collect(Collectors.toList());
 				
@@ -428,9 +403,7 @@ public class CardServiceImpl implements CardDetailService {
 			throw new IllegalArgumentException("Card Id is invalid: " + cardId);
 		
 		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
-		
-		
-		
+
 		if(list == null)
 			list = Collections.emptyList();
 		
@@ -534,6 +507,15 @@ public class CardServiceImpl implements CardDetailService {
 			list.add(array.getLong(i));		
 		}		
 		return list;
+	}
+
+	@Override
+	public List<CardsSearchDTO> getRandomCards() {		
+		List<Card> list = cardRepository.findRandomCards();
+		
+		List<CardsSearchDTO> listDTO = list.stream().map(card -> CardsSearchDTO.transformInDTO(card)).collect(Collectors.toList());
+	
+		return listDTO;		
 	}
 	
 	

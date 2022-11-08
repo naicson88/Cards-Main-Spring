@@ -44,6 +44,7 @@ public abstract class ValidObjects {
 		relDeckCards.setCard_set_code("YYYY-1111");
 		relDeckCards.setDeckId(1L);
 		relDeckCards.setDt_criacao(new Date());
+		relDeckCards.setCardId(1);
 		
 		return relDeckCards;
 	}
@@ -62,7 +63,7 @@ public abstract class ValidObjects {
 		card.setNumero(15060L);
 		card.setImagem("mocked imagem");
 		card.setNome("Test Name");
-		
+	
 		return card;
 	}
 	

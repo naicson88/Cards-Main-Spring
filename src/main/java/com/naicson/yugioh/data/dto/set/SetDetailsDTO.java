@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.util.enums.CardAttributes;
 
 public class SetDetailsDTO {

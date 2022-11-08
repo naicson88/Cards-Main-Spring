@@ -20,6 +20,8 @@ import com.naicson.yugioh.util.enums.GenericTypesCards;
 
 @Service
 public class SetsUtils {
+		
+	public SetsUtils() {}
 	
 	public SetDetailsDTO getSetStatistics(SetDetailsDTO detailDTO) {
 		
