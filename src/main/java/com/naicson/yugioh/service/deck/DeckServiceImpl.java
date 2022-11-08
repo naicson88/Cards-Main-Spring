@@ -64,9 +64,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Autowired
 	UserDeckRepository userDeckRepository;
-	
-	@Autowired
-	SetsUtils utils;
+
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -144,7 +142,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource))
 			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);
 
-		Deck deck = this.returnDeckWithCards(deckId, deckSource);
+		Deck deck = new Deck();
+
+		SetsUtils utils = new SetsUtils();
+
+		deck = this.returnDeckWithCards(deckId, deckSource);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -183,22 +185,26 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
-		
+
 		Deck deck = new Deck();
-		
+		List<Card> mainDeck = null;
+
 		if ("konami".equalsIgnoreCase(deckSource))
-			 deck = this.findById(deckId);
+			deck = this.findById(deckId);
 
 		else if ("user".equalsIgnoreCase(deckSource)) {
 			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
-			 deck = Deck.deckFromDeckUser(deckUser);
+			deck = Deck.deckFromDeckUser(deckUser);
 
 		} else
 			throw new IllegalArgumentException("Invalid Deck Source: " + deckSource);
 
+		if (deck == null)
+			throw new EntityNotFoundException("Deck not found. Id informed: " + deckId);
+
 		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
 
-		List<Card>  mainDeck = this.cardsOfDeck(deckId, table);
+		mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);
 
 		deck.setCards(mainDeck);
@@ -273,12 +279,13 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
 
-		List<Deck> isAlreadyRegistered = deckRepository.findByNome(kDeck.getNome());
+			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());
 
-		if (isAlreadyRegistered != null && isAlreadyRegistered.size() > 0)
-			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
-		
-		kDeck = deckRepository.save(kDeck);	
+			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
+				kDeck = deckRepository.save(kDeck);
+			} else 
+				throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
+			
 
 		return kDeck;
 	}
