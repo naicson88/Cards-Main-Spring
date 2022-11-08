@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +83,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
+	//Trazer o card para mostrar os detalhes;
 	public Card cardDetails(Integer id) {
 		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :deckId", Card.class);
 		Card card = (Card) query.setParameter("deckId", id).getSingleResult();
@@ -94,9 +94,16 @@ public class CardServiceImpl implements CardDetailService {
 	@Override
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
-		if(cardsNumbers == null || cardsNumbers.length == 0) 
+		UserDetailsImpl user = GeneralFunctions.userLogged();
+		
+		if(user.getId() == 0) {
+			 new ErrorMessage("Unable to query user cards, user ID not entered");
+		}
+		
+		if(cardsNumbers == null || cardsNumbers.length == 0) {
 			 new ErrorMessage("Unable to query user cards, decks IDs not entered");
-				
+		}
+		
 	     String cardsNumbersString = "";
 	     
 	     for(int id: cardsNumbers) {
@@ -105,7 +112,7 @@ public class CardServiceImpl implements CardDetailService {
 	     }	     
 	     cardsNumbersString += "0";
 	     
-	     List<RelUserCardsDTO> relUserCardsList = dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
+	     List<RelUserCardsDTO> relUserCardsList = dao.searchForCardsUserHave(user.getId(), cardsNumbersString);
 		
 	     return relUserCardsList;
 	     
@@ -149,7 +156,16 @@ public class CardServiceImpl implements CardDetailService {
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
 			
 			if(cardsDetails != null ) {
-				List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
+				//Mapeia o Tuple e preenche o objeto de acordo com as colunas da query
+				List<CardsOfUserSetsDTO> listCardsSets = cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
+						c.get(0, String.class),
+						c.get(1, String.class),
+						c.get(2, String.class),
+						c.get(3, Double.class),
+						Integer.parseInt(String.valueOf(c.get(4))),
+						Integer.parseInt(String.valueOf(c.get(5))),
+						c.get(6, String.class)
+						)).collect(Collectors.toList());
 				
 				Map<String, Integer> mapRarity = new HashMap<>();
 						
@@ -171,21 +187,6 @@ public class CardServiceImpl implements CardDetailService {
 			
 			return cardUserDTO;
 			
-	}
-
-	protected List<CardsOfUserSetsDTO> createCardsOfUserDTOList(List<Tuple> cardsDetails) {
-		if(cardsDetails == null || cardsDetails.size() == 0)
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid Tuple List of CardsOfUserSetsDTO");
-		
-		return cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
-				c.get(0, String.class),
-				c.get(1, String.class),
-				c.get(2, String.class),
-				c.get(3, Double.class),
-				Integer.parseInt(String.valueOf(c.get(4))),
-				Integer.parseInt(String.valueOf(c.get(5))),
-				c.get(6, String.class)
-				)).collect(Collectors.toList());
 	}
 	
 	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
@@ -240,6 +241,7 @@ public class CardServiceImpl implements CardDetailService {
 		if(total != null) {
 			
 			total.stream().forEach(relation -> {
+				System.out.println(relation.get(1));
 				mapCardSetAndQuantity.put(relation.get(1, String.class), relation.get(0, BigInteger.class).intValue());
 			});			
 			
@@ -291,6 +293,21 @@ public class CardServiceImpl implements CardDetailService {
 	return listCardSets;
 }
 
+	
+//	private Card setAllDecksAndAlternativeNumbers(Long cardNumero, Card card) {
+//		
+//		card.setSets(dao.cardDecks(card.getId()));
+//					
+//		if(card.getSets() != null && card.getSets().size() > 0) {			
+//			card.getSets().stream().forEach(deck -> 
+//				deck.setRel_deck_cards(relDeckCardsRepository.findByDeckIdAndCardNumber(deck.getId(), cardNumero)));
+//		}
+//		
+//		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));
+//		
+//		return card;
+//	}
+	
 	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
 		
@@ -303,6 +320,7 @@ public class CardServiceImpl implements CardDetailService {
 			return Collections.emptyList();
 		
 		List<CardsSearchDTO> dtoList = list.stream()
+				.filter(card -> card != null)
 				.map(card -> CardsSearchDTO.transformInDTO(card))
 				.collect(Collectors.toList());
 				
@@ -391,7 +409,7 @@ public class CardServiceImpl implements CardDetailService {
 		List<Card> cards = cardRepository.findRandomCards();
 		
 		if(cards == null || cards.isEmpty())
-			 throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Can't find Random cards");		
+			 new ErrorMessage("Can't find random cards");		
 	
 		return cards;		
 	}
@@ -403,7 +421,9 @@ public class CardServiceImpl implements CardDetailService {
 			throw new IllegalArgumentException("Card Id is invalid: " + cardId);
 		
 		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
-
+		
+		
+		
 		if(list == null)
 			list = Collections.emptyList();
 		
@@ -467,7 +487,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 		JSONObject card = new JSONObject(cardImagesJson);
 		HashSet<Long> imagesList = transforJsonArrayInList(card.getJSONArray("images"));
-
+		System.out.println(imagesList);
 		String cardName = (String) Optional.ofNullable(card.get("cardName"))
 				.orElseThrow(() -> new IllegalArgumentException("Invalid Card Name to update Images"));
 		
@@ -481,7 +501,7 @@ public class CardServiceImpl implements CardDetailService {
 			if(imagesList.contains(alt.getCardAlternativeNumber()))
 				imagesList.remove(alt.getCardAlternativeNumber());
 		});	
-
+		System.out.println(imagesList);
 		if(imagesList.size() > 0)
 			saveNewAlternativeImages(cardEntity.getId(), imagesList);
 		
@@ -507,15 +527,6 @@ public class CardServiceImpl implements CardDetailService {
 			list.add(array.getLong(i));		
 		}		
 		return list;
-	}
-
-	@Override
-	public List<CardsSearchDTO> getRandomCards() {		
-		List<Card> list = cardRepository.findRandomCards();
-		
-		List<CardsSearchDTO> listDTO = list.stream().map(card -> CardsSearchDTO.transformInDTO(card)).collect(Collectors.toList());
-	
-		return listDTO;		
 	}
 	
 	

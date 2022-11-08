@@ -53,6 +53,4 @@ public interface CardDetailService {
 
 	void updateCardsImages(String cardImages);
 
-	List<CardsSearchDTO> getRandomCards();
-
 }

@@ -23,6 +23,7 @@ import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 
@@ -33,6 +34,9 @@ import io.swagger.annotations.Authorization;
 @RequestMapping({ "yugiohAPI/userDeck" })
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserDeckController<T> {
+	
+	@Autowired
+	UserDeckRepository deckUserRepository;
 	
 	@Autowired
 	UserDeckServiceImpl userDeckService;
@@ -59,7 +63,7 @@ public class UserDeckController<T> {
 	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
 		Deck deck = userDeckService.editUserDeck(deckId);
 		
-		return new ResponseEntity<>(deck, HttpStatus.OK);
+		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
 	}
 	
 	@PostMapping(path = "/save-userdeck")
@@ -68,7 +72,7 @@ public class UserDeckController<T> {
 		
 		this.userDeckService.saveUserdeck(deck, null);
 		
-		return new ResponseEntity<>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
+		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
 
 	}
 
@@ -78,7 +82,7 @@ public class UserDeckController<T> {
 		
 		 userDeckService.removeSetFromUsersCollection(deckId);
 		
-		return new ResponseEntity<>(JSONObject.quote("Set was successfully removed from your collection"), HttpStatus.OK);
+		return new ResponseEntity<String>(JSONObject.quote("Set was successfully removed from your collection"), HttpStatus.OK);
 
 	}
 	
@@ -88,7 +92,7 @@ public class UserDeckController<T> {
 		
 		 userDeckService.addSetToUserCollection(deckId);
 		
-		return new ResponseEntity<>(1, HttpStatus.OK);
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 					
 	}
 	
@@ -106,7 +110,7 @@ public class UserDeckController<T> {
 		
 		UserSetCollectionDTO dto = userDeckService.getDeckAndCardsForTransfer(deckId.longValue());
 		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-based-deck")
@@ -114,7 +118,7 @@ public class UserDeckController<T> {
 	public ResponseEntity<Long> createBasedDeck(@RequestBody Integer konamiDeckId){
 		Long createdDeckId = userDeckService.createBasedDeck(konamiDeckId.longValue());
 		
-		return new ResponseEntity<>(createdDeckId, HttpStatus.CREATED);
+		return new ResponseEntity<Long>(createdDeckId, HttpStatus.CREATED);
 	}
 	
 }
