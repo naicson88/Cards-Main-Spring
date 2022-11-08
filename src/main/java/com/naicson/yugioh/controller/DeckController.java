@@ -88,7 +88,7 @@ public class DeckController<T> {
 	public ResponseEntity<Page<DeckSummaryDTO>> searchBySetName(@RequestParam("setName") String setName) {
 		Page<DeckSummaryDTO> setsFound = this.deckService.searchBySetName(setName);
 		
-		return new ResponseEntity<Page<DeckSummaryDTO>>(setsFound, HttpStatus.OK);
+		return new ResponseEntity<>(setsFound, HttpStatus.OK);
 	}
 
 	@GetMapping("/autocomplete-sets")
@@ -106,7 +106,7 @@ public class DeckController<T> {
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(@RequestParam("collectionDeck") boolean collectionDeck){
 		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName(collectionDeck);
 		
-		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
+		return new ResponseEntity<>(listDto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/update-cards-quantity")
@@ -114,7 +114,7 @@ public class DeckController<T> {
 	public ResponseEntity<String> updateCardsQuantity(@RequestBody String setCodes){
 		deckService.updateCardsQuantity(setCodes);
 
-		return new ResponseEntity<String>(JSONObject.quote("Update received!"), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote("Update received!"), HttpStatus.OK);
 	}
 	
 

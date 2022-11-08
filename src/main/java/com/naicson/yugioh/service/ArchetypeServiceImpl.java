@@ -18,13 +18,14 @@ public class ArchetypeServiceImpl {
 	
 	@Autowired
 	ArchetypeRepository archRepository;	
+	
 	@Autowired
 	CardServiceImpl cardService;
 	
 	Logger logger = LoggerFactory.getLogger(ArchetypeServiceImpl.class);
 	
 	public List<Archetype> getAllArchetypes() {
-		logger.info("Started consulting all archetypes..." + LocalDateTime.now());		
+		logger.info("Started consulting all archetypes...");		
 		return archRepository.findAll();		
 	}
 	

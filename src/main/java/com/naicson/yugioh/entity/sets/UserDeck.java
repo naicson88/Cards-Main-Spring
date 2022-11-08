@@ -13,10 +13,10 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 
-import com.naicson.yugioh.controller.UserRelDeckCards;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.util.GeneralFunctions;
 
 @Entity

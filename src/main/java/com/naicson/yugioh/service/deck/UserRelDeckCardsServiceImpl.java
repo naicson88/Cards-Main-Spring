@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.controller.UserRelDeckCards;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.repository.UserRelDeckCardsRepository;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
