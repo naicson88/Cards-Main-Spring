@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.builders.DeckBuilder;
+import com.naicson.yugioh.data.builders.UserDeckBuilder;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
@@ -90,17 +91,6 @@ public class UserDeckServiceImpl {
 
 	private Deck createDeckObject(Long deckId, UserDeck deckUser) {
 		
-//		Deck deck = new Deck();
-//		deck.setNome(deckUser.getNome());
-//		deck.setImagem(deckUser.getImagem());
-//		deck.setImgurUrl(deckUser.getImagem());
-//		deck.setDt_criacao(deckUser.getDtCriacao());
-//		deck.setId(deckUser.getId());	
-//		deck.setCards(this.consultMainDeck(deckId));
-//		deck.setExtraDeck(this.consultExtraDeckCards(deckId, "User"));
-//		deck.setSideDeckCards(this.consultSideDeckCards(deckId, "User"));
-//		deck.setRel_deck_cards(this.relDeckUserCards(deckId));
-		
 		Deck deck = DeckBuilder.builder()
 				.addNome(deckUser.getNome())
 				.addCards(this.consultMainDeck(deckId))
@@ -141,6 +131,7 @@ public class UserDeckServiceImpl {
 	}
 
 	private List<Card> consultExtraDeckCards(Long deckId, String userOrKonamiDeck) {
+		
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Invalid Deck ID");
 
@@ -150,6 +141,7 @@ public class UserDeckServiceImpl {
 	}
 	
 	private List<RelDeckCards> relDeckUserCards(Long deckUserId) {
+		
 		if (deckUserId == null || deckUserId == 0)
 			throw new IllegalArgumentException("Deck User Id informed is invalid");
 
@@ -168,11 +160,12 @@ public class UserDeckServiceImpl {
 
 		List<Card> sortedCardList = new ArrayList<>();
 		try {
-			// Insere primeiro os cards do tipo Monstro
+			
+			//  primeiro os cards do tipo Monstro
 			cardList.stream().filter(card -> card.getNivel() != null || card.getGenericType() == null) // .sorted(Comparator.comparing(Card::getNome))
 					.collect(Collectors.toCollection(() -> sortedCardList));
 
-			// Coloca o restante das cartas
+			// Insere o restante das cartas
 			cardList.stream().filter(card -> card.getNivel() == null)
 					.sorted((c1, c2) -> c1.getGenericType().compareTo(c2.getGenericType()))
 					.collect(Collectors.toCollection(() -> sortedCardList));
@@ -181,7 +174,6 @@ public class UserDeckServiceImpl {
 			logger.error("Error when trying to sort Main Deck");
 			return cardList;
 		}
-		
 
 		return sortedCardList;
 	}
@@ -189,6 +181,7 @@ public class UserDeckServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public int removeSetFromUsersCollection(Long setId) {
 		logger.info("Starting removing Set from user collection. ID {}", setId);
+		
 		int qtdRemoved = 0;
 
 		UserDeck setOrigem = userDeckRepository
@@ -209,30 +202,38 @@ public class UserDeckServiceImpl {
 	}
 
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	public void saveUserdeck(Deck deck, List<UserRelDeckCards> listRel) {
+	public UserDeck saveUserdeck(Deck deck, List<UserRelDeckCards> listRel) {
 		logger.info("Starting saving UserDeck...");
+		
 		UserDeck userDeck = new UserDeck();
 		
 		this.validUserDeck(deck);
 
 		// Check if it is a new deck or a existing deck
-		if (deck.getId() != null && deck.getId() != 0) {
-			dao.deleteCardsDeckuserByDeckId(deck.getId());
-			userDeck = userDeckRepository.getOne(deck.getId());
-			userDeck.setNome(deck.getNome());
-
-		} else {
+		if (deck.getId() != null && deck.getId() != 0)
+			userDeck = updateDeck(deck);
+		else
 			userDeck = createNewUserDeck(deck);
-		}
 		
 		// FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
-		if (userDeckRepository.save(userDeck) == null)
+		if ((userDeck = userDeckRepository.save(userDeck)) == null)
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the Deck");
 		
 		this.saveRelDeckCardsOnSavingUserDeck(listRel, deck);
 		
 		logger.info("User Deck was saved successfully! ID: {}", deck.getId());
+		
+		return userDeck;
 
+	}
+
+
+	private UserDeck updateDeck(Deck deck) {	
+		UserDeck userDeck;
+		dao.deleteCardsDeckuserByDeckId(deck.getId());
+		userDeck = userDeckRepository.getOne(deck.getId());
+		userDeck.setNome(deck.getNome());
+		return userDeck;
 	}
 	
 	
@@ -249,6 +250,7 @@ public class UserDeckServiceImpl {
 	}
 	
 	private void saveRelDeckCardsOnSavingUserDeck(List<UserRelDeckCards> listRel, Deck deck) {
+		//If its null means dont came from a SetCollection
 		if(listRel == null) {
 			listRel = new ArrayList<>();
 			listRel = deck.getRel_deck_cards().stream().map(rel -> {
@@ -261,21 +263,21 @@ public class UserDeckServiceImpl {
 		userRelService.saveAll(listRel);
 	}
 
-	private UserDeck createNewUserDeck(Deck deck) {
-	    UserDeck userDeck = new UserDeck();
-		userDeck.setId(null);
-		userDeck.setUserId(GeneralFunctions.userLogged().getId());
-		userDeck.setDtCriacao(new Date());
-		userDeck.setSetType("DECK");
-		userDeck.setNome(deck.getNome()+"_"+GeneralFunctions.momentAsString());
-		userDeck.setImagem(GeneralFunctions.getRandomDeckCase());
-		userDeck.setImgurUrl(userDeck.getImagem());		
-		return userDeck;
+	private UserDeck createNewUserDeck(Deck deck) {		
+		return  UserDeckBuilder
+				.builder()
+				.userId(GeneralFunctions.userLogged().getId())
+				.dtCriacao(new Date())
+				.setType("DECK")
+				.nome(deck.getNome())
+				.imagem(GeneralFunctions.getRandomDeckCase())
+				.build();
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public UserDeck saveUserDeck(UserDeck userDeck) {
-		this.validUserDeck(userDeck);
+		
+	userDeck = UserDeckBuilder.builder(userDeck).build();
 		
 	 UserDeck userDeckSaved = userDeckRepository.save(userDeck);
 	 
@@ -289,29 +291,8 @@ public class UserDeckServiceImpl {
 		
 	 	return userDeckSaved;
 	}
-
-
-	private void validUserDeck(UserDeck userDeck) {
-		
-		if(userDeck == null)
-			throw new IllegalArgumentException("Invalid UserDeck");
-		
-		if (userDeck.getNome() == null || userDeck.getNome().isBlank())
-			throw new IllegalArgumentException("UserDeck name cannot be null or empty");
-
-		if (userDeck.getImagem() == null || userDeck.getImagem().isBlank())
-			throw new IllegalArgumentException("UserDeck Image cannot be null or empty");
-		
-		if (userDeck.getDtCriacao() == null)
-			throw new IllegalArgumentException("UserDeck Creation Date cannot be null or empty");
-		
-		if (userDeck.getIsSpeedDuel() == null)
-			throw new IllegalArgumentException("UserDeck IsSpeedDuel cannot be null or empty");
-		
-	     if(SetType.getByType(userDeck.getSetType()) == null)
-	    	 throw new IllegalArgumentException("Invalid SetType: " + userDeck.getSetType());
-		
-	}
+	
+	
 
 //	
 //	@Transactional(rollbackFor = Exception.class)

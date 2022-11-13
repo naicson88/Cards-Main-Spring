@@ -1,8 +1,13 @@
 package com.naicson.yugioh.deck;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,6 +19,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -30,9 +36,11 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
+import com.naicson.yugioh.mocks.RelDeckCardsMock;
 import com.naicson.yugioh.mocks.UserDeckMock;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.service.deck.UserRelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.ValidObjects;
 
@@ -45,14 +53,17 @@ public class UserDeckServiceImplTest {
 	UserDeckServiceImpl deckService;
 	
 	@Mock
-	UserDeckRepository deckUserRepository;
+	UserDeckRepository userDeckRepository;
 	@Mock
 	DeckDAO dao;
+	@Mock
+	UserRelDeckCardsServiceImpl userRelService;
 	
-	
+	List<RelDeckCards> listRel;
 	@BeforeEach
 	public void setup(){
 	    MockitoAnnotations.initMocks(this); //without this you will get NPE
+	    listRel = List.of(RelDeckCardsMock.relDeckCards(), RelDeckCardsMock.relDeckCards());
 	}
 	
 	@Test
@@ -70,7 +81,7 @@ public class UserDeckServiceImplTest {
 				ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards());
 		Optional<UserDeck> du = Optional.of(UserDeckMock.generateValidUserDeck());
 		
-		Mockito.when(deckUserRepository.findById(deckId)).thenReturn(du);
+		Mockito.when(userDeckRepository.findById(deckId)).thenReturn(du);
 		
 		doReturn(mainDeck).when(dao).consultMainDeck(deckId);
 		doReturn(sideDeck).when(dao).consultSideDeckCards(deckId, "User");
@@ -83,6 +94,41 @@ public class UserDeckServiceImplTest {
 		assertThat(deck.getCards().contains(mainDeck.get(0)));
 		assertThat(deck.getSideDeckCards().contains(sideDeck.get(0)));
 		assertTrue(deck.getExtraDeck().isEmpty());
+	}
+	
+	@Test
+	public void removeSetFromUsersCollectionsSuccessfully() {
+		
+		Optional <UserDeck> opt = Optional.of(UserDeckMock.generateValidUserDeck()); 
+		Long setId = 1L;
+		
+		Mockito.when(userDeckRepository.findById(setId)).thenReturn(opt);
+		Mockito.when(dao.relDeckUserCards(setId)).thenReturn(listRel);
+		Mockito.when(dao.removeCardsFromUserSet(setId)).thenReturn(40);
+		doNothing().when(userDeckRepository).deleteById(anyLong());
+		
+		int qtdRemoved = deckService.removeSetFromUsersCollection(setId);
+		
+		assertEquals(40, qtdRemoved);
+		
+	}
+	
+	@Test
+	public void saveUserdeckWhenItIsNew() {
+		mockAuth();
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setRel_deck_cards(listRel);
+		deck.setId(null);
+		
+		Mockito.when(userDeckRepository.save(any())).thenReturn(AdditionalAnswers.returnsFirstArg());
+		Mockito.when(userRelService.saveAll(anyList())).thenReturn(null);
+		
+		UserDeck userDeck = deckService.saveUserdeck(deck, null);
+		
+		assertNotNull(userDeck);
+		assertEquals(deck.getNome(), userDeck.getNome());
+		assertEquals("DECK", userDeck.getSetType());
+		
 	}
 	
 	

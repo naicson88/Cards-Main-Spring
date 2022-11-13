@@ -125,7 +125,7 @@ public class CardServiceImpl implements CardDetailService {
 		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
 				.orElseThrow(() -> new NoSuchElementException("It was not possible found cards of Archetype: " + archId));
 		
-		List<CardOfArchetypeDTO> listDTO = new ArrayList<>();
+		List<CardOfArchetypeDTO> listDTO = new LinkedList<>();
 		
 		  cardsOfArchetype.stream().forEach(card -> {
 			CardOfArchetypeDTO dto = new CardOfArchetypeDTO(card);
@@ -253,8 +253,10 @@ public class CardServiceImpl implements CardDetailService {
 	
 	private List<KonamiSetsWithCardDTO> setAllSetsWithThisCard(Card card) {
 		
-		List<Tuple> listKonamiSets = cardRepository.setsOfCard(card.getId());
-		List<KonamiSetsWithCardDTO> listCardSets = new ArrayList<>();
+		List<Tuple> listKonamiSets = Optional.of(cardRepository.setsOfCard(card.getId()))
+				.orElse(Collections.emptyList());
+		
+		List<KonamiSetsWithCardDTO> listCardSets = new LinkedList<>();
 			
 		listKonamiSets.stream().forEach(c -> {	
 			Boolean hasOnList = false;
@@ -275,19 +277,10 @@ public class CardServiceImpl implements CardDetailService {
 			}
 			
 			if(!hasOnList) {
-				listCardSets.add(new KonamiSetsWithCardDTO(
-						id,
-						setType,
-						c.get(2, String.class),
-						c.get(3, String.class),
-						c.get(4, String.class),
-						List.of(c.get(5, String.class)),
-						List.of(c.get(6, BigDecimal.class))));
-				
+				listCardSets.add(new KonamiSetsWithCardDTO(c));	
 				};
 			});
-		
-					
+							
 	return listCardSets;
 }
 

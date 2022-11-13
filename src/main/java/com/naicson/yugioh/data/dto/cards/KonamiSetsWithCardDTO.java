@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.persistence.Tuple;
+
 public class KonamiSetsWithCardDTO {
 	
 	private BigInteger id;
@@ -16,16 +18,16 @@ public class KonamiSetsWithCardDTO {
 	
 	public KonamiSetsWithCardDTO() {}
 	
-	public KonamiSetsWithCardDTO(BigInteger id, String setType, String image, String name, String cardSetCode,
-			List<String> rarity, List<BigDecimal> price) {
-		super();
-		this.id = id;
-		this.setType = setType;
-		this.image = image;
-		this.name = name;
-		this.cardSetCode = cardSetCode;
-		this.rarity = rarity;
-		this.price = price;
+	public KonamiSetsWithCardDTO(Tuple c) {
+		
+		this.id = c.get(0, BigInteger.class);
+		this.setType = c.get(1, String.class);
+		this.image = 	c.get(2, String.class);
+		this.name = c.get(3, String.class);
+		this.cardSetCode = c.get(4, String.class);
+		this.rarity = List.of(c.get(5, String.class));
+		this.price = List.of(c.get(6, BigDecimal.class));
+		
 	}
 
 	public BigInteger getId() {

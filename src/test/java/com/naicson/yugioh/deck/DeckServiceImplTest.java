@@ -265,20 +265,7 @@ public class DeckServiceImplTest {
 //		assertThat(dto.get(0).getQuantity() == rel.get(0).getQuantity());
 //	}
 	
-//	@Test
-//	public void removeSetFromUsersCollectionsSuccessfully() {
-//		
-//		Optional <UserDeck> opt = Optional.of(UserDeckMock.generateValidUserDeck()); 
-//		
-//		Mockito.when(deckUserRepository.findById(anyLong())).thenReturn(opt);
-//		Mockito.when(dao.removeCardsFromUserSet(anyLong())).thenReturn(40);
-//		doNothing().when(deckUserRepository).deleteById(anyLong());
-//		
-//		int qtdRemoved = deckService.removeSetFromUsersCollection(1L);
-//		
-//		assertEquals(40, qtdRemoved);
-//		
-//	}
+
 //	
 //	@Test
 //	public void removeSetFromUsersCollectionsError() {

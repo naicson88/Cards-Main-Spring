@@ -43,11 +43,11 @@ public class UserDeck {
 	public static UserDeck userDeckFromDeck(Deck deck) {
 		UserDeck userDeck = new UserDeck();
 		BeanUtils.copyProperties(deck, userDeck);		
-		//userDeck.setNome(userDeck.getNome()+"_"+GeneralFunctions.momentAsString());
+
 		userDeck.setUserId(GeneralFunctions.userLogged().getId());
 		userDeck.setDtCriacao(new Date());
 		userDeck.setKonamiDeckCopied(deck.getId());
-		//userDeck.setRelDeckCards(deck.getRel_deck_cards());		
+	
 		return userDeck;
 	}
 	

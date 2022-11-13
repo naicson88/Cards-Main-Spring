@@ -2,6 +2,8 @@ package com.naicson.yugioh.data.dto.set;
 
 import java.util.Date;
 
+import javax.persistence.Tuple;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DeckSummaryDTO {
@@ -19,16 +21,14 @@ public class DeckSummaryDTO {
 	
 	
 	
-	public DeckSummaryDTO(Long id, String nome, String nomePortugues, String imagem, Date lancamento, String setType,
-			int quantityUserHave) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.nomePortugues = nomePortugues;
-		this.imagem = imagem;
-		this.lancamento = lancamento;
-		this.setType = setType;
-		this.quantityUserHave = quantityUserHave;
+	public DeckSummaryDTO(Tuple set) {
+		this.id = Long.parseLong(String.valueOf(set.get(0)));
+		this.nome = set.get(1, String.class);
+		this.nomePortugues = set.get(2, String.class);
+		this.imagem = set.get(3, String.class);
+		this.lancamento = set.get(4, Date.class);
+		this.setType = set.get(5, String.class);
+		this.quantityUserHave = Integer.parseInt(String.valueOf(set.get(6)));
 	}
 
 

@@ -213,23 +213,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (setName.isEmpty() || setName.length() <= 3) 
 			throw new IllegalArgumentException("Invalid set name for searching");
 		
-		setName = setName.trim();
-
-		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName);
+		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName.trim());
 		
 		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
-							
-			Long id = Long.parseLong(String.valueOf(set.get(0)));
-			Integer qtd = Integer.parseInt(String.valueOf(set.get(6)));
 			
-			DeckSummaryDTO summary = new DeckSummaryDTO(
-					id,
-					set.get(1, String.class),
-					set.get(2, String.class),
-					set.get(3, String.class),
-					set.get(4, Date.class),
-					set.get(5, String.class),
-					qtd);
+			DeckSummaryDTO summary = new DeckSummaryDTO(set);
 					
 					return summary;	
 						
@@ -275,8 +263,8 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		List<Deck> isAlreadyRegistered = deckRepository.findByNome(kDeck.getNome());
 
-		if (isAlreadyRegistered != null && isAlreadyRegistered.size() > 0)
-			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
+		if (isAlreadyRegistered != null && !isAlreadyRegistered.isEmpty())
+			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered: " + kDeck.getNome());
 		
 		kDeck = deckRepository.save(kDeck);	
 
