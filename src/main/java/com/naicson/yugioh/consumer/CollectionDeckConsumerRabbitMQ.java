@@ -2,6 +2,7 @@ package com.naicson.yugioh.consumer;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.dto.CollectionDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -72,20 +74,21 @@ public class CollectionDeckConsumerRabbitMQ {
 		
 		SetCollection set = setCollectionService.findById(cDeck.getSetId());
 		
-		Deck deck = new Deck();
-		deck.setDt_criacao(new Date());
-		deck.setImagem(set.getImgPath());
-		deck.setLancamento(set.getReleaseDate());
-		deck.setNome(cDeck.getNome().trim());
-		deck.setNomePortugues(cDeck.getNomePortugues());
-		deck.setRel_deck_cards(cDeck.getListRelDeckCards());
-		deck.setSetType(set.getSetCollectionType().toString());
-		deck.setIsSpeedDuel(set.getIsSpeedDuel());
-		deck.setImgurUrl(set.getImgurUrl());
-		deck.setIsBasedDeck(cDeck.getIsBasedDeck());
-		deck.setSetCode(set.getSetCode());
+		cDeck.getListRelDeckCards().forEach(rel -> rel.setIsSpeedDuel(set.getIsSpeedDuel()));
 		
-		return deck;
+		return DeckBuilder.builder()
+		.dt_criacao(new Date())
+		.imagem(StringUtils.isBlank(cDeck.getImagem()) ? set.getImgPath() : cDeck.getImagem())
+		.lancamento(set.getReleaseDate())
+		.nome(cDeck.getNome())
+		.setType(set.getSetCollectionType())
+		.isSpeedDuel(set.getIsSpeedDuel())
+		.imgurUrl(StringUtils.isBlank(cDeck.getImagem()) ?set.getImgurUrl(): cDeck.getImagem() )
+		.isBasedDeck(cDeck.getIsBasedDeck())
+		.setCode(set.getSetCode())
+		.relDeckCards(cDeck.getListRelDeckCards())
+		.build();
+
 	}
 	
 	private CollectionDeck convertJsonToSetCollectionDto(String json) {		

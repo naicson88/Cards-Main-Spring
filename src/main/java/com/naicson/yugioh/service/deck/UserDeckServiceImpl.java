@@ -91,19 +91,18 @@ public class UserDeckServiceImpl {
 
 	private Deck createDeckObject(Long deckId, UserDeck deckUser) {
 		
-		Deck deck = DeckBuilder.builder()
-				.addNome(deckUser.getNome())
-				.addCards(this.consultMainDeck(deckId))
-				.addDt_criacao()
-				.addExtraDeck(this.consultExtraDeckCards(deckId, "User"))
-				.addId(deckUser.getId())
-				.addImagem(deckUser.getImagem())
-				.addImgurUrl(deckUser.getImagem())
-				.addRel_deck_cards(this.relDeckUserCards(deckId))
-				.addSideDeckCards(this.consultSideDeckCards(deckId, "User"))
-				.build();
-		
-		return deck;
+		return DeckBuilder.builder()
+				.nome(deckUser.getNome())			
+				.dt_criacao(new Date())
+				.extraDeckList(this.consultExtraDeckCards(deckId, "User"))
+				.id(deckUser.getId())
+				.imagem(deckUser.getImagem())
+				.imgurUrl(deckUser.getImagem())
+				.extraDeckList(this.consultExtraDeckCards(deckId, "User"))
+				.cardsList(this.consultMainDeck(deckId))
+				.relDeckCards(this.relDeckUserCards(deckId))
+				.sideDeckList(this.consultSideDeckCards(deckId, "User"))
+				.buildForUserDeck();
 	}
 
 	private List<Card> consultMainDeck(Long deckId) {

@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.util.enums.SetType;
 
 public class DeckBuilder {
 
@@ -20,58 +24,108 @@ public class DeckBuilder {
 		return new DeckBuilder();
 	}
 
-	public DeckBuilder addNome(String nome) {
+	public DeckBuilder nome(String nome) {
 		this.deck.setNome(Objects.requireNonNull(nome, "Name is required to create a Deck"));
 		return this;
 	}
+	
+	public DeckBuilder isSpeedDuel(Boolean isSpeedDuel) {
+		this.deck.setIsSpeedDuel(isSpeedDuel);
+		return this;
+	}
+	
+	public DeckBuilder setCode(String setCode) {
+		this.deck.setSetCode(setCode);
+		return this;
+	}
+	
+	public DeckBuilder isBasedDeck(Boolean isBasedDeck) {
+		this.deck.setIsBasedDeck(isBasedDeck);
+		return this;
+	}
+	
+	public DeckBuilder setType(SetType setType) {
+		this.deck.setSetType(setType.toString());
+		return this;
+	}
+	
+	public DeckBuilder lancamento(Date lancamento) {
+		this.deck.setLancamento(lancamento);
+		return this;
+	}
 
-	public DeckBuilder addImagem(String img) {
+	public DeckBuilder imagem(String img) {
 		this.deck.setImagem(img);
 		return this;
 
 	}
 
-	public DeckBuilder addImgurUrl(String imgurImg) {
+	public DeckBuilder imgurUrl(String imgurImg) {
 		this.deck.setImgurUrl(imgurImg);
 		return this;
 	}
 
-	public DeckBuilder addDt_criacao() {
-		this.deck.setDt_criacao(new Date());
+	public DeckBuilder dt_criacao(Date date) {
+		this.deck.setDt_criacao(date);
 		return this;
 
 	}
 
-	public DeckBuilder addId(Long id) {
+	public DeckBuilder id(Long id) {
 		this.deck.setId(id);
 		return this;
 	}
 
-	public DeckBuilder addCards(List<Card> cards) {
+	public DeckBuilder cardsList(List<Card> cards) {
 		this.deck.setCards(cards);
 		return this;
 
 	}
 
-	public DeckBuilder addExtraDeck(List<Card> extraDeckCards) {
+	public DeckBuilder extraDeckList(List<Card> extraDeckCards) {
 		this.deck.setExtraDeck(extraDeckCards);
 		return this;
 
 	}
 
-	public DeckBuilder addSideDeckCards(List<Card> sideDeckCards) {
+	public DeckBuilder sideDeckList(List<Card> sideDeckCards) {
 		this.deck.setSideDeckCards(sideDeckCards);
 		return this;
 	}
 
-	public DeckBuilder addRel_deck_cards(List<RelDeckCards> listRelDeckCards) {
+	public DeckBuilder relDeckCards(List<RelDeckCards> listRelDeckCards) {
 		this.deck.setRel_deck_cards(listRelDeckCards);
 		return this;
-
 	}
 
 	public Deck build() {
+		validateDeck(this.deck);
 		return this.deck;
+	}
+	
+	public Deck buildForUserDeck() {
+		return this.deck;
+	}
+	
+	private void validateDeck(Deck deck) {
+		
+		if(deck == null)
+			throw new IllegalArgumentException("Invalid Deck to build");
+		if(deck.getIsSpeedDuel() == null)
+			throw new IllegalArgumentException("Invalid Speed Duel info to build");
+		if(CollectionUtils.isEmpty(deck.getRel_deck_cards()))
+			throw new IllegalArgumentException("Invalid Card List to build");
+		if(deck.getDt_criacao() == null)
+			throw new IllegalArgumentException("Invalid Date Criacao info to build");
+		if(StringUtils.isBlank(deck.getImagem()))
+			throw new IllegalArgumentException("Invalid Image info to build");
+		if(StringUtils.isBlank(deck.getNome()))
+			throw new IllegalArgumentException("Invalid Nome info to build");
+		if(StringUtils.isBlank(deck.getSetCode()))
+			throw new IllegalArgumentException("Invalid Set Code info to build");
+		if(StringUtils.isBlank(deck.getSetType()))
+			throw new IllegalArgumentException("Invalid Set Type info to build");
+
 	}
 
 }
