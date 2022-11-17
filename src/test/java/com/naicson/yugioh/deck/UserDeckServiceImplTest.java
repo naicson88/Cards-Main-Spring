@@ -120,7 +120,7 @@ public class UserDeckServiceImplTest {
 		deck.setRel_deck_cards(listRel);
 		deck.setId(null);
 		
-		Mockito.when(userDeckRepository.save(any())).thenReturn(AdditionalAnswers.returnsFirstArg());
+		Mockito.when(userDeckRepository.save(any())).then(AdditionalAnswers.returnsFirstArg());
 		Mockito.when(userRelService.saveAll(anyList())).thenReturn(null);
 		
 		UserDeck userDeck = deckService.saveUserdeck(deck, null);

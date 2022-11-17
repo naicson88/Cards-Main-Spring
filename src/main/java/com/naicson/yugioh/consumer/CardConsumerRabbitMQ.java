@@ -38,6 +38,9 @@ public class CardConsumerRabbitMQ {
 
 	@Autowired
 	CardServiceImpl cardService;
+	
+	@Autowired
+	ConsumerUtils consumerUtils;
 
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 
@@ -46,7 +49,7 @@ public class CardConsumerRabbitMQ {
 	public void consumer(String json) {
 		logger.info("Start saving Card on Deck: {}", json);
 
-		AddNewCardToDeckDTO card = this.convertJsonToNewCardDTO(json);
+		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.ADD_NEW_CARD);
 
 		Long cardId = this.verifyIfCardIsAlreadyRegistered(card);
 

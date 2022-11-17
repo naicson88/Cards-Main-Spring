@@ -244,8 +244,7 @@ public class UserDeckServiceImpl {
 		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
 			throw new IllegalArgumentException("There is no card in this deck");
 		
-		SetType.valueOf(deck.getSetType().toUpperCase());
-		
+		SetType.valueOf(deck.getSetType().toUpperCase());		
 	}
 	
 	private void saveRelDeckCardsOnSavingUserDeck(List<UserRelDeckCards> listRel, Deck deck) {
@@ -270,6 +269,7 @@ public class UserDeckServiceImpl {
 				.setType("DECK")
 				.nome(deck.getNome())
 				.imagem(GeneralFunctions.getRandomDeckCase())
+				.isSpeedDuel(false)
 				.build();
 	}
 	

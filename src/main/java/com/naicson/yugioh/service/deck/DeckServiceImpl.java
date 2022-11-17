@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -259,8 +260,11 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Override
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
+		
+		if(kDeck == null || StringUtils.isBlank(kDeck.getNome()))
+			throw new IllegalArgumentException("Invalid Deck for consuting");
 
-		List<Deck> isAlreadyRegistered = deckRepository.findByNome(kDeck.getNome());
+		List<Deck> isAlreadyRegistered = findByNome(kDeck.getNome());
 
 		if (isAlreadyRegistered != null && !isAlreadyRegistered.isEmpty())
 			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered: " + kDeck.getNome());
@@ -268,6 +272,13 @@ public class DeckServiceImpl implements DeckDetailService {
 		kDeck = deckRepository.save(kDeck);	
 
 		return kDeck;
+	}
+
+	public List<Deck> findByNome(String nome) {
+		if(StringUtils.isBlank(nome))
+			throw new IllegalArgumentException("Invalid Nome for consuting");
+		
+		return deckRepository.findByNome(nome);
 	}
 
 	@Override

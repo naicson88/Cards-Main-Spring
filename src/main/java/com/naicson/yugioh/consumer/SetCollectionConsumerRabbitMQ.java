@@ -35,6 +35,9 @@ public class SetCollectionConsumerRabbitMQ {
 	@Autowired
 	SetCollectionServiceImpl setColService;
 	
+	@Autowired
+	ConsumerUtils consumerUtils;
+	
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 		
 	@RabbitListener(queues = "${rabbitmq.queue.setcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
@@ -43,7 +46,7 @@ public class SetCollectionConsumerRabbitMQ {
 			
 		logger.info("Start consuming new Set Collection: {}" , json);
 		
-		SetCollectionDto setCollection = convertJsonToSetCollectionDto(json);
+		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, consumerUtils.SET_COLLECTION);
 		
 		SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 	
@@ -52,28 +55,5 @@ public class SetCollectionConsumerRabbitMQ {
 		logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
 			
 	}
-
-	private SetCollectionDto convertJsonToSetCollectionDto(String json) {
-		
-		try {
-			
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-			
-			SetCollectionDto dto = mapper.readValue(json, SetCollectionDto.class);
-			
-			return dto;
-			
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	
 
 }

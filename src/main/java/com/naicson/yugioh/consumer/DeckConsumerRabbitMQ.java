@@ -4,14 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.card.CardRegistry;
@@ -39,7 +34,10 @@ public class DeckConsumerRabbitMQ {
 			
 		logger.info("Start consuming new KonamiDeck: {}" , json);
 		
-		KonamiDeck kDeck = convertJsonToSetCollectionDto(json);
+		KonamiDeck kDeck = (KonamiDeck) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.KONAMI_DECK);
+		
+		if(!deckService.findByNome(kDeck.getNome()).isEmpty())
+			throw new ErrorMessage("Deck already registered with that name: " + kDeck.getNome());
 		
 		cardRegistry.registryCardFromYuGiOhAPI(kDeck.getCardsToBeRegistered());
 		
@@ -57,28 +55,6 @@ public class DeckConsumerRabbitMQ {
 		
 		logger.info("Deck successfully created!! {}", newDeck.getNome());
 						
-	}
-	
-	private KonamiDeck convertJsonToSetCollectionDto(String json) {
-			
-		try {
-			
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-			
-			KonamiDeck dto = mapper.readValue(json, KonamiDeck.class);
-			
-			return dto;
-			
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
 	}
 	
 }

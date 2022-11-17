@@ -1,6 +1,5 @@
 package com.naicson.yugioh.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,6 +33,22 @@ public class ArchetypeServiceImpl {
 		List<CardOfArchetypeDTO> cards = cardService.findCardByArchetype(archetypeId);	
 		arch.setArrayCards(cards);
 		
+		return arch;
+	}
+	
+	public Archetype getCardArchetype(String archetype) {
+		Archetype arch = new Archetype();
+
+		if (archetype != null && !archetype.isEmpty()) {
+			arch = archRepository.findByArcName(archetype.trim());
+			
+			if(arch == null || arch.getId() < 1) {
+				arch = archRepository.save(new Archetype(archetype));
+			}
+		}			
+		else
+			arch = null;
+
 		return arch;
 	}
 }

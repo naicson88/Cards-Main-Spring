@@ -81,7 +81,8 @@ public abstract class ValidObjects {
 		newDeck.setQtd_super_raras(10L);
 		newDeck.setQtd_ultra_raras(2L);
 		newDeck.setDt_criacao(new Date());
- 			  		  
+ 		newDeck.setIsSpeedDuel(false);
+ 		newDeck.setIsBasedDeck(false);
 	  
 	  return newDeck;  
 

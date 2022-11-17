@@ -84,6 +84,11 @@ public class UserDeckBuilder {
 		return this.userDeck;
 	}
 	
+	public UserDeck build(UserDeck ud) {
+		validUserDeck(ud);
+		return ud;
+	}
+	
 	private void validUserDeck(UserDeck userDeck) {	
 		if(userDeck == null)
 			throw new IllegalArgumentException("Invalid UserDeck");

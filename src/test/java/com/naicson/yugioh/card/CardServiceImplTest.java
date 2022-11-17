@@ -16,7 +16,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,6 @@ import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.stats.CardPriceInformation;
 import com.naicson.yugioh.mocks.CardAlternativeNumberMock;
@@ -131,20 +129,33 @@ public class CardServiceImplTest {
 	@Test
 	public void cardOfUserDetail() {
 		this.mockAuth();
-		Card card = ValidObjects.generateValidCard(1);
-	
-		Tuple mockedTuple = Mockito.mock(Tuple.class); 
-		List<Tuple> tupleList = List.of(mockedTuple);
+	//	Card card = ValidObjects.generateValidCard(1);
+		
+		List<Tuple> tupleList = createTupleOfCardsOfUserSetsDTO();
 		  
-		Mockito.when(cardRepository.findById(anyInt())).thenReturn(Optional.of(card));
+		//Mockito.when(cardRepository.findById(anyInt())).thenReturn(Optional.of(card));
 		Mockito.when(dao.listCardOfUserDetails(anyInt(), anyLong())).thenReturn(tupleList);
 		
 		CardOfUserDetailDTO dto = cardService.cardOfUserDetails(1);
 		
-		assertEquals(dto.getCardName(), card.getNome());
-		assertEquals(dto.getCardNumber(), card.getNumero());
+		assertEquals("Set Name", dto.getSetsWithThisCard().get(0).getSetName());
+		assertEquals( 2.0, dto.getSetsWithThisCard().get(0).getPrice());
 		assertNotNull(dto.getSetsWithThisCard());
 		assertNotNull(dto.getRarity());		
+	}
+	
+	private List<Tuple> createTupleOfCardsOfUserSetsDTO() {
+		
+		List<Tuple> tupleList = new ArrayList<>();
+		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
+		
+		tupleList.add((Tuple)nativeQueryTupleTransformer
+				.transformTuple(
+						   new Object[]{new  String("Set Name"), new String("Set Code"), new String("Rarity"), 2.0,
+								   new  String("12"), new String("11"), new String("Set Tipe")},
+						new String[]{"AAA", "BBB","CCC", "DDD","FFF", "RRR", "YUYU"}));
+		
+		return tupleList;
 	}
 	
 	@Test

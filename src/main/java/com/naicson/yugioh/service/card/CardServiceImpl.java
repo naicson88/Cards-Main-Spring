@@ -142,32 +142,30 @@ public class CardServiceImpl implements CardDetailService {
 			if(cardId == null || cardId == 0)
 				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
-			UserDetailsImpl user = GeneralFunctions.userLogged();
-								
-			cardUserDTO = this.getCardOfUserDetailDTO(cardId);
+			CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
 			
-			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, user.getId());
+			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, GeneralFunctions.userLogged().getId());
 			
-			if(cardsDetails != null ) {
-				List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
-				
-				Map<String, Integer> mapRarity = new HashMap<>();
-						
-					listCardsSets.stream().forEach(r ->{
-					//Verifica se ja tem essa raridade inserida no map
-						if(!mapRarity.containsKey(r.getRarity())) {
-							mapRarity.put(r.getRarity(), 1);
-						} 
-						else {
-							//... se tiver acrescenta mais um 
-							mapRarity.merge(r.getRarity(), 1, Integer::sum);
-						}
-				});
-				
-				cardUserDTO.setRarity(mapRarity);
-				cardUserDTO.setSetsWithThisCard(listCardsSets);
-	
-			}
+			if(cardsDetails == null ) 
+				return cardUserDTO;
+			
+			List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
+			
+			Map<String, Integer> mapRarity = new HashMap<>();
+					
+				listCardsSets.stream().forEach(r ->{
+				//Verifica se ja tem essa raridade inserida no map
+					if(!mapRarity.containsKey(r.getRarity())) {
+						mapRarity.put(r.getRarity(), 1);
+					} 
+					else {
+						//... se tiver acrescenta mais um 
+						mapRarity.merge(r.getRarity(), 1, Integer::sum);
+					}
+			});
+			
+			cardUserDTO.setRarity(mapRarity);
+			cardUserDTO.setSetsWithThisCard(listCardsSets);
 			
 			return cardUserDTO;
 			

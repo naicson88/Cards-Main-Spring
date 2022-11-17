@@ -19,8 +19,6 @@ public class DeckSummaryDTO {
 	
 	public DeckSummaryDTO() {}
 	
-	
-	
 	public DeckSummaryDTO(Tuple set) {
 		this.id = Long.parseLong(String.valueOf(set.get(0)));
 		this.nome = set.get(1, String.class);
@@ -30,8 +28,6 @@ public class DeckSummaryDTO {
 		this.setType = set.get(5, String.class);
 		this.quantityUserHave = Integer.parseInt(String.valueOf(set.get(6)));
 	}
-
-
 
 	public String getNome() {
 		return nome;

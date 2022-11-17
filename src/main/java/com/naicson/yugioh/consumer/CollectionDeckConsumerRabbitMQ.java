@@ -45,7 +45,10 @@ public class CollectionDeckConsumerRabbitMQ {
 	private void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
 		
-		CollectionDeck cDeck = this.convertJsonToSetCollectionDto(json);
+		CollectionDeck cDeck = (CollectionDeck) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.COLLECTION_DECK);
+		
+		if(cDeck.getSetId() == null)
+			throw new IllegalArgumentException("Invalid Set ID");
 		
 		cardRegistry.registryCardFromYuGiOhAPI(cDeck.getCardsToBeRegistered());
 		
@@ -90,26 +93,4 @@ public class CollectionDeckConsumerRabbitMQ {
 		.build();
 
 	}
-	
-	private CollectionDeck convertJsonToSetCollectionDto(String json) {		
-		try {
-			
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-			
-			CollectionDeck dto = mapper.readValue(json, CollectionDeck.class);
-			
-			return dto;
-			
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	
 }
