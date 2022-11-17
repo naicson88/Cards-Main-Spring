@@ -26,80 +26,81 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class CardConsumerRabbitMQ {
-	
+
 	@Autowired
 	CardRegistry cardRegistry;
-	
+
 	@Autowired
 	CardAlternativeNumberRepository cardAlternativeNumberRepository;
-	
+
 	@Autowired
 	RelDeckCardsServiceImpl relDeckCardService;
-	
+
 	@Autowired
 	CardServiceImpl cardService;
 	
+	@Autowired
+	ConsumerUtils consumerUtils;
+
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
-	
+
 	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class })
 	public void consumer(String json) {
-		logger.info("Start saving Card on Deck: {}" , json);
-		
-		AddNewCardToDeckDTO card = this.convertJsonToNewCardDTO(json);	
-		
+		logger.info("Start saving Card on Deck: {}", json);
+
+		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.ADD_NEW_CARD);
+
 		Long cardId = this.verifyIfCardIsAlreadyRegistered(card);
-			
+
 		RelDeckCards cardToBeAdded = this.createRelDeckCards(cardId, card);
-		
-		relDeckCardService.saveRelDeckCards(List.of(cardToBeAdded));	
-		
-		logger.info("Card successfully saved on Deck: {}" , cardToBeAdded.getCardNumber());
+
+		relDeckCardService.saveRelDeckCards(List.of(cardToBeAdded));
+
+		logger.info("Card successfully saved on Deck: {}", cardToBeAdded.getCardNumber());
 	}
-	
+
 	private Long verifyIfCardIsAlreadyRegistered(AddNewCardToDeckDTO card) {
 		Card cardFound = cardAlternativeNumberRepository.findCardByCardNumber(card.getNumber());
-		
-		if(cardFound == null)
+
+		if (cardFound == null)
 			cardFound = cardService.findByCardNome(card.getName());
-		
-		if(cardFound == null) 
+
+		if (cardFound == null)
 			cardFound = cardRegistry.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered()).get(0);
-		
+
 		return cardFound.getId().longValue();
 	}
-	
+
 	private RelDeckCards createRelDeckCards(Long cardId, AddNewCardToDeckDTO card) {
-		RelDeckCards rel = new RelDeckCards();
-		rel.setCard_price(card.getPrice());
-		rel.setCardSetCode(card.getCardSetCode());
-		rel.setCardId(cardId.intValue());
-		rel.setCardNumber(card.getNumber());
-		rel.setDeckId(card.getDeckId());
-		rel.setDt_criacao(new Date());
-		rel.setIsSideDeck(false);
-		rel.setIsSpeedDuel(card.getIsSpeedDuel());
-		rel.setQuantity(1);
-		rel.setCard_raridade(card.getRarity());
-		rel.setSetRarityCode(card.getRarityCode());
-		rel.setRarityDetails(card.getRarityDetails());
-		
-		return rel;
-				
+
+		return new RelDeckCards.RelDeckCardsBuilder(card.getDeckId(),
+				card.getNumber(), 
+				card.getCardSetCode(),
+				card.getPrice(),
+				card.getRarity(),
+				new Date(),
+				false,
+				false, 
+				cardId.intValue(),
+				1,
+				card.getRarityCode(),
+				card.getRarityDetails())
+				.build();
 	}
 
 	private AddNewCardToDeckDTO convertJsonToNewCardDTO(String json) {
-	try {			
+		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);		
-			AddNewCardToDeckDTO dto = mapper.readValue(json, AddNewCardToDeckDTO.class);	
+			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+			AddNewCardToDeckDTO dto = mapper.readValue(json, AddNewCardToDeckDTO.class);
 			return dto;
-			
+
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-			
+
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

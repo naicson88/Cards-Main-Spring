@@ -1,281 +1,109 @@
 package com.naicson.yugioh.service.card;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
-import com.naicson.yugioh.data.dto.KonamiDeck;
-import com.naicson.yugioh.entity.Archetype;
-import com.naicson.yugioh.entity.Atributo;
+import com.naicson.yugioh.data.factories.card.BuildCard;
+import com.naicson.yugioh.data.factories.card.BuildCommonCardAttributes;
+import com.naicson.yugioh.data.factories.card.BuildMonsterCardAttributes;
+import com.naicson.yugioh.data.factories.card.BuildNonMonsterCardAttributes;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
-import com.naicson.yugioh.entity.TipoCard;
-import com.naicson.yugioh.repository.ArchetypeRepository;
-import com.naicson.yugioh.repository.AtributoRepository;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
-import com.naicson.yugioh.repository.TipoCardRepository;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.CardProperty;
-import com.naicson.yugioh.util.enums.GenericTypesCards;
 
 @Service
 public class CardRegistry {
 
 	@Autowired
 	CardRepository cardRepository;
-	@Autowired
-	TipoCardRepository cardTypeRepository;
-	@Autowired
-	ArchetypeRepository archRepository;
-	@Autowired
-	AtributoRepository attRepository;
+
 	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 
-
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
-
+	
 	@Transactional
-	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {			
-		List<Card> cardsSaved = new ArrayList<>();
+	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
+		List<Card> cardsSaved = new LinkedList<>();
 
-		if (cardsToBeRegistered != null && cardsToBeRegistered.size() > 0) {
+		if (cardsToBeRegistered != null && !cardsToBeRegistered.isEmpty()) {
+
 			cardsToBeRegistered.stream().forEach(apiCard -> {
 				if (!this.checkIfCardAlreadyRegisteredWithAlternativeNumber(apiCard)) {
-					
-					Card cardToBeRegistered = createCardTobeRegistered(apiCard);
-	
-					this.validCardBeforeSave(cardToBeRegistered);
-					
+
+					Card cardToBeRegistered = createCardToBeRegistered(apiCard);
+
 					Card cardSaved = cardRepository.save(cardToBeRegistered);
-					
-					if (cardRepository.save(cardToBeRegistered).getId() < 1) 					
-						throw new IllegalArgumentException("It was not possible save the card: " + cardToBeRegistered.getNumero());
-					
-					CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(), cardSaved.getNumero());
+
+					CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(),
+							cardSaved.getNumero());
+
 					alternativeRepository.save(alternative);
-					
+
 					logger.info("Card successfuly saved! {}", cardSaved.getNome());
-					
-					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());	
-					
+
+					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());
+
 					cardsSaved.add(cardSaved);
 				}
-			} );	
-		}		
+			});
+		}
+
 		return cardsSaved;
 	}
 
-	private Card createCardTobeRegistered(CardYuGiOhAPI apiCard) {
-		
-		Card cardToBeRegistered = new Card();
-		// Informations that all cards may have
-		cardToBeRegistered.setNumero(apiCard.getId());
-		cardToBeRegistered.setCategoria(apiCard.getType());
-		cardToBeRegistered.setNome(apiCard.getName().trim());
-		cardToBeRegistered.setRegistryDate(new Date());
-		cardToBeRegistered.setArchetype(apiCard.getRace() != null ? this.getCardArchetype(apiCard.getArchetype()) : null);			
-		cardToBeRegistered.setAtributo(this.getCardAttribute(apiCard));
-				
-		if (StringUtils.containsIgnoreCase("spell", apiCard.getType())
-				|| StringUtils.containsIgnoreCase("trap", apiCard.getType())) {
+	public Card createCardToBeRegistered(CardYuGiOhAPI apiCard) {
 
-			cardToBeRegistered.setPropriedade(
-					apiCard.getRace() != null ? this.getCardProperty(apiCard.getRace()) : null);
+		BuildCard buildCard = new BuildCommonCardAttributes();
+		Card cardToBeRegistered = buildCard.buildCard(apiCard, null);
 
-		} else {
-			cardToBeRegistered.setNivel(apiCard.getLevel());
-			cardToBeRegistered.setAtk(apiCard.getAtk());
-			cardToBeRegistered.setDef(apiCard.getDef());
-			cardToBeRegistered.setQtd_link(apiCard.getLinkval() > 0 ? String.valueOf(apiCard.getLinkval()) : null); // validar
-			cardToBeRegistered.setEscala(apiCard.getScale() != null ? Integer.parseInt(apiCard.getScale()) : null); // validar
-			cardToBeRegistered.setTipo(apiCard.getRace() != null ? this.getCardType(apiCard.getRace()) : null);
+		buildCard = new BuildNonMonsterCardAttributes();
+		cardToBeRegistered = buildCard.buildCard(apiCard, cardToBeRegistered);
 
-		}
-
-		cardToBeRegistered.setGenericType(this.setCardGenericType(apiCard.getType()));
-
-		cardToBeRegistered = this.setCardDesc(cardToBeRegistered, apiCard);
+		buildCard = new BuildMonsterCardAttributes();
+		cardToBeRegistered = buildCard.buildCard(apiCard, cardToBeRegistered);
 
 		return cardToBeRegistered;
 	}
 
 	private boolean checkIfCardAlreadyRegisteredWithAlternativeNumber(CardYuGiOhAPI apiCard) {
 
-		Card card = cardRepository.findByNome(apiCard.getName());
+		if (alternativeRepository.findByCardAlternativeNumber(apiCard.getId()) != null)
+			return true;
 
-		if (card != null && card.getId() > 0) {
-			if (card.getNumero() != apiCard.getId()) {
+		Card card = cardRepository.findByNome(apiCard.getName().trim());
 
-				if (alternativeRepository.findByCardAlternativeNumber(apiCard.getId()) != null)
-					return true;
-				
-				else {
-					CardAlternativeNumber alternative = new CardAlternativeNumber(null, card.getId(), apiCard.getId());
-					
-					if(alternativeRepository.save(alternative) != null) {
-						logger.info("Alternative card number saved!");
-						GeneralFunctions.saveCardInFolder(apiCard.getId());
-						return true;
-						
-					}else {
-						throw new RuntimeException("It was not possible save alternative card number");
-					}
-
-				}
-
-			} else {
-				//logger.error("Cards with same number and diferent name cant be registered.");
-				throw new RuntimeException("Cards with same number and diferent name cant be registered.");
-			}
-
-		} else {
+		if (card == null || card.getId() == 0)
 			return false;
-		}
 
+		if (card.getNumero().equals(apiCard.getId()))
+			throw new IllegalArgumentException("Cards with same number and diferent name can't be registered.");
+
+		CardAlternativeNumber alternative = new CardAlternativeNumber(null, card.getId(), apiCard.getId());
+
+		return saveAlternativerCardNumber(apiCard, alternative);
 	}
 
-	private void validCardBeforeSave(Card cardToBeRegistered) {
+	private boolean saveAlternativerCardNumber(CardYuGiOhAPI apiCard, CardAlternativeNumber alternative) {
 
-		if (cardToBeRegistered.getNumero() == null || cardToBeRegistered.getNumero() == 0)
-			throw new IllegalArgumentException("Invalid card number.");
-
-		if (cardToBeRegistered.getCategoria() == null || cardToBeRegistered.getCategoria().isEmpty())
-			throw new IllegalArgumentException("Invalid Card category.");
-
-		if (cardToBeRegistered.getNome() == null || cardToBeRegistered.getNome().isEmpty())
-			throw new IllegalArgumentException("Invalid card name.");
-
-		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")) {
-			if (cardToBeRegistered.getQtd_link() == null || cardToBeRegistered.getQtd_link().equals("0"))
-				throw new IllegalArgumentException("Invalid Link Quantity.");
-		}
-
-		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "pendulum")) {
-			if (cardToBeRegistered.getEscala() == null || cardToBeRegistered.getEscala() == 0)
-				throw new IllegalArgumentException("Invalid Card Scale.");
-		}
-
-	}
-
-	private Card setCardDesc(Card cardToBeRegistered, CardYuGiOhAPI apiCard) {
-
-		if (StringUtils.containsIgnoreCase("pendulum", apiCard.getType())) {
-
-			String fullDesc = apiCard.getDesc();
-			// Verify if has pendulum description
-			if (fullDesc.contains("----------------------------------------")) {
-				String[] parts = fullDesc.split("----------------------------------------");
-				String pendulumDesc = parts[0];
-				String simpleDesc = parts[1];
-				cardToBeRegistered.setDescricao(simpleDesc);
-				cardToBeRegistered.setDescr_pendulum(pendulumDesc);
-			} else {
-				cardToBeRegistered.setDescricao(fullDesc);
-			}
+		if (alternativeRepository.save(alternative) != null) {
+			logger.info("Alternative card number saved!");
+			GeneralFunctions.saveCardInFolder(apiCard.getId());
+			return true;
 
 		} else {
-			cardToBeRegistered.setDescricao(apiCard.getDesc());
+			throw new RuntimeException("It was not possible save alternative card number");
 		}
-
-		return cardToBeRegistered;
-	}
-
-	private String setCardGenericType(String type) {
-		String generic = null;
-
-		if (StringUtils.containsIgnoreCase(type, "xyz"))
-			generic = GenericTypesCards.XYZ.toString();
-		else if (StringUtils.containsIgnoreCase(type, "fusion"))
-			generic = GenericTypesCards.FUSION.toString();
-		else if (StringUtils.containsIgnoreCase(type, "link"))
-			generic = GenericTypesCards.LINK.toString();
-		else if (StringUtils.containsIgnoreCase(type, "pendulum"))
-			generic = GenericTypesCards.PENDULUM.toString();
-		else if (StringUtils.containsIgnoreCase(type, "spell"))
-			generic = GenericTypesCards.SPELL.toString();
-		else if (StringUtils.containsIgnoreCase(type, "trap"))
-			generic = GenericTypesCards.TRAP.toString();
-		else if (StringUtils.containsIgnoreCase(type, "synchro"))
-			generic = GenericTypesCards.SYNCHRO.toString();
-		else if (StringUtils.containsIgnoreCase(type, "ritual"))
-			generic = GenericTypesCards.RITUAL.toString();
-		else if (StringUtils.containsIgnoreCase(type, "token"))
-			generic = GenericTypesCards.TOKEN.toString();
-		else if (StringUtils.containsIgnoreCase(type, "monster"))
-			generic = GenericTypesCards.MONSTER.toString();
-		else if (StringUtils.containsIgnoreCase(type, "skill"))
-			generic = GenericTypesCards.SKILL.toString();
-		else
-			throw new IllegalArgumentException("Invalid monster type");
-
-		return generic;
-	}
-
-	private String getCardProperty(String race) {
-		if (!EnumUtils.isValidEnum(CardProperty.class, race))
-			throw new IllegalArgumentException("Invalid property");
-
-		return race;
-	}
-
-	private Atributo getCardAttribute(CardYuGiOhAPI card) {
-		
-		String attr = null;
-		
-		if(card.getType().contains("Spell") || card.getType().contains("Trap"))
-			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
-		else if(card.getType().equalsIgnoreCase("Skill Card"))
-			attr = "SKILL";
-		else
-			attr = card.getAttribute();
-		
-		Atributo att = attRepository.findByName(attr.trim());
-
-		if (att == null) {
-			throw new EntityNotFoundException("Cant found Attribute: " + attr);
-		}
-
-		return att;
-	}
-
-	private Archetype getCardArchetype(String archetype) {
-		Archetype arch = new Archetype();
-
-		if (archetype != null && !archetype.isEmpty()) {
-			arch = archRepository.findByArcName(archetype.trim());
-			
-			if(arch == null || arch.getId() < 1) {
-				arch = archRepository.save(new Archetype(archetype));
-			}
-		}			
-		else
-			arch = null;
-
-		return arch;
-	}
-
-	private TipoCard getCardType(String race) {
-		TipoCard type = new TipoCard();
-
-		if (!"Normal".equalsIgnoreCase(race)) // Trap and Spell cards has "normal" type
-			type = cardTypeRepository.findByName(race != null ? race.trim() : null);
-		else
-			type = null;
-
-		return type;
 	}
 
 }

@@ -73,14 +73,15 @@ public abstract class ValidObjects {
 		newDeck.setImagem("Imagem Deck");
 		newDeck.setNome("Deck Teste");
 		newDeck.setNomePortugues("Deck teste Portugues");
-		newDeck.setSetType("UD");
+		newDeck.setSetType("DECK");
 		newDeck.setQtd_cards(10L);
 		newDeck.setQtd_comuns(5L);
 		newDeck.setQtd_raras(11L);
 		newDeck.setQtd_super_raras(10L);
 		newDeck.setQtd_ultra_raras(2L);
 		newDeck.setDt_criacao(new Date());
- 			  		  
+ 		newDeck.setIsSpeedDuel(false);
+ 		newDeck.setIsBasedDeck(false);
 	  
 	  return newDeck;  
 

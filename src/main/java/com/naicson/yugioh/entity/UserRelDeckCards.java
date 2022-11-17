@@ -1,4 +1,4 @@
-package com.naicson.yugioh.controller;
+package com.naicson.yugioh.entity;
 
 import java.util.Date;
 

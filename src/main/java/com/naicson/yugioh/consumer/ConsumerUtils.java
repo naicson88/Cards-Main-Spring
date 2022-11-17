@@ -6,14 +6,24 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naicson.yugioh.data.builders.DeckBuilder;
+import com.naicson.yugioh.data.dto.CollectionDeck;
 import com.naicson.yugioh.data.dto.KonamiDeck;
+import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
+import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class ConsumerUtils {
@@ -23,25 +33,28 @@ public class ConsumerUtils {
 	
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
 	
+	public final static String KONAMI_DECK = "KONAMI DECK";
+	public final static String ADD_NEW_CARD = "ADD NEW CARD";
+	public final static String COLLECTION_DECK = "COLLECTION DECK";
+	public final static String SET_COLLECTION = "SET COLLECTION";
+	
 	public  Deck createNewDeck(KonamiDeck kDeck) {
 			
 			if(kDeck == null) 
 				throw new IllegalArgumentException("Informed Konami Deck is invalid!");
 				
-			Deck deck = new Deck();
-			deck.setDt_criacao(new Date());
-			deck.setImagem(kDeck.getImagem());
-			deck.setLancamento(kDeck.getLancamento());
-			deck.setNome(kDeck.getNome().trim());
-			deck.setNomePortugues(kDeck.getNomePortugues());
-			deck.setRel_deck_cards(kDeck.getListRelDeckCards());
-			deck.setSetType(SetType.valueOf(kDeck.getSetType()).toString());
-			deck.setIsSpeedDuel(kDeck.getIsSpeedDuel());
-			deck.setImgurUrl(kDeck.getImagem());
-			deck.setIsBasedDeck(kDeck.getIsBasedDeck());
-			deck.setSetCode(kDeck.getSetCode());
-			
-			return deck;
+		return DeckBuilder.builder()
+			.dt_criacao(new Date())
+			.imagem(kDeck.getImagem())
+			.lancamento(kDeck.getLancamento())
+			.nome(kDeck.getNome().trim())
+			.relDeckCards(kDeck.getListRelDeckCards())
+			.setType(SetType.valueOf(kDeck.getSetType()))
+			.isSpeedDuel(kDeck.getIsSpeedDuel())
+			.imgurUrl(kDeck.getImagem())
+			.isBasedDeck(kDeck.getIsBasedDeck())
+			.setCode(kDeck.getSetCode())
+			.build();
 	}
 	
 	public  Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
@@ -70,5 +83,33 @@ public class ConsumerUtils {
 		});
 		
 		return listRelDeckCards;
+	}
+	
+	public Object convertJsonToSetCollectionDto(String json, String obj) {		
+		try {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+			
+			if(KONAMI_DECK.equals(obj))
+				return mapper.readValue(json, KonamiDeck.class);
+			else if(ADD_NEW_CARD.equals(obj))
+				return mapper.readValue(json, AddNewCardToDeckDTO.class);
+			else if(COLLECTION_DECK.equals(obj))
+				return mapper.readValue(json, CollectionDeck.class);
+			else if(SET_COLLECTION.equals(obj))
+				return mapper.readValue(json, SetCollectionDto.class);
+			else
+				throw new IllegalArgumentException("Invalid Object to mapper");
+			
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 }

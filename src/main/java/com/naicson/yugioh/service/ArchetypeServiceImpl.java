@@ -35,4 +35,20 @@ public class ArchetypeServiceImpl {
 		
 		return arch;
 	}
+	
+	public Archetype getCardArchetype(String archetype) {
+		Archetype arch = new Archetype();
+
+		if (archetype != null && !archetype.isEmpty()) {
+			arch = archRepository.findByArcName(archetype.trim());
+			
+			if(arch == null || arch.getId() < 1) {
+				arch = archRepository.save(new Archetype(archetype));
+			}
+		}			
+		else
+			arch = null;
+
+		return arch;
+	}
 }

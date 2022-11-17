@@ -26,18 +26,17 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 	@Transactional(rollbackFor = Exception.class)
 	public List<RelDeckCards> saveRelDeckCards(List<RelDeckCards> listRelDeckCards) {
 		
+		if(listRelDeckCards == null || listRelDeckCards.isEmpty()) 
+			throw new IllegalArgumentException("Invalid list of Rel Deck Cards");	
+		
 		List<RelDeckCards> relSaved = new ArrayList<>();
 		
-		if(listRelDeckCards == null || listRelDeckCards.size() == 0) 
-			throw new IllegalArgumentException("Invalid list of Rel Deck Cards");		
+		relSaved = relDeckCardsRepository.saveAll(listRelDeckCards);
 		
-				relSaved = relDeckCardsRepository.saveAll(listRelDeckCards);
-				
-				if(listRelDeckCards.size() != relSaved.size()) {
-					throw new ErrorMessage("It was not possible save all Relations");
-				}	
-				
-			return relSaved;
+		if(listRelDeckCards.size() != relSaved.size()) 
+			throw new ErrorMessage("It was not possible save all Relations");	
+		
+		return relSaved;
 	}
 	
 	public List<RelDeckCards> findRelByDeckId(Long deckId){
@@ -52,17 +51,5 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 		
 		relDeckCardsRepository.deleteRelUserDeckByDeckId(deckId);
 	}
-	
-//	public void saveAllRelDeckUserCards(List<RelDeckCards> listRel) {
-//		
-//		if(listRel != null && listRel.size() > 0) {
-//			listRel.stream().forEach(rel -> {
-//					Integer qtd = rel.getQuantity();
-//					relDeckCardsRepository.saveRelUserDeckCards(rel.getDeckId(), rel.getCardNumber(), rel.getCard_raridade(), rel.getCard_set_code(),
-//					rel.getCard_price(), rel.getDt_criacao(), rel.getIsSideDeck(), rel.getCardId(), rel.getIsSpeedDuel(), qtd);
-//					logger.error("It was not possible save Rel: {} ", rel.toString());		
-//			});
-//		}	
-//	}
 	
 }

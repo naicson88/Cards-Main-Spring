@@ -3,11 +3,8 @@ package com.naicson.yugioh.data.dto.cards;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 
-@Component
 public class CardOfUserDetailDTO {
 	
 	private Long cardNumber;

@@ -1,5 +1,7 @@
 package com.naicson.yugioh.util.enums;
 
+import java.util.stream.Stream;
+
 public enum GenericTypesCards {
 		
 	MONSTER(1),
@@ -37,4 +39,5 @@ public enum GenericTypesCards {
 	public static int getOrderByGenerycType(String enumGenericType) {
 		return GenericTypesCards.valueOf(enumGenericType).getId();
 	}
+	
 }

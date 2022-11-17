@@ -13,10 +13,10 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 
-import com.naicson.yugioh.controller.UserRelDeckCards;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.util.GeneralFunctions;
 
 @Entity
@@ -43,11 +43,11 @@ public class UserDeck {
 	public static UserDeck userDeckFromDeck(Deck deck) {
 		UserDeck userDeck = new UserDeck();
 		BeanUtils.copyProperties(deck, userDeck);		
-		//userDeck.setNome(userDeck.getNome()+"_"+GeneralFunctions.momentAsString());
+
 		userDeck.setUserId(GeneralFunctions.userLogged().getId());
 		userDeck.setDtCriacao(new Date());
 		userDeck.setKonamiDeckCopied(deck.getId());
-		//userDeck.setRelDeckCards(deck.getRel_deck_cards());		
+	
 		return userDeck;
 	}
 	

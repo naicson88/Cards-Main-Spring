@@ -3,7 +3,6 @@ package com.naicson.yugioh.service.deck;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -64,7 +64,9 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Autowired
 	UserDeckRepository userDeckRepository;
-
+	
+	@Autowired
+	SetsUtils utils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -142,11 +144,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource))
 			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);
 
-		Deck deck = new Deck();
-
-		SetsUtils utils = new SetsUtils();
-
-		deck = this.returnDeckWithCards(deckId, deckSource);
+		Deck deck = this.returnDeckWithCards(deckId, deckSource);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 
@@ -185,26 +183,22 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
-
+		
 		Deck deck = new Deck();
-		List<Card> mainDeck = null;
-
+		
 		if ("konami".equalsIgnoreCase(deckSource))
-			deck = this.findById(deckId);
+			 deck = this.findById(deckId);
 
 		else if ("user".equalsIgnoreCase(deckSource)) {
 			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
-			deck = Deck.deckFromDeckUser(deckUser);
+			 deck = Deck.deckFromDeckUser(deckUser);
 
 		} else
 			throw new IllegalArgumentException("Invalid Deck Source: " + deckSource);
 
-		if (deck == null)
-			throw new EntityNotFoundException("Deck not found. Id informed: " + deckId);
-
 		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
 
-		mainDeck = this.cardsOfDeck(deckId, table);
+		List<Card>  mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);
 
 		deck.setCards(mainDeck);
@@ -219,23 +213,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (setName.isEmpty() || setName.length() <= 3) 
 			throw new IllegalArgumentException("Invalid set name for searching");
 		
-		setName = setName.trim();
-
-		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName);
+		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName.trim());
 		
 		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
-							
-			Long id = Long.parseLong(String.valueOf(set.get(0)));
-			Integer qtd = Integer.parseInt(String.valueOf(set.get(6)));
 			
-			DeckSummaryDTO summary = new DeckSummaryDTO(
-					id,
-					set.get(1, String.class),
-					set.get(2, String.class),
-					set.get(3, String.class),
-					set.get(4, Date.class),
-					set.get(5, String.class),
-					qtd);
+			DeckSummaryDTO summary = new DeckSummaryDTO(set);
 					
 					return summary;	
 						
@@ -278,16 +260,25 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Override
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
+		
+		if(kDeck == null || StringUtils.isBlank(kDeck.getNome()))
+			throw new IllegalArgumentException("Invalid Deck for consuting");
 
-			List<Deck> isAlreadyRegistered = deckRepository.findTop30ByNomeContaining(kDeck.getNome());
+		List<Deck> isAlreadyRegistered = findByNome(kDeck.getNome());
 
-			if (isAlreadyRegistered == null || isAlreadyRegistered.size() == 0) {
-				kDeck = deckRepository.save(kDeck);
-			} else 
-				throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered");
-			
+		if (isAlreadyRegistered != null && !isAlreadyRegistered.isEmpty())
+			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered: " + kDeck.getNome());
+		
+		kDeck = deckRepository.save(kDeck);	
 
 		return kDeck;
+	}
+
+	public List<Deck> findByNome(String nome) {
+		if(StringUtils.isBlank(nome))
+			throw new IllegalArgumentException("Invalid Nome for consuting");
+		
+		return deckRepository.findByNome(nome);
 	}
 
 	@Override
