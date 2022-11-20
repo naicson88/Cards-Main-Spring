@@ -32,7 +32,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 	
 	public Optional<UserSetCollection> findById(Long id);
 
-	public Page<UserSetCollection> findAllBySetCollectionType(Pageable pageable, SetType setType);
+	public Page<UserSetCollection> findAllBySetCollectionTypeOrderByIdDesc(Pageable pageable, SetType setType);
 	
 	
 	@Query(value = " select count(dk.konami_set_copied) as qtd from tab_user_set_collection dk "

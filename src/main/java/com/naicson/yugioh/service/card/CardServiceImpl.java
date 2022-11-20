@@ -64,8 +64,6 @@ public class CardServiceImpl implements CardDetailService {
 	@Autowired
 	CardDAO dao;
 	@Autowired
-	CardOfUserDetailDTO cardUserDTO;
-	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 	@Autowired
 	CardPriceInformationServiceImpl cardPriceService;
@@ -187,6 +185,8 @@ public class CardServiceImpl implements CardDetailService {
 	}
 	
 	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
+		
+		CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
 		
 		Card card = cardRepository.findById(cardId)
 				.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));

@@ -105,10 +105,10 @@ public class CardBuilder {
 	}
 	
 	public Card build() {
-		this.validCardBeforeSave(this.card);
-		return this.card;
-		
+		this.validCardBeforeSave(this.card);	
+		return this.card;	
 	}
+
 	
 	private void validCardBeforeSave(Card cardToBeRegistered) {
 
@@ -120,15 +120,22 @@ public class CardBuilder {
 
 		if (StringUtils.isBlank(cardToBeRegistered.getNome()))
 			throw new IllegalArgumentException("Invalid Card name.");
+		
+		if(cardToBeRegistered.getRegistryDate() == null)
+			throw new IllegalArgumentException("Invalid Registry Date of Card");
 
 		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")) {
 			if (cardToBeRegistered.getQtd_link() == null || cardToBeRegistered.getQtd_link().equals("0"))
 				throw new IllegalArgumentException("Invalid Link Quantity.");
 		}
-
+		
 		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "pendulum")) {
-			if (cardToBeRegistered.getEscala() == null || cardToBeRegistered.getEscala() == 0)
-				throw new IllegalArgumentException("Invalid Card Scale.");
+			
+			if (cardToBeRegistered.getEscala() == null)
+				throw new IllegalArgumentException("Invalid Card Scale. " + cardToBeRegistered.toString());
+			
+			if(cardToBeRegistered.getDescr_pendulum() == null && cardToBeRegistered.getDescricao() == null)
+				throw new IllegalArgumentException("Invalid Card Description.");
 		}
 
 	}

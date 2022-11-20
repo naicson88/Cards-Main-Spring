@@ -85,17 +85,20 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	+ " group by rel.card_set_code, du.nome", nativeQuery = true)
 	List<Tuple> findQtdUserHaveByUserCollection(Integer cardId, long userId);
 	
-	@Query(value = " select deck.id, deck.set_type as setType, deck.imgur_url as image, deck.nome as name, rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price as price "
+	@Query(value = " select deck.id, deck.set_type as setType, deck.imgur_url as image, deck.nome as name, "
+	+ " rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price as price, lancamento as release_date "
 	+ " from tab_decks deck "
 	+ " inner join tab_rel_deck_cards rel on rel.deck_id = deck.id "
 	+ " where card_id = :cardId and deck.set_type = 'DECK' "
 	+ " UNION "
-	+ " select setcol.id, setcol.set_collection_type as setType, setcol.imgur_url as image, setcol.name, rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price  as price "
+	+ " select setcol.id, setcol.set_collection_type as setType, setcol.imgur_url as image, setcol.name,"
+	+ " rel.card_set_code as cardSetCode, rel.card_raridade as rarity, rel.card_price  as price, release_date as release_date "
 	+ " from tab_set_collection setcol "
 	+ " inner join tab_setcollection_deck scd on scd.set_collection_id = setcol.id "
 	+ " inner join tab_decks decks on decks.id = scd.deck_id "
 	+ " inner join tab_rel_deck_cards rel on rel.deck_id = decks.id "
-	+ " where card_id = :cardId and decks.set_type != 'DECK'", nativeQuery = true)
+	+ " where card_id = :cardId and decks.set_type != 'DECK' "
+	+ " order by release_date desc", nativeQuery = true)
 	List<Tuple> setsOfCard(Integer cardId);
 	
 	

@@ -98,11 +98,6 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		deck.setImagem(originalDeck.getImgurUrl() != null ? originalDeck.getImgurUrl() : originalDeck.getImagem());
 		deck.setNomePortugues(originalDeck.getNomePortugues());
 		deck.setQuantityUserHave(userDeckService.countQuantityOfADeckUserHave(originalDeck.getId()));
-		
-//		Long[] idEntity = {originalDeck.getId()};
-//		 if(userDeckService.searchForDecksUserHave(idEntity) != null && userDeckService.searchForDecksUserHave(idEntity).size() > 0)
-//			 deck.setQuantityUserHave(userDeckService.searchForDecksUserHave(idEntity).get(0).getQuantity());
-//		
 		return deck;
 	}
 
@@ -119,7 +114,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 			 pageDTO = convertPageUserDeck(pageDeck);
 			 
 		} else {			
-			pageSet =  userSetRepository.findAllBySetCollectionType(pageable, type);
+			pageSet =  userSetRepository.findAllBySetCollectionTypeOrderByIdDesc(pageable, type);
 			pageDTO = this.convertPageUserSetToPageDeck(pageSet);
 		}
 					

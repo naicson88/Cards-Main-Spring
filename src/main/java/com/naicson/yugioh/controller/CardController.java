@@ -53,11 +53,11 @@ public class CardController {
 	
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 	
-	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
-	@GetMapping(path = {"num/{numero}"})
-	public Card listarNumero(@PathVariable("numero") Long numero) {
-		return cardService.listarNumero(numero);
-	}
+//	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
+//	@GetMapping(path = {"num/{numero}"})
+//	public Card listarNumero(@PathVariable("numero") Long numero) {
+//		return cardService.listarNumero(numero);
+//	}
 	
 	@ApiOperation(value="Return Card details by its Number", authorizations = { @Authorization(value="JWT") })
 	@GetMapping(path = {"number/{cardNumero}"})

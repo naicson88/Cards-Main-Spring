@@ -36,19 +36,17 @@ public class ArchetypeServiceImpl {
 		return arch;
 	}
 	
-	public Archetype getCardArchetype(String archetype) {
-		Archetype arch = new Archetype();
-
-		if (archetype != null && !archetype.isEmpty()) {
-			arch = archRepository.findByArcName(archetype.trim());
-			
-			if(arch == null || arch.getId() < 1) {
-				arch = archRepository.save(new Archetype(archetype));
-			}
-		}			
-		else
-			arch = null;
-
-		return arch;
+	public Archetype getCardArchetypeByName(String archetype) {		
+		if (archetype == null || archetype.isBlank())		
+			throw new IllegalArgumentException("Invalid Archetype name to get");
+		
+		return archRepository.findByArcName(archetype.trim());
+	}
+	
+	public Archetype saveArchetype(String archetype) {	
+		if (archetype == null || archetype.isBlank())		
+			throw new IllegalArgumentException("Invalid Archetype name to save");
+		
+		return archRepository.save(new Archetype(archetype.trim()));
 	}
 }
