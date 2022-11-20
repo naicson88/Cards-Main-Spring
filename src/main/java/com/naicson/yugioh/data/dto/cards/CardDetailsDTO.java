@@ -11,7 +11,7 @@ public class CardDetailsDTO {
 	
 	private Card card;
 	private Map<String, Integer> qtdUserHaveByKonamiCollection;
-	private Map<String,Integer> qtdUserHaveByUserCollection;
+	private Map<String,List<String>> qtdUserHaveByUserCollection;
 	private List<CardPriceInformation> prices;
 	private CardViewsInformation views;
 	private List<KonamiSetsWithCardDTO> konamiSets;
@@ -33,11 +33,11 @@ public class CardDetailsDTO {
 		this.qtdUserHaveByKonamiCollection = qtdUserHaveByKonamiCollection;
 	}
 
-	public Map<String,Integer> getQtdUserHaveByUserCollection() {
+	public Map<String,List<String>> getQtdUserHaveByUserCollection() {
 		return qtdUserHaveByUserCollection;
 	}
 
-	public void setQtdUserHaveByUserCollection(Map<String,Integer> qtdUserHaveByUserCollection) {
+	public void setQtdUserHaveByUserCollection(Map<String,List<String>> qtdUserHaveByUserCollection) {
 		this.qtdUserHaveByUserCollection = qtdUserHaveByUserCollection;
 	}
 

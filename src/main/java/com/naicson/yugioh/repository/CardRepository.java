@@ -76,9 +76,8 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	+ " group by rel.card_set_code, decks.nome", nativeQuery = true)
 	List<Tuple> findQtdUserHaveByKonamiCollection(Integer cardId, long userId);
 	
-	@Query(value = " SELECT count(rel.card_set_code) as total, CONCAT(du.nome, ' (', rel.card_set_code,')' ) AS card_set "
+	@Query(value = " SELECT rel.card_set_code as total, CONCAT(du.nome, ' (', SUM(rel.QUANTITY) ,')' ) AS card_set   "
 	+ " FROM yugioh.tab_rel_deckusers_cards as rel "
-	+ " inner join tab_rel_deck_cards rdc on rdc.card_set_code = rel.card_set_code"
 	+ " inner join tab_user_deck du on du.id = rel.deck_id "
 	+ " where du.user_id = :userId "
 	+ " and  rel.card_numero in (select card_alternative_number from tab_card_alternative_numbers where card_id = :cardId) "
