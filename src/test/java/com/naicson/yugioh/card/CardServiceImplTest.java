@@ -245,7 +245,7 @@ public class CardServiceImplTest {
 		
 		List<CardAlternativeNumber> listAlternativeNumber = List.of(CardAlternativeNumberMock.generateValidCardAlternativeNumber(1L));
 		
-		Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
+		//Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
 		Map<String, Integer> mapUser = Map.of("CCC",1 ,"DDD",2);
 		
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(Optional.of(card));		
@@ -254,12 +254,12 @@ public class CardServiceImplTest {
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
 		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
-		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
+		//doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
 		
 		CardDetailsDTO dto = cardService.findCardByNumberWithDecks(1L);
 		
 		assertNotNull(dto.getCard());
-		assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
+		//assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
 		assertNotNull(dto.getQtdUserHaveByUserCollection().get("CCC"));
 					
 	}

@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -85,7 +85,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (Id == null || Id == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
 
-		Deck deck = deckRepository.findById(Id).orElseThrow(() -> new NoSuchElementException("Deck not found."));
+		Deck deck = deckRepository.findById(Id)
+				.orElseThrow(() -> new EntityNotFoundException("Deck not found."));
 
 		return deck;
 	}
@@ -231,29 +232,62 @@ public class DeckServiceImpl implements DeckDetailService {
 
 
 	@Override
-	public Deck countQtdCardRarityInTheDeck(Deck deck) {
-
-		deck.setQtd_cards(deck.getRel_deck_cards().stream().count());
+	public Deck countCardRaritiesOnDeck(Deck deck) {
 		
-		deck.setQtd_comuns(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.COMMON.getCardRarity())).count());
-		deck.setQtd_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.RARE.getCardRarity())).count());
-		deck.setQtd_super_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.SUPER_RARE.getCardRarity())).count());
-		deck.setQtd_ultra_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTRA_RARE.getCardRarity())).count());
-		deck.setQtd_secret_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.SECRET_RARE.getCardRarity())).count());
-		deck.setQtd_ultimate_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTIMATE_RARE.getCardRarity())).count());
-		deck.setQtd_gold_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.GOLD_RARE.getCardRarity())).count());
-		deck.setQtd_parallel_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.PARALLEL_RARE.getCardRarity())).count());
-		deck.setQtd_ghost_raras(deck.getRel_deck_cards().stream()
-				.filter(card -> card.getCard_raridade().equals(ECardRarity.GHOST_RARE.getCardRarity())).count());
+		List<RelDeckCards> listRel =  deck.getRel_deck_cards();	
 
+		deck.setQtd_cards(listRel.size());
+		
+		Map<String, Long> mapRarities = listRel.stream().collect(Collectors.groupingBy(
+				card -> card.getCard_raridade(), Collectors.counting()
+				));
+		
+		deck = setMappedDeckRarities(deck, mapRarities);
+		
+//	deck.setQtd_comuns(listRel.stream().filter(card -> card.getCard_raridade().equals(ECardRarity.COMMON.getCardRarity())).count());
+//		
+//		deck.setQtd_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.RARE.getCardRarity())).count());
+//		deck.setQtd_super_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.SUPER_RARE.getCardRarity())).count());
+//		deck.setQtd_ultra_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTRA_RARE.getCardRarity())).count());
+//		deck.setQtd_secret_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.SECRET_RARE.getCardRarity())).count());
+//		deck.setQtd_ultimate_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTIMATE_RARE.getCardRarity())).count());
+//		deck.setQtd_gold_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.GOLD_RARE.getCardRarity())).count());
+//		deck.setQtd_parallel_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.PARALLEL_RARE.getCardRarity())).count());
+//		deck.setQtd_ghost_raras(deck.getRel_deck_cards().stream()
+//				.filter(card -> card.getCard_raridade().equals(ECardRarity.GHOST_RARE.getCardRarity())).count());
+//
+		return deck;
+	}
+
+	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
+		
+		if(deck == null || mapRarities == null)
+			throw new IllegalArgumentException("Invalid information to map rarities");
+		
+		mapRarities.forEach((key, value) ->{
+			ECardRarity rarity = ECardRarity.getRarityByName(key);
+			switch (rarity) {		
+				case COMMON: deck.setQtd_comuns(value); break;				
+				case RARE: deck.setQtd_raras(value); break;			
+				case SUPER_RARE: deck.setQtd_super_raras(value); break;			
+				case ULTRA_RARE: deck.setQtd_ultra_raras(value); break;		
+				case SECRET_RARE: deck.setQtd_secret_raras(value); break;				
+				case ULTIMATE_RARE: deck.setQtd_ultimate_raras(value); break;
+				case GOLD_RARE: deck.setQtd_gold_raras(value); break;		
+				case PARALLEL_RARE: deck.setQtd_parallel_raras(value); break;				
+				case GHOST_RARE: deck.setQtd_ghost_raras(value); break;					
+				default:
+					throw new IllegalArgumentException("Invalid Rarity informed! " + key);
+			}
+		});
+		
 		return deck;
 	}
 

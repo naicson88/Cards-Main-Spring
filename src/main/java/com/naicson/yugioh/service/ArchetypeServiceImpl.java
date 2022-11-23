@@ -2,6 +2,8 @@ package com.naicson.yugioh.service;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,9 @@ public class ArchetypeServiceImpl {
 	}
 	
 	public Archetype getByArchetypeId(Integer archetypeId) {
-		Archetype arch = archRepository.findById(archetypeId).get();
+		Archetype arch = archRepository.findById(archetypeId)
+				.orElseThrow(() -> new EntityNotFoundException("Can't found Archetype with ID: " + archetypeId));
+		
 		List<CardOfArchetypeDTO> cards = cardService.findCardByArchetype(archetypeId);	
 		arch.setArrayCards(cards);
 		
