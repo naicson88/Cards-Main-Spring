@@ -140,7 +140,7 @@ public class CardServiceImpl implements CardDetailService {
 			if(cardId == null || cardId == 0)
 				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
-			CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
+			CardOfUserDetailDTO cardUserDTO = getCardOfUserDetailDTO(cardId);
 			
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, GeneralFunctions.userLogged().getId());
 			

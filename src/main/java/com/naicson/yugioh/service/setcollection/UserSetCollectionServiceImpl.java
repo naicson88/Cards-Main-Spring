@@ -118,6 +118,7 @@ public class UserSetCollectionServiceImpl {
 
 		dto.setId(set.getId());
 		dto.setName(set.getName());
+		dto.setSetType(set.getSetCollectionType().toString());
 		dto.setCards(this.cardsOfSetCollection(set));
 		dto.setRarities(this.countRarities(dto.getCards()));
 		dto.setSetCodes(this.listSetCodes(dto.getCards()));
@@ -176,22 +177,27 @@ public class UserSetCollectionServiceImpl {
 
 	}
 
-	public Map<String, Integer> countRarities(List<CardSetCollectionDTO> cards) {
-		Map<String, Integer> mapRarity = new HashMap<>();
+	public Map<String, Long> countRarities(List<CardSetCollectionDTO> cards) {
+		//Map<String, Long> mapRarity = new HashMap<>();
+		
+		Map<String, Long> mapRarity = cards.stream()
+				.filter(c -> c.getQuantityUserHave() > 0)
+				.collect(Collectors.groupingBy(
+				card -> card.getRelDeckCards().getCard_raridade(), Collectors.counting()
+				));
 
-		cards.stream().forEach(c -> {
-			String rarity = c.getRelDeckCards().getCard_raridade();
-			rarity = rarity.replace(" ", "_");
-
-			if (rarity != null && !rarity.isEmpty()) {
-				if (!mapRarity.containsKey(rarity))
-					mapRarity.put(rarity, 1);
-				else
-					mapRarity.put(rarity.toString(), mapRarity.get(rarity) + 1);
-			}
-		});
-
-		return mapRarity;
+//		cards.stream().filter(c -> c.getQuantityUserHave() > 0).forEach(c -> {
+//			String rarity = c.getRelDeckCards().getCard_raridade();
+//			rarity = rarity.replace(" ", "_");
+//
+//			if (rarity != null && !rarity.isEmpty()) {
+//				if (!mapRarity.containsKey(rarity))
+//					mapRarity.put(rarity, 1);
+//				else
+//					mapRarity.put(rarity.toString(), mapRarity.get(rarity) + 1);
+//			}
+//		});
+			return mapRarity;
 	}
 
 	public List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set) {
