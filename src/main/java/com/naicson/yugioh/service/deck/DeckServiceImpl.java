@@ -244,25 +244,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		deck = setMappedDeckRarities(deck, mapRarities);
 		
-//	deck.setQtd_comuns(listRel.stream().filter(card -> card.getCard_raridade().equals(ECardRarity.COMMON.getCardRarity())).count());
-//		
-//		deck.setQtd_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.RARE.getCardRarity())).count());
-//		deck.setQtd_super_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.SUPER_RARE.getCardRarity())).count());
-//		deck.setQtd_ultra_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTRA_RARE.getCardRarity())).count());
-//		deck.setQtd_secret_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.SECRET_RARE.getCardRarity())).count());
-//		deck.setQtd_ultimate_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.ULTIMATE_RARE.getCardRarity())).count());
-//		deck.setQtd_gold_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.GOLD_RARE.getCardRarity())).count());
-//		deck.setQtd_parallel_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.PARALLEL_RARE.getCardRarity())).count());
-//		deck.setQtd_ghost_raras(deck.getRel_deck_cards().stream()
-//				.filter(card -> card.getCard_raridade().equals(ECardRarity.GHOST_RARE.getCardRarity())).count());
-//
 		return deck;
 	}
 
@@ -405,5 +386,16 @@ public class DeckServiceImpl implements DeckDetailService {
 			}	
 		}
 	}
+	
+//	public Map<String, Long> getDeckRaritiesInMap(Deck deck){
+//		if(deck == null)
+//			throw new IllegalArgumentException("Invalid Deck informed to consult rarities!");
+//		
+//		for(ECardRarity rarity : ECardRarity.values()) {
+//			if(rarity.equals(ECardRarity.COMMON))
+//				if(deck.getQtd_comuns() > 0)
+//					
+//		}
+//	}
 
 }

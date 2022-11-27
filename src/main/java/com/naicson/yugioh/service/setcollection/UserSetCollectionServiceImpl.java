@@ -121,6 +121,7 @@ public class UserSetCollectionServiceImpl {
 		dto.setSetType(set.getSetCollectionType().toString());
 		dto.setCards(this.cardsOfSetCollection(set));
 		dto.setRarities(this.countRarities(dto.getCards()));
+//		dto.setKonamiRarities(this.countRarities(null, null));
 		dto.setSetCodes(this.listSetCodes(dto.getCards()));
 		dto.setTotalPrice(this.calculateTotalPrice(dto.getCards()));
 		dto.setImage(set.getImgurUrl());
@@ -178,25 +179,13 @@ public class UserSetCollectionServiceImpl {
 	}
 
 	public Map<String, Long> countRarities(List<CardSetCollectionDTO> cards) {
-		//Map<String, Long> mapRarity = new HashMap<>();
-		
+			
 		Map<String, Long> mapRarity = cards.stream()
 				.filter(c -> c.getQuantityUserHave() > 0)
 				.collect(Collectors.groupingBy(
 				card -> card.getRelDeckCards().getCard_raridade(), Collectors.counting()
 				));
-
-//		cards.stream().filter(c -> c.getQuantityUserHave() > 0).forEach(c -> {
-//			String rarity = c.getRelDeckCards().getCard_raridade();
-//			rarity = rarity.replace(" ", "_");
-//
-//			if (rarity != null && !rarity.isEmpty()) {
-//				if (!mapRarity.containsKey(rarity))
-//					mapRarity.put(rarity, 1);
-//				else
-//					mapRarity.put(rarity.toString(), mapRarity.get(rarity) + 1);
-//			}
-//		});
+				
 			return mapRarity;
 	}
 
