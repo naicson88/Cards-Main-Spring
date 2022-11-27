@@ -77,6 +77,10 @@ public class Deck implements Serializable {
 		return deck;		
 	}
 	
+	public Deck( Long id) {
+		this.id = id;
+	}
+	
 	public List<Card> getExtraDeck() {
 		return extraDeckCards;
 	}

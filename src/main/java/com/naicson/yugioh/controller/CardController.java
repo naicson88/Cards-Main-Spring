@@ -1,6 +1,7 @@
 package com.naicson.yugioh.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -29,8 +30,10 @@ import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardRepository;
+import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.SearchCriteria;
@@ -50,6 +53,8 @@ public class CardController {
 	DeckServiceImpl deckService;
 	@Autowired
 	CardRepository cardRepository;
+	@Autowired
+	RelDeckCardsRepository relDeckCardsRepository;
 	
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 	
@@ -89,10 +94,17 @@ public class CardController {
 	
 	@GetMapping(path = {"/randomCards"})
 	@ApiOperation(value="Bring random Cards informations", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<List<CardsSearchDTO>> getRandomCards(){		
-		List<CardsSearchDTO> dtoList = cardService.getRandomCards();
-			
-		return new ResponseEntity<>(dtoList, HttpStatus.OK);
+	public ResponseEntity<List<CardsSearchDTO>> randomCards(){
+		List<CardsSearchDTO> dtoList = new ArrayList<>();
+		
+		List<Card> list = cardRepository.findRandomCards();
+		
+		for(Card card : list) {
+			if(list != null && list.size() > 0) 
+				dtoList.add(CardsSearchDTO.transformInDTO(card));
+		}
+		
+		return new ResponseEntity<List<CardsSearchDTO>>(dtoList, HttpStatus.OK);
 	}
 	
 	@GetMapping(path = {"/randomCardsDetailed"})
@@ -107,21 +119,39 @@ public class CardController {
 	@GetMapping(path = {"/rel-user-cards"})
 	@ApiOperation(value="Search for cards that user have", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<RelUserCardsDTO>> searchForCardsUserHave(@RequestParam int[] cardsNumbers) throws SQLException, ErrorMessage {
-
-		List<RelUserCardsDTO> relList =	cardService.searchForCardsUserHave(cardsNumbers);
+		List<RelUserCardsDTO> rel = null;
 		
-		return new ResponseEntity<>(relList, HttpStatus.OK);
-
+		if(cardsNumbers != null && cardsNumbers.length > 0) {
+			rel = cardService.searchForCardsUserHave(cardsNumbers);
+		}
+		
+		if(rel != null && rel.size() > 0) {
+			return new ResponseEntity<List<RelUserCardsDTO>>(rel, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<RelUserCardsDTO>>(rel, HttpStatus.NO_CONTENT);
+		}
 	}
 	
 	@GetMapping(path = {"/load-cards-userscollection"})
 	@ApiOperation(value="Search for cards from user collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<List<CardsSearchDTO>> loadCardsUserHave(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
-			@RequestParam String genericType) {
+			@RequestParam String genericType) throws SQLException, ErrorMessage{
+		
+		try {
+			if(genericType == null)
+				throw new ErrorMessage(" No generic type was informed.");
 			
-			List<CardsSearchDTO> list = cardService.getByGenericType(pageable, genericType, GeneralFunctions.userLogged().getId());
+			UserDetailsImpl user = GeneralFunctions.userLogged(); 
 			
-			return new ResponseEntity<>(list, HttpStatus.OK);
+			List<CardsSearchDTO> list = cardService.getByGenericType(pageable, genericType, user.getId());
+			
+			return new ResponseEntity<List<CardsSearchDTO>>(list, HttpStatus.OK);
+						
+		}catch (ErrorMessage me) {
+			throw me;
+		}catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	@GetMapping(path = {"/card-user-details"})
@@ -141,7 +171,7 @@ public class CardController {
 		
 		List<CardsSearchDTO> cardList = cardService.cardSearchByNameUserCollection(cardName, pageable);
 		
-		return new ResponseEntity<>(cardList, HttpStatus.OK);
+		return new ResponseEntity<List<CardsSearchDTO>>(cardList, HttpStatus.OK);
 		
 	}
 	
@@ -150,7 +180,7 @@ public class CardController {
 	public ResponseEntity<List<RelDeckCards>> findAllRelDeckCardsByCardNumber(@RequestParam Integer cardId){
 		List<RelDeckCards> relation = this.cardService.findAllRelDeckCardsByCardNumber(cardId);
 		
-		return new ResponseEntity<>(relation, HttpStatus.OK);
+		return new ResponseEntity<List<RelDeckCards>>(relation, HttpStatus.OK);
 	}
 	
 	@PostMapping(path = {"/search-cards-not-registered"})
@@ -161,7 +191,7 @@ public class CardController {
 		
 		List<Long> cardsNotRegistered = this.cardService.findCardsNotRegistered(cardNumbers);
 		
-		return new ResponseEntity<>(cardsNotRegistered, HttpStatus.OK);
+		return new ResponseEntity<List<Long>>(cardsNotRegistered, HttpStatus.OK);
 	}
 	
 	@PostMapping(path = {"/update-images"})
@@ -169,6 +199,8 @@ public class CardController {
 	public ResponseEntity<String> updateCardsImages(@RequestBody String cardImagesJson){
 		
 		cardService.updateCardsImages(cardImagesJson);
+		
+		//GeneralFunctions.createNewFile("all cards", ".txt", null, null);
 		
 		return new ResponseEntity<>(JSONObject.quote("Communication Success"), HttpStatus.OK);
 	}
