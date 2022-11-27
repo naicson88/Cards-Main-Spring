@@ -2,9 +2,12 @@ package com.naicson.yugioh.data.dto.cards;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Tuple;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class KonamiSetsWithCardDTO {
 	
@@ -15,6 +18,8 @@ public class KonamiSetsWithCardDTO {
 	private String cardSetCode;
 	private List<String> rarity;
 	private List<BigDecimal> price;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date releaseDate;
 	
 	public KonamiSetsWithCardDTO() {}
 	
@@ -27,7 +32,7 @@ public class KonamiSetsWithCardDTO {
 		this.cardSetCode = c.get(4, String.class);
 		this.rarity = List.of(c.get(5, String.class));
 		this.price = List.of(c.get(6, BigDecimal.class));
-		
+		this.releaseDate = c.get(7, Date.class);
 	}
 
 	public BigInteger getId() {
@@ -75,6 +80,14 @@ public class KonamiSetsWithCardDTO {
 
 	public void setPrice(List<BigDecimal> price) {
 		this.price = price;
+	}
+
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
 	}
 	
 }

@@ -2,6 +2,8 @@ package com.naicson.yugioh.util.enums;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
@@ -38,12 +40,23 @@ public enum ECardRarity {
 				.findFirst().orElseThrow(() -> new ErrorMessage("Rarity Not Found!"));
 	}
 	
+	public static ECardRarity getRarityByName(String name) {
+		return Arrays.stream(ECardRarity.values())
+			.filter(r -> r.name.equals(name))
+			.findFirst()
+			.orElseThrow(() -> new NoSuchElementException("Cant find Rarity with name: " + name));
+	}
+	
 	public String getCardRarity() {
 		return name;
 	}
 	
 	public List<String> getListRarityCode(){
 		return listRarityCode;
+	}
+	
+	public static Stream<ECardRarity> stream(){
+		return Stream.of(ECardRarity.values());
 	}
 	
 	

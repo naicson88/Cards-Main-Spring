@@ -12,7 +12,8 @@ public class UserSetCollectionDTO {
 	private Double totalPrice;
 	private String image;
 	private String setType;
-	private Map<String, Integer> rarities;
+	private Map<String, Long> rarities;
+	private Map<String, Long> konamiRarities;
 	private List<String> setCodes;
 	private List<CardSetCollectionDTO> cards;
 	private Map<Long, String> basedDeck;
@@ -35,10 +36,10 @@ public class UserSetCollectionDTO {
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	public Map<String, Integer> getRarities() {
+	public Map<String, Long> getRarities() {
 		return rarities;
 	}
-	public void setRarities(Map<String, Integer> rarities) {
+	public void setRarities(Map<String, Long> rarities) {
 		this.rarities = rarities;
 	}
 	public List<String> getSetCodes() {
@@ -70,6 +71,12 @@ public class UserSetCollectionDTO {
 	}
 	public void setBasedDeck(Map<Long, String> basedDeck) {
 		this.basedDeck = basedDeck;
+	}
+	public Map<String, Long> getKonamiRarities() {
+		return konamiRarities;
+	}
+	public void setKonamiRarities(Map<String, Long> konamiRarities) {
+		this.konamiRarities = konamiRarities;
 	}
 	
 	

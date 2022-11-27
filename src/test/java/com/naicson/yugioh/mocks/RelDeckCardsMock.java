@@ -11,7 +11,7 @@ public class RelDeckCardsMock {
 		RelDeckCards rel = new RelDeckCards();
 		rel.setId(1L);
 		rel.setCard_price(1.5);
-		rel.setCard_set_code("Super Rare");
+		rel.setCard_raridade("Super Rare");
 		rel.setCard_set_code("ABCD");
 		rel.setCardId(1);
 		rel.setCardNumber(123456L);
@@ -22,8 +22,14 @@ public class RelDeckCardsMock {
 		rel.setQuantity(5);
 		rel.setSetRarityCode("SR");
 		
+		return rel;		
+		
+	}
+	
+	public static RelDeckCards cardRarities(String raridade) {
+		RelDeckCards rel = new RelDeckCards();
+		rel.setCard_raridade(raridade);
+		
 		return rel;
-		
-		
 	}
 }

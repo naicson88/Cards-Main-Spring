@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -29,11 +32,13 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.mocks.RelDeckCardsMock;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.ValidObjects;
+import com.naicson.yugioh.util.enums.ECardRarity;
 
 
 @ActiveProfiles("test")
@@ -376,10 +381,35 @@ public class DeckServiceImplTest {
 
 	}
 
-	
+	@Test
+	public void countQtdRaritiesCardOnDeckWhenAllRaritiesExists() {
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setRel_deck_cards(List.of(RelDeckCardsMock.cardRarities("Rare"),RelDeckCardsMock.cardRarities("Rare"),
+				RelDeckCardsMock.cardRarities("Ultra Rare"), RelDeckCardsMock.cardRarities("Super Rare"), 
+				RelDeckCardsMock.cardRarities("Super Rare"), RelDeckCardsMock.cardRarities("Common"),
+				RelDeckCardsMock.cardRarities("Common"), RelDeckCardsMock.cardRarities("Common")));
+		
+		Deck d = deckService.countCardRaritiesOnDeck(deck);
+		
+		assertNotNull(d);
+		assertEquals(2, deck.getQtd_raras());
+		assertEquals(3, deck.getQtd_comuns());
+		assertEquals(2, deck.getQtd_super_raras());
+	}
 
-	
-	
-	
+	@Test
+	public void countQtdRaritiesCardOnDeckWhenSomeRarityDontExists() {
+		Deck deck = ValidObjects.generateValidDeck();
+		deck.setRel_deck_cards(List.of(RelDeckCardsMock.cardRarities("Invalid Rarity")));
+		
+		NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
+			deckService.countCardRaritiesOnDeck(deck);	  
+		});
+			
+		String expected = "Cant find Rarity with name: " + "Invalid Rarity";
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+	}
 
 }

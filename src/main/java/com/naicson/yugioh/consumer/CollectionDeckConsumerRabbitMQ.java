@@ -7,14 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.dto.CollectionDeck;
 import com.naicson.yugioh.entity.Deck;
@@ -27,6 +22,7 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class CollectionDeckConsumerRabbitMQ {
+	
 	@Autowired
 	CardRegistry cardRegistry;
 	@Autowired
@@ -56,7 +52,7 @@ public class CollectionDeckConsumerRabbitMQ {
 		
 		newDeck.setRel_deck_cards(consumerUtils.setRarity(newDeck.getRel_deck_cards()));
 		
-		newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
+		newDeck = deckService.countCardRaritiesOnDeck(newDeck);
 		
 		Long deckId = deckService.saveKonamiDeck(newDeck).getId();
 		

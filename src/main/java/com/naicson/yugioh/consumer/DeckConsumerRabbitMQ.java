@@ -45,7 +45,7 @@ public class DeckConsumerRabbitMQ {
 		
 		newDeck.setRel_deck_cards(consumerUtils.setRarity(kDeck.getListRelDeckCards()));
 		
-		newDeck = deckService.countQtdCardRarityInTheDeck(newDeck);
+		newDeck = deckService.countCardRaritiesOnDeck(newDeck);
 		
 		Long deckId = deckService.saveKonamiDeck(newDeck).getId();
 		

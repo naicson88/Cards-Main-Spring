@@ -11,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
-import com.naicson.yugioh.data.factories.card.BuildCard;
-import com.naicson.yugioh.data.factories.card.BuildCommonCardAttributes;
-import com.naicson.yugioh.data.factories.card.BuildMonsterCardAttributes;
-import com.naicson.yugioh.data.factories.card.BuildNonMonsterCardAttributes;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
@@ -30,8 +26,11 @@ public class CardRegistry {
 	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 
+	@Autowired
+	BuildCardFromYuGiOhAPI buildCard;
+
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
-	
+
 	@Transactional
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
 		List<Card> cardsSaved = new LinkedList<>();
@@ -64,14 +63,7 @@ public class CardRegistry {
 
 	public Card createCardToBeRegistered(CardYuGiOhAPI apiCard) {
 
-		BuildCard buildCard = new BuildCommonCardAttributes();
-		Card cardToBeRegistered = buildCard.buildCard(apiCard, null);
-
-		buildCard = new BuildNonMonsterCardAttributes();
-		cardToBeRegistered = buildCard.buildCard(apiCard, cardToBeRegistered);
-
-		buildCard = new BuildMonsterCardAttributes();
-		cardToBeRegistered = buildCard.buildCard(apiCard, cardToBeRegistered);
+		Card cardToBeRegistered = buildCard.createCard(apiCard);
 
 		return cardToBeRegistered;
 	}

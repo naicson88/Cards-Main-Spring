@@ -49,7 +49,7 @@ public interface CardDetailService {
 
 	Card listarNumero(Long numero);
 	
-	 Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource);
+	 Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String nameAndQuantity);
 
 	void updateCardsImages(String cardImages);
 	

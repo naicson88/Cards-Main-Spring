@@ -3,6 +3,8 @@ package com.naicson.yugioh.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +31,26 @@ public class ArchetypeServiceImpl {
 	}
 	
 	public Archetype getByArchetypeId(Integer archetypeId) {
-		Archetype arch = archRepository.findById(archetypeId).get();
+		Archetype arch = archRepository.findById(archetypeId)
+				.orElseThrow(() -> new EntityNotFoundException("Can't found Archetype with ID: " + archetypeId));
+		
 		List<CardOfArchetypeDTO> cards = cardService.findCardByArchetype(archetypeId);	
 		arch.setArrayCards(cards);
 		
 		return arch;
 	}
 	
-	public Archetype getCardArchetype(String archetype) {
-		Archetype arch = new Archetype();
-
-		if (archetype != null && !archetype.isEmpty()) {
-			arch = archRepository.findByArcName(archetype.trim());
-			
-			if(arch == null || arch.getId() < 1) {
-				arch = archRepository.save(new Archetype(archetype));
-			}
-		}			
-		else
-			arch = null;
-
-		return arch;
+	public Archetype getCardArchetypeByName(String archetype) {		
+		if (archetype == null || archetype.isBlank())		
+			throw new IllegalArgumentException("Invalid Archetype name to get");
+		
+		return archRepository.findByArcName(archetype.trim());
+	}
+	
+	public Archetype saveArchetype(String archetype) {	
+		if (archetype == null || archetype.isBlank())		
+			throw new IllegalArgumentException("Invalid Archetype name to save");
+		
+		return archRepository.save(new Archetype(archetype.trim()));
 	}
 }

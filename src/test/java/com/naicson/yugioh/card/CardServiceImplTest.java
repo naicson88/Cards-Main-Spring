@@ -245,7 +245,7 @@ public class CardServiceImplTest {
 		
 		List<CardAlternativeNumber> listAlternativeNumber = List.of(CardAlternativeNumberMock.generateValidCardAlternativeNumber(1L));
 		
-		Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
+		//Map<String, Integer> mapKonami = Map.of("AAA",1 ,"BBB",2);
 		Map<String, Integer> mapUser = Map.of("CCC",1 ,"DDD",2);
 		
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(Optional.of(card));		
@@ -254,36 +254,36 @@ public class CardServiceImplTest {
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
 		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("user"));
-		doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
+		//doReturn(mapKonami).when(cardService).findQtdCardUserHaveByCollection(anyInt(), eq("konami"));
 		
 		CardDetailsDTO dto = cardService.findCardByNumberWithDecks(1L);
 		
 		assertNotNull(dto.getCard());
-		assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
+		//assertNotNull(dto.getQtdUserHaveByKonamiCollection().get("AAA"));
 		assertNotNull(dto.getQtdUserHaveByUserCollection().get("CCC"));
 					
 	}
 	
-	@Test
-	public void findQtdCardUserHaveByCollectionKONAMI() {
-		this.mockAuth();
-		
-		String collectionSource = "konami"; 
-		
-		List<Tuple> tupleList = new ArrayList<>();
-		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
-		
-		tupleList.add((Tuple)nativeQueryTupleTransformer
-				.transformTuple(new Object[]{new BigInteger("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
-		
-		Mockito.when(cardRepository.findQtdUserHaveByKonamiCollection(anyInt(), anyLong())).thenReturn(tupleList);
-		
-		Map<String, Integer> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
-		
-		assertNotNull(map);
-		assertNotNull(map.get("AAA"));
-		
-	}
+//	@Test
+//	public void findQtdCardUserHaveByCollectionKONAMI() {
+//		this.mockAuth();
+//		
+//		String collectionSource = "konami"; 
+//		
+//		List<Tuple> tupleList = new ArrayList<>();
+//		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
+//		
+//		tupleList.add((Tuple)nativeQueryTupleTransformer
+//				.transformTuple(new Object[]{new BigInteger("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
+//		
+//		Mockito.when(cardRepository.findQtdUserHaveByKonamiCollection(anyInt(), anyLong())).thenReturn(tupleList);
+//		
+//		Map<String, Integer> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
+//		
+//		assertNotNull(map);
+//		assertNotNull(map.get("AAA"));
+//		
+//	}
 	
 	@Test
 	public void findQtdCardUserHaveByCollectionUSER() {
@@ -294,11 +294,11 @@ public class CardServiceImplTest {
 		NativeQueryTupleTransformer nativeQueryTupleTransformer = new NativeQueryTupleTransformer();
 		
 		tupleList.add((Tuple)nativeQueryTupleTransformer
-				.transformTuple(new Object[]{new BigInteger("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
+				.transformTuple(new Object[]{new String("123"), new String("AAA")}, new String[]{"AAA", "BBB"}));
 		
 		Mockito.when(cardRepository.findQtdUserHaveByUserCollection(anyInt(), anyLong())).thenReturn(tupleList);
 		
-		Map<String, Integer> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
+		Map<String, List<String>> map = cardService.findQtdCardUserHaveByCollection(1, collectionSource);
 		
 		assertNotNull(map);
 		assertNotNull(map.get("AAA"));

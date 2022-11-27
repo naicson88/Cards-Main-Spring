@@ -16,7 +16,7 @@ import com.naicson.yugioh.entity.sets.SetCollection;
 @Repository
 public interface SetCollectionRepository extends JpaRepository<SetCollection, Integer>{
 	
-	@Query(value = "SELECT * FROM yugioh.tab_set_collection where set_collection_type = :setType",
+	@Query(value = "SELECT * FROM yugioh.tab_set_collection where set_collection_type = :setType order by release_date desc",
 			countQuery = "SELECT count(*) FROM yugioh.tab_set_collection", nativeQuery = true)
 	public Page<SetCollection> findAllBySetType(Pageable pageable, String setType);
 	

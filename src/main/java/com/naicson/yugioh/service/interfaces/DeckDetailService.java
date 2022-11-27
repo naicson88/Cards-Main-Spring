@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.data.dto.RelUserDeckDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
@@ -30,7 +29,7 @@ public interface DeckDetailService {
 
 	Page<DeckSummaryDTO> searchBySetName(String setName);
 	
-	Deck countQtdCardRarityInTheDeck(Deck deck);
+	Deck countCardRaritiesOnDeck(Deck deck);
 
 	List<RelDeckCards> relDeckCards(Long deckId, String setSource);
 	

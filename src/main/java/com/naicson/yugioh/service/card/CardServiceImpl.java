@@ -64,8 +64,6 @@ public class CardServiceImpl implements CardDetailService {
 	@Autowired
 	CardDAO dao;
 	@Autowired
-	CardOfUserDetailDTO cardUserDTO;
-	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 	@Autowired
 	CardPriceInformationServiceImpl cardPriceService;
@@ -142,7 +140,7 @@ public class CardServiceImpl implements CardDetailService {
 			if(cardId == null || cardId == 0)
 				throw new IllegalArgumentException("Invalid card ID: " + cardId + " #cardOfUserDetails");
 			
-			CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
+			CardOfUserDetailDTO cardUserDTO = getCardOfUserDetailDTO(cardId);
 			
 			List<Tuple> cardsDetails = dao.listCardOfUserDetails(cardId, GeneralFunctions.userLogged().getId());
 			
@@ -188,6 +186,8 @@ public class CardServiceImpl implements CardDetailService {
 	
 	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
 		
+		CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
+		
 		Card card = cardRepository.findById(cardId)
 				.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
 					
@@ -211,7 +211,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 		dto.setKonamiSets(this.setAllSetsWithThisCard(card));
 		dto.setCard(card);
-		dto.setQtdUserHaveByKonamiCollection(this.findQtdCardUserHaveByCollection(card.getId(), "konami"));
+		//dto.setQtdUserHaveByKonamiCollection(this.findQtdCardUserHaveByCollection(card.getId(), "konami"));
 		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId(), "user"));
 		dto.setPrices(cardPriceService.getAllPricesOfACardById(card.getId()));
 		
@@ -222,29 +222,34 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public Map<String, Integer> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
-		UserDetailsImpl user = GeneralFunctions.userLogged();
+	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
 		
-		Map<String, Integer> mapCardSetAndQuantity = new HashMap<>();
-		List<Tuple> total = null;
+		Map<String, List<String>> mapCardSetAndQuantity = new HashMap<>();
+//		
+//		if("konami".equalsIgnoreCase(collectionSource))
+//			total = cardRepository.findQtdUserHaveByKonamiCollection(cardId, user.getId());
+//		else if("user".equalsIgnoreCase(collectionSource))
+	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
+//		else
+//			throw new IllegalArgumentException("Invalid collection source");
 		
-		if("konami".equalsIgnoreCase(collectionSource))
-			total = cardRepository.findQtdUserHaveByKonamiCollection(cardId, user.getId());
-		else if("user".equalsIgnoreCase(collectionSource))
-			total = cardRepository.findQtdUserHaveByUserCollection(cardId, user.getId());
-		else
-			throw new IllegalArgumentException("Invalid collection source");
-		
-		if(total != null) {
-			
-			total.stream().forEach(relation -> {
-				mapCardSetAndQuantity.put(relation.get(1, String.class), relation.get(0, BigInteger.class).intValue());
-			});			
-			
-		} else {
+		if(total == null) 
 			return Collections.emptyMap();
-		}
-		
+			
+		total.stream().forEach(cardSetCode -> {
+			String setCode = cardSetCode.get(0, String.class);
+			String setName = cardSetCode.get(1, String.class);
+			
+			if(!mapCardSetAndQuantity.containsKey(setCode)) {
+				mapCardSetAndQuantity.put(setCode,  new ArrayList<String>());
+				mapCardSetAndQuantity.get(setCode).add(setName);							
+			}			
+			else {				
+				mapCardSetAndQuantity.get(setCode).add(setName);			
+			}		
+				
+		});			
+	
 		return mapCardSetAndQuantity;
 	
 	}
@@ -254,30 +259,35 @@ public class CardServiceImpl implements CardDetailService {
 		List<Tuple> listKonamiSets = Optional.of(cardRepository.setsOfCard(card.getId()))
 				.orElse(Collections.emptyList());
 		
-		List<KonamiSetsWithCardDTO> listCardSets = new LinkedList<>();
+//		List<KonamiSetsWithCardDTO> listCardSets = new LinkedList<>();
+		
+		List<KonamiSetsWithCardDTO> listCardSets = listKonamiSets.stream().map(set -> {
+			KonamiSetsWithCardDTO dto = new KonamiSetsWithCardDTO(set);
+			return dto;
+		}).collect(Collectors.toList());
 			
-		listKonamiSets.stream().forEach(c -> {	
-			Boolean hasOnList = false;
-			BigInteger id = c.get(0, BigInteger.class);
-			String setType = c.get(1, String.class);
-			
-			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
-				if(cardSet.getId().equals(id) && cardSet.getSetType().equals(setType)) {
-					hasOnList = true;
-					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
-					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
-					cardSet.setPrice(listDecimals);
-					
-					List<String> listRarity = new ArrayList<>(cardSet.getRarity());
-					listRarity.addAll(List.of(c.get(5, String.class)));
-					cardSet.setRarity(listRarity);
-				}
-			}
-			
-			if(!hasOnList) {
-				listCardSets.add(new KonamiSetsWithCardDTO(c));	
-				};
-			});
+//		listKonamiSets.stream().forEach(c -> {	
+//			Boolean hasOnList = false;
+//			BigInteger id = c.get(0, BigInteger.class);
+//			String setType = c.get(1, String.class);
+//			
+//			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
+//				if(cardSet.getId().equals(id) && cardSet.getSetType().equals(setType)) {
+//					hasOnList = true;
+//					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
+//					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
+//					cardSet.setPrice(listDecimals);
+//					
+//					List<String> listRarity = new ArrayList<>(cardSet.getRarity());
+//					listRarity.addAll(List.of(c.get(5, String.class)));
+//					cardSet.setRarity(listRarity);
+//				}
+//			}
+//			
+//			if(!hasOnList) {
+//				listCardSets.add(new KonamiSetsWithCardDTO(c));	
+//				};
+//			});
 							
 	return listCardSets;
 }

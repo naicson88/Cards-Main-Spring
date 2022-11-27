@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.naicson.yugioh.service.user.UserDetailsImpl;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 public abstract class GeneralFunctions {
 
@@ -37,32 +38,6 @@ public abstract class GeneralFunctions {
 		return user;
 	}
 
-	public static String transformArrayInString(int[] array) {
-
-		String str = "";
-
-		for (int ints : array) {
-			str += ints;
-			str += ",";
-		}
-		str += "0";
-
-		return str;
-	}
-
-	public static String transformArrayInStringForLong(Long[] array) {
-
-		String str = "";
-
-		for (Long values : array) {
-			str += values;
-			str += ",";
-		}
-		str += "0";
-
-		return str;
-	}
-
 	public static String momentAsString() {
 		String hour = String.valueOf(LocalDateTime.now().getHour());
 		String minutes = String.valueOf(LocalDateTime.now().getMinute());
@@ -78,27 +53,14 @@ public abstract class GeneralFunctions {
 	}
 
 	public static void saveCardInFolder(Long cardNumber) {
-		try (InputStream in = new URL("https://storage.googleapis.com/ygoprodeck.com/pics/" + cardNumber + ".jpg")
+		try (InputStream in = new URL("https://images.ygoprodeck.com/images/cards/" + cardNumber + ".jpg")
 				.openStream()) {
 			Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber + ".jpg"));
 			logger.info("Card saved in folder");
 		} catch (IOException e) {
 			e.getMessage();
+			throw new ErrorMessage(e.getMessage());
 		}
-	}
-
-	public static String getFolderBySetType(String setType) {
-
-		if ("DECK".equalsIgnoreCase(setType))
-			return "deck";
-		else if ("BOOSTER".equalsIgnoreCase(setType))
-			return "booster";
-		if ("TIN".equalsIgnoreCase(setType))
-			return "tin";
-		else if ("BOX".equalsIgnoreCase(setType))
-			return "box";
-
-		return null;
 	}
 
 	public static String getRandomDeckCase() {
