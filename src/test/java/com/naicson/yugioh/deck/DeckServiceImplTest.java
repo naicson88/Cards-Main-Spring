@@ -392,9 +392,9 @@ public class DeckServiceImplTest {
 		Deck d = deckService.countCardRaritiesOnDeck(deck);
 		
 		assertNotNull(d);
-		assertEquals(2, deck.getQtd_raras());
-		assertEquals(3, deck.getQtd_comuns());
-		assertEquals(2, deck.getQtd_super_raras());
+		assertEquals(2, deck.getQuantity().getRare());
+		assertEquals(3, deck.getQuantity().getCommon());
+		assertEquals(2, deck.getQuantity().getSuperRare());
 	}
 
 	@Test

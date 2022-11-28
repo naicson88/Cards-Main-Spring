@@ -63,7 +63,7 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		
 		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
 		
-		if(setDetailsDto.getInsideDeck() != null && setDetailsDto.getInsideDeck().size() > 0)	
+		if(setDetailsDto.getInsideDecks() != null && setDetailsDto.getInsideDecks().size() > 0)	
 			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
 		
 		return setDetailsDto;
@@ -133,16 +133,8 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 		});
 		
 		setDetailsDto.setInsideDecks(listInsideDeck);
-
-		set.getDecks().stream().forEach(d -> {
-			setDetailsDto.setQtd_cards(setDetailsDto.getQtd_cards() + d.getQtd_cards());
-			setDetailsDto.setQtd_comuns(setDetailsDto.getQtd_comuns() + d.getQtd_comuns());
-			setDetailsDto.setQtd_raras(setDetailsDto.getQtd_raras() + d.getQtd_raras());
-			setDetailsDto.setQtd_secret_raras(setDetailsDto.getQtd_secret_raras() + d.getQtd_secret_raras());
-			setDetailsDto.setQtd_super_raras(setDetailsDto.getQtd_super_raras() + d.getQtd_super_raras());
-			setDetailsDto.setQtd_ultra_raras(setDetailsDto.getQtd_ultra_raras() + d.getQtd_ultra_raras());
-		});
-			
+		setDetailsDto.setQuantity(deckService.countDeckRarityQuantity(setDetailsDto));
+		
 		return setDetailsDto;
 				
 	}

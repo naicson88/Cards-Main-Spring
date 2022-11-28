@@ -28,25 +28,25 @@ public class SetsUtils {
 		if(detailDTO == null)
 			throw new IllegalArgumentException("Invalid DetailDTO informed");
 		
-		Map<CardAttributes, Integer> mapAttr = setQuantityByAttributeType(detailDTO.getInsideDeck());
+		Map<CardAttributes, Integer> mapAttr = setQuantityByAttributeType(detailDTO.getInsideDecks());
 		detailDTO.setStatsQuantityByAttribute(mapAttr);
 		
-		Map<Integer, Integer> mapCardAttribute = this.setQuantityStars(detailDTO.getInsideDeck());
+		Map<Integer, Integer> mapCardAttribute = this.setQuantityStars(detailDTO.getInsideDecks());
 		detailDTO.setStatsQuantityByLevel(mapCardAttribute);
 		
-		Map<String, Integer> setQuantityByProperty = this.setQuantityByProperty(detailDTO.getInsideDeck());
+		Map<String, Integer> setQuantityByProperty = this.setQuantityByProperty(detailDTO.getInsideDecks());
 		detailDTO.setStatsQuantityByProperty(setQuantityByProperty);
 		
-		Map<String, Integer> setQuantityByGenericType= this.setQuantityByGenericType(detailDTO.getInsideDeck());
+		Map<String, Integer> setQuantityByGenericType= this.setQuantityByGenericType(detailDTO.getInsideDecks());
 		detailDTO.setStatsQuantityByGenericType(setQuantityByGenericType);	
 		
-		Map<String, Integer> setQuantityByType = this.setQuantityByType(detailDTO.getInsideDeck());
+		Map<String, Integer> setQuantityByType = this.setQuantityByType(detailDTO.getInsideDecks());
 		detailDTO.setStatsQuantityByType(setQuantityByType);
 		
-		Map<Integer, Integer> atkMap = this.infoAtk(detailDTO.getInsideDeck());
+		Map<Integer, Integer> atkMap = this.infoAtk(detailDTO.getInsideDecks());
 		detailDTO.setStatsAtk(atkMap);	
 		
-		Map<Integer, Integer> defMap = this.infoDef(detailDTO.getInsideDeck());
+		Map<Integer, Integer> defMap = this.infoDef(detailDTO.getInsideDecks());
 		detailDTO.setStatsDef(defMap);
 		
 		return detailDTO;

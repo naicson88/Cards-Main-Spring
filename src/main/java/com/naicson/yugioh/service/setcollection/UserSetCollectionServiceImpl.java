@@ -25,6 +25,7 @@ import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.DeckRarityQuantity;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -120,8 +121,8 @@ public class UserSetCollectionServiceImpl {
 		dto.setName(set.getName());
 		dto.setSetType(set.getSetCollectionType().toString());
 		dto.setCards(this.cardsOfSetCollection(set));
-		dto.setRarities(this.countRarities(dto.getCards()));
-//		dto.setKonamiRarities(this.countRarities(null, null));
+		//dto.setRarities(this.getUserRarities(dto.getCards()));
+		dto.setKonamiRarities(this.getAllRarities(dto.getCards()));
 		dto.setSetCodes(this.listSetCodes(dto.getCards()));
 		dto.setTotalPrice(this.calculateTotalPrice(dto.getCards()));
 		dto.setImage(set.getImgurUrl());
@@ -130,7 +131,46 @@ public class UserSetCollectionServiceImpl {
 		return dto;
 
 	}
-
+	
+	private Map<String, String> getAllRarities(List<CardSetCollectionDTO> cards){
+		Map<String, Long> userRarities = this.getUserRarities(cards);
+		Map<String, Long> konamiRarities = this.getKonamiRarities(cards);
+		Map<String, String> allRaritiesMap = new HashMap<>();
+		
+		for(Map.Entry<String, Long> konamiMap: konamiRarities.entrySet()){
+			String rarities = null;
+			if(userRarities.containsKey(konamiMap.getKey())) {
+				rarities = userRarities.get(konamiMap.getKey()).toString() + " / " + konamiMap.getValue().toString();
+			} else {
+				rarities = "0 / " + konamiMap.getValue().toString();
+			}			
+			allRaritiesMap.put(konamiMap.getKey(), rarities);
+		}
+		
+		return allRaritiesMap;
+	}
+	
+	private Map<String, Long> getKonamiRarities(List<CardSetCollectionDTO> cards) {	
+		
+		Map<String, Long> mapRarity = cards.stream()
+				.collect(Collectors.groupingBy(
+				card -> card.getRelDeckCards().getCard_raridade(), Collectors.counting()
+				));
+				
+			return mapRarity;	
+	}
+	
+	public Map<String, Long> getUserRarities(List<CardSetCollectionDTO> cards) {
+		
+		Map<String, Long> mapRarity = cards.stream()
+				.filter(c -> c.getQuantityUserHave() > 0)
+				.collect(Collectors.groupingBy(
+				card -> card.getRelDeckCards().getCard_raridade(), Collectors.counting()
+				));
+				
+			return mapRarity;
+	}
+	
 	private Map<Long, String> getBasedDeck(Integer konamiSet) {
 
 		if (konamiSet == null || konamiSet == 0)
@@ -178,16 +218,7 @@ public class UserSetCollectionServiceImpl {
 
 	}
 
-	public Map<String, Long> countRarities(List<CardSetCollectionDTO> cards) {
-			
-		Map<String, Long> mapRarity = cards.stream()
-				.filter(c -> c.getQuantityUserHave() > 0)
-				.collect(Collectors.groupingBy(
-				card -> card.getRelDeckCards().getCard_raridade(), Collectors.counting()
-				));
-				
-			return mapRarity;
-	}
+
 
 	public List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set) {
 

@@ -149,18 +149,10 @@ public class CardServiceImpl implements CardDetailService {
 			
 			List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
 			
-			Map<String, Integer> mapRarity = new HashMap<>();
-					
-				listCardsSets.stream().forEach(r ->{
-				//Verifica se ja tem essa raridade inserida no map
-					if(!mapRarity.containsKey(r.getRarity())) {
-						mapRarity.put(r.getRarity(), 1);
-					} 
-					else {
-						//... se tiver acrescenta mais um 
-						mapRarity.merge(r.getRarity(), 1, Integer::sum);
-					}
-			});
+			Map<String, Long> mapRarity = listCardsSets.stream()
+					.collect(Collectors.groupingBy(
+					card -> card.getRarity(), Collectors.counting()
+					));
 			
 			cardUserDTO.setRarity(mapRarity);
 			cardUserDTO.setSetsWithThisCard(listCardsSets);
@@ -225,13 +217,8 @@ public class CardServiceImpl implements CardDetailService {
 	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
 		
 		Map<String, List<String>> mapCardSetAndQuantity = new HashMap<>();
-//		
-//		if("konami".equalsIgnoreCase(collectionSource))
-//			total = cardRepository.findQtdUserHaveByKonamiCollection(cardId, user.getId());
-//		else if("user".equalsIgnoreCase(collectionSource))
+
 	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
-//		else
-//			throw new IllegalArgumentException("Invalid collection source");
 		
 		if(total == null) 
 			return Collections.emptyMap();
