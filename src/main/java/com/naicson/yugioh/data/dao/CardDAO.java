@@ -10,6 +10,7 @@ import javax.persistence.Tuple;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 
@@ -53,7 +54,7 @@ public class CardDAO {
 		
 		return resultCards;
 	}
-	
+
 	public List<Deck> cardDecks(Integer cardId) {
 		Query query = em.createNativeQuery("SELECT *  FROM tab_decks deck "
 				+ " inner join TAB_REL_DECK_CARDS rel on deck.id = rel.deck_id " 
@@ -76,5 +77,7 @@ public class CardDAO {
 		
 		return decks_set;
 	}
+	
+	
 	
 }

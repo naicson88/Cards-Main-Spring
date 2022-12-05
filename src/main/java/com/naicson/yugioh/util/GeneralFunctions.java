@@ -38,19 +38,19 @@ public abstract class GeneralFunctions {
 		return user;
 	}
 
-	public static String momentAsString() {
-		String hour = String.valueOf(LocalDateTime.now().getHour());
-		String minutes = String.valueOf(LocalDateTime.now().getMinute());
-		String seconds = String.valueOf(LocalDateTime.now().getSecond());
-
-		String day = String.valueOf(LocalDateTime.now().getDayOfMonth());
-		String month = String.valueOf(LocalDateTime.now().getMonthValue());
-		String year = String.valueOf(LocalDateTime.now().getYear());
-
-		String moment = day + month + year + hour + minutes + seconds;
-
-		return moment;
-	}
+//	public static String momentAsString() {
+//		String hour = String.valueOf(LocalDateTime.now().getHour());
+//		String minutes = String.valueOf(LocalDateTime.now().getMinute());
+//		String seconds = String.valueOf(LocalDateTime.now().getSecond());
+//
+//		String day = String.valueOf(LocalDateTime.now().getDayOfMonth());
+//		String month = String.valueOf(LocalDateTime.now().getMonthValue());
+//		String year = String.valueOf(LocalDateTime.now().getYear());
+//
+//		String moment = day + month + year + hour + minutes + seconds;
+//
+//		return moment;
+//	}
 
 	public static void saveCardInFolder(Long cardNumber) {
 		try (InputStream in = new URL("https://images.ygoprodeck.com/images/cards/" + cardNumber + ".jpg")

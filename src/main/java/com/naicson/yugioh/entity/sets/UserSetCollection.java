@@ -67,18 +67,13 @@ public class UserSetCollection {
 		
 		userSet.setDtUpdate(new Date());
 		userSet.setId(null);
-		userSet.setName(set.getName()+"_"+GeneralFunctions.momentAsString());
+		userSet.setName(set.getName());
 		userSet.setRegistrationDate(new Date());
 		userSet.setUserId(GeneralFunctions.userLogged().getId());
 		userSet.setImgPath(set.getImgurUrl());
 		userSet.setKonamiSetCopied(set.getId());
 		UserDeck ud = UserDeck.userDeckFromDeck(set.getDecks().get(0));		
-		ud.setNome(set.getName()+"_"+GeneralFunctions.momentAsString());
-		
-//		List<UserDeck> listDeckUser =  set.getDecks().stream().map(d -> {
-//			UserDeck du = UserDeck.userDeckFromDeck(d);		
-//			return du;
-//		}).collect(Collectors.toList());
+		ud.setNome(set.getName());
 		
 		userSet.setUserDeck(List.of(ud));
 		
@@ -92,7 +87,7 @@ public class UserSetCollection {
 		userSetCollection.setImgPath(GeneralFunctions.getRandomCollectionCase());
 		userSetCollection.setImgurUrl(userSetCollection.getImgPath());
 		userSetCollection.setIsSpeedDuel(false);
-		userSetCollection.setName(userCollection.getName()+"_"+GeneralFunctions.momentAsString());
+		userSetCollection.setName(userCollection.getName());
 		userSetCollection.setOnlyDefaultDeck(true);
 		userSetCollection.setRegistrationDate(new Date());
 		userSetCollection.setReleaseDate(new Date());

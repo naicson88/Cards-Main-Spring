@@ -355,7 +355,7 @@ public class UserDeckServiceImpl {
 		if (deckName == null || deckName.isBlank())
 			throw new IllegalArgumentException("Invalid Deck name, can't be customized!");
 
-		String customizedDeckName = deckName + "_" + GeneralFunctions.momentAsString();
+		String customizedDeckName = deckName;
 
 		return customizedDeckName;
 

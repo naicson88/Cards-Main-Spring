@@ -29,7 +29,7 @@ import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.util.enums.SetType;
 
 @Service
-public class SetCollectionServiceImpl implements SetCollectionService{
+public class SetCollectionServiceImpl implements SetCollectionService {
 	
 	@Autowired
 	SetCollectionRepository setColRepository;
@@ -85,13 +85,11 @@ public class SetCollectionServiceImpl implements SetCollectionService{
 	}
 	
 	private SetDetailsDTO konamiSetDetailsDTO(Long setId) {
-		SetCollection setCollection = new SetCollection();
-		SetDetailsDTO setDetailsDto = new SetDetailsDTO();
-
-		setCollection = setColRepository.findById(setId.intValue())
+		
+		 SetCollection setCollection = setColRepository.findById(setId.intValue())
 			.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
 		
-		setDetailsDto = this.convertSetCollectionToDeck(setCollection, "KONAMI");
+		 SetDetailsDTO setDetailsDto = this.convertSetCollectionToDeck(setCollection, "KONAMI");
 		
 		return setDetailsDto;
 	}

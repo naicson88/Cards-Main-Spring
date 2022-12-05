@@ -4,14 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.card.CardRegistry;
@@ -46,7 +41,7 @@ public class SetCollectionConsumerRabbitMQ {
 			
 		logger.info("Start consuming new Set Collection: {}" , json);
 		
-		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, consumerUtils.SET_COLLECTION);
+		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.SET_COLLECTION);
 		
 		SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 	
