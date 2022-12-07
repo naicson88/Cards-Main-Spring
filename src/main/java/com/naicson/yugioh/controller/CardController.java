@@ -29,8 +29,7 @@ import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.repository.CardRepository;
-import com.naicson.yugioh.repository.RelDeckCardsRepository;
+
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
@@ -51,10 +50,6 @@ public class CardController {
 	CardDetailService cardService;
 	@Autowired
 	DeckServiceImpl deckService;
-	@Autowired
-	CardRepository cardRepository;
-	@Autowired
-	RelDeckCardsRepository relDeckCardsRepository;
 	
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 	

@@ -1,7 +1,5 @@
 package com.naicson.yugioh.service.card;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -149,18 +147,10 @@ public class CardServiceImpl implements CardDetailService {
 			
 			List<CardsOfUserSetsDTO> listCardsSets = createCardsOfUserDTOList(cardsDetails);
 			
-			Map<String, Integer> mapRarity = new HashMap<>();
-					
-				listCardsSets.stream().forEach(r ->{
-				//Verifica se ja tem essa raridade inserida no map
-					if(!mapRarity.containsKey(r.getRarity())) {
-						mapRarity.put(r.getRarity(), 1);
-					} 
-					else {
-						//... se tiver acrescenta mais um 
-						mapRarity.merge(r.getRarity(), 1, Integer::sum);
-					}
-			});
+			Map<String, Long> mapRarity = listCardsSets.stream()
+					.collect(Collectors.groupingBy(
+					card -> card.getRarity(), Collectors.counting()
+					));
 			
 			cardUserDTO.setRarity(mapRarity);
 			cardUserDTO.setSetsWithThisCard(listCardsSets);
@@ -225,13 +215,8 @@ public class CardServiceImpl implements CardDetailService {
 	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
 		
 		Map<String, List<String>> mapCardSetAndQuantity = new HashMap<>();
-//		
-//		if("konami".equalsIgnoreCase(collectionSource))
-//			total = cardRepository.findQtdUserHaveByKonamiCollection(cardId, user.getId());
-//		else if("user".equalsIgnoreCase(collectionSource))
+
 	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
-//		else
-//			throw new IllegalArgumentException("Invalid collection source");
 		
 		if(total == null) 
 			return Collections.emptyMap();
@@ -259,35 +244,10 @@ public class CardServiceImpl implements CardDetailService {
 		List<Tuple> listKonamiSets = Optional.of(cardRepository.setsOfCard(card.getId()))
 				.orElse(Collections.emptyList());
 		
-//		List<KonamiSetsWithCardDTO> listCardSets = new LinkedList<>();
-		
 		List<KonamiSetsWithCardDTO> listCardSets = listKonamiSets.stream().map(set -> {
 			KonamiSetsWithCardDTO dto = new KonamiSetsWithCardDTO(set);
 			return dto;
 		}).collect(Collectors.toList());
-			
-//		listKonamiSets.stream().forEach(c -> {	
-//			Boolean hasOnList = false;
-//			BigInteger id = c.get(0, BigInteger.class);
-//			String setType = c.get(1, String.class);
-//			
-//			for (KonamiSetsWithCardDTO cardSet : listCardSets) {
-//				if(cardSet.getId().equals(id) && cardSet.getSetType().equals(setType)) {
-//					hasOnList = true;
-//					List<BigDecimal> listDecimals = new ArrayList<>(cardSet.getPrice());
-//					listDecimals.addAll(List.of(c.get(6, BigDecimal.class)));
-//					cardSet.setPrice(listDecimals);
-//					
-//					List<String> listRarity = new ArrayList<>(cardSet.getRarity());
-//					listRarity.addAll(List.of(c.get(5, String.class)));
-//					cardSet.setRarity(listRarity);
-//				}
-//			}
-//			
-//			if(!hasOnList) {
-//				listCardSets.add(new KonamiSetsWithCardDTO(c));	
-//				};
-//			});
 							
 	return listCardSets;
 }

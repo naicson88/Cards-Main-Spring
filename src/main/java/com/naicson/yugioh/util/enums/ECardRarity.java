@@ -15,7 +15,7 @@ public enum ECardRarity {
 	SUPER_RARE("Super Rare", List.of("(SPR)", "(DSPR)")),
 	ULTRA_RARE("Ultra Rare", List.of("(UR(PR))", "(UPR)", "(DUPR)", "(PG)")),
 	SECRET_RARE("Secret Rare", 
-			List.of("(ScR)","(HGR)","(PlR)", "(StR)","(PScR)","(EScR)","(PlScR)", "(UScR)","(20ScR)", "(ScUR)","(10000ScR)", "(ScPR)", "(EScPR)", "(DScPR)")),
+			List.of("(PS)", "(ScR)","(HGR)","(PlR)", "(StR)","(PScR)","(EScR)","(PlScR)", "(UScR)","(20ScR)", "(ScUR)","(10000ScR)", "(ScPR)", "(EScPR)", "(DScPR)")),
 	ULTIMATE_RARE("Ultimate Rare",List.of("(UtR)")),
 	GOLD_RARE("Gold Rare", List.of("(GScR)", "(GGR)", "(PGR)")),
 	PARALLEL_RARE("Parallel Rare",
@@ -37,7 +37,7 @@ public enum ECardRarity {
 		return Arrays.stream(ECardRarity.values())
 				.filter(rarity -> rarity.listRarityCode
 				.contains(rarityCode))
-				.findFirst().orElseThrow(() -> new ErrorMessage("Rarity Not Found!"));
+				.findFirst().orElseThrow(() -> new ErrorMessage("Rarity Not Found! " + rarityCode));
 	}
 	
 	public static ECardRarity getRarityByName(String name) {

@@ -10,7 +10,7 @@ public class CardOfUserDetailDTO {
 	private Long cardNumber;
 	private String cardImage;
 	private String cardName;
-	private Map<String, Integer> rarity;
+	private Map<String, Long> rarity;
 	private List<CardsOfUserSetsDTO> setsWithThisCard;
 	private List<CardsOfUserSetsDTO> setsUserDontHave;
 	
@@ -30,10 +30,10 @@ public class CardOfUserDetailDTO {
 	public void setCardName(String cardName) {
 		this.cardName = cardName;
 	}
-	public Map<String, Integer> getRarity() {
+	public Map<String, Long> getRarity() {
 		return rarity;
 	}
-	public void setRarity(Map<String, Integer> rarity) {
+	public void setRarity(Map<String, Long> rarity) {
 		this.rarity = rarity;
 	}
 	public List<CardsOfUserSetsDTO> getSetsWithThisCard() {

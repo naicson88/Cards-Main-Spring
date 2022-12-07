@@ -3,6 +3,7 @@ package com.naicson.yugioh.service.deck;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.DeckRarityQuantity;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.DeckRepository;
@@ -148,12 +150,28 @@ public class DeckServiceImpl implements DeckDetailService {
 		Deck deck = this.returnDeckWithCards(deckId, deckSource);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
+		
+		dto.setQuantity(this.countDeckRarityQuantity(dto));
 
 		dto = utils.getSetStatistics(dto);
 
 		return dto;
 	}
-
+	
+	public Map<String, Long> countDeckRarityQuantity(SetDetailsDTO dto){
+		
+		List<CardSetDetailsDTO> listCards = new ArrayList<>();
+			
+		dto.getInsideDecks().forEach(in -> { listCards.addAll(in.getCards()); });
+				
+		Map<String, Long> mapRarity = listCards.stream()
+				.collect(Collectors.groupingBy(
+				card -> card.getListCardRarity().get(0).getCard_raridade(), Collectors.counting()
+				));
+				
+			return mapRarity;	
+	}
+	
 	private SetDetailsDTO convertDeckToSetDetailsDTO(Deck deck) {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
@@ -236,7 +254,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		List<RelDeckCards> listRel =  deck.getRel_deck_cards();	
 
-		deck.setQtd_cards(listRel.size());
+	//	deck.setQtd_cards(listRel.size());
 		
 		Map<String, Long> mapRarities = listRel.stream().collect(Collectors.groupingBy(
 				card -> card.getCard_raridade(), Collectors.counting()
@@ -244,33 +262,63 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		deck = setMappedDeckRarities(deck, mapRarities);
 		
+		deck.getQuantity().setTotal(listRel.size());
+		
 		return deck;
 	}
 
+//	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
+//		
+//		if(deck == null || mapRarities == null)
+//			throw new IllegalArgumentException("Invalid information to map rarities");
+//		
+//		mapRarities.forEach((key, value) ->{
+//			ECardRarity rarity = ECardRarity.getRarityByName(key);
+//			switch (rarity) {		
+//				case COMMON: deck.setQtd_comuns(value); break;				
+//				case RARE: deck.setQtd_raras(value); break;			
+//				case SUPER_RARE: deck.setQtd_super_raras(value); break;			
+//				case ULTRA_RARE: deck.setQtd_ultra_raras(value); break;		
+//				case SECRET_RARE: deck.setQtd_secret_raras(value); break;				
+//				case ULTIMATE_RARE: deck.setQtd_ultimate_raras(value); break;
+//				case GOLD_RARE: deck.setQtd_gold_raras(value); break;		
+//				case PARALLEL_RARE: deck.setQtd_parallel_raras(value); break;				
+//				case GHOST_RARE: deck.setQtd_ghost_raras(value); break;					
+//				default:
+//					throw new IllegalArgumentException("Invalid Rarity informed! " + key);
+//			}
+//		});
+//		
+//		return deck;
+//	}
+	
 	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
-		
-		if(deck == null || mapRarities == null)
-			throw new IllegalArgumentException("Invalid information to map rarities");
-		
-		mapRarities.forEach((key, value) ->{
-			ECardRarity rarity = ECardRarity.getRarityByName(key);
-			switch (rarity) {		
-				case COMMON: deck.setQtd_comuns(value); break;				
-				case RARE: deck.setQtd_raras(value); break;			
-				case SUPER_RARE: deck.setQtd_super_raras(value); break;			
-				case ULTRA_RARE: deck.setQtd_ultra_raras(value); break;		
-				case SECRET_RARE: deck.setQtd_secret_raras(value); break;				
-				case ULTIMATE_RARE: deck.setQtd_ultimate_raras(value); break;
-				case GOLD_RARE: deck.setQtd_gold_raras(value); break;		
-				case PARALLEL_RARE: deck.setQtd_parallel_raras(value); break;				
-				case GHOST_RARE: deck.setQtd_ghost_raras(value); break;					
-				default:
-					throw new IllegalArgumentException("Invalid Rarity informed! " + key);
-			}
-		});
-		
-		return deck;
-	}
+	
+	if(deck == null || mapRarities == null)
+		throw new IllegalArgumentException("Invalid information to map rarities");
+	
+	DeckRarityQuantity quantity = new DeckRarityQuantity();
+	
+	mapRarities.forEach((key, value) ->{
+		ECardRarity rarity = ECardRarity.getRarityByName(key);
+		switch (rarity) {		
+			case COMMON: quantity.setCommon(value); break;				
+			case RARE: quantity.setRare(value); break;			
+			case SUPER_RARE: quantity.setSuperRare(value); break;			
+			case ULTRA_RARE: quantity.setUltraRare(value); break;		
+			case SECRET_RARE: quantity.setSecretRare(value); break;				
+			case ULTIMATE_RARE: quantity.setUltimateRare(value); break;
+			case GOLD_RARE: quantity.setGoldRare(value); break;		
+			case PARALLEL_RARE: quantity.setParallelRare(value); break;				
+			case GHOST_RARE: quantity.setGhostRare(value); break;					
+			default:
+				throw new IllegalArgumentException("Invalid Rarity informed! " + key);
+		}
+	});
+	
+	deck.setQuantity(quantity);
+	return deck;
+}
 
 	@Override
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
@@ -387,13 +435,20 @@ public class DeckServiceImpl implements DeckDetailService {
 		}
 	}
 	
-//	public Map<String, Long> getDeckRaritiesInMap(Deck deck){
+//	public Map<String, Long> getDeckRaritiesInMap(Deck deck) {
 //		if(deck == null)
 //			throw new IllegalArgumentException("Invalid Deck informed to consult rarities!");
 //		
+//		Map<String, Long> konamiDeckRarities = new HashMap<>();
+//		long currentQuantity = 0;
+//		
 //		for(ECardRarity rarity : ECardRarity.values()) {
 //			if(rarity.equals(ECardRarity.COMMON))
-//				if(deck.getQtd_comuns() > 0)
+//				if((currentQuantity = deck.getQuantity().getCommon()) > 0)
+//					konamiDeckRarities.put(rarity.getCardRarity(), currentQuantity);
+//		else if(rarity.equals(ECardRarity.GHOST_RARE))
+//				if((currentQuantity = deck.getQuantity().getGhostRare()) > 0)
+//					konamiDeckRarities.put(rarity.getCardRarity(), currentQuantity);
 //					
 //		}
 //	}

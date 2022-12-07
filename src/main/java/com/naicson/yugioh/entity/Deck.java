@@ -4,14 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserDeck;
@@ -39,7 +45,12 @@ public class Deck implements Serializable {
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
 	private boolean isBasedDeck;
-	private String setCode;
+	private String setCode;	
+	
+	@NotNull
+	@OneToOne(cascade=CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "quantity_id", referencedColumnName = "id")
+    private DeckRarityQuantity quantity;	
 	
 	@ManyToMany(mappedBy = "decks")
 	private List<SetCollection> setCollection;	
@@ -51,18 +62,6 @@ public class Deck implements Serializable {
 	private List<Card> extraDeckCards;
 	@Transient
 	private List<RelDeckCards> rel_deck_cards;
-	
-	@Column(name = "qtd_cards")
-	private long qtd_cards;
-	private long qtd_comuns;
-	private long qtd_raras;
-	private long qtd_super_raras;
-	private long qtd_ultra_raras;
-	private long qtd_secret_raras;
-	private long qtd_ultimate_raras;
-	private long qtd_gold_raras;
-	private long qtd_parallel_raras;
-	private long qtd_ghost_raras;
 		
 	public Deck() {
 		
@@ -137,45 +136,7 @@ public class Deck implements Serializable {
 		this.nomePortugues = nomePortugues;
 	}
 
-	public long getQtd_cards() {
-		return qtd_cards;
-	}
 
-	public void setQtd_cards(long qtd_cards) {
-		this.qtd_cards = qtd_cards;
-	}
-
-	public long getQtd_comuns() {
-		return qtd_comuns;
-	}
-
-	public void setQtd_comuns(long qtd_comuns) {
-		this.qtd_comuns = qtd_comuns;
-	}
-
-	public long getQtd_raras() {
-		return qtd_raras;
-	}
-
-	public void setQtd_raras(long qtd_raras) {
-		this.qtd_raras = qtd_raras;
-	}
-
-	public long getQtd_super_raras() {
-		return qtd_super_raras;
-	}
-
-	public void setQtd_super_raras(long qtd_super_raras) {
-		this.qtd_super_raras = qtd_super_raras;
-	}
-
-	public long getQtd_ultra_raras() {
-		return qtd_ultra_raras;
-	}
-
-	public void setQtd_ultra_raras(long qtd_ulta_raras) {
-		this.qtd_ultra_raras = qtd_ulta_raras;
-	}
 
 	public Date getLancamento() {
 		return lancamento;
@@ -233,13 +194,6 @@ public class Deck implements Serializable {
 		this.isSpeedDuel = isSpeedDuel;
 	}
 
-	public long getQtd_secret_raras() {
-		return qtd_secret_raras;
-	}
-
-	public void setQtd_secret_raras(long qtd_secret_raras) {
-		this.qtd_secret_raras = qtd_secret_raras;
-	}
 
 	public String getImgurUrl() {
 		return imgurUrl;
@@ -247,38 +201,6 @@ public class Deck implements Serializable {
 
 	public void setImgurUrl(String imgurUrl) {
 		this.imgurUrl = imgurUrl;
-	}
-
-	public long getQtd_ultimate_raras() {
-		return qtd_ultimate_raras;
-	}
-
-	public void setQtd_ultimate_raras(long qtd_ultimate_raras) {
-		this.qtd_ultimate_raras = qtd_ultimate_raras;
-	}
-
-	public long getQtd_gold_raras() {
-		return qtd_gold_raras;
-	}
-
-	public void setQtd_gold_raras(long qtd_gold_raras) {
-		this.qtd_gold_raras = qtd_gold_raras;
-	}
-
-	public long getQtd_parallel_raras() {
-		return qtd_parallel_raras;
-	}
-
-	public void setQtd_parallel_raras(long qtd_parallel_raras) {
-		this.qtd_parallel_raras = qtd_parallel_raras;
-	}
-
-	public long getQtd_ghost_raras() {
-		return qtd_ghost_raras;
-	}
-
-	public void setQtd_ghost_raras(long qtd_ghost_raras) {
-		this.qtd_ghost_raras = qtd_ghost_raras;
 	}
 
 	public static long getSerialversionuid() {
@@ -300,5 +222,19 @@ public class Deck implements Serializable {
 	public void setSetCode(String setCode) {
 		this.setCode = setCode;
 	}
+
+	public DeckRarityQuantity getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(DeckRarityQuantity quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setBasedDeck(boolean isBasedDeck) {
+		this.isBasedDeck = isBasedDeck;
+	}
+	
+	
 		
 }

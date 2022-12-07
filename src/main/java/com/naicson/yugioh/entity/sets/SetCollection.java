@@ -56,15 +56,15 @@ public class SetCollection {
 	public static SetCollection setCollectionDtoToEntity(SetCollectionDto dto) {
 		
 		SetCollection collection = new SetCollection();
-		collection.setImgurUrl(dto.getImgPath());
-		collection.setImgPath(dto.getImgPath());
+		collection.setImgurUrl(dto.getImgPath().trim());
+		collection.setImgPath(dto.getImgPath().trim());
 		collection.setIsSpeedDuel(dto.getIsSpeedDuel());
-		collection.setName(dto.getName());
+		collection.setName(dto.getName().trim());
 		collection.setPortugueseName(dto.getPortugueseName());
 		collection.setRegistrationDate(new Date());
 		collection.setReleaseDate(dto.getReleaseDate());
 		collection.setSetCollectionType(SetType.valueOf(dto.getSetType()));
-		collection.setSetCode(dto.getSetCode());
+		collection.setSetCode(dto.getSetCode().trim());
 		
 		return collection;
 	}

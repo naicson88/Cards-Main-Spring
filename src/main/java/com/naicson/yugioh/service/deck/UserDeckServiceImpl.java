@@ -355,7 +355,7 @@ public class UserDeckServiceImpl {
 		if (deckName == null || deckName.isBlank())
 			throw new IllegalArgumentException("Invalid Deck name, can't be customized!");
 
-		String customizedDeckName = deckName + "_" + GeneralFunctions.momentAsString();
+		String customizedDeckName = deckName;
 
 		return customizedDeckName;
 
@@ -505,7 +505,7 @@ public class UserDeckServiceImpl {
 		dto.setImage(userDeck.getImgurUrl());
 		dto.setCards(userSetService.transformTupleInCardSetCollectionDTO(tupleCards));
 		dto.setCards(userSetService.orderByGenericType(dto.getCards()));
-		dto.setRarities(userSetService.countRarities(dto.getCards()));
+		dto.setRarities(userSetService.getUserRarities(dto.getCards()));
 		dto.setTotalPrice(userSetService.calculateTotalPrice(dto.getCards()));
 				
 		return dto;

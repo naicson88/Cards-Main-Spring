@@ -13,7 +13,7 @@ public class UserSetCollectionDTO {
 	private String image;
 	private String setType;
 	private Map<String, Long> rarities;
-	private Map<String, Long> konamiRarities;
+	private Map<String, String>  konamiRarities;
 	private List<String> setCodes;
 	private List<CardSetCollectionDTO> cards;
 	private Map<Long, String> basedDeck;
@@ -72,12 +72,11 @@ public class UserSetCollectionDTO {
 	public void setBasedDeck(Map<Long, String> basedDeck) {
 		this.basedDeck = basedDeck;
 	}
-	public Map<String, Long> getKonamiRarities() {
+	public Map<String, String> getKonamiRarities() {
 		return konamiRarities;
 	}
-	public void setKonamiRarities(Map<String, Long> konamiRarities) {
+	public void setKonamiRarities(Map<String, String> konamiRarities) {
 		this.konamiRarities = konamiRarities;
-	}
-	
+	}	
 	
 }
