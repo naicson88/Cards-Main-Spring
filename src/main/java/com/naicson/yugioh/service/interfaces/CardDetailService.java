@@ -52,7 +52,7 @@ public interface CardDetailService {
 	 Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String nameAndQuantity);
 
 	void updateCardsImages(String cardImages);
-
+	
 	List<CardsSearchDTO> getRandomCards();
 
 }

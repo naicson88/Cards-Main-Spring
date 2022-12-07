@@ -1,8 +1,0 @@
-com\naicson\yugioh\mocks\UserDeckMock.class
-com\naicson\yugioh\mocks\CardAlternativeNumberMock.class
-com\naicson\yugioh\YugiohApplicationTests.class
-com\naicson\yugioh\deck\DeckServiceImplTest.class
-com\naicson\yugioh\card\CardServiceImplTest.class
-com\naicson\yugioh\mocks\RelUserDeckDTOMock.class
-com\naicson\yugioh\mocks\CardPriceInformationMock.class
-com\naicson\yugioh\util\ValidObjects.class
