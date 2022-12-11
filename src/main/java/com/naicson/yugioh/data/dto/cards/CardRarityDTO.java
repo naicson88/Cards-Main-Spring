@@ -9,8 +9,6 @@ public class CardRarityDTO {
 	private Double card_price;
 	private String cardSetCode;
 	
-	public CardRarityDTO() {}
-	
 	
 	public String getCard_raridade() {
 		return card_raridade;

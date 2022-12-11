@@ -152,8 +152,9 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 		
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
+		dto.setQuantityUserHave(userDeckRepository.countQuantityOfADeckUserHave(deckId, GeneralFunctions.userLogged().getId()));
 
-		dto = utils.getSetStatistics(dto);
+		//dto = utils.getSetStatistics(dto);
 
 		return dto;
 	}
@@ -229,22 +230,18 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Override
 	public Page<DeckSummaryDTO> searchBySetName(String setName) {		
 
-		if (setName.isEmpty() || setName.length() <= 3) 
+		if (setName == null || setName.length() <= 3) 
 			throw new IllegalArgumentException("Invalid set name for searching");
 		
 		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName.trim());
 		
 		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
 			
-			DeckSummaryDTO summary = new DeckSummaryDTO(set);
-					
-					return summary;	
+			return new DeckSummaryDTO(set);
 						
 		}).collect(Collectors.toList());
 		
-		Page<DeckSummaryDTO> summaryPage = new PageImpl<>(summaryList);
-
-		return summaryPage;
+		return new PageImpl<>(summaryList);
 
 	}
 
@@ -253,8 +250,6 @@ public class DeckServiceImpl implements DeckDetailService {
 	public Deck countCardRaritiesOnDeck(Deck deck) {
 		
 		List<RelDeckCards> listRel =  deck.getRel_deck_cards();	
-
-	//	deck.setQtd_cards(listRel.size());
 		
 		Map<String, Long> mapRarities = listRel.stream().collect(Collectors.groupingBy(
 				card -> card.getCard_raridade(), Collectors.counting()
@@ -419,7 +414,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	private void updateSetCodeQuantity(String setCode, Integer quantity) {	
+	public void updateSetCodeQuantity(String setCode, Integer quantity) {	
 		if(quantity == null || setCode == null)
 			throw new IllegalAccessError("Invalid information to update SetCode Quantity");
 		
@@ -434,23 +429,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			}	
 		}
 	}
-	
-//	public Map<String, Long> getDeckRaritiesInMap(Deck deck) {
-//		if(deck == null)
-//			throw new IllegalArgumentException("Invalid Deck informed to consult rarities!");
-//		
-//		Map<String, Long> konamiDeckRarities = new HashMap<>();
-//		long currentQuantity = 0;
-//		
-//		for(ECardRarity rarity : ECardRarity.values()) {
-//			if(rarity.equals(ECardRarity.COMMON))
-//				if((currentQuantity = deck.getQuantity().getCommon()) > 0)
-//					konamiDeckRarities.put(rarity.getCardRarity(), currentQuantity);
-//		else if(rarity.equals(ECardRarity.GHOST_RARE))
-//				if((currentQuantity = deck.getQuantity().getGhostRare()) > 0)
-//					konamiDeckRarities.put(rarity.getCardRarity(), currentQuantity);
-//					
-//		}
-//	}
+
 
 }

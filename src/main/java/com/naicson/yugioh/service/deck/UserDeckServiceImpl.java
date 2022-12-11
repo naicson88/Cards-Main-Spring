@@ -16,7 +16,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -215,8 +214,7 @@ public class UserDeckServiceImpl {
 			userDeck = createNewUserDeck(deck);
 		
 		// FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
-		if ((userDeck = userDeckRepository.save(userDeck)) == null)
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the Deck");
+		userDeck = userDeckRepository.save(userDeck);
 		
 		this.saveRelDeckCardsOnSavingUserDeck(listRel, deck);
 		
@@ -279,9 +277,6 @@ public class UserDeckServiceImpl {
 	userDeck = UserDeckBuilder.builder(userDeck).build();
 		
 	 UserDeck userDeckSaved = userDeckRepository.save(userDeck);
-	 
-	 if (userDeckSaved == null)
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create/update the User Deck");
 	 	
 	 if(userDeck.getRelDeckCards() != null && userDeck.getRelDeckCards().size() > 0) 
 		userRelService.saveAll(userDeck.getRelDeckCards());
@@ -290,35 +285,7 @@ public class UserDeckServiceImpl {
 		
 	 	return userDeckSaved;
 	}
-	
-	
 
-//	
-//	@Transactional(rollbackFor = Exception.class)
-//	private List<UserRelDeckCards> saveRelDeckCardsFromUserDeck(Deck deck, UserDeck userDeck) {
-//		
-//		List<UserRelDeckCards> listUserRel = deck.getRel_deck_cards().stream().map(rel ->{			
-//			return createUserRelDeckCardsObj(userDeck, rel);
-//			
-//		}).collect(Collectors.toList());
-//		
-//		return userRelService.saveAll(listUserRel);
-//	}
-//
-//	private UserRelDeckCards createUserRelDeckCardsObj(UserDeck userDeck, RelDeckCards rel) {
-//		
-//		UserRelDeckCards userRel = new UserRelDeckCards();
-//		BeanUtils.copyProperties(rel, userRel);
-//		
-//		userRel.setCard_price(rel.getCard_price() == null ? 0.00 : rel.getCard_price());
-//		userRel.setCard_raridade(rel.getCard_raridade() == null ? ECardRarity.UNKNOWN.getCardRarity() : rel.getCard_raridade());
-//		userRel.setCardSetCode(rel.getCard_set_code() == null  ? "Not Defined" : rel.getCard_set_code());			
-//		userRel.setQuantity(1);
-//		userRel.setDeckId(userDeck.getId());
-//		userRel.setId(null);
-//		userRel.setDt_criacao(new Date());
-//		return userRel;	
-//	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public UserDeck addSetToUserCollection(Long originalDeckId) {
@@ -332,10 +299,7 @@ public class UserDeckServiceImpl {
 		newDeck.setNome(this.customizeDeckName(deckOrigem.getNome()));
 		newDeck.setSetType(SetType.DECK.toString());
 		UserDeck generatedDeckUser = userDeckRepository.save(newDeck);
-
-		if (generatedDeckUser == null)
-			throw new ErrorMessage("It was not possible add Deck to user. Original Deck ID: " + originalDeckId);
-
+		
 		List<UserRelDeckCards> listUserRelCards = userRelService.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
 
 		if (listUserRelCards == null || listUserRelCards.size() <= 0)
@@ -360,19 +324,6 @@ public class UserDeckServiceImpl {
 		return customizedDeckName;
 
 	}
-	
-	
-//	@Transactional(rollbackFor = Exception.class)
-//	public int addCardsToUserDeck(Long originalDeckId, Long generatedDeckId) {
-//
-//		if (originalDeckId == null && generatedDeckId == null)
-//			new IllegalArgumentException("Original deck or generated deck is invalid.");
-//		
-//		int cardsAddedToDeck = dao.addCardsToDeck(originalDeckId, generatedDeckId);
-//
-//		return cardsAddedToDeck;
-//
-//	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove) {
@@ -415,45 +366,6 @@ public class UserDeckServiceImpl {
 		return qtdCardsAddedOrRemoved;
 
 	}
-	
-//	@Transactional(rollbackFor = Exception.class)
-//	public int ImanegerCardsToUserCollection(Long originalDeckId, String flagAddOrRemove) {
-//
-//		long userId = GeneralFunctions.userLogged().getId();
-//		int itemAtualizado;
-//
-//		Integer alreadyHasThisDeck = dao.verifyIfUserAleadyHasTheDeck(originalDeckId, userId);
-//
-//		// Se o usuário não tiver o Deck e for passado parametro para remover esse deck.
-//		if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0 && flagAddOrRemove.equals("R"))
-//			return 0;
-//
-//		if (alreadyHasThisDeck != null && alreadyHasThisDeck == 0) {
-//			itemAtualizado = dao.addDeckToUserCollection(originalDeckId, userId);
-//
-//			if (itemAtualizado < 1)
-//				throw new NoSuchElementException(
-//						"Unable to include Deck for User! Original Deck ID: " + originalDeckId.toString());
-//
-//		} else {
-//			itemAtualizado = dao.changeQuantitySpecificDeckUserHas(originalDeckId, userId, flagAddOrRemove);
-//
-//			if (itemAtualizado < 1)
-//				throw new NoSuchElementException(
-//						"Unable to manege Deck for User! Original Deck ID: " + originalDeckId.toString());
-//
-//		}
-//
-//		int qtdAddedOrRemoved = this.addOrRemoveCardsToUserCollection(originalDeckId, userId, flagAddOrRemove);
-//
-//		if (qtdAddedOrRemoved < 1)
-//			throw new NoSuchElementException(
-//					"Unable to include Cards for User! Original Deck ID: " + originalDeckId.toString());
-//
-//		return qtdAddedOrRemoved;
-//
-//	}
-
 	
 	public Page<UserDeck> findAll(Pageable pageable) {
 		Page<UserDeck> decks = userDeckRepository.findAll(pageable);

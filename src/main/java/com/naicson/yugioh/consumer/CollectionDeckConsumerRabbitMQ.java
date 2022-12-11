@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.builders.DeckBuilder;
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.CollectionDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -38,10 +39,10 @@ public class CollectionDeckConsumerRabbitMQ {
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	private void consumer (String json) {
+	public void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
 		
-		CollectionDeck cDeck = (CollectionDeck) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.COLLECTION_DECK);
+		CollectionDeck cDeck = (CollectionDeck) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.COLLECTION_DECK);
 		
 		if(cDeck.getSetId() == null)
 			throw new IllegalArgumentException("Invalid Set ID");

@@ -29,7 +29,6 @@ import com.naicson.yugioh.service.interfaces.HomeDetailService;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class HomeServiceImpl implements HomeDetailService {
@@ -102,11 +101,11 @@ public class HomeServiceImpl implements HomeDetailService {
 	}
 
 	private List<LastAddedDTO> lastCardsAddedToUsuer(List<Tuple> lastCardsAddedTuple) {
-		List<LastAddedDTO> lastCardsAdded = new ArrayList<>();
 
-		if (lastCardsAddedTuple != null && !lastCardsAddedTuple.isEmpty()) {
-
-			lastCardsAdded = lastCardsAddedTuple.stream().map(card -> {
+		if (lastCardsAddedTuple == null || lastCardsAddedTuple.isEmpty()) 
+			return Collections.emptyList();
+		
+			List<LastAddedDTO> lastCardsAdded = lastCardsAddedTuple.stream().map(card -> {
 				LastAddedDTO lastCard = new LastAddedDTO();
 				lastCard.setCardNumber(card.get(0, Integer.class).longValue());
 				lastCard.setName(card.get(1, String.class));
@@ -116,92 +115,75 @@ public class HomeServiceImpl implements HomeDetailService {
 				return lastCard;
 			}).collect(Collectors.toList());
 
-		} else {
-			return Collections.emptyList();
-		}
-
 		return lastCardsAdded;
 	}
 
 	private List<LastAddedDTO> hotNews(List<Tuple> hotNews) {
 		List<LastAddedDTO> hotNewsList = new ArrayList<>();
 
-		if (hotNews != null && !hotNews.isEmpty()) {
-			hotNewsList = hotNews.stream().map(set -> {
-				LastAddedDTO lastAdded = new LastAddedDTO();
-
-				lastAdded.setId(set.get(0, BigInteger.class).longValue());
-				lastAdded.setImg(set.get(2, String.class));
-				lastAdded.setName(set.get(1, String.class));
-				lastAdded.setSetType(set.get(4, String.class));
-				
-				return lastAdded;
-			}).collect(Collectors.toList());
-
-		} else 
+		if (hotNews == null || hotNews.isEmpty())
 			throw new NoSuchElementException("Hot News list is empty");
+		
+		hotNewsList = hotNews.stream().map(set -> {
+			LastAddedDTO lastAdded = new LastAddedDTO();
+
+			lastAdded.setId(set.get(0, BigInteger.class).longValue());
+			lastAdded.setImg(set.get(2, String.class));
+			lastAdded.setName(set.get(1, String.class));
+			lastAdded.setSetType(set.get(4, String.class));
+			
+			return lastAdded;
+		}).collect(Collectors.toList());
 		
 		return hotNewsList;
 	}
 	
 	private List<LastAddedDTO> lastDecksAdded() {
-		 UserDetailsImpl user = GeneralFunctions.userLogged();
 
-		List<Tuple> sets = homeRepository.returnLastDecksAddedToUser(user.getId());
-		List<LastAddedDTO> lastDecksAdded = new ArrayList<>();
+		List<Tuple> sets = homeRepository.returnLastDecksAddedToUser(GeneralFunctions.userLogged().getId());
 
-		if (sets != null && !sets.isEmpty()) {
-			// Lasts cards or decks added
-			lastDecksAdded = sets.stream().map(set -> {
-
-				LastAddedDTO lastSet = new LastAddedDTO();
-
-				lastSet.setId(set.get(0, BigInteger.class).longValue());
-				lastSet.setName(set.get(2, String.class));
-				lastSet.setImg(set.get(1, String.class));
-				lastSet.setPrice(totalDeckPrice(lastSet.getId()));
-				lastSet.setRegisteredDate(set.get(5, Date.class));
-				lastSet.setSetType("DECK");
-				return lastSet;
-			}).collect(Collectors.toList());
-			
-		} else {
+		if (sets == null || sets.isEmpty())
 			return Collections.emptyList();
-		}
+
+		List<LastAddedDTO> lastDecksAdded = sets.stream().map(set -> {
+
+		LastAddedDTO lastSet = new LastAddedDTO();
+
+		lastSet.setId(set.get(0, BigInteger.class).longValue());
+		lastSet.setName(set.get(2, String.class));
+		lastSet.setImg(set.get(1, String.class));
+		lastSet.setPrice(totalDeckPrice(lastSet.getId()));
+		lastSet.setRegisteredDate(set.get(5, Date.class));
+		lastSet.setSetType("DECK");
+		return lastSet;
+		}).collect(Collectors.toList());					
 
 		return lastDecksAdded;
 	}
 
 	private List<LastAddedDTO> lastsSetCollectionAdded() {
-	    UserDetailsImpl user = GeneralFunctions.userLogged();
 
-		List<Tuple> sets = homeRepository.returnLastSetsAddedToUser(user.getId());
-		List<LastAddedDTO> lastSetsAdded = new ArrayList<>();
+		List<Tuple> sets = homeRepository.returnLastSetsAddedToUser(GeneralFunctions.userLogged().getId());
 
-		if (!sets.isEmpty()) {
-
-				lastSetsAdded = sets.stream().map(set -> {
-
-				LastAddedDTO lastSet = new LastAddedDTO();
-
-				lastSet.setId(set.get(0, BigInteger.class).longValue());
-				lastSet.setName(set.get(5, String.class));
-				lastSet.setImg(set.get(3, String.class));
-				lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
-				lastSet.setRegisteredDate(set.get(8, Date.class));
-				lastSet.setSetType(set.get(10, String.class));
-
-				return lastSet;
-			}).collect(Collectors.toList());
-
-			if (lastSetsAdded == null || lastSetsAdded.isEmpty()) 
-				throw new ErrorMessage("List with lasts added is empty");
-			
-		} else {
+		if (sets == null || sets.isEmpty()) 
 			return Collections.emptyList();
-		}
+		
+		List<LastAddedDTO> lastSetsAdded = sets.stream().map(set -> {
 
+			LastAddedDTO lastSet = new LastAddedDTO();
+
+			lastSet.setId(set.get(0, BigInteger.class).longValue());
+			lastSet.setName(set.get(5, String.class));
+			lastSet.setImg(set.get(3, String.class));
+			lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
+			lastSet.setRegisteredDate(set.get(8, Date.class));
+			lastSet.setSetType(set.get(10, String.class));
+
+			return lastSet;
+		}).collect(Collectors.toList());
+		
 		return lastSetsAdded;
+		
 	}
 
 	public List<GeneralSearchDTO> getEntitiesByParam() {	

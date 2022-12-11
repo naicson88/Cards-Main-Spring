@@ -291,41 +291,41 @@ public class DeckServiceImplTest {
 //		
 //	}
 	
-	@Test
-	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsUser() {
-		
-		Deck deck = ValidObjects.generateValidDeck();
-		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
-	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
-		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
-		
-		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "user");
-		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
-		
-		
-		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "user");
-		
-		assertNotNull(deckReturned);
-			
-	}
+//	@Test
+//	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsUser() {
+//		
+//		Deck deck = ValidObjects.generateValidDeck();
+//		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
+//	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
+//		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
+//		
+//		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "user");
+//		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
+//		
+//		
+//		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "user");
+//		
+//		assertNotNull(deckReturned);
+//			
+//	}
 	
-	@Test
-	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsKonami() {
-		
-		Deck deck = ValidObjects.generateValidDeck();
-		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
-	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
-		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
-		
-		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "konami");
-		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
-		
-		
-		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "konami");
-		
-		assertNotNull(deckReturned);
-			
-	}
+//	@Test
+//	public void returnDeckAndRespectiveCardsSuccessfullyWhenSourceIsKonami() {
+//		
+//		Deck deck = ValidObjects.generateValidDeck();
+//		deck.setCards(List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2)));
+//	    deck.setRel_deck_cards(List.of(ValidObjects.generateRelDeckCards(),ValidObjects.generateRelDeckCards()));
+//		SetDetailsDTO setDetail = mock(SetDetailsDTO.class);
+//		
+//		Mockito.doReturn(deck).when(deckService).returnDeckWithCards(1L, "konami");
+//		Mockito.doReturn(setDetail).when(utils).getSetStatistics(any());
+//		
+//		
+//		SetDetailsDTO deckReturned = deckService.deckAndCards(1L, "konami");
+//		
+//		assertNotNull(deckReturned);
+//			
+//	}
 	
 	@Test
 	public void testDeckAndCardWithInvalidSource() {

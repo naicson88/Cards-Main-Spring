@@ -12,8 +12,8 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\dto\set\SetDetailsDTO.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\consumer\DeckConsumerRabbitMQ.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\security\AuthTokenFilter.java
-C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\controller\UserRelDeckCards.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\CardPriceInformationRepository.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\builders\CardBuilder.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\CardViewsInformationRepository.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\AtributoRepository.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\dto\set\UserSetCollectionDTO.java
@@ -53,6 +53,7 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\consumer\CollectionDeckConsumerRabbitMQ.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\enums\CardStats.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\GeneralFunctions.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\card\BuildCardFromYuGiOhAPI.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\config\SwaggerConfig.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\dto\cards\CardAndSetsDTO.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\Atributo.java
@@ -71,6 +72,7 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\CardRepository.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\AdminFunctions.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\stats\CardViewsInformation.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\UserRelDeckCards.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\auth\Role.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\enums\CardProperty.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\ArchetypeRepository.java
@@ -89,6 +91,7 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\auth\ERole.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\Deck.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\YugiohApplication.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\DeckRarityQuantity.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\setcollection\SetsUtils.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\dto\set\DeckAndSetsBySetTypeDTO.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\CardAlternativeNumberRepository.java
@@ -121,10 +124,12 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\sets\UserSetCollection.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\interfaces\HomeDetailService.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\sets\UserDeckRepository.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\builders\DeckBuilder.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\Card.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\entity\auth\LoginRequest.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\user\UserDetailsServiceImpl.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\card\CardServiceImpl.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\data\builders\UserDeckBuilder.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\util\exceptions\ErrorMessage.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\service\deck\DeckServiceImpl.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\main\java\com\naicson\yugioh\repository\UserSetCollectionRepository.java

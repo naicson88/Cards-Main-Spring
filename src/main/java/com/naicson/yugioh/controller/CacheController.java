@@ -33,7 +33,7 @@ public class CacheController {
 	@ApiOperation(authorizations = { @Authorization(value="JWT") }, value = "")	
 	public ResponseEntity<String> evictArchetypes() {
 		logger.info("Cleaning Archetypes cache...");
-		return new ResponseEntity<String>("Archetype cache was clear!", HttpStatus.OK);
+		return new ResponseEntity<>("Archetype cache was clear!", HttpStatus.OK);
 	}
 	
 	@ApiOperation(authorizations = { @Authorization(value="JWT") }, value = "")	

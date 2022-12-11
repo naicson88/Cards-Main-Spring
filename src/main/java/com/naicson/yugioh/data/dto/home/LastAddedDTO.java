@@ -12,11 +12,7 @@ public class LastAddedDTO {
 	private Long cardNumber;
 	private Date registeredDate;
 	private String setType;
-	
-	public LastAddedDTO() {
-		
-	}
-	
+
 	public Long getId() {
 		return id;
 	}

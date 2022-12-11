@@ -87,15 +87,12 @@ public class CardRegistry {
 	}
 
 	private boolean saveAlternativerCardNumber(CardYuGiOhAPI apiCard, CardAlternativeNumber alternative) {
-
-		if (alternativeRepository.save(alternative) != null) {
+			
+			alternativeRepository.save(alternative);
+			
 			logger.info("Alternative card number saved!");
 			GeneralFunctions.saveCardInFolder(apiCard.getId());
 			return true;
-
-		} else {
-			throw new RuntimeException("It was not possible save alternative card number");
-		}
 	}
 
 }

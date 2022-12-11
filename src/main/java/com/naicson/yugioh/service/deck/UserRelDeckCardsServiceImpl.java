@@ -33,7 +33,7 @@ public class UserRelDeckCardsServiceImpl {
 	public List<UserRelDeckCards>  addCardsToUserDeck(Long originalDeckId, Long generatedDeckId) {
 		
 		if (originalDeckId == null && generatedDeckId == null)
-			new IllegalArgumentException("Original deck or generated deck is invalid.");
+			throw new IllegalArgumentException("Original deck or generated deck is invalid.");
 		
 		List<RelDeckCards> relDeckCards = relDeckCardsService.findRelByDeckId(originalDeckId);
 		

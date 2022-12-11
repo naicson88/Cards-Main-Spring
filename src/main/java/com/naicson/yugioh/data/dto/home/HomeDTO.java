@@ -30,10 +30,6 @@ public class HomeDTO {
 	private List<RankingForHomeDTO> lowCards;
 	@Transient
 	private List<RankingForHomeDTO> weeklyMostView;
-	
-	public HomeDTO() {
-		
-	}
 
 	public Long getId() {
 		return id;

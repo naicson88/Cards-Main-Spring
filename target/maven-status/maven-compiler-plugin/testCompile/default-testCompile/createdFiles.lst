@@ -1,8 +1,14 @@
 com\naicson\yugioh\mocks\UserDeckMock.class
 com\naicson\yugioh\mocks\CardAlternativeNumberMock.class
-com\naicson\yugioh\YugiohApplicationTests.class
 com\naicson\yugioh\deck\DeckServiceImplTest.class
+com\naicson\yugioh\card\CardRegistryTest.class
+com\naicson\yugioh\mocks\CardPriceInformationMock.class
+com\naicson\yugioh\YugiohApplicationTests.class
+com\naicson\yugioh\mocks\CardYuGiOhAPIMock.class
+com\naicson\yugioh\deck\UserDeckServiceImplTest.class
+com\naicson\yugioh\mocks\RelDeckCardsMock.class
 com\naicson\yugioh\card\CardServiceImplTest.class
 com\naicson\yugioh\mocks\RelUserDeckDTOMock.class
-com\naicson\yugioh\mocks\CardPriceInformationMock.class
+com\naicson\yugioh\consumer\ConsumerUtilsTest.class
 com\naicson\yugioh\util\ValidObjects.class
+com\naicson\yugioh\mocks\CardSetDetailsDTOMock.class

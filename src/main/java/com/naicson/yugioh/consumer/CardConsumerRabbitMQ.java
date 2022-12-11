@@ -7,14 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
@@ -42,14 +38,14 @@ public class CardConsumerRabbitMQ {
 	@Autowired
 	ConsumerUtils consumerUtils;
 
-	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
+	Logger logger = LoggerFactory.getLogger(CardConsumerRabbitMQ.class);
 
 	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class })
 	public void consumer(String json) {
 		logger.info("Start saving Card on Deck: {}", json);
 
-		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.ADD_NEW_CARD);
+		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.ADD_NEW_CARD);
 
 		Long cardId = this.verifyIfCardIsAlreadyRegistered(card);
 
@@ -74,7 +70,8 @@ public class CardConsumerRabbitMQ {
 
 	private RelDeckCards createRelDeckCards(Long cardId, AddNewCardToDeckDTO card) {
 
-		return new RelDeckCards.RelDeckCardsBuilder(card.getDeckId(),
+		return new RelDeckCards.RelDeckCardsBuilder(
+				card.getDeckId(),
 				card.getNumber(), 
 				card.getCardSetCode(),
 				card.getPrice(),
@@ -89,21 +86,4 @@ public class CardConsumerRabbitMQ {
 				.build();
 	}
 
-	private AddNewCardToDeckDTO convertJsonToNewCardDTO(String json) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-			AddNewCardToDeckDTO dto = mapper.readValue(json, AddNewCardToDeckDTO.class);
-			return dto;
-
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
 }

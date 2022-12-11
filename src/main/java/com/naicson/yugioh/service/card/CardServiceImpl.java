@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -91,7 +92,7 @@ public class CardServiceImpl implements CardDetailService {
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
 		if(cardsNumbers == null || cardsNumbers.length == 0) 
-			 new ErrorMessage("Unable to query user cards, decks IDs not entered");
+			 throw new ErrorMessage("Unable to query user cards, decks IDs not informed");
 				
 	     String cardsNumbersString = "";
 	     
@@ -313,7 +314,8 @@ public class CardServiceImpl implements CardDetailService {
 		CardSpecification spec = new CardSpecification();
 		
 		criterias.stream().forEach(criterio ->
-		spec.add(new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue())));
+			spec.add(new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
+			);
 		
 		Page<Card> list = this.findAll(spec, pageable);
 		
@@ -451,7 +453,7 @@ public class CardServiceImpl implements CardDetailService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	private void saveNewAlternativeImages(Integer cardId, HashSet<Long> numbers) {
+	public void saveNewAlternativeImages(Integer cardId, Set<Long> numbers) {
 		numbers.stream().forEach(num -> {
 			CardAlternativeNumber alt = new CardAlternativeNumber(null, cardId, num);
 			alternativeRepository.save(alt);

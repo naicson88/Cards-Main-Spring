@@ -26,6 +26,7 @@ import com.naicson.yugioh.repository.SetCollectionRepository;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
+import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
 
 @Service
@@ -63,9 +64,10 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		
 		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
 		
-		if(setDetailsDto.getInsideDecks() != null && setDetailsDto.getInsideDecks().size() > 0)	
-			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
-		
+//		if(setDetailsDto.getInsideDecks() != null && setDetailsDto.getInsideDecks().size() > 0)	
+//			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
+//		
+		setDetailsDto.setQuantityUserHave(userSetRepository.countQuantityOfASetUserHave(setId.intValue(), GeneralFunctions.userLogged().getId()));
 		return setDetailsDto;
 	}
 	

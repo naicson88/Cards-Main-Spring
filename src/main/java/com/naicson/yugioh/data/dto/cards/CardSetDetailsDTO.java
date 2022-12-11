@@ -3,8 +3,6 @@ package com.naicson.yugioh.data.dto.cards;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Atributo;
@@ -44,42 +42,6 @@ public class CardSetDetailsDTO {
 	private Long cardNumber;
 	private Boolean isSideDeck;
 	private Boolean isSpeedDuel;
-	
-	public CardSetDetailsDTO(Integer id, Long numero, String categoria, String nome, String nomePortugues,
-			Atributo atributo, String propriedade, Integer nivel, Integer atk, Integer def, String descricao,
-			String descricaoPortugues, String imagem, Integer escala, String descr_pendulum, String descr_pendulum_pt,
-			String qtd_link, List<Deck> sets, String genericType, TipoCard tipo, Archetype archetype, Date registryDate,
-			List<CardAlternativeNumber> alternativeCardNumber, List<CardRarityDTO> listCardRarity, Long cardNumber,
-			Boolean isSideDeck, Boolean isSpeedDuel) {
-		super();
-		this.id = id;
-		this.numero = numero;
-		this.categoria = categoria;
-		this.nome = nome;
-		this.nomePortugues = nomePortugues;
-		this.atributo = atributo;
-		this.propriedade = propriedade;
-		this.nivel = nivel;
-		this.atk = atk;
-		this.def = def;
-		this.descricao = descricao;
-		this.descricaoPortugues = descricaoPortugues;
-		this.imagem = imagem;
-		this.escala = escala;
-		this.descr_pendulum = descr_pendulum;
-		this.descr_pendulum_pt = descr_pendulum_pt;
-		this.qtd_link = qtd_link;
-		this.sets = sets;
-		this.genericType = genericType;
-		this.tipo = tipo;
-		this.archetype = archetype;
-		this.registryDate = registryDate;
-		this.alternativeCardNumber = alternativeCardNumber;
-		this.listCardRarity = listCardRarity;
-		this.cardNumber = cardNumber;
-		this.isSideDeck = isSideDeck;
-		this.isSpeedDuel = isSpeedDuel;
-	}
 
 	public CardSetDetailsDTO() {}
 

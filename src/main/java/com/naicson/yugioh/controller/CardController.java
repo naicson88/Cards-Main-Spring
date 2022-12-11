@@ -48,7 +48,7 @@ public class CardController {
 	@Autowired
 	DeckServiceImpl deckService;
 	
-	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
+	Logger logger = LoggerFactory.getLogger(CardController.class);
 	
 	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
 	@GetMapping(path = {"num/{numero}"})
@@ -62,7 +62,7 @@ public class CardController {
 
 		CardDetailsDTO card = cardService.findCardByNumberWithDecks(cardNumero);
 
-		return new ResponseEntity<CardDetailsDTO>(card, HttpStatus.OK);		
+		return new ResponseEntity<>(card, HttpStatus.OK);		
 	}	
 	
 	@PostMapping(path = {"/searchCard"})
@@ -72,7 +72,7 @@ public class CardController {
 			
 		List<CardsSearchDTO> list = cardService.cardSearch(criterias, join, pageable);
 		
-		return new ResponseEntity<List<CardsSearchDTO>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
 	@PostMapping(path = {"/searchCardDetailed"})
@@ -81,7 +81,7 @@ public class CardController {
 			@RequestBody List<SearchCriteria> criterias, String join){
 		Page<Card> listCards = cardService.searchCardDetailed(criterias, join, pageable);
 		
-		return new ResponseEntity<Page<Card>>(listCards, HttpStatus.OK);
+		return new ResponseEntity<>(listCards, HttpStatus.OK);
 	}
 	
 	@GetMapping(path = {"/randomCards"})
@@ -98,7 +98,7 @@ public class CardController {
 		
 		List<Card> cards = cardService.randomCardsDetailed();
 		
-		return new ResponseEntity<List<Card>>(cards, HttpStatus.OK);
+		return new ResponseEntity<>(cards, HttpStatus.OK);
 	}
 	
 	@GetMapping(path = {"/rel-user-cards"})
@@ -127,7 +127,7 @@ public class CardController {
 
 		CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardId);	
 		
-		return new ResponseEntity<CardOfUserDetailDTO>(cardDetailDTO, HttpStatus.OK);	
+		return new ResponseEntity<>(cardDetailDTO, HttpStatus.OK);	
 	}
 	
 	@GetMapping(path = {"/cardname-usercollection"})

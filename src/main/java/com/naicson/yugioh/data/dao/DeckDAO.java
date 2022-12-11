@@ -21,21 +21,18 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.DeckRepository;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
 
 @Repository
 @Transactional
 public class DeckDAO {
 	
-	@PersistenceContext
+	 @PersistenceContext
 	 EntityManager em;
-	
-	 Query query = null;
 	 
 	 @Autowired
 	 DeckRepository deckRepository;
 	 
-	 Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
+	 Logger logger = LoggerFactory.getLogger(DeckDAO.class);
 	 
 	 
 	public DeckDAO() {
@@ -53,9 +50,7 @@ public class DeckDAO {
 				.setParameter("deck_id", originalDeckId);
 		
 		BigInteger inserted = (BigInteger) query.getSingleResult();
-		int id = (int) inserted.longValue();
-		
-		return id;			
+		 return (int) inserted.longValue();		
 		
 	}
 	
@@ -76,8 +71,7 @@ public class DeckDAO {
 		Query query = em.createNativeQuery("SELECT * FROM tab_rel_deck_cards WHERE DECK_ID = :deckId", DeckDTO.class)
 				.setParameter("deckId", originalDeckId);
 		
-		List<DeckDTO> relationDeckAndCards = (List<DeckDTO>) query.setParameter("deckId", originalDeckId).getResultList();
-		return relationDeckAndCards;			
+		return (List<DeckDTO>) query.setParameter("deckId", originalDeckId).getResultList();		
 	}
 	
 	public boolean verifyIfUserAleadyHasTheCard(long userId, String cardSetCode) {
@@ -86,31 +80,21 @@ public class DeckDAO {
 				.setParameter("cardSetCode", cardSetCode)
 				.setParameter("userId", userId);
 		
-		int has =  ((Number) query.getSingleResult()).intValue();
-		
-		if(has > 0)
-			return true;
-		else
-			return false;	
+		return ((Number) query.getSingleResult()).intValue() > 0 ? true : false;
 	}
 	
 	public int verifyIfUserAleadyHasTheDeck(Long originalDeckId, long userId) {
-		Integer has = null;
+
 		Query query = em.createNativeQuery(" SELECT qtd FROM tab_rel_user_deck WHERE deck_id = :deckId AND USER_ID = :userId ")
 				.setParameter("userId", userId)
 				.setParameter("deckId", originalDeckId);
 		
 		try {
 			//Quando ele não acha nada, acusa um exception, este try catch é só pra ignorar. 
-			 has = ((Number) query.getSingleResult()).intValue();
+			return ((Number) query.getSingleResult()).intValue();
 		} catch(NoResultException e) {
-			
-		}
-				
-		if(has != null && has > 0)
-			return has;
-		else
 			return 0;
+		}
 			
 	}
 	
@@ -213,9 +197,8 @@ public class DeckDAO {
 	}
 
 	public List<Card> consultMainDeck(Long deckId) {
-		Query query = null;
 		
-		 query = em.createNativeQuery(
+		 Query query = em.createNativeQuery(
 				  " SELECT * FROM TAB_CARDS CARDS "
 			    + " INNER JOIN tab_rel_deckusers_cards rel on rel.card_id = cards.id "	 
 				+ " WHERE cards.id IN "
@@ -244,22 +227,17 @@ public class DeckDAO {
 	}
 
 	public List<Card> consultExtraDeckCards(Long deckId, String userOrKonamiDeck) {
-		Query query = null;
 		
-		if(userOrKonamiDeck.equalsIgnoreCase("User")) {
-			 query = em.createNativeQuery(
+		if(!userOrKonamiDeck.equals("User"))
+			throw new IllegalArgumentException("Type of deck not informed");
+		
+		Query query = em.createNativeQuery(
 			  " SELECT * FROM TAB_CARDS CARDS "
 			+ " INNER JOIN tab_rel_deckusers_cards rel on rel.card_id = cards.id"	 
 			+ " WHERE cards.id IN "
 			+ " (SELECT card_id FROM tab_rel_deckusers_cards WHERE DECK_ID = :deckId and (is_side_deck = 0 or is_side_deck is null)) "
 			+ " AND CARDS.GENERIC_TYPE IN ('XYZ', 'SYNCHRO', 'FUSION', 'LINK') and deck_id = :deckId  and is_side_deck = 0 order by cards.generic_type", Card.class);
-			
-		} else if (userOrKonamiDeck.equalsIgnoreCase("Konami")) {
-			
-		} else {
-			throw new IllegalArgumentException("Type of deck not informed");
-		}
-		
+	
 		List<Card> cards = (List<Card>) query.setParameter("deckId", deckId).getResultList();
 		
 		return cards;

@@ -141,7 +141,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("Invalid Card Number: " + cardNumber);
 		
-		if (cardRepository.findByNumero(cardNumber) == null ) 
+		if (cardRepository.findByNumero(cardNumber).isEmpty()) 
 			throw new EntityNotFoundException("Can't find card with number: " + cardNumber);
 		
 	}

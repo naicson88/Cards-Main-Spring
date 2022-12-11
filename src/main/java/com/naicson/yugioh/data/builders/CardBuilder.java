@@ -11,7 +11,7 @@ import com.naicson.yugioh.entity.TipoCard;
 
 public class CardBuilder {
 	
-	public Card card;
+	private Card card;
 	
 	public CardBuilder () {
 		this.card = new Card();
@@ -124,8 +124,8 @@ public class CardBuilder {
 		if(cardToBeRegistered.getRegistryDate() == null)
 			throw new IllegalArgumentException("Invalid Registry Date of Card");
 
-		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")) {
-			if (cardToBeRegistered.getQtd_link() == null || cardToBeRegistered.getQtd_link().equals("0"))
+		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")
+				&& cardToBeRegistered.getQtd_link() == null || cardToBeRegistered.getQtd_link().equals("0")) {
 				throw new IllegalArgumentException("Invalid Link Quantity.");
 		}
 		
