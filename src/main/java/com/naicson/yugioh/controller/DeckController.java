@@ -1,6 +1,8 @@
 package com.naicson.yugioh.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.strategy.setDetails.SetDetailsStrategy;
+import com.naicson.yugioh.data.strategy.setDetails.SetDetailsType;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
@@ -49,8 +53,14 @@ public class DeckController<T> {
 	@Autowired
 	ISetsByType<T> setsBySetType;
 	
-	Page<DeckSummaryDTO> setList = null;
+	private final Map<SetDetailsType, SetDetailsStrategy> getDetailByType;
 	
+	public DeckController(Map<SetDetailsType, SetDetailsStrategy> getDetailByType) {
+		super();
+		this.getDetailByType = getDetailByType;
+	}
+
+	Page<DeckSummaryDTO> setList = null;
 
 	@GetMapping("/todos")
 	public List<Deck> consultar() {
@@ -68,20 +78,30 @@ public class DeckController<T> {
 	    return new ResponseEntity<>(setList, HttpStatus.OK);
 
 	}
-
+	
 	@GetMapping("/set-details")
 	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
-	//@Cacheable(value = "setDetails")
+	@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
-		SetDetailsDTO deck = null;	
 		
-		if("DECK".equals(setType))
-			deck = deckService.deckAndCards(id, source);		
-		else 
-			deck = setCollService.setCollectionDetailsAsDeck(id, source);
-			
-		return new ResponseEntity<>(deck, HttpStatus.OK) ;
-	}	
+		SetDetailsStrategy setDetailStrategy = getDetailByType.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
+
+		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source), HttpStatus.OK) ;
+	}
+
+//	@GetMapping("/set-details")
+//	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
+//	@Cacheable(value = "setDetails")
+//	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
+//		SetDetailsDTO deck = null;	
+//		
+//		if("DECK".equals(setType))
+//			deck = deckService.deckAndCards(id, source);		
+//		else 
+//			deck = setCollService.setCollectionDetailsAsDeck(id, source);
+//			
+//		return new ResponseEntity<>(deck, HttpStatus.OK) ;
+//	}	
 	
 	@GetMapping("/search-by-set-name")
 	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })

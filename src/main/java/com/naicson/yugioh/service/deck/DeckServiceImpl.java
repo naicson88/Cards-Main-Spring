@@ -62,7 +62,7 @@ public class DeckServiceImpl implements DeckDetailService {
 	DeckRepository deckRepository;
 	
 	@Autowired
-	RelDeckCardsRepository relDeckCardsRepository;
+	RelDeckCardsServiceImpl relService;
 	
 	@Autowired
 	UserDeckRepository userDeckRepository;
@@ -72,9 +72,9 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
-	public DeckServiceImpl(DeckRepository deckRepository, RelDeckCardsRepository relDeckCardsRepository, DeckDAO dao) {
+	public DeckServiceImpl(DeckRepository deckRepository, RelDeckCardsServiceImpl relService, DeckDAO dao) {
 		this.deckRepository = deckRepository;
-		this.relDeckCardsRepository = relDeckCardsRepository;
+		this.relService = relService;
 		this.dao = dao;
 	}
 
@@ -102,7 +102,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		List<RelDeckCards> relation = new ArrayList<>();
 
 		if ("konami".equalsIgnoreCase(setSource))
-			relation = relDeckCardsRepository.findByDeckId(deckId);
+			relation = relService.findRelByDeckId(deckId);
 		else if ("user".equalsIgnoreCase(setSource))
 			relation = dao.relDeckUserCards(deckId);
 		else
@@ -152,28 +152,18 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 		
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
-		dto.setQuantityUserHave(userDeckRepository.countQuantityOfADeckUserHave(deckId, GeneralFunctions.userLogged().getId()));
+		dto.setQuantityUserHave(quantityUserHaveDeck(deckId));
 
 		//dto = utils.getSetStatistics(dto);
 
 		return dto;
 	}
-	
-	public Map<String, Long> countDeckRarityQuantity(SetDetailsDTO dto){
-		
-		List<CardSetDetailsDTO> listCards = new ArrayList<>();
-			
-		dto.getInsideDecks().forEach(in -> { listCards.addAll(in.getCards()); });
-				
-		Map<String, Long> mapRarity = listCards.stream()
-				.collect(Collectors.groupingBy(
-				card -> card.getListCardRarity().get(0).getCard_raridade(), Collectors.counting()
-				));
-				
-			return mapRarity;	
+
+	public Integer quantityUserHaveDeck(Long deckId) {
+		return userDeckRepository.countQuantityOfADeckUserHave(deckId, GeneralFunctions.userLogged().getId());
 	}
 	
-	private SetDetailsDTO convertDeckToSetDetailsDTO(Deck deck) {
+	public SetDetailsDTO convertDeckToSetDetailsDTO(Deck deck) {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
@@ -196,6 +186,20 @@ public class DeckServiceImpl implements DeckDetailService {
 		dto.setInsideDecks(List.of(insideDeck));
 
 		return dto;
+	}
+	
+	public Map<String, Long> countDeckRarityQuantity(SetDetailsDTO dto){
+		
+		List<CardSetDetailsDTO> listCards = new ArrayList<>();
+			
+		dto.getInsideDecks().forEach(in -> { listCards.addAll(in.getCards()); });
+				
+		Map<String, Long> mapRarity = listCards.stream()
+				.collect(Collectors.groupingBy(
+				card -> card.getListCardRarity().get(0).getCard_raridade(), Collectors.counting()
+				));
+				
+			return mapRarity;	
 	}
 
 	@Override
@@ -225,6 +229,18 @@ public class DeckServiceImpl implements DeckDetailService {
 		deck.setRel_deck_cards(relDeckCards);
 
 		return deck;
+	}
+	
+	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, String source) {
+		
+		deck.setCards(this.cardsOfDeck(deckId, table));
+		deck.setRel_deck_cards(this.relDeckCards(deckId, source));
+		
+		SetDetailsDTO dto = this.convertDeckToSetDetailsDTO(deck);
+		dto.setQuantity(this.countDeckRarityQuantity(dto));
+		dto.setQuantityUserHave(this.quantityUserHaveDeck(deckId));
+		//dto = utils.getSetStatistics(dto);
+		return dto;
 	}
 
 	@Override
@@ -418,14 +434,13 @@ public class DeckServiceImpl implements DeckDetailService {
 		if(quantity == null || setCode == null)
 			throw new IllegalAccessError("Invalid information to update SetCode Quantity");
 		
-		List<RelDeckCards> rel = relDeckCardsRepository.findByCardSetCodeLike(setCode)
-				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
+		List<RelDeckCards> rel = relService.findByCardSetCodeLike(setCode);
 		
 		if(rel.size() < quantity) {
 			for(int i = rel.size(); i < quantity; i++) {
 				RelDeckCards relCopied = SerializationUtils.clone(rel.get(0)); 
 				relCopied.setId(null);
-				relDeckCardsRepository.save(relCopied);
+				relService.save(relCopied);
 			}	
 		}
 	}

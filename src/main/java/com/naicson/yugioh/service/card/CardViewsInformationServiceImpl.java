@@ -35,10 +35,8 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	
 	@Override
 	public List<RankingForHomeDTO> getWeeklyMostViewed(){
-	
-			CardStats stats = CardStats.VIEW;
-			CardStats.valueOf(CardStats.VIEW.toString());
-			List<CardViewsInformation> cardViews = stats.getStatsView(cardViewsRepository);
+			
+			List<CardViewsInformation> cardViews = CardStats.VIEW.getStatsView(cardViewsRepository);
 			
 			List<RankingForHomeDTO> rankingList = this.fromCardViewsInfoToRankingDTO(cardViews);
 			

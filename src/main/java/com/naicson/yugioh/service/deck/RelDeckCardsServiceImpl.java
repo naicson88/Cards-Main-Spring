@@ -2,6 +2,9 @@ package com.naicson.yugioh.service.deck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
@@ -50,6 +54,15 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails {
 			throw new IllegalArgumentException("Invalid Deck Id to remove Relation");
 		
 		relDeckCardsRepository.deleteRelUserDeckByDeckId(deckId);
+	}
+
+	public List<RelDeckCards> findByCardSetCodeLike(String setCode) {
+		return relDeckCardsRepository.findByCardSetCodeLike(setCode)
+				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
+	}
+
+	public void save(RelDeckCards relCopied) {
+		relDeckCardsRepository.save(relCopied);
 	}
 	
 }
