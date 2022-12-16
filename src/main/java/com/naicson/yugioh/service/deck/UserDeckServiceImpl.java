@@ -143,7 +143,7 @@ public class UserDeckServiceImpl {
 		if (deckUserId == null || deckUserId == 0)
 			throw new IllegalArgumentException("Deck User Id informed is invalid");
 
-		List<RelDeckCards> relation = dao.relDeckUserCards(deckUserId);
+		List<RelDeckCards> relation = dao.findRelationByDeckId(deckUserId);
 
 		if (relation.isEmpty())
 			return Collections.emptyList();
@@ -185,7 +185,7 @@ public class UserDeckServiceImpl {
 		UserDeck setOrigem = userDeckRepository
 				.findById(setId).orElseThrow(() -> new NoSuchElementException("Set not found with this code. ID = " + setId));
 		
-		if(dao.relDeckUserCards(setId).size() > 0) {
+		if(dao.findRelationByDeckId(setId).size() > 0) {
 			 qtdRemoved = dao.removeCardsFromUserSet(setId);
 
 			if (qtdRemoved <= 0)

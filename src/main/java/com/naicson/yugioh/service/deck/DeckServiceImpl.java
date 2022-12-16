@@ -3,7 +3,6 @@ package com.naicson.yugioh.service.deck;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.bridge.source.SourceTypes;
+import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
 import com.naicson.yugioh.data.dao.DeckDAO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
@@ -41,7 +42,6 @@ import com.naicson.yugioh.entity.DeckRarityQuantity;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.DeckRepository;
-import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
@@ -67,8 +67,8 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Autowired
 	UserDeckRepository userDeckRepository;
 	
-	@Autowired
-	SetsUtils utils;
+//	@Autowired
+//	SetsUtils utils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -94,20 +94,15 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public List<RelDeckCards> relDeckCards(Long deckId, String setSource) {
+	public List<RelDeckCards> relDeckCards(Long deckId, SourceTypes setSource) {
 
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
-
-		List<RelDeckCards> relation = new ArrayList<>();
-
-		if ("konami".equalsIgnoreCase(setSource))
-			relation = relService.findRelByDeckId(deckId);
-		else if ("user".equalsIgnoreCase(setSource))
-			relation = dao.relDeckUserCards(deckId);
-		else
-			throw new IllegalArgumentException("Informed Set Source is invalid!" + setSource);
-
+		
+		RelDeckCardsRelationBySource src = setSource.getRelationCards(Map.of(SourceTypes.KONAMI, relService, SourceTypes.USER, dao));
+		
+		List<RelDeckCards> relation = src.findRelationByDeckId(deckId);
+		
 		if (relation == null || relation.size() == 0) 
 			return Collections.emptyList();
 
@@ -142,12 +137,9 @@ public class DeckServiceImpl implements DeckDetailService {
 
 
 	@Override
-	public SetDetailsDTO deckAndCards(Long deckId, String deckSource) {
+	public SetDetailsDTO deckAndCards(Long deckId, SourceTypes deckSource, String table) {
 
-		if (!("Konami").equalsIgnoreCase(deckSource) && !("User").equalsIgnoreCase(deckSource))
-			throw new IllegalArgumentException("Deck Source invalid: " + deckSource);
-
-		Deck deck = this.returnDeckWithCards(deckId, deckSource);
+		Deck deck = this.returnDeckWithCards(deckId, deckSource, table);
 
 		SetDetailsDTO dto = convertDeckToSetDetailsDTO(deck);
 		
@@ -203,25 +195,23 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public Deck returnDeckWithCards(Long deckId, String deckSource) {
+	public Deck returnDeckWithCards(Long deckId, SourceTypes deckSource, String table) {
 
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Invalid Deck Id. deckId = " + deckId);
 		
 		Deck deck = new Deck();
 		
-		if ("konami".equalsIgnoreCase(deckSource))
+		if (deckSource.equals(SourceTypes.KONAMI))
 			 deck = this.findById(deckId);
 
-		else if ("user".equalsIgnoreCase(deckSource)) {
+		else if (deckSource.equals(SourceTypes.USER)) {
 			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
 			 deck = Deck.deckFromDeckUser(deckUser);
-
-		} else
-			throw new IllegalArgumentException("Invalid Deck Source: " + deckSource);
-
-		String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
-
+		}
+		
+		//String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
+		
 		List<Card>  mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);
 
@@ -231,7 +221,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;
 	}
 	
-	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, String source) {
+	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, SourceTypes source) {
 		
 		deck.setCards(this.cardsOfDeck(deckId, table));
 		deck.setRel_deck_cards(this.relDeckCards(deckId, source));
@@ -277,31 +267,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		return deck;
 	}
-
-//	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
-//		
-//		if(deck == null || mapRarities == null)
-//			throw new IllegalArgumentException("Invalid information to map rarities");
-//		
-//		mapRarities.forEach((key, value) ->{
-//			ECardRarity rarity = ECardRarity.getRarityByName(key);
-//			switch (rarity) {		
-//				case COMMON: deck.setQtd_comuns(value); break;				
-//				case RARE: deck.setQtd_raras(value); break;			
-//				case SUPER_RARE: deck.setQtd_super_raras(value); break;			
-//				case ULTRA_RARE: deck.setQtd_ultra_raras(value); break;		
-//				case SECRET_RARE: deck.setQtd_secret_raras(value); break;				
-//				case ULTIMATE_RARE: deck.setQtd_ultimate_raras(value); break;
-//				case GOLD_RARE: deck.setQtd_gold_raras(value); break;		
-//				case PARALLEL_RARE: deck.setQtd_parallel_raras(value); break;				
-//				case GHOST_RARE: deck.setQtd_ghost_raras(value); break;					
-//				default:
-//					throw new IllegalArgumentException("Invalid Rarity informed! " + key);
-//			}
-//		});
-//		
-//		return deck;
-//	}
 	
 	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
 	

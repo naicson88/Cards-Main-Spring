@@ -2,6 +2,7 @@ package com.naicson.yugioh.data.bridge.source.set;
 
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
@@ -25,7 +26,7 @@ public class KonamiSourceDeckBridge implements SourceSetBridge {
 			
 		Deck deck = deckService.findById(deckId);
 		
-		return deckService.constructDeckDetails(deckId, deck, TABLE, "konami") ;
+		return deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.KONAMI) ;
 
 	}
 

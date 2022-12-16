@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
@@ -24,7 +25,7 @@ import com.naicson.yugioh.repository.DeckRepository;
 
 @Repository
 @Transactional
-public class DeckDAO {
+public class DeckDAO implements RelDeckCardsRelationBySource{
 	
 	 @PersistenceContext
 	 EntityManager em;
@@ -243,7 +244,8 @@ public class DeckDAO {
 		return cards;
 	}
 
-	public List<RelDeckCards> relDeckUserCards(Long deckUserId) {
+	@Override
+	public List<RelDeckCards> findRelationByDeckId(Long deckUserId) {
 		Query query = em.createNativeQuery("select * from tab_rel_deckusers_cards where deck_id = :deckUserId", RelDeckCards.class);
 			
 		List<RelDeckCards> relation = (List<RelDeckCards>) query.setParameter("deckUserId", deckUserId).getResultList();

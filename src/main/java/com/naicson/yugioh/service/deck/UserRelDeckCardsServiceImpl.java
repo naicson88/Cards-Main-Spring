@@ -35,7 +35,7 @@ public class UserRelDeckCardsServiceImpl {
 		if (originalDeckId == null && generatedDeckId == null)
 			throw new IllegalArgumentException("Original deck or generated deck is invalid.");
 		
-		List<RelDeckCards> relDeckCards = relDeckCardsService.findRelByDeckId(originalDeckId);
+		List<RelDeckCards> relDeckCards = relDeckCardsService.findRelationByDeckId(originalDeckId);
 		
 		if(relDeckCards == null || relDeckCards.size() == 0)
 			throw new NoSuchElementException("Can't find cards for Konami Deck: " + originalDeckId);

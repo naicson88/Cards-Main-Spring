@@ -2,6 +2,7 @@ package com.naicson.yugioh.data.bridge.source.set;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.UserDeck;
@@ -28,7 +29,7 @@ public class UserSourceDeckBridge implements SourceSetBridge {
 				.orElseThrow(() -> new EntityNotFoundException("Can't find UserDeck with ID: " + deckId));
 		Deck deck = Deck.deckFromDeckUser(deckUser);
 		
-		return  deckService.constructDeckDetails(deckId, deck, TABLE, "user");
+		return  deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.USER);
 
 	}
 
