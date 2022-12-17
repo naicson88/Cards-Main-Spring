@@ -12,7 +12,7 @@ public interface SetCollectionService {
 	
 	public SetCollection saveSetCollection(SetCollection setCollection)  throws Exception;
 	
-	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
+//	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
 
 	public List<DeckAndSetsBySetTypeDTO> getAllSetsBySetType(String setType);
 

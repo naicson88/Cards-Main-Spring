@@ -9,10 +9,6 @@ public class RankingForHomeDTO {
 	private Double cardPrice;
 	private Long qtdViewsWeekly;
 	
-	public RankingForHomeDTO() {
-		
-	}
-
 	public String getCardName() {
 		return cardName;
 	}

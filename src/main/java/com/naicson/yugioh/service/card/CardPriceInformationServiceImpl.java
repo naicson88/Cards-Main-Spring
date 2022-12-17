@@ -46,7 +46,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 		
 		if(diference != 0.0) {
 			Double percentDiff = (diference / cardInfo.getPrice2()) * 100;
-			cardInfo.setWeeklyPercentVariable(new BigDecimal(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue());
+			cardInfo.setWeeklyPercentVariable(BigDecimal.valueOf(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {
 			cardInfo.setWeeklyPercentVariable(diference);
 		}

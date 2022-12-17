@@ -25,6 +25,8 @@ public abstract class GeneralFunctions {
 
 	static Logger logger = LoggerFactory.getLogger(GeneralFunctions.class);
 
+	private static Random random = new Random();
+
 	public static UserDetailsImpl userLogged() {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,7 +69,7 @@ public abstract class GeneralFunctions {
 		String[] arrayBoxCases = { "https://i.imgur.com/6aq3xPy.png", "https://i.imgur.com/3pyZ4U9.png",
 				"https://i.imgur.com/cMb2tTF.png", "https://i.imgur.com/ZZvw3oo.png", "https://i.imgur.com/389kGKl.png",
 				"https://i.imgur.com/7E3tMCA.png" };
-		Random random = new Random();
+
 		int randomIndex = random.nextInt(arrayBoxCases.length);
 		return arrayBoxCases[randomIndex];
 	}
@@ -75,7 +77,7 @@ public abstract class GeneralFunctions {
 	public static String getRandomCollectionCase() {
 		String[] arrayBoxCases = { "https://i.imgur.com/1obzCUB.png", "https://i.imgur.com/Lnxe5WI.png",
 				"https://i.imgur.com/s4yGaCe.png", "https://i.imgur.com/bK2lgrq.png" };
-		Random random = new Random();
+
 		int randomIndex = random.nextInt(arrayBoxCases.length);
 		return arrayBoxCases[randomIndex];
 	}
@@ -88,39 +90,44 @@ public abstract class GeneralFunctions {
 			return 0;
 		}
 	}
-	
-	public static void createNewFile(String fileName,  String fileExtension, String path, List<String> informations) {
-		
-		if(fileExtension == null || fileExtension.isBlank() || informations == null
-				|| fileName == null || fileName.isBlank())
+
+	public static void createNewFile(String fileName, String fileExtension, String path, List<String> informations) {
+
+		if (fileExtension == null || fileExtension.isBlank() || informations == null || fileName == null
+				|| fileName.isBlank())
 			throw new IllegalArgumentException("Invalid file extension or file name informed");
 
 		try {
 			logger.info("Starting creating a new File...");
-			
+
 			path = path == null || path.isBlank() ? "C:\\Cards\\" : path;
-			String fullPath = path+fileName+fileExtension;
+			String fullPath = path + fileName + fileExtension;
 			File file = new File(fullPath);
-			
-			 FileWriter fw = new FileWriter(file.getAbsoluteFile());
-	         BufferedWriter bw = new BufferedWriter(fw);
-			
-			if(!file.exists()) {file.createNewFile();}
-			
-			informations.stream().forEach(n -> {try {
-				bw.write(n);
-				bw.newLine();
-			} catch (IOException e) {
-				logger.error("Error while writing information: " + n);
-			}});
-					
-			bw.close();	         
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			fw.close();
+
+			if (!file.exists())
+				file.createNewFile();
+
+			informations.stream().forEach(n -> {
+				try {
+					bw.write(n);
+					bw.newLine();
+				} catch (IOException e) {
+					logger.error("Error while writing information: " + n);
+				}
+
+			});
+			bw.close();
 			logger.info("File created successfully! " + fullPath);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("Error while generaton File: " + e.getMessage());
-		} 
-		
+
+		} finally {
+
+		}
 	}
-	
-	
+
 }

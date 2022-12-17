@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.service.card.CardRegistry;
@@ -30,11 +31,11 @@ public class DeckConsumerRabbitMQ {
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deck}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	private void consumer(String json) {		
+	public void consumer(String json) {		
 			
 		logger.info("Start consuming new KonamiDeck: {}" , json);
 		
-		KonamiDeck kDeck = (KonamiDeck) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.KONAMI_DECK);
+		KonamiDeck kDeck = (KonamiDeck) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.KONAMI_DECK);
 		
 		if(!deckService.findByNome(kDeck.getNome()).isEmpty())
 			throw new ErrorMessage("Deck already registered with that name: " + kDeck.getNome());

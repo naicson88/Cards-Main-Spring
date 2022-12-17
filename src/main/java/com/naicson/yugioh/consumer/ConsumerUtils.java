@@ -11,13 +11,11 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.builders.DeckBuilder;
-import com.naicson.yugioh.data.dto.CollectionDeck;
+import com.naicson.yugioh.data.composite.JsonConverterValidationComposite;
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.KonamiDeck;
-import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
-import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
@@ -26,17 +24,13 @@ import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
+@SuppressWarnings("rawtypes")
 public class ConsumerUtils {
 	
 	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
 	
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
-	
-	public final static String KONAMI_DECK = "KONAMI DECK";
-	public final static String ADD_NEW_CARD = "ADD NEW CARD";
-	public final static String COLLECTION_DECK = "COLLECTION DECK";
-	public final static String SET_COLLECTION = "SET COLLECTION";
 	
 	public  Deck createNewDeck(KonamiDeck kDeck) {
 			
@@ -59,9 +53,9 @@ public class ConsumerUtils {
 	
 	public  Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
 		
-		if(deckId == null || deckId == 0) {
+		if(deckId == null || deckId == 0) 
 			throw new IllegalArgumentException("Generated Deck Id is invalid.");
-		}		
+				
 		newDeck.getRel_deck_cards().stream().forEach(rel -> {
 			rel.setDeckId(deckId);
 			rel.setQuantity(1);			
@@ -84,32 +78,49 @@ public class ConsumerUtils {
 		
 		return listRelDeckCards;
 	}
-	
-	public Object convertJsonToSetCollectionDto(String json, String obj) {		
+	public Object convertJsonToSetCollectionDto(String json, String obj) {
+		
 		try {
+	
+			for(JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {
+				
+				if(criteria.validate(obj)) {				
+					return new ObjectMapper()
+					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+					.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true)
+					.readValue(json,   criteria.objetoRetorno);
+				}
+			}
 			
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+			throw new IllegalArgumentException(" Invalid Object to mapper: " + obj);
 			
-			if(KONAMI_DECK.equals(obj))
-				return mapper.readValue(json, KonamiDeck.class);
-			else if(ADD_NEW_CARD.equals(obj))
-				return mapper.readValue(json, AddNewCardToDeckDTO.class);
-			else if(COLLECTION_DECK.equals(obj))
-				return mapper.readValue(json, CollectionDeck.class);
-			else if(SET_COLLECTION.equals(obj))
-				return mapper.readValue(json, SetCollectionDto.class);
-			else
-				throw new IllegalArgumentException("Invalid Object to mapper");
-			
-		} catch (JsonMappingException e) {
+		} catch (JsonProcessingException e ) {
 			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());			
+		} 
+}
+	
+//	public Object convertJsonToSetCollectionDto(String json, String obj) {		
+//		try {
+//			
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+//			
+//			if(KONAMI_DECK.equals(obj))
+//				return mapper.readValue(json, KonamiDeck.class);
+//			else if(ADD_NEW_CARD.equals(obj))
+//				return mapper.readValue(json, AddNewCardToDeckDTO.class);
+//			else if(COLLECTION_DECK.equals(obj))
+//				return mapper.readValue(json, CollectionDeck.class);
+//			else if(SET_COLLECTION.equals(obj))
+//				return mapper.readValue(json, SetCollectionDto.class);
+//			else
+//				throw new IllegalArgumentException(" Invalid Object to mapper: " + obj);
+//			
+//		} catch (JsonProcessingException e ) {
+//			e.printStackTrace();
+//			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());			
+//		} 
+//	}
 }

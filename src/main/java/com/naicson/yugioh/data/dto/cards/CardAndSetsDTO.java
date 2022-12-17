@@ -11,10 +11,6 @@ public class CardAndSetsDTO {
 	private Map<String, String> mapDeckSetcode;
 	private Map<Long, String> mapSetsOfUser;
 	
-	public CardAndSetsDTO() {
-		
-	}
-
 	public long getNumero() {
 		return numero;
 	}

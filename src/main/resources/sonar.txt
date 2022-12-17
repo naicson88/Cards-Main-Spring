@@ -1,0 +1,1 @@
+mvn clean verify sonar:sonar -Dsonar.projectKey=cards-main -Dsonar.host.url=http://localhost:9000 -Dsonar.login=f9c9006a75f35ef1cd917dfb6b73f33b0652fd4b

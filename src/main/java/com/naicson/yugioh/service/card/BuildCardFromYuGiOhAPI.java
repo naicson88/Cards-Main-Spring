@@ -9,9 +9,12 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.naicson.yugioh.consumer.CollectionDeckConsumerRabbitMQ;
 import com.naicson.yugioh.data.builders.CardBuilder;
 import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
 import com.naicson.yugioh.entity.Archetype;
@@ -35,6 +38,8 @@ public class BuildCardFromYuGiOhAPI {
 	
 	@Autowired
 	TipoCardRepository cardTypeRepository;
+	
+	Logger logger = LoggerFactory.getLogger(BuildCardFromYuGiOhAPI.class);
 	
 	public Card createCard(CardYuGiOhAPI apiCard) {
 
@@ -88,11 +93,13 @@ public class BuildCardFromYuGiOhAPI {
 		if(archetype == null || archetype.isBlank())
 			return null;
 		
-	Archetype arch = Optional.of(archService.getCardArchetypeByName(archetype.trim()))
-				.orElseGet(() -> archService.saveArchetype(archetype.trim()));
-		
-		System.out.println(arch.toString());
-		
+	   Archetype arch = archService.getCardArchetypeByName(archetype.trim());
+			
+	   if(arch == null) {
+		   arch = archService.saveArchetype(archetype.trim());
+		   logger.info("New Archetype registered: {} ", arch.toString());
+	   }
+	
 		return arch;	
 	}
 

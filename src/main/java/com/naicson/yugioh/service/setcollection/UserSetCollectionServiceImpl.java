@@ -25,7 +25,6 @@ import com.naicson.yugioh.data.dto.cards.CardSetCollectionDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.DeckRarityQuantity;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.entity.sets.SetCollection;
@@ -200,7 +199,7 @@ public class UserSetCollectionServiceImpl {
 		Double totalPrice = cards.stream().filter(c -> c.getQuantityUserHave() > 0)
 				.mapToDouble(c -> c.getRelDeckCards().getCard_price() * c.getQuantityUserHave()).sum();
 
-		return new BigDecimal(totalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return  BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 	}
 
@@ -294,12 +293,6 @@ public class UserSetCollectionServiceImpl {
 
 		UserSetCollection set = userSetRepository.findById(userCollection.getId())
 				.orElseThrow(() -> new EntityNotFoundException("Set not found with ID: " + userCollection.getId()));
-
-//		if(!set.getName().equals(userCollection.getName())) {
-//			set.setName(userCollection.getName());
-//			userSetRepository.save(set);
-//			logger.info("Set Name changed. ID: {}", set.getId());
-//		}
 
 		Long deckId = userSetRepository.consultSetUserDeckRelation(set.getId()).get(0);
 

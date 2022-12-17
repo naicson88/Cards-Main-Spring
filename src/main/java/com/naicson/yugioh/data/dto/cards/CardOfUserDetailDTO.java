@@ -14,10 +14,6 @@ public class CardOfUserDetailDTO {
 	private List<CardsOfUserSetsDTO> setsWithThisCard;
 	private List<CardsOfUserSetsDTO> setsUserDontHave;
 	
-	public CardOfUserDetailDTO() {
-		
-	}
-	
 	public String getCardImage() {
 		return cardImage;
 	}

@@ -86,7 +86,7 @@ public class UserDeckServiceImplTest {
 		doReturn(mainDeck).when(dao).consultMainDeck(deckId);
 		doReturn(sideDeck).when(dao).consultSideDeckCards(deckId, "User");
 		doReturn(extraDeck).when(dao).consultExtraDeckCards(deckId, "User");
-		doReturn(rel).when(dao).relDeckUserCards(deckId);
+		doReturn(rel).when(dao).findRelationByDeckId(deckId);
 		
 		Deck deck = deckService.editUserDeck(deckId);
 		
@@ -103,7 +103,7 @@ public class UserDeckServiceImplTest {
 		Long setId = 1L;
 		
 		Mockito.when(userDeckRepository.findById(setId)).thenReturn(opt);
-		Mockito.when(dao.relDeckUserCards(setId)).thenReturn(listRel);
+		Mockito.when(dao.findRelationByDeckId(setId)).thenReturn(listRel);
 		Mockito.when(dao.removeCardsFromUserSet(setId)).thenReturn(40);
 		doNothing().when(userDeckRepository).deleteById(anyLong());
 		

@@ -1,6 +1,5 @@
 package com.naicson.yugioh.data.dto.cards;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,8 +18,6 @@ public class CardSetCollectionDTO {
 	private boolean isSpeedDuel;
 	private String genericType;
 	private int sortOrder;
-	
-	private CardSetCollectionDTO() {}
 	
 	public CardSetCollectionDTO(Integer cardId, Integer number, String name,int quantityUserHave,
 			int quantityOtherCollections, RelDeckCards rel, boolean isSpeedDuel, String genericType) {

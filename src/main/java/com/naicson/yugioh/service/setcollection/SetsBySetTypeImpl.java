@@ -30,25 +30,20 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	DeckServiceImpl deckService;	
 	@Autowired
 	SetCollectionRepository setRepository;
-	
-	Page<DeckSummaryDTO> pageDTO  = null;
+
 	
 	@Override
 	public Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType) {
-		Page<SetCollection> pageSet = null;
-		Page<Deck> pageDeck;
 		
 		SetType type = SetType.valueOf(setType);
+				
+		Page<DeckSummaryDTO> pageDTO  = null;
 		
-		if(type.equals(SetType.DECK)) {
-			 pageDeck = deckService.findAllBySetType(pageable, setType);		
-			 pageDTO = convertPageDeck(pageDeck);
-			 
-		} else {
-			pageSet =  setRepository.findAllBySetType(pageable, type.toString());
-			pageDTO = this.convertPageSetToPageDeck(pageSet);
-		}
-					
+		if(type.equals(SetType.DECK))
+			 pageDTO = convertPageDeck(deckService.findAllBySetType(pageable, setType)); 
+		else
+			pageDTO = this.convertPageSetToPageDeck(setRepository.findAllBySetType(pageable, type.toString()));
+						
 		 return pageDTO;
 	}
 	
@@ -104,19 +99,15 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 
 	@Override
 	public Page<DeckSummaryDTO> findAllUserSetsByType(Pageable pageable, String setType) {
-		Page<UserSetCollection> pageSet = null;
-		Page<UserDeck> pageDeck;
 		
 		SetType type = SetType.valueOf(setType);
 		
-		if(type.equals(SetType.DECK)) {
-			 pageDeck = userDeckService.findAllBySetType(pageable, setType);		
-			 pageDTO = convertPageUserDeck(pageDeck);
-			 
-		} else {			
-			pageSet =  userSetRepository.findAllBySetCollectionTypeOrderByIdDesc(pageable, type);
-			pageDTO = this.convertPageUserSetToPageDeck(pageSet);
-		}
+		Page<DeckSummaryDTO> pageDTO  = null;
+		
+		if(type.equals(SetType.DECK))	
+			 pageDTO = convertPageUserDeck(userDeckService.findAllBySetType(pageable, setType));
+		else 		
+			pageDTO = this.convertPageUserSetToPageDeck(userSetRepository.findAllBySetCollectionTypeOrderByIdDesc(pageable, type));
 					
 		 return pageDTO;
 	}
@@ -135,7 +126,7 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {
 		
 		DeckSummaryDTO deck = new DeckSummaryDTO();
-		deck.setId(set.getId().longValue());
+		deck.setId(set.getId());
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
 		deck.setSetType(set.getSetCollectionType().toString());

@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.service.card.CardRegistry;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
@@ -19,35 +17,26 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 public class SetCollectionConsumerRabbitMQ {
 	
 	@Autowired
-	CardRegistry cardRegistry;
-	
-	@Autowired
-	DeckServiceImpl deckService;
-	
-	@Autowired
-	RelDeckCardsServiceImpl relDeckCardsService;
-	
-	@Autowired
 	SetCollectionServiceImpl setColService;
 	
 	@Autowired
 	ConsumerUtils consumerUtils;
 	
-	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
+	Logger logger = LoggerFactory.getLogger(SetCollectionConsumerRabbitMQ.class);
 		
 	@RabbitListener(queues = "${rabbitmq.queue.setcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	private void consumerSetCollectionQueue(String json) {
+	public void consumerSetCollectionQueue(String json) {
 			
 		logger.info("Start consuming new Set Collection: {}" , json);
 		
-		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, ConsumerUtils.SET_COLLECTION);
+		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.SET_COLLECTION);
 		
 		SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 	
 		setCollectionEntity = setColService.saveSetCollection(setCollectionEntity);
 			
-		logger.info("Registered Set Collection: {}", setCollectionEntity.toString() );			
+		logger.info("Registered Set Collection: {}", setCollectionEntity.getName());			
 			
 	}
 

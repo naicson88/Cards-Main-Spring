@@ -35,10 +35,8 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	
 	@Override
 	public List<RankingForHomeDTO> getWeeklyMostViewed(){
-	
-			CardStats stats = CardStats.VIEW;
-			CardStats.valueOf(CardStats.VIEW.toString());
-			List<CardViewsInformation> cardViews = stats.getStatsView(cardViewsRepository);
+			
+			List<CardViewsInformation> cardViews = CardStats.VIEW.getStatsView(cardViewsRepository);
 			
 			List<RankingForHomeDTO> rankingList = this.fromCardViewsInfoToRankingDTO(cardViews);
 			
@@ -141,7 +139,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("Invalid Card Number: " + cardNumber);
 		
-		if (cardRepository.findByNumero(cardNumber) == null ) 
+		if (cardRepository.findByNumero(cardNumber).isEmpty()) 
 			throw new EntityNotFoundException("Can't find card with number: " + cardNumber);
 		
 	}

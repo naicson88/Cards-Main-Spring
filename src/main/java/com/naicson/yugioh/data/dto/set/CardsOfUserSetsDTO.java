@@ -1,7 +1,5 @@
 package com.naicson.yugioh.data.dto.set;
 
-import java.math.BigInteger;
-
 public class CardsOfUserSetsDTO {
 	
 

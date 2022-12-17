@@ -10,7 +10,6 @@ import javax.persistence.Tuple;
 import org.springframework.stereotype.Repository;
 
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 
@@ -24,10 +23,8 @@ public class CardDAO {
 		Query query = em.createNativeQuery(" SELECT * FROM tab_rel_user_cards WHERE user_id = :userId and card_numero in (" + cardsNumbers + ")", RelUserCardsDTO.class)
 				.setParameter("userId", userId);
 		
-		@SuppressWarnings("unchecked")
-		List<RelUserCardsDTO> relList = query.getResultList();
-		
-		return relList;
+		return query.getResultList();
+
 	}
 	
 	public List<Tuple> listCardOfUserDetails(Integer cardId, long userId) {
@@ -49,10 +46,8 @@ public class CardDAO {
 				.setParameter("cardId", cardId)
 				.setParameter("userId", userId);
 		
-		@SuppressWarnings("unchecked")
-		List<Tuple> resultCards = query.getResultList();
 		
-		return resultCards;
+		return query.getResultList();
 	}
 
 	public List<Deck> cardDecks(Integer cardId) {
@@ -60,9 +55,7 @@ public class CardDAO {
 				+ " inner join TAB_REL_DECK_CARDS rel on deck.id = rel.deck_id " 
 				+ " where rel.card_id = :cardId ", Deck.class);
 		
-		List<Deck> decks_set = (List<Deck>) query.setParameter("cardId", cardId).getResultList();
-		
-		return decks_set;
+		return (List<Deck>) query.setParameter("cardId", cardId).getResultList();
 	}
 	
 
@@ -73,9 +66,7 @@ public class CardDAO {
 				+ " inner join TAB_REL_DECK_CARDS rel on decks.id = rel.deck_id"
 				+ " where rel.card_id = :cardId", SetCollection.class);
 		
-		List<SetCollection> decks_set = (List<SetCollection>) query.setParameter("cardId", cardId).getResultList();
-		
-		return decks_set;
+		return (List<SetCollection>) query.setParameter("cardId", cardId).getResultList();
 	}
 	
 	
