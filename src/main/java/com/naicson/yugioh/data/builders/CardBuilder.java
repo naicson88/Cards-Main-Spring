@@ -116,17 +116,17 @@ public class CardBuilder {
 			throw new IllegalArgumentException("Invalid card number.");
 
 		if (StringUtils.isBlank(cardToBeRegistered.getCategoria()))
-			throw new IllegalArgumentException("Invalid Card category.");
+			throw new IllegalArgumentException("Invalid Card category. " + card.getNome());
 
 		if (StringUtils.isBlank(cardToBeRegistered.getNome()))
-			throw new IllegalArgumentException("Invalid Card name.");
+			throw new IllegalArgumentException("Invalid Card name. " + card.getNome());
 		
 		if(cardToBeRegistered.getRegistryDate() == null)
 			throw new IllegalArgumentException("Invalid Registry Date of Card");
 
 		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")
-				&& cardToBeRegistered.getQtd_link() == null || cardToBeRegistered.getQtd_link().equals("0")) {
-				throw new IllegalArgumentException("Invalid Link Quantity.");
+				&& cardToBeRegistered.getQtd_link().isBlank() || cardToBeRegistered.getQtd_link().equals("0")) {
+				throw new IllegalArgumentException("Invalid Link Quantity. " + card.getNome());
 		}
 		
 		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "pendulum")) {
@@ -135,7 +135,7 @@ public class CardBuilder {
 				throw new IllegalArgumentException("Invalid Card Scale. " + cardToBeRegistered.toString());
 			
 			if(cardToBeRegistered.getDescr_pendulum() == null && cardToBeRegistered.getDescricao() == null)
-				throw new IllegalArgumentException("Invalid Card Description.");
+				throw new IllegalArgumentException("Invalid Card Description. " + card.getNome());
 		}
 
 	}

@@ -38,11 +38,11 @@ public class JsonConverterValidationFactory {
 		criterias.add(consumerTypeValidation);
 		
 		JsonConverterValidationComposite collectionDeckValidation = new ConsumerTypeValidation(COLLECTION_DECK);
-		konamiDeckValidation.objetoRetorno = CollectionDeck.class;
+		collectionDeckValidation.objetoRetorno = CollectionDeck.class;
 		criterias.add(collectionDeckValidation);
 		
 		JsonConverterValidationComposite setCollectionDeck = new ConsumerTypeValidation(SET_COLLECTION);
-		konamiDeckValidation.objetoRetorno = SetCollectionDto.class;
+		setCollectionDeck.objetoRetorno = SetCollectionDto.class;
 		criterias.add(setCollectionDeck);
 		
 		return criterias;

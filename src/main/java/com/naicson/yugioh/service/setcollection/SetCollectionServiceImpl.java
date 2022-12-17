@@ -57,46 +57,6 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		
 		return collectionSaved;
 	}
-
-//	@Override
-//	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source) {
-//		
-//		validSetSource(setId, source);
-//		
-//		SetDetailsDTO setDetailsDto = "KONAMI".equalsIgnoreCase(source) ? this.konamiSetDetailsDTO(setId) : userSetDetailsDTO(setId);
-//		
-////		if(setDetailsDto.getInsideDecks() != null && setDetailsDto.getInsideDecks().size() > 0)	
-////			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
-////		
-//		setDetailsDto.setQuantityUserHave(userSetRepository.countQuantityOfASetUserHave(setId.intValue(), GeneralFunctions.userLogged().getId()));
-//		return setDetailsDto;
-//	}
-	
-//	private SetDetailsDTO userSetDetailsDTO(Long setId) {
-//		SetCollection setCollection = new SetCollection();
-//
-//		UserSetCollection userSet = userSetRepository.findById(setId)
-//				.orElseThrow(() -> new EntityNotFoundException("User Set Collection not found! ID: " + setId));
-//		
-//		BeanUtils.copyProperties(userSet, setCollection);			
-//		setCollection.setId(userSet.getId().intValue());		
-//		setCollection.setDecks(List.of(Deck.deckFromDeckUser(userSet.getUserDeck().get(0))));
-//
-//		 SetDetailsDTO setDetailsDto = this.convertSetCollectionToDeck(setCollection, SourceTypes.USER);	
-//		 
-//		 return setDetailsDto;
-//	}
-	
-//	private SetDetailsDTO konamiSetDetailsDTO(Long setId) {
-//		
-//		 SetCollection setCollection = setColRepository.findById(setId.intValue())
-//			.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
-//		
-//		 SetDetailsDTO setDetailsDto = this.convertSetCollectionToDeck(setCollection, SourceTypes.KONAMI);
-//		
-//		return setDetailsDto;
-//	}
-
 	
 	public SetDetailsDTO convertSetCollectionToDeck(SetCollection set, SourceTypes deckSource, String table) {
 		

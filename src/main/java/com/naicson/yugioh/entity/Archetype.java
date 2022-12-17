@@ -70,12 +70,6 @@ public class Archetype {
 		this.arrayDecks = arrayDecks;
 	}
 
-	@Override
-	public String toString() {
-		return "Archetype [id=" + id + ", arcName=" + arcName + ", arrayCards=" + arrayCards + ", arrayDecks="
-				+ arrayDecks + "]";
-	}
-
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
@@ -83,5 +77,13 @@ public class Archetype {
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Archetype [id=" + id + ", arcName=" + arcName + ", registrationDate=" + registrationDate
+				+ ", arrayCards=" + arrayCards + ", arrayDecks=" + arrayDecks + "]";
+	}
+	
+	
 	
 }
