@@ -24,7 +24,7 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 	
 	Page<Deck> findAllBySetType(String setType, Pageable pageable);
 	
-	List<Deck> findAllByIdIn(Long[] arraySetsIds);
+	List<Deck> findAllByIdIn(Long[] arraySetsIds);	
 	
 	List<Deck> findByNome(String nome);
 	

@@ -54,7 +54,7 @@ public class DeckConsumerRabbitMQ {
 		
 		relDeckCardsService.saveRelDeckCards(newDeck.getRel_deck_cards());
 		
-		logger.info("Deck successfully created!! {}", newDeck.getNome());
+		logger.info("Deck successfully saved! {}", newDeck.getNome());
 						
 	}
 	
