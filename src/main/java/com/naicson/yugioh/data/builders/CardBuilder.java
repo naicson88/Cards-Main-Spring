@@ -125,7 +125,7 @@ public class CardBuilder {
 			throw new IllegalArgumentException("Invalid Registry Date of Card");
 
 		if (StringUtils.containsIgnoreCase(cardToBeRegistered.getCategoria(), "link")
-				&& cardToBeRegistered.getQtd_link().isBlank() || cardToBeRegistered.getQtd_link().equals("0")) {
+				&& cardToBeRegistered.getQtd_link().isBlank()) {
 				throw new IllegalArgumentException("Invalid Link Quantity. " + card.getNome());
 		}
 		
