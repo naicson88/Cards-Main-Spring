@@ -2,15 +2,22 @@ package com.naicson.yugioh.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
@@ -38,6 +45,14 @@ public class SetCollectionController {
 		List<DeckAndSetsBySetTypeDTO> dto = service.getAllSetsBySetType(setType);
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/new-association")
+	public ResponseEntity<String> newAssociation(@Valid @RequestBody AssociationDTO dto){
+		
+		service.newAssociation(dto);
+		
+		return new ResponseEntity<>(JSONObject.quote("Association confirmed!"), HttpStatus.OK);
 	}
 	
 

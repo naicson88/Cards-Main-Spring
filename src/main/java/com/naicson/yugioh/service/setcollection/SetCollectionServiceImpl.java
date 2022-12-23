@@ -2,10 +2,12 @@ package com.naicson.yugioh.service.setcollection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Tuple;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
@@ -181,9 +184,29 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	}
 	
 	public List<Long> getSetDeckRelationId(Integer setId){
+		
 		if(setId == null)
-			throw new IllegalArgumentException("Invalid date to save relation Set - Deck");		
+			throw new IllegalArgumentException("Invalid date to save relation Set - Deck");	
+		
 		return this.setColRepository.getSetDeckRelationId(setId);
+	}
+
+	@Override
+	@Transactional
+	public AssociationDTO newAssociation(@Valid AssociationDTO dto) {
+		
+		logger.info("Starting creating new Association...");
+		
+		List<Long> deckId =  Optional.ofNullable(this.getSetDeckRelationId(dto.getSourceId()))
+				.orElseThrow(() -> new EntityNotFoundException("Deck ID not found: " + dto.getSourceId()));
+		
+		for(Integer toAssociate : dto.getArrayToAssociate()) {
+			this.saveSetDeckRelation(toAssociate.longValue(), deckId.get(0));
+		}
+		
+		logger.info("Association Created!");
+		
+		return dto;
 	}
 
 }
