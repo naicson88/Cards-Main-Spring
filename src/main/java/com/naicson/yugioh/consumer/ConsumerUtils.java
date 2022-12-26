@@ -26,101 +26,71 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 @Component
 @SuppressWarnings("rawtypes")
 public class ConsumerUtils {
-	
+
 	@Autowired
 	CardAlternativeNumberRepository alternativeRepository;
-	
+
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
-	
-	public  Deck createNewDeck(KonamiDeck kDeck) {
-			
-			if(kDeck == null) 
-				throw new IllegalArgumentException("Informed Konami Deck is invalid!");
-				
-		return DeckBuilder.builder()
-			.dt_criacao(new Date())
-			.imagem(kDeck.getImagem())
-			.lancamento(kDeck.getLancamento())
-			.nome(kDeck.getNome().trim())
-			.relDeckCards(kDeck.getListRelDeckCards())
-			.setType(SetType.valueOf(kDeck.getSetType()))
-			.isSpeedDuel(kDeck.getIsSpeedDuel())
-			.imgurUrl(kDeck.getImagem())
-			.isBasedDeck(kDeck.getIsBasedDeck())
-			.setCode(kDeck.getSetCode())
-			.build();
+
+	public Deck createNewDeck(KonamiDeck kDeck) {
+
+		if (kDeck == null)
+			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
+
+		return DeckBuilder.builder().dt_criacao(new Date()).imagem(kDeck.getImagem()).lancamento(kDeck.getLancamento())
+				.nome(kDeck.getNome().trim()).relDeckCards(kDeck.getListRelDeckCards())
+				.setType(SetType.valueOf(kDeck.getSetType())).isSpeedDuel(kDeck.getIsSpeedDuel())
+				.imgurUrl(kDeck.getImagem()).isBasedDeck(kDeck.getIsBasedDeck()).setCode(kDeck.getSetCode())
+				.description(kDeck.getDescription()).build();
 	}
-	
-	public  Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
-		
-		if(deckId == null || deckId == 0) 
+
+	public Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
+
+		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Generated Deck Id is invalid.");
-				
+
 		newDeck.getRel_deck_cards().stream().forEach(rel -> {
 			rel.setDeckId(deckId);
-			rel.setQuantity(1);			
+			rel.setQuantity(1);
 			rel.setCardId(alternativeRepository.findByCardAlternativeNumber(rel.getCardNumber()).getCardId());
 		});
-		
+
 		return newDeck;
 	}
-	
+
 	public List<RelDeckCards> setRarity(List<RelDeckCards> listRelDeckCards) {
-		
-		if(listRelDeckCards == null)
+
+		if (listRelDeckCards == null)
 			throw new IllegalArgumentException("Invalid list of Rel DeckCards");
-		
-		listRelDeckCards.stream()
-			.filter(rel -> !ECardRarity.DEFAULT_RARITIES.contains(rel.getCard_raridade())).forEach(rel -> {
-				ECardRarity rarity = ECardRarity.getRarityByRarityCode(rel.getSetRarityCode());
-			rel.setCard_raridade(rarity.getCardRarity());
-		});
-		
+
+		listRelDeckCards.stream().filter(rel -> !ECardRarity.DEFAULT_RARITIES.contains(rel.getCard_raridade()))
+				.forEach(rel -> {
+					ECardRarity rarity = ECardRarity.getRarityByRarityCode(rel.getSetRarityCode());
+					rel.setCard_raridade(rarity.getCardRarity());
+				});
+
 		return listRelDeckCards;
 	}
+
 	public Object convertJsonToSetCollectionDto(String json, String obj) {
-		
+
 		try {
-	
-			for(JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {
-				
-				if(criteria.validate(obj)) {				
-					return new ObjectMapper()
-					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-					.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true)
-					.readValue(json,   criteria.objetoRetorno);
+
+			for (JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {
+
+				if (criteria.validate(obj)) {
+					return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+							.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true)
+							.readValue(json, criteria.objetoRetorno);
 				}
 			}
-			
+
 			throw new IllegalArgumentException(" Invalid Object to mapper: " + obj);
-			
-		} catch (JsonProcessingException e ) {
+
+		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());			
-		} 
-}
-	
-//	public Object convertJsonToSetCollectionDto(String json, String obj) {		
-//		try {
-//			
-//			ObjectMapper mapper = new ObjectMapper();
-//			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//			mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-//			
-//			if(KONAMI_DECK.equals(obj))
-//				return mapper.readValue(json, KonamiDeck.class);
-//			else if(ADD_NEW_CARD.equals(obj))
-//				return mapper.readValue(json, AddNewCardToDeckDTO.class);
-//			else if(COLLECTION_DECK.equals(obj))
-//				return mapper.readValue(json, CollectionDeck.class);
-//			else if(SET_COLLECTION.equals(obj))
-//				return mapper.readValue(json, SetCollectionDto.class);
-//			else
-//				throw new IllegalArgumentException(" Invalid Object to mapper: " + obj);
-//			
-//		} catch (JsonProcessingException e ) {
-//			e.printStackTrace();
-//			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());			
-//		} 
-//	}
+			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
 }

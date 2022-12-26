@@ -97,6 +97,11 @@ public class DeckBuilder {
 		this.deck.setRel_deck_cards(listRelDeckCards);
 		return this;
 	}
+	
+	public DeckBuilder description(String description) {
+		this.deck.setDescription(description);
+		return this;
+	}
 
 	public Deck build() {
 		validateDeck(this.deck);

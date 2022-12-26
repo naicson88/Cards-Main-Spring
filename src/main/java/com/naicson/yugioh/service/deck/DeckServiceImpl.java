@@ -210,8 +210,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			 deck = Deck.deckFromDeckUser(deckUser);
 		}
 		
-		//String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
-		
 		List<Card>  mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);
 

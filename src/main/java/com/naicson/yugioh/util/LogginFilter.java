@@ -33,11 +33,14 @@ public class LogginFilter extends OncePerRequestFilter {
 		
 		String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), request.getCharacterEncoding());
 //		String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), response.getCharacterEncoding());
-//		RESPONSE={}; responseBody
-		LOGGER.info(
-				"FINISHED PROCESSING \n METHOD={}; REQUEST_URI={}; REQUEST_PAYLOAD={}; \n RESPONSE_CODE={}, TIME_TAKEN={}",
-				 request.getMethod(), request.getRequestURI(), requestBody, response.getStatus(), timeTaken
-				);
+//		RESPONSE={}; responseBody,
+		if(!request.getRequestURI().contains("consulta-usuario")) {
+			LOGGER.info(
+					"FINISHED PROCESSING \n METHOD={}; REQUEST_URI={}; REQUEST_PAYLOAD={}; RESPONSE_CODE={}, TIME_TAKEN={}",
+					 request.getMethod(), request.getRequestURI(), requestBody, response.getStatus(), timeTaken
+					);
+		}
+		
 	
 		responseWrapper.copyBodyToResponse();
 	}
