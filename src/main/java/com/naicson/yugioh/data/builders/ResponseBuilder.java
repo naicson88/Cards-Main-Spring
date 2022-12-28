@@ -28,6 +28,7 @@ public class ResponseBuilder {
     }
 
     public ResponseEntity <ApiResponse<Object>>buildResponse(
+    		//Teste sonar
             int httpStatusCode, String message, Map <String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
                 .withOtherParams(otherParams).build();

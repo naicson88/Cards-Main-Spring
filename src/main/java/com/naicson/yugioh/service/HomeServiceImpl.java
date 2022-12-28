@@ -1,7 +1,6 @@
 package com.naicson.yugioh.service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -76,11 +75,10 @@ public class HomeServiceImpl implements HomeDetailService {
 		List<LastAddedDTO> lastsDecksAdded = this.lastDecksAdded();
 		List<LastAddedDTO> lastSetCollections = this.lastsSetCollectionAdded();
 
-		List<LastAddedDTO> lastsAdded = Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
+		return Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
 				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate).reversed()).limit(10)
 				.collect(Collectors.toList());
 
-		return lastsAdded;
 	}
 
 	private Double totalDeckPrice(Long setId) {
@@ -93,7 +91,7 @@ public class HomeServiceImpl implements HomeDetailService {
 
 	private Double totalSetCollectionPrice(List<Long> deckOfSetCollectionId) {
 
-		if (deckOfSetCollectionId == null || deckOfSetCollectionId.size() == 0)
+		if (deckOfSetCollectionId == null || deckOfSetCollectionId.isEmpty())
 			return 0.0;
 
 		return deckOfSetCollectionId.stream()
@@ -105,7 +103,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (lastCardsAddedTuple == null || lastCardsAddedTuple.isEmpty()) 
 			return Collections.emptyList();
 		
-			List<LastAddedDTO> lastCardsAdded = lastCardsAddedTuple.stream().map(card -> {
+		return	lastCardsAddedTuple.stream().map(card -> {
 				LastAddedDTO lastCard = new LastAddedDTO();
 				lastCard.setCardNumber(card.get(0, Integer.class).longValue());
 				lastCard.setName(card.get(1, String.class));
@@ -115,16 +113,15 @@ public class HomeServiceImpl implements HomeDetailService {
 				return lastCard;
 			}).collect(Collectors.toList());
 
-		return lastCardsAdded;
+		
 	}
 
 	private List<LastAddedDTO> hotNews(List<Tuple> hotNews) {
-		List<LastAddedDTO> hotNewsList = new ArrayList<>();
 
 		if (hotNews == null || hotNews.isEmpty())
 			throw new NoSuchElementException("Hot News list is empty");
 		
-		hotNewsList = hotNews.stream().map(set -> {
+		return hotNews.stream().map(set -> {
 			LastAddedDTO lastAdded = new LastAddedDTO();
 
 			lastAdded.setId(set.get(0, BigInteger.class).longValue());
@@ -135,7 +132,6 @@ public class HomeServiceImpl implements HomeDetailService {
 			return lastAdded;
 		}).collect(Collectors.toList());
 		
-		return hotNewsList;
 	}
 	
 	private List<LastAddedDTO> lastDecksAdded() {
@@ -145,20 +141,19 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (sets == null || sets.isEmpty())
 			return Collections.emptyList();
 
-		List<LastAddedDTO> lastDecksAdded = sets.stream().map(set -> {
-
-		LastAddedDTO lastSet = new LastAddedDTO();
-
-		lastSet.setId(set.get(0, BigInteger.class).longValue());
-		lastSet.setName(set.get(2, String.class));
-		lastSet.setImg(set.get(1, String.class));
-		lastSet.setPrice(totalDeckPrice(lastSet.getId()));
-		lastSet.setRegisteredDate(set.get(5, Date.class));
-		lastSet.setSetType("DECK");
-		return lastSet;
+		return sets.stream().map(set -> {
+			LastAddedDTO lastSet = new LastAddedDTO();
+	
+			lastSet.setId(set.get(0, BigInteger.class).longValue());
+			lastSet.setName(set.get(2, String.class));
+			lastSet.setImg(set.get(1, String.class));
+			lastSet.setPrice(totalDeckPrice(lastSet.getId()));
+			lastSet.setRegisteredDate(set.get(5, Date.class));
+			lastSet.setSetType("DECK");
+			return lastSet;
 		}).collect(Collectors.toList());					
 
-		return lastDecksAdded;
+		
 	}
 
 	private List<LastAddedDTO> lastsSetCollectionAdded() {
@@ -168,7 +163,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (sets == null || sets.isEmpty()) 
 			return Collections.emptyList();
 		
-		List<LastAddedDTO> lastSetsAdded = sets.stream().map(set -> {
+		return sets.stream().map(set -> {
 
 			LastAddedDTO lastSet = new LastAddedDTO();
 
@@ -182,15 +177,11 @@ public class HomeServiceImpl implements HomeDetailService {
 			return lastSet;
 		}).collect(Collectors.toList());
 		
-		return lastSetsAdded;
-		
 	}
 
 	public List<GeneralSearchDTO> getEntitiesByParam() {	
 		
-		List<Tuple>  tuple = homeRepository.generalSearch();
-		
-		List<GeneralSearchDTO> listData = tuple.stream().map(data -> {
+		return homeRepository.generalSearch().stream().map(data -> {
 			
 			GeneralSearchDTO dto = new GeneralSearchDTO(
 					data.get(0, BigInteger.class).longValue(),
@@ -206,8 +197,7 @@ public class HomeServiceImpl implements HomeDetailService {
 			return dto;
 			
 		}).collect(Collectors.toList());	
-		
-		return listData;		
+	
 	}
 
 }
