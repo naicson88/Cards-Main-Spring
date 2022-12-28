@@ -176,6 +176,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		insideDeck.setCards(cardDetailsList);
 		dto.setInsideDecks(List.of(insideDeck));
+		dto.setDescription(deck.getDescription());
 
 		return dto;
 	}

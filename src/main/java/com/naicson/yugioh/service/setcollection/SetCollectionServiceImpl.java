@@ -107,7 +107,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		deck.setIsSpeedDuel(set.getIsSpeedDuel());
 		deck.setLancamento(set.getReleaseDate());
 		deck.setNome(set.getName());
-		deck.setNomePortugues(set.getPortugueseName());
+		deck.setDescription(set.getDescription());
 		deck.setSetType(set.getSetCollectionType().toString());
 		deck.setImgurUrl(set.getImgurUrl());
 		return deck;

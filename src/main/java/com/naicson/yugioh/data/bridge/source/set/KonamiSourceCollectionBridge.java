@@ -12,7 +12,7 @@ public class KonamiSourceCollectionBridge implements SourceSetBridge{
 	
 	SetCollectionServiceImpl setService;
 	SetCollectionRepository setRepository;
-	private final String TABLE = "tab_rel_deck_cards";
+	private static final String TABLE = "tab_rel_deck_cards";
 	
 	public KonamiSourceCollectionBridge(SetCollectionServiceImpl setService, SetCollectionRepository setRepository) {
 		super();
@@ -26,9 +26,8 @@ public class KonamiSourceCollectionBridge implements SourceSetBridge{
 		 SetCollection setCollection = setRepository.findById(setId.intValue())
 					.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));
 				
-				 SetDetailsDTO setDetailsDto = setService.convertSetCollectionToDeck(setCollection, SourceTypes.KONAMI, TABLE);
-				
-				return setDetailsDto;
+				 return setService.convertSetCollectionToDeck(setCollection, SourceTypes.KONAMI, TABLE);
+
 	}
 
 }

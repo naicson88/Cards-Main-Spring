@@ -13,7 +13,7 @@ public class SetDetailsDTO {
 	private Long id;
 	private String nome;
 	private String imagem;
-	private String nomePortugues;	
+	private String description;	
 	@JsonFormat(pattern="MM-dd-yyyy")
 	private Date lancamento;	
 	private String setType;
@@ -49,12 +49,6 @@ public class SetDetailsDTO {
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
-	}
-	public String getNomePortugues() {
-		return nomePortugues;
-	}
-	public void setNomePortugues(String nomePortugues) {
-		this.nomePortugues = nomePortugues;
 	}
 
 	public Date getLancamento() {
@@ -149,6 +143,12 @@ public class SetDetailsDTO {
 	}
 	public void setQuantityUserHave(int quantityUserHave) {
 		this.quantityUserHave = quantityUserHave;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
