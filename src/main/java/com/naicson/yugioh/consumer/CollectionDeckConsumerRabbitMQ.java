@@ -47,7 +47,8 @@ public class CollectionDeckConsumerRabbitMQ {
 		if(cDeck.getSetId() == null)
 			throw new IllegalArgumentException("Invalid Set ID");
 		
-		cardRegistry.registryCardFromYuGiOhAPI(cDeck.getCardsToBeRegistered());
+		if(cDeck.getCardsToBeRegistered() != null && !cDeck.getCardsToBeRegistered().isEmpty())
+			cardRegistry.registryCardFromYuGiOhAPI(cDeck.getCardsToBeRegistered());
 		
 		Deck newDeck = this.crateNewDeckOfCollection(cDeck);
 		

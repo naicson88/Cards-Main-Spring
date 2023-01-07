@@ -34,9 +34,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		if(listRelDeckCards == null || listRelDeckCards.isEmpty()) 
 			throw new IllegalArgumentException("Invalid list of Rel Deck Cards");	
 		
-		List<RelDeckCards> relSaved = new ArrayList<>();
-		
-		relSaved = relDeckCardsRepository.saveAll(listRelDeckCards);
+		List<RelDeckCards> relSaved  = relDeckCardsRepository.saveAll(listRelDeckCards);
 		
 		if(listRelDeckCards.size() != relSaved.size()) 
 			throw new ErrorMessage("It was not possible save all Relations");	
