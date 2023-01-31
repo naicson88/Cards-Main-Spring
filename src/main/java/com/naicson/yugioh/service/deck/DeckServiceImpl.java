@@ -187,12 +187,11 @@ public class DeckServiceImpl implements DeckDetailService {
 			
 		dto.getInsideDecks().forEach(in -> { listCards.addAll(in.getCards()); });
 				
-		Map<String, Long> mapRarity = listCards.stream()
+		return listCards.stream()
 				.collect(Collectors.groupingBy(
 				card -> card.getListCardRarity().get(0).getCard_raridade(), Collectors.counting()
 				));
-				
-			return mapRarity;	
+
 	}
 
 	@Override

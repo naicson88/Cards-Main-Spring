@@ -46,7 +46,7 @@ public class Deck implements Serializable {
 	private String imgurUrl;
 	private boolean isBasedDeck;
 	private String setCode;	
-	@Column(length = 2000)
+	@Column(length = 6000)
 	private String description;
 	
 	@NotNull

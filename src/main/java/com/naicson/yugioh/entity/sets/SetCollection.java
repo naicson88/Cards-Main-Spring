@@ -39,7 +39,7 @@ public class SetCollection {
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
 	private String setCode;
-	@Column(length = 2000)
+	@Column(length = 6000)
 	private String description;
 	
 	@ManyToMany( fetch = FetchType.EAGER)

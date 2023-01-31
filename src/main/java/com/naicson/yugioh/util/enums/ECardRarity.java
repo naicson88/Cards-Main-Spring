@@ -10,7 +10,7 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 public enum ECardRarity {
 	
 	
-	COMMON("Common", List.of("(NR)","(SP)", "(HFR)", "(DNPR)")),
+	COMMON("Common", List.of("(NR)","(SP)", "(HFR)", "(DNPR)", "(SSP)")),
 	RARE("Rare", List.of("(R)","(DNRPR)", "(DRPR)")),
 	SUPER_RARE("Super Rare", List.of("(SPR)", "(DSPR)")),
 	ULTRA_RARE("Ultra Rare", List.of("(UR(PR))", "(UPR)", "(DUPR)", "(PG)")),
