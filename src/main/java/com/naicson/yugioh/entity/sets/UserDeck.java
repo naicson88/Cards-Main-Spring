@@ -27,6 +27,7 @@ public class UserDeck {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(unique = true)
 	private String nome;
 	private String imagem;
 	@Column(name = "konami_deck_copied")

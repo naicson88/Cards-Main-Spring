@@ -69,7 +69,7 @@ public class CardServiceImpl implements CardDetailService {
 	@Autowired
 	CardViewsInformationServiceImpl viewsService;
 	
-	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);	
+	Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);	
 	
 	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository, DeckRepository deckRepository) {
 		this.cardRepository = cardRepository;
@@ -202,8 +202,7 @@ public class CardServiceImpl implements CardDetailService {
 		
 		dto.setKonamiSets(this.setAllSetsWithThisCard(card));
 		dto.setCard(card);
-		//dto.setQtdUserHaveByKonamiCollection(this.findQtdCardUserHaveByCollection(card.getId(), "konami"));
-		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId(), "user"));
+		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId()));
 		dto.setPrices(cardPriceService.getAllPricesOfACardById(card.getId()));
 		
 		dto.setViews(viewsService.updateCardViewsOrInsertInDB(cardNumero));	
@@ -213,21 +212,21 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	@Override
-	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId, String collectionSource) {
-		
-		Map<String, List<String>> mapCardSetAndQuantity = new HashMap<>();
+	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId) {
 
 	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
 		
 		if(total == null) 
 			return Collections.emptyMap();
-			
+		
+		Map<String, List<String>> mapCardSetAndQuantity = new HashMap<>();
+		
 		total.stream().forEach(cardSetCode -> {
 			String setCode = cardSetCode.get(0, String.class);
 			String setName = cardSetCode.get(1, String.class);
 			
 			if(!mapCardSetAndQuantity.containsKey(setCode)) {
-				mapCardSetAndQuantity.put(setCode,  new ArrayList<String>());
+				mapCardSetAndQuantity.put(setCode,  new ArrayList<>());
 				mapCardSetAndQuantity.get(setCode).add(setName);							
 			}			
 			else {				
@@ -235,9 +234,7 @@ public class CardServiceImpl implements CardDetailService {
 			}		
 				
 		});			
-	
 		return mapCardSetAndQuantity;
-	
 	}
 	
 	private List<KonamiSetsWithCardDTO> setAllSetsWithThisCard(Card card) {

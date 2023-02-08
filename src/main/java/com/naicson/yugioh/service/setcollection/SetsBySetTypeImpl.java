@@ -50,12 +50,12 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 
 	private Page<DeckSummaryDTO> convertPageSetToPageDeck(Page<SetCollection> pageSet){
 		
-		Page<DeckSummaryDTO> pageDeck = pageSet.map(originalPage -> {
-			DeckSummaryDTO deck =  this.convertSetCollectionToDTO(originalPage);
-			return deck;
+		return pageSet.map(originalPage -> {
+			return  this.convertSetCollectionToDTO(originalPage);
+			//return deck;
 		});
 		
-		return pageDeck;		
+		//return pageDeck;		
 	}
 
 	private DeckSummaryDTO convertSetCollectionToDTO(SetCollection set) {
