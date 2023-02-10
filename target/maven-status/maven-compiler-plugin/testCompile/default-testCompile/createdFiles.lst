@@ -1,3 +1,4 @@
+
 com\naicson\yugioh\mocks\UserDeckMock.class
 com\naicson\yugioh\mocks\CardAlternativeNumberMock.class
 com\naicson\yugioh\deck\DeckServiceImplTest.class
@@ -12,3 +13,4 @@ com\naicson\yugioh\mocks\RelUserDeckDTOMock.class
 com\naicson\yugioh\consumer\ConsumerUtilsTest.class
 com\naicson\yugioh\util\ValidObjects.class
 com\naicson\yugioh\mocks\CardSetDetailsDTOMock.class
+

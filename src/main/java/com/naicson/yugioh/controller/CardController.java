@@ -170,4 +170,3 @@ public class CardController {
 		return new ResponseEntity<>(JSONObject.quote("Communication Success"), HttpStatus.OK);
 	}
 }
-
