@@ -6,12 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -57,8 +59,18 @@ public abstract class GeneralFunctions {
 	public static void saveCardInFolder(Long cardNumber) {
 		try (InputStream in = new URL("https://images.ygoprodeck.com/images/cards/" + cardNumber + ".jpg")
 				.openStream()) {
-			Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber + ".jpg"));
-			logger.info("Card saved in folder");
+
+			try {
+			
+				Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber + ".jpg"));
+				logger.info("Card saved in folder");
+				
+			} catch (FileAlreadyExistsException e) {
+				logger.warn(e.getLocalizedMessage());
+				String randomString = RandomStringUtils.randomAlphabetic(10);
+				Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber +"-"+randomString+".jpg"));
+			}
+
 		} catch (IOException e) {
 			e.getMessage();
 			throw new ErrorMessage(e.getMessage());
@@ -86,7 +98,7 @@ public abstract class GeneralFunctions {
 		try {
 			return Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			logger.error("Error when tryng parse value: " + value);
+			logger.error("Error when tryng parse value: {}", value);
 			return 0;
 		}
 	}
@@ -116,14 +128,14 @@ public abstract class GeneralFunctions {
 					bw.write(n);
 					bw.newLine();
 				} catch (IOException e) {
-					logger.error("Error while writing information: " + n);
+					logger.error("Error while writing information: {}", n);
 				}
 
 			});
 			bw.close();
-			logger.info("File created successfully! " + fullPath);
+			logger.info("File created successfully! {}", fullPath);
 		} catch (Exception e) {
-			logger.error("Error while generaton File: " + e.getMessage());
+			logger.error("Error while generaton File: {}", e.getMessage());
 
 		} finally {
 

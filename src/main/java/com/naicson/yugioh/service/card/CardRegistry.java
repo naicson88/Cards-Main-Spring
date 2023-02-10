@@ -33,10 +33,9 @@ public class CardRegistry {
 
 	@Transactional
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
+		
 		List<Card> cardsSaved = new LinkedList<>();
-
-		if (cardsToBeRegistered != null && !cardsToBeRegistered.isEmpty()) {
-
+		
 			cardsToBeRegistered.stream().forEach(apiCard -> {
 				if (!this.checkIfCardAlreadyRegisteredWithAlternativeNumber(apiCard)) {
 
@@ -56,7 +55,6 @@ public class CardRegistry {
 					cardsSaved.add(cardSaved);
 				}
 			});
-		}
 
 		return cardsSaved;
 	}

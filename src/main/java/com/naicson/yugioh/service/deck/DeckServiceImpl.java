@@ -176,6 +176,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		insideDeck.setCards(cardDetailsList);
 		dto.setInsideDecks(List.of(insideDeck));
+		dto.setDescription(deck.getDescription());
 
 		return dto;
 	}
@@ -186,12 +187,11 @@ public class DeckServiceImpl implements DeckDetailService {
 			
 		dto.getInsideDecks().forEach(in -> { listCards.addAll(in.getCards()); });
 				
-		Map<String, Long> mapRarity = listCards.stream()
+		return listCards.stream()
 				.collect(Collectors.groupingBy(
 				card -> card.getListCardRarity().get(0).getCard_raridade(), Collectors.counting()
 				));
-				
-			return mapRarity;	
+
 	}
 
 	@Override
@@ -209,8 +209,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
 			 deck = Deck.deckFromDeckUser(deckUser);
 		}
-		
-		//String table = ("konami").equalsIgnoreCase(deckSource) ? "tab_rel_deck_cards" : "tab_rel_deckusers_cards";
 		
 		List<Card>  mainDeck = this.cardsOfDeck(deckId, table);
 		List<RelDeckCards> relDeckCards = this.relDeckCards(deckId, deckSource);

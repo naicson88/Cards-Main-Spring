@@ -1,6 +1,5 @@
 package com.naicson.yugioh.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,19 +88,6 @@ public class DeckController<T> {
 		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source), HttpStatus.OK) ;
 	}
 
-//	@GetMapping("/set-details")
-//	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
-//	@Cacheable(value = "setDetails")
-//	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
-//		SetDetailsDTO deck = null;	
-//		
-//		if("DECK".equals(setType))
-//			deck = deckService.deckAndCards(id, source);		
-//		else 
-//			deck = setCollService.setCollectionDetailsAsDeck(id, source);
-//			
-//		return new ResponseEntity<>(deck, HttpStatus.OK) ;
-//	}	
 	
 	@GetMapping("/search-by-set-name")
 	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })

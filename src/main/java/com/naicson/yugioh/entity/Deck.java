@@ -46,6 +46,8 @@ public class Deck implements Serializable {
 	private String imgurUrl;
 	private boolean isBasedDeck;
 	private String setCode;	
+	@Column(length = 6000)
+	private String description;
 	
 	@NotNull
 	@OneToOne(cascade=CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -233,6 +235,14 @@ public class Deck implements Serializable {
 
 	public void setBasedDeck(boolean isBasedDeck) {
 		this.isBasedDeck = isBasedDeck;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

@@ -1,28 +1,14 @@
 package com.naicson.yugioh.data.strategy.setDetails;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.naicson.yugioh.data.bridge.source.SourceBridge;
 import com.naicson.yugioh.data.bridge.source.SourceTypes;
-import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
-import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
-import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.SetCollectionRepository;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
-import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.GeneralFunctions;
 
 @Component
@@ -36,7 +22,6 @@ public class CollectionDetailsStrategy implements SetDetailsStrategy{
 	
 	@Autowired
 	SetCollectionServiceImpl setService;
-	
 	
 	@Override
 	public SetDetailsDTO getSetDetails(Long setId, String source) {

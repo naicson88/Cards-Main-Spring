@@ -1,8 +1,6 @@
 package com.naicson.yugioh.service.deck;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
-import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
@@ -34,9 +31,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		if(listRelDeckCards == null || listRelDeckCards.isEmpty()) 
 			throw new IllegalArgumentException("Invalid list of Rel Deck Cards");	
 		
-		List<RelDeckCards> relSaved = new ArrayList<>();
-		
-		relSaved = relDeckCardsRepository.saveAll(listRelDeckCards);
+		List<RelDeckCards> relSaved  = relDeckCardsRepository.saveAll(listRelDeckCards);
 		
 		if(listRelDeckCards.size() != relSaved.size()) 
 			throw new ErrorMessage("It was not possible save all Relations");	

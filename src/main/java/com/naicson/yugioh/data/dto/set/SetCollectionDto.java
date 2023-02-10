@@ -16,6 +16,7 @@ public class SetCollectionDto {
 	private String setType;
 	private Boolean isSpeedDuel;
 	private String setCode;
+	private String description;
 
 	
 	public String getName() {
@@ -71,6 +72,12 @@ public class SetCollectionDto {
 	}
 	public void setSetCode(String setCode) {
 		this.setCode = setCode;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

@@ -124,7 +124,7 @@ public class BuildCardFromYuGiOhAPI {
 
 	private String setCardGenericType(String type) {
 		
-		if("Normal Monster".equalsIgnoreCase(type) || "Effect Monster".equalsIgnoreCase(type))
+		if("Normal Monster".equalsIgnoreCase(type) || "Effect Monster".equalsIgnoreCase(type) || "Tuner Monster".equalsIgnoreCase(type))
 			return GenericTypesCards.MONSTER.toString();
 		
 		for (GenericTypesCards gen : GenericTypesCards.values()) {

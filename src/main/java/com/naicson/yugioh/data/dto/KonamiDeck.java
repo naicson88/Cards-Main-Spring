@@ -28,6 +28,7 @@ public class KonamiDeck implements Serializable{
 	private Boolean isSpeedDuel;
 	private boolean isBasedDeck;
 	private String setCode;
+	private String description;
 	
 	public Long getId() {
 		return id;
@@ -104,6 +105,12 @@ public class KonamiDeck implements Serializable{
 	}
 	public void setSetCode(String setCode) {
 		this.setCode = setCode;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

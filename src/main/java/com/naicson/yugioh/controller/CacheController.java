@@ -45,8 +45,7 @@ public class CacheController {
 	
 	@ApiIgnore
 	@Scheduled(cron="0 0 0 * * ?")
-	public void evictAllcachesAtIntervals() {
-		
+	public void evictAllcachesAtIntervals() {		
 	    evictAllCaches();
 	}
 	
