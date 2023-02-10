@@ -11,37 +11,45 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
+import brave.Tracer;
+
 @Component
 public class LogginFilter extends OncePerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogginFilter.class);
+	
+	 @Autowired
+     Tracer tracer;
+	 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+	
 		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 		
-		//LocalDateTime startTime = LocalDateTime.now();
+//		//LocalDateTime startTime = LocalDateTime.now();
+//		filterChain.doFilter(requestWrapper, responseWrapper);
+//		LocalDateTime timeTaken = LocalDateTime.now();
+//		
+//		String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), request.getCharacterEncoding());
+////		String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), response.getCharacterEncoding());
+////		RESPONSE={}; responseBody,
+//		if(!request.getRequestURI().contains("consulta-usuario")) {
+//			LOGGER.info(
+//					"FINISHED PROCESSING \n METHOD={}; REQUEST_URI={}; REQUEST_PAYLOAD={}; RESPONSE_CODE={}, TIME_TAKEN={}",
+//					 request.getMethod(), request.getRequestURI(), requestBody, response.getStatus(), timeTaken
+//					);
+//		}
+		
 		filterChain.doFilter(requestWrapper, responseWrapper);
-		LocalDateTime timeTaken = LocalDateTime.now();
-		
-		String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), request.getCharacterEncoding());
-//		String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), response.getCharacterEncoding());
-//		RESPONSE={}; responseBody,
-		if(!request.getRequestURI().contains("consulta-usuario")) {
-			LOGGER.info(
-					"FINISHED PROCESSING \n METHOD={}; REQUEST_URI={}; REQUEST_PAYLOAD={}; RESPONSE_CODE={}, TIME_TAKEN={}",
-					 request.getMethod(), request.getRequestURI(), requestBody, response.getStatus(), timeTaken
-					);
-		}
-		
-	
+		responseWrapper.addHeader("correlationId", tracer.currentSpan().context().traceIdString());
 		responseWrapper.copyBodyToResponse();
 	}
 	
