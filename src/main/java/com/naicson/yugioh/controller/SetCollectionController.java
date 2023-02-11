@@ -44,7 +44,7 @@ public class SetCollectionController {
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllSetsBySetType(@PathVariable("setType") String setType){
 		List<DeckAndSetsBySetTypeDTO> dto = service.getAllSetsBySetType(setType);
 		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(dto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/new-association")

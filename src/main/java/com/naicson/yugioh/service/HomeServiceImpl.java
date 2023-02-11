@@ -75,9 +75,10 @@ public class HomeServiceImpl implements HomeDetailService {
 		List<LastAddedDTO> lastsDecksAdded = this.lastDecksAdded();
 		List<LastAddedDTO> lastSetCollections = this.lastsSetCollectionAdded();
 
+
 		return Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
 				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate).reversed()).limit(10)
-				.collect(Collectors.toList());
+
 
 	}
 
@@ -85,7 +86,9 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (setId == null || setId == 0)
 			throw new IllegalArgumentException("Invalid Set Id to get total price.");
 
-		return homeRepository.findTotalDeckPrice(setId);
+		Double totalPrice = homeRepository.findTotalDeckPrice(setId);
+
+		return totalPrice;
 
 	}
 
@@ -94,8 +97,10 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (deckOfSetCollectionId == null || deckOfSetCollectionId.isEmpty())
 			return 0.0;
 
-		return deckOfSetCollectionId.stream()
+		Double totalPrice = deckOfSetCollectionId.stream()
 				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();
+
+		return totalPrice;
 	}
 
 	private List<LastAddedDTO> lastCardsAddedToUsuer(List<Tuple> lastCardsAddedTuple) {
