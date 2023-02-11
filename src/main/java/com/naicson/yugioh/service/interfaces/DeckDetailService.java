@@ -28,7 +28,7 @@ public interface DeckDetailService {
 
 	SetDetailsDTO deckAndCards(Long deckId, SourceTypes setType, String table) throws Exception;
 
-	Page<DeckSummaryDTO> searchBySetName(String setName);
+	Page<DeckSummaryDTO> searchBySetName(String setName, SourceTypes source);
 	
 	Deck countCardRaritiesOnDeck(Deck deck);
 

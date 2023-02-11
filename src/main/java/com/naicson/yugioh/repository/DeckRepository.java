@@ -59,14 +59,24 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 			+ " left join tab_user_deck ud on ud.konami_deck_copied = deck.id "
 			+ " where deck.nome like CONCAT('%',:setName,'%') "
 			+ " group by ud.konami_deck_copied"
-			+ " UNION "
+			+ " UNION"
 			+ " select setcol.id, setcol.name, setcol.portuguese_name, setcol.imgur_url, setcol.release_date, setcol.set_collection_type, count(usc.konami_set_copied) as quantityUserHave "
 			+ " from tab_set_collection setcol "
 			+ " left join tab_user_set_collection usc on usc.konami_set_copied = setcol.id "
 			+ " where setcol.name like CONCAT('%',:setName,'%') "
 			+ " group by usc.konami_set_copied"
 			,  nativeQuery = true)
-	List<Tuple> searchSetsByName(String setName);
+	List<Tuple> searchSetsByNameKonami(String setName);
+	
+	@Query(value = "select deck.id, deck.nome,'none' as nome_portugues, deck.imgur_url,  deck.dt_criacao,  deck.set_type, 0 as quantityUserHave "
+			+ " from tab_user_deck deck "
+			+ " where deck.nome like CONCAT('%',:setName,'%') and user_id = :userId"
+			+ " UNION"
+			+ " select setcol.id, setcol.name, '' as portuguese_name, setcol.imgur_url, setcol.release_date, setcol.set_collection_type, 0 as quantityUserHave "
+			+ " from tab_user_set_collection setcol "
+			+ " where setcol.name like CONCAT('%',:setName,'%') and user_id = :userId"
+			,  nativeQuery = true)
+	List<Tuple> searchSetsByNameUser(String setName, Long userId);
 	
 	@Query(value = "select ud.id, ud.nome  from tab_decks ud where set_type = 'DECK' order by 1 desc", nativeQuery = true)	
 	List<Tuple> getAllDecksName();
