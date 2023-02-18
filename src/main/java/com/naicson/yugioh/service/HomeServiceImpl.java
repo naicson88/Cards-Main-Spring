@@ -78,6 +78,7 @@ public class HomeServiceImpl implements HomeDetailService {
 
 		return Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
 				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate).reversed()).limit(10)
+				.collect(Collectors.toList());
 
 
 	}

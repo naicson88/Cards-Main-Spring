@@ -58,6 +58,7 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 			+ " from tab_decks deck "
 			+ " left join tab_user_deck ud on ud.konami_deck_copied = deck.id "
 			+ " where deck.nome like CONCAT('%',:setName,'%') "
+			+ " and deck.set_type = 'DECK'"
 			+ " group by ud.konami_deck_copied"
 			+ " UNION"
 			+ " select setcol.id, setcol.name, setcol.portuguese_name, setcol.imgur_url, setcol.release_date, setcol.set_collection_type, count(usc.konami_set_copied) as quantityUserHave "
@@ -70,7 +71,9 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
 	
 	@Query(value = "select deck.id, deck.nome,'none' as nome_portugues, deck.imgur_url,  deck.dt_criacao,  deck.set_type, 0 as quantityUserHave "
 			+ " from tab_user_deck deck "
-			+ " where deck.nome like CONCAT('%',:setName,'%') and user_id = :userId"
+			+ " where deck.nome like CONCAT('%',:setName,'%') "
+			+ " and user_id = :userId "
+			+ " and deck.set_type = 'DECK'"
 			+ " UNION"
 			+ " select setcol.id, setcol.name, '' as portuguese_name, setcol.imgur_url, setcol.release_date, setcol.set_collection_type, 0 as quantityUserHave "
 			+ " from tab_user_set_collection setcol "
