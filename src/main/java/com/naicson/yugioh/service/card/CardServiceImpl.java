@@ -136,6 +136,7 @@ public class CardServiceImpl implements CardDetailService {
 		return listDTO;
 	}
 
+	
 	@Override
 	public CardOfUserDetailDTO cardOfUserDetails(Integer cardId) {
 		
