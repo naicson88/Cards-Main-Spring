@@ -412,5 +412,10 @@ public class DeckServiceImplTest {
 		
 		assertTrue(actual.contains(expected));
 	}
+	
+	@Test
+	public void searchBySetNameSuccessfully() {
+		
+	}
 
 }

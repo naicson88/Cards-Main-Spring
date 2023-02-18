@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
@@ -91,10 +92,11 @@ public class DeckController<T> {
 	
 	@GetMapping("/search-by-set-name")
 	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<Page<DeckSummaryDTO>> searchBySetName(@RequestParam("setName") String setName) {
-		Page<DeckSummaryDTO> setsFound = this.deckService.searchBySetName(setName);
+	public ResponseEntity<Page<DeckSummaryDTO>> searchBySetName(@RequestParam("setName") String setName, 
+			@RequestParam("source") SourceTypes source) {
+		Page<DeckSummaryDTO> setsFound = this.deckService.searchBySetName(setName, source);
 		
-		return new ResponseEntity<Page<DeckSummaryDTO>>(setsFound, HttpStatus.OK);
+		return new ResponseEntity<>(setsFound, HttpStatus.OK);
 	}
 
 	@GetMapping("/autocomplete-sets")
@@ -112,7 +114,7 @@ public class DeckController<T> {
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(@RequestParam("collectionDeck") boolean collectionDeck){
 		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName(collectionDeck);
 		
-		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(listDto, HttpStatus.OK);
+		return new ResponseEntity<>(listDto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/update-cards-quantity")

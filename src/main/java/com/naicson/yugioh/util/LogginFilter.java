@@ -48,8 +48,10 @@ public class LogginFilter extends OncePerRequestFilter {
 //					);
 //		}
 		
+		//responseWrapper.addHeader("Request-Id", tracer.currentSpan().context().traceIdString());
 		filterChain.doFilter(requestWrapper, responseWrapper);
-		responseWrapper.addHeader("correlationId", tracer.currentSpan().context().traceIdString());
+		
+		responseWrapper.setHeader("Request-Id", tracer.currentSpan().context().traceIdString());
 		responseWrapper.copyBodyToResponse();
 	}
 	
@@ -59,7 +61,7 @@ public class LogginFilter extends OncePerRequestFilter {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "";
 	}
 

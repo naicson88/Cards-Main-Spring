@@ -2,6 +2,7 @@ package com.naicson.yugioh.service.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -124,7 +125,9 @@ public class CardServiceImpl implements CardDetailService {
 		
 		List<CardOfArchetypeDTO> listDTO = new LinkedList<>();
 		
-		  cardsOfArchetype.stream().forEach(card -> {
+		  cardsOfArchetype.stream()
+		    .sorted(Comparator.comparing(Card::getNome))
+		  	.forEach(card -> {
 			CardOfArchetypeDTO dto = new CardOfArchetypeDTO(card);
 			dto.setQtdUserHave(cardRepository.findQtdUserHave(card.getId()));
 			listDTO.add(dto);

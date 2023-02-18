@@ -232,12 +232,15 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public Page<DeckSummaryDTO> searchBySetName(String setName) {		
+	public Page<DeckSummaryDTO> searchBySetName(String setName, SourceTypes source) {		
 
 		if (setName == null || setName.length() <= 3) 
 			throw new IllegalArgumentException("Invalid set name for searching");
 		
-		List<Tuple> setsFoundTuple = this.deckRepository.searchSetsByName(setName.trim());
+		List<Tuple> setsFoundTuple = source.getSetsByName(deckRepository, setName);
+		
+		if(setsFoundTuple == null)
+			 return new PageImpl<>(Collections.emptyList());
 		
 		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
 			
