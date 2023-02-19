@@ -215,3 +215,659 @@
 2023-02-19 01:32:56.445 DEBUG [,38e2ad435178b71e,38e2ad435178b71e,false] 25388 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
 2023-02-19 01:32:56.522 DEBUG [,d68c1c24b2c71e7d,d68c1c24b2c71e7d,false] 25388 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
 2023-02-19 01:32:56.563 DEBUG [,d68c1c24b2c71e7d,d68c1c24b2c71e7d,false] 25388 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:09:05.328  INFO [,,,] 12364 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 11:09:06.903  INFO [,,,] 12364 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 11:09:07.068  INFO [,,,] 12364 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 154ms. Found 17 JPA repository interfaces.
+2023-02-19 11:09:07.474  INFO [,,,] 12364 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 11:09:08.354  INFO [,,,] 12364 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 11:09:08.380  INFO [,,,] 12364 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 11:09:08.381  INFO [,,,] 12364 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 11:09:08.565  INFO [,,,] 12364 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 11:09:08.566  INFO [,,,] 12364 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3210 ms
+2023-02-19 11:09:09.539  WARN [,,,] 12364 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 11:09:09.919  INFO [,,,] 12364 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 11:09:10.033  INFO [,,,] 12364 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 11:09:10.273  INFO [,,,] 12364 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 11:09:10.464  INFO [,,,] 12364 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 11:09:10.655  INFO [,,,] 12364 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 11:09:10.687  INFO [,,,] 12364 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 11:09:12.024  INFO [,,,] 12364 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 11:09:12.032  INFO [,,,] 12364 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 11:09:15.432  INFO [,,,] 12364 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 11:09:15.767  INFO [,,,] 12364 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@152a41ab, org.springframework.security.web.context.SecurityContextPersistenceFilter@2033fd39, org.springframework.security.web.header.HeaderWriterFilter@650f4d76, org.springframework.web.filter.CorsFilter@5a372288, org.springframework.security.web.authentication.logout.LogoutFilter@30396acf, com.naicson.yugioh.data.security.AuthTokenFilter@3c7e7ffd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@34692767, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4b6b9255, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3f4b52fa, org.springframework.security.web.session.SessionManagementFilter@7d5fb53a, org.springframework.security.web.access.ExceptionTranslationFilter@3bbd9232, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@492b12e5]
+2023-02-19 11:09:15.798  INFO [,,,] 12364 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 11:09:16.002  INFO [,,,] 12364 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 11:09:16.960  INFO [,,,] 12364 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 11:09:17.093  INFO [,,,] 12364 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 11:09:17.124  INFO [,,,] 12364 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 11:09:17.161  INFO [,,,] 12364 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 11:09:17.572  INFO [,,,] 12364 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 11:09:17.575  INFO [,,,] 12364 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 11:09:17.617  INFO [,,,] 12364 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 11:09:17.684  INFO [,,,] 12364 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 11:09:17.726  INFO [,,,] 12364 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 11:09:17.853  INFO [,,,] 12364 --- [RMI TCP Connection(1)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 11:09:17.854  INFO [,,,] 12364 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 11:09:17.854 DEBUG [,,,] 12364 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 11:09:17.870 DEBUG [,,,] 12364 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 11:09:17.870  INFO [,,,] 12364 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2023-02-19 11:09:18.692  INFO [,,,] 12364 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#6770a229:0/SimpleConnection@675d209c [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 64616]
+2023-02-19 11:09:21.774  INFO [,,,] 12364 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 18.039 seconds (JVM running for 18.977)
+2023-02-19 11:11:44.372 DEBUG [,a0f3adb0e36bd7d6,a0f3adb0e36bd7d6,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:11:44.450 DEBUG [,a0f3adb0e36bd7d6,a0f3adb0e36bd7d6,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:49.507 DEBUG [,e3cfaffea2773372,e3cfaffea2773372,false] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/auth/login", parameters={}
+2023-02-19 11:11:49.729 DEBUG [,e3cfaffea2773372,e3cfaffea2773372,false] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:49.764 DEBUG [,630c9e27240549f0,630c9e27240549f0,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/home/info", parameters={}
+2023-02-19 11:11:50.424 DEBUG [,630c9e27240549f0,630c9e27240549f0,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:56.034 DEBUG [,ed9767da4c0c2ce3,ed9767da4c0c2ce3,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:11:56.042 DEBUG [,ed9767da4c0c2ce3,ed9767da4c0c2ce3,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:56.061 DEBUG [,c374c741f0138793,c374c741f0138793,false] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-19 11:11:56.063 DEBUG [,65aa13551c7720ea,65aa13551c7720ea,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=USER", parameters={masked}
+2023-02-19 11:11:56.094 DEBUG [,65aa13551c7720ea,65aa13551c7720ea,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:56.119 DEBUG [,c374c741f0138793,c374c741f0138793,false] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:11:59.051 DEBUG [,173c2392cab35e29,173c2392cab35e29,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-19 11:11:59.115 DEBUG [,173c2392cab35e29,173c2392cab35e29,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:04.026 DEBUG [,9479627f36fbb401,9479627f36fbb401,false] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:12:04.157 DEBUG [,9479627f36fbb401,9479627f36fbb401,false] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:12.258 DEBUG [,70d0497f4e18eb8f,70d0497f4e18eb8f,false] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 11:12:12.294 DEBUG [,70d0497f4e18eb8f,70d0497f4e18eb8f,false] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:16.087 DEBUG [,3ed3f4beee39e7ef,3ed3f4beee39e7ef,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 11:12:16.091 DEBUG [,3ed3f4beee39e7ef,3ed3f4beee39e7ef,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:26.363 DEBUG [,dfcc1c537ccb8a41,dfcc1c537ccb8a41,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 11:12:26.499  INFO [,dfcc1c537ccb8a41,dfcc1c537ccb8a41,false] 12364 --- [http-nio-8080-exec-10] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 11:12:26.513 DEBUG [,dfcc1c537ccb8a41,dfcc1c537ccb8a41,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:31.820 DEBUG [,3105874d5d510121,3105874d5d510121,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:12:31.825 DEBUG [,3105874d5d510121,3105874d5d510121,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:12:31.898 DEBUG [,b19d1c05ddf0bffc,b19d1c05ddf0bffc,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:12:31.943 DEBUG [,b19d1c05ddf0bffc,b19d1c05ddf0bffc,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:13:46.865 DEBUG [,1854f434cb0d3d8a,1854f434cb0d3d8a,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:13:46.871 DEBUG [,1854f434cb0d3d8a,1854f434cb0d3d8a,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:13:47.036 DEBUG [,1fad2be71307fef7,1fad2be71307fef7,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:13:47.080 DEBUG [,1fad2be71307fef7,1fad2be71307fef7,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:15:31.472 DEBUG [,45f022787a25f5f2,45f022787a25f5f2,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:15:31.477 DEBUG [,45f022787a25f5f2,45f022787a25f5f2,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:15:31.603 DEBUG [,da8796b7facf563e,da8796b7facf563e,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:15:31.642 DEBUG [,da8796b7facf563e,da8796b7facf563e,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:17:56.779 DEBUG [,72c5f29f0aee06ec,72c5f29f0aee06ec,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:17:56.784 DEBUG [,72c5f29f0aee06ec,72c5f29f0aee06ec,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:17:56.902 DEBUG [,12a371f741df4c66,12a371f741df4c66,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:17:56.936 DEBUG [,12a371f741df4c66,12a371f741df4c66,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:18:56.846 DEBUG [,ba36cbe139e8eb09,ba36cbe139e8eb09,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:18:56.853 DEBUG [,ba36cbe139e8eb09,ba36cbe139e8eb09,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:18:57.021 DEBUG [,49e8527d71cb86d8,49e8527d71cb86d8,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:18:57.063 DEBUG [,49e8527d71cb86d8,49e8527d71cb86d8,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:19:04.156 DEBUG [,c0b70dbe1621acd1,c0b70dbe1621acd1,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:19:04.160 DEBUG [,c0b70dbe1621acd1,c0b70dbe1621acd1,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:19:04.263 DEBUG [,0d29b4950c46197f,0d29b4950c46197f,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:19:04.300 DEBUG [,0d29b4950c46197f,0d29b4950c46197f,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:19:46.237 DEBUG [,06a51819bb4c921e,06a51819bb4c921e,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:19:46.243 DEBUG [,06a51819bb4c921e,06a51819bb4c921e,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:19:46.374 DEBUG [,853dba490c3dc093,853dba490c3dc093,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:19:46.409 DEBUG [,853dba490c3dc093,853dba490c3dc093,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:21:26.417 DEBUG [,a80f94bab48f7b01,a80f94bab48f7b01,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:21:26.422 DEBUG [,a80f94bab48f7b01,a80f94bab48f7b01,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:21:26.536 DEBUG [,01dd4ed8b3849f85,01dd4ed8b3849f85,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:21:26.573 DEBUG [,01dd4ed8b3849f85,01dd4ed8b3849f85,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:23:46.953 DEBUG [,9733e2294a876cac,9733e2294a876cac,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:23:46.958 DEBUG [,9733e2294a876cac,9733e2294a876cac,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:23:47.057 DEBUG [,d348b0c9f2ca60fe,d348b0c9f2ca60fe,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:23:47.091 DEBUG [,d348b0c9f2ca60fe,d348b0c9f2ca60fe,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:05.962 DEBUG [,f4044dc4f9e16be0,f4044dc4f9e16be0,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:24:05.967 DEBUG [,f4044dc4f9e16be0,f4044dc4f9e16be0,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:06.173 DEBUG [,a8c41a603a8fea03,a8c41a603a8fea03,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:24:06.215 DEBUG [,a8c41a603a8fea03,a8c41a603a8fea03,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:15.704 DEBUG [,19eeaf93c5760ac3,19eeaf93c5760ac3,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:24:15.710 DEBUG [,19eeaf93c5760ac3,19eeaf93c5760ac3,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:15.891 DEBUG [,c9031dfca319bdb9,c9031dfca319bdb9,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:24:15.935 DEBUG [,c9031dfca319bdb9,c9031dfca319bdb9,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:34.728 DEBUG [,8d05a2425effa832,8d05a2425effa832,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:24:34.734 DEBUG [,8d05a2425effa832,8d05a2425effa832,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:24:34.960 DEBUG [,5f1f1ffda70acc63,5f1f1ffda70acc63,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:24:35.011 DEBUG [,5f1f1ffda70acc63,5f1f1ffda70acc63,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:31.625 DEBUG [,d9b2a0e873050402,d9b2a0e873050402,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:33:31.629 DEBUG [,d9b2a0e873050402,d9b2a0e873050402,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:31.710 DEBUG [,516c97e939239384,516c97e939239384,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 11:33:31.747 DEBUG [,516c97e939239384,516c97e939239384,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:49.889 DEBUG [,ff6be9e15d6f8c12,ff6be9e15d6f8c12,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:33:49.896 DEBUG [,ff6be9e15d6f8c12,ff6be9e15d6f8c12,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:50.000 DEBUG [,058b96ff9ff6cf5d,058b96ff9ff6cf5d,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-19 11:33:50.003 DEBUG [,39e8499ec4c238d9,39e8499ec4c238d9,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=USER", parameters={masked}
+2023-02-19 11:33:50.006 DEBUG [,39e8499ec4c238d9,39e8499ec4c238d9,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:50.009 DEBUG [,058b96ff9ff6cf5d,058b96ff9ff6cf5d,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:53.441 DEBUG [,ed78d50d38637ffd,ed78d50d38637ffd,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-19 11:33:53.460 DEBUG [,ed78d50d38637ffd,ed78d50d38637ffd,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:33:54.768 DEBUG [,460ad643640f623e,460ad643640f623e,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/90", parameters={}
+2023-02-19 11:33:54.839 DEBUG [,460ad643640f623e,460ad643640f623e,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:35:56.507 DEBUG [,f303d451333be9c3,f303d451333be9c3,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:35:56.512 DEBUG [,f303d451333be9c3,f303d451333be9c3,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:35:56.617 DEBUG [,f1ada07cde5538b8,f1ada07cde5538b8,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/90", parameters={}
+2023-02-19 11:35:56.646 DEBUG [,f1ada07cde5538b8,f1ada07cde5538b8,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:39:27.662 DEBUG [,275fa1d9e1fa6ed2,275fa1d9e1fa6ed2,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:39:27.667 DEBUG [,275fa1d9e1fa6ed2,275fa1d9e1fa6ed2,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:39:27.759 DEBUG [,6a3e4dd67b945627,6a3e4dd67b945627,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/90", parameters={}
+2023-02-19 11:39:27.821 DEBUG [,6a3e4dd67b945627,6a3e4dd67b945627,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:41:36.879 DEBUG [,6c5198feddb7465a,6c5198feddb7465a,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:41:36.883 DEBUG [,6c5198feddb7465a,6c5198feddb7465a,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:41:36.975 DEBUG [,6d40d97b13da6478,6d40d97b13da6478,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/90", parameters={}
+2023-02-19 11:41:37.012 DEBUG [,6d40d97b13da6478,6d40d97b13da6478,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:43:47.283 DEBUG [,118b66522a96b2a4,118b66522a96b2a4,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-19 11:43:47.290 DEBUG [,118b66522a96b2a4,118b66522a96b2a4,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:43:47.291 DEBUG [,3e564dfd301c7888,3e564dfd301c7888,false] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=USER", parameters={masked}
+2023-02-19 11:43:47.293 DEBUG [,3e564dfd301c7888,3e564dfd301c7888,false] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:43:51.654 DEBUG [,df296e127f06e629,df296e127f06e629,false] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-19 11:43:51.674 DEBUG [,df296e127f06e629,df296e127f06e629,false] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:43:55.107 DEBUG [,07619d30b90ace18,07619d30b90ace18,false] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 11:43:55.191 DEBUG [,07619d30b90ace18,07619d30b90ace18,false] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:46:42.657 DEBUG [,f0c2b5b3fa4033aa,f0c2b5b3fa4033aa,false] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:46:42.661 DEBUG [,f0c2b5b3fa4033aa,f0c2b5b3fa4033aa,false] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:46:42.778 DEBUG [,38a08bbb7ec2ba6f,38a08bbb7ec2ba6f,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 11:46:42.817 DEBUG [,38a08bbb7ec2ba6f,38a08bbb7ec2ba6f,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:53:31.842 DEBUG [,d1e4c91dc196ed05,d1e4c91dc196ed05,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:53:31.847 DEBUG [,d1e4c91dc196ed05,d1e4c91dc196ed05,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:53:31.944 DEBUG [,3d46bdfd41a24209,3d46bdfd41a24209,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 11:53:31.981 DEBUG [,3d46bdfd41a24209,3d46bdfd41a24209,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:54:26.037 DEBUG [,e87ba4296dd9e772,e87ba4296dd9e772,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:54:26.043 DEBUG [,e87ba4296dd9e772,e87ba4296dd9e772,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:54:26.253 DEBUG [,55be854abf7a7c3e,55be854abf7a7c3e,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 11:54:26.296 DEBUG [,55be854abf7a7c3e,55be854abf7a7c3e,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:54:43.004 DEBUG [,8804c6beb0410909,8804c6beb0410909,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 11:54:43.007 DEBUG [,8804c6beb0410909,8804c6beb0410909,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 11:54:43.109 DEBUG [,13e628495a281d04,13e628495a281d04,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 11:54:43.146 DEBUG [,13e628495a281d04,13e628495a281d04,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:07:37.352 DEBUG [,470a2046ed0a5ef1,470a2046ed0a5ef1,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:07:37.357 DEBUG [,470a2046ed0a5ef1,470a2046ed0a5ef1,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:07:37.442 DEBUG [,9aeeccf852182026,9aeeccf852182026,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:07:37.485 DEBUG [,9aeeccf852182026,9aeeccf852182026,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:08:42.308 DEBUG [,777bce7125935efe,777bce7125935efe,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:08:42.313 DEBUG [,777bce7125935efe,777bce7125935efe,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:08:42.442 DEBUG [,93b84c102975cf43,93b84c102975cf43,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:08:42.484 DEBUG [,93b84c102975cf43,93b84c102975cf43,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:09:03.073 DEBUG [,13cad475c4972b84,13cad475c4972b84,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:09:03.077 DEBUG [,13cad475c4972b84,13cad475c4972b84,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:09:03.208 DEBUG [,8e7398b6e9e1b566,8e7398b6e9e1b566,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:09:03.267 DEBUG [,8e7398b6e9e1b566,8e7398b6e9e1b566,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:10:46.735 DEBUG [,0e07e8243c75fabb,0e07e8243c75fabb,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:10:46.740 DEBUG [,0e07e8243c75fabb,0e07e8243c75fabb,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:10:46.868 DEBUG [,80873db831518bd9,80873db831518bd9,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:10:46.918 DEBUG [,80873db831518bd9,80873db831518bd9,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:11:21.362 DEBUG [,6a4beb1730f47ab4,6a4beb1730f47ab4,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:11:21.367 DEBUG [,6a4beb1730f47ab4,6a4beb1730f47ab4,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:11:21.554 DEBUG [,3c73f355b2095905,3c73f355b2095905,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:11:21.600 DEBUG [,3c73f355b2095905,3c73f355b2095905,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:11:58.018 DEBUG [,71823b557e8aead6,71823b557e8aead6,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:11:58.022 DEBUG [,71823b557e8aead6,71823b557e8aead6,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:11:58.098 DEBUG [,b86fbf4bb586dcc9,b86fbf4bb586dcc9,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/87", parameters={}
+2023-02-19 12:11:58.137 DEBUG [,b86fbf4bb586dcc9,b86fbf4bb586dcc9,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:16:12.585 DEBUG [,0f5f04679f4c0c2b,0f5f04679f4c0c2b,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:16:12.589 DEBUG [,0f5f04679f4c0c2b,0f5f04679f4c0c2b,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:16:12.648 DEBUG [,296d11ee93b82f98,296d11ee93b82f98,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-19 12:16:12.655 DEBUG [,296d11ee93b82f98,296d11ee93b82f98,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:16:12.658 DEBUG [,fc38e73bd912de95,fc38e73bd912de95,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=USER", parameters={masked}
+2023-02-19 12:16:12.660 DEBUG [,fc38e73bd912de95,fc38e73bd912de95,false] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:16:21.385 DEBUG [,ce9f314a60581fe9,ce9f314a60581fe9,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/userDeck/sets-of-user?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-19 12:16:21.415 DEBUG [,ce9f314a60581fe9,ce9f314a60581fe9,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:16:22.526 DEBUG [,a8440786aceff00c,a8440786aceff00c,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:16:22.570 DEBUG [,a8440786aceff00c,a8440786aceff00c,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:18:27.915 DEBUG [,521411da44d1a7fe,521411da44d1a7fe,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:18:27.919 DEBUG [,521411da44d1a7fe,521411da44d1a7fe,false] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:18:27.995 DEBUG [,6211eda1188a300f,6211eda1188a300f,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:18:28.025 DEBUG [,6211eda1188a300f,6211eda1188a300f,false] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:19:21.994 DEBUG [,9e34cfd413f9c8e5,9e34cfd413f9c8e5,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:19:21.999 DEBUG [,9e34cfd413f9c8e5,9e34cfd413f9c8e5,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:19:22.215 DEBUG [,9c483bb3603b352b,9c483bb3603b352b,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:19:22.254 DEBUG [,9c483bb3603b352b,9c483bb3603b352b,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:21:37.455 DEBUG [,99ab79d0b7480d70,99ab79d0b7480d70,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:21:37.457 DEBUG [,99ab79d0b7480d70,99ab79d0b7480d70,false] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:21:40.387 DEBUG [,cebeed4f8e64ecd6,cebeed4f8e64ecd6,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:21:40.389 DEBUG [,cebeed4f8e64ecd6,cebeed4f8e64ecd6,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:21:51.022 DEBUG [,73eb64bc80fe0c35,73eb64bc80fe0c35,false] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:21:51.111  INFO [,73eb64bc80fe0c35,73eb64bc80fe0c35,false] 12364 --- [http-nio-8080-exec-7] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:21:51.123 DEBUG [,73eb64bc80fe0c35,73eb64bc80fe0c35,false] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:21:56.739 DEBUG [,178490ea4c8361e6,178490ea4c8361e6,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:21:56.744 DEBUG [,178490ea4c8361e6,178490ea4c8361e6,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:21:56.858 DEBUG [,a4cf155fbc65962b,a4cf155fbc65962b,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:21:56.897 DEBUG [,a4cf155fbc65962b,a4cf155fbc65962b,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:22:10.658 DEBUG [,64dbaae6e3ec51df,64dbaae6e3ec51df,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:22:10.661 DEBUG [,64dbaae6e3ec51df,64dbaae6e3ec51df,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:22:16.341 DEBUG [,cf2aea5f62602bdc,cf2aea5f62602bdc,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:22:16.344 DEBUG [,cf2aea5f62602bdc,cf2aea5f62602bdc,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:22:19.766 DEBUG [,4a56aae0d14b3da6,4a56aae0d14b3da6,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:22:19.804  INFO [,4a56aae0d14b3da6,4a56aae0d14b3da6,true] 12364 --- [http-nio-8080-exec-2] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:22:19.809 DEBUG [,4a56aae0d14b3da6,4a56aae0d14b3da6,true] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:22:24.079 DEBUG [,1624feee12fb3ba4,1624feee12fb3ba4,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:22:24.083 DEBUG [,1624feee12fb3ba4,1624feee12fb3ba4,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:22:24.183 DEBUG [,26575c0e00e4dd04,26575c0e00e4dd04,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:22:24.215 DEBUG [,26575c0e00e4dd04,26575c0e00e4dd04,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:23:11.372 DEBUG [,36e2fbc094d3df60,36e2fbc094d3df60,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:23:11.375 DEBUG [,36e2fbc094d3df60,36e2fbc094d3df60,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:23:47.774 DEBUG [,bacf418d37ef3337,bacf418d37ef3337,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:23:47.778 DEBUG [,bacf418d37ef3337,bacf418d37ef3337,true] 12364 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:23:47.906 DEBUG [,9fb01a8dd0076054,9fb01a8dd0076054,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:23:47.938 DEBUG [,9fb01a8dd0076054,9fb01a8dd0076054,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:23:56.849 DEBUG [,4429c5a3d5c7a30b,4429c5a3d5c7a30b,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:23:56.851 DEBUG [,4429c5a3d5c7a30b,4429c5a3d5c7a30b,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:23:59.333 DEBUG [,3b8bd316cf5a96a0,3b8bd316cf5a96a0,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:23:59.335 DEBUG [,3b8bd316cf5a96a0,3b8bd316cf5a96a0,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:30:03.180 DEBUG [,17af588251422c0c,17af588251422c0c,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:30:03.185 DEBUG [,17af588251422c0c,17af588251422c0c,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:30:03.255 DEBUG [,d0f1d3da7c54ff50,d0f1d3da7c54ff50,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:30:03.296 DEBUG [,d0f1d3da7c54ff50,d0f1d3da7c54ff50,false] 12364 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:30:07.512 DEBUG [,77fa630d575c7dbc,77fa630d575c7dbc,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:30:07.514 DEBUG [,77fa630d575c7dbc,77fa630d575c7dbc,true] 12364 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:30:10.554 DEBUG [,37231ed095163ae1,37231ed095163ae1,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:30:10.555 DEBUG [,37231ed095163ae1,37231ed095163ae1,true] 12364 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:30:20.951 DEBUG [,2a529f6947eaf3a3,2a529f6947eaf3a3,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:30:21.013  INFO [,2a529f6947eaf3a3,2a529f6947eaf3a3,true] 12364 --- [http-nio-8080-exec-4] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:30:21.022 DEBUG [,2a529f6947eaf3a3,2a529f6947eaf3a3,true] 12364 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:31:52.378 DEBUG [,b602493f9aa6779a,b602493f9aa6779a,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:31:52.382 DEBUG [,b602493f9aa6779a,b602493f9aa6779a,true] 12364 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:31:52.526 DEBUG [,fcdf21945694b230,fcdf21945694b230,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:31:52.567 DEBUG [,fcdf21945694b230,fcdf21945694b230,true] 12364 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:31:54.298 DEBUG [,1902e066a9c3c877,1902e066a9c3c877,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:31:54.300 DEBUG [,1902e066a9c3c877,1902e066a9c3c877,true] 12364 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:31:57.072 DEBUG [,4269989678ebdf9c,4269989678ebdf9c,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:31:57.075 DEBUG [,4269989678ebdf9c,4269989678ebdf9c,true] 12364 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:32:05.707 DEBUG [,7f3156a4ace3cc92,7f3156a4ace3cc92,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:32:05.752  INFO [,7f3156a4ace3cc92,7f3156a4ace3cc92,true] 12364 --- [http-nio-8080-exec-9] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:32:05.758 DEBUG [,7f3156a4ace3cc92,7f3156a4ace3cc92,true] 12364 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:33:32.612  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-02-19 12:33:32.847  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-19 12:33:33.645  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-19 12:33:33.832  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-19 12:33:34.546  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-19 12:33:34.733  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-19 12:33:35.464  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-19 12:33:35.652  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-19 12:33:35.929  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-19 12:33:35.954  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-02-19 12:33:35.957  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-02-19 12:33:35.964  WARN [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@16.0.2/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@16.0.2/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@16.0.2/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1661)
+ java.base@16.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@16.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1056)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1116)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+ java.base@16.0.2/java.lang.Thread.run(Thread.java:831)
+2023-02-19 12:33:35.980  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-19 12:33:35.982  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-19 12:33:35.982  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-19 12:33:35.982  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-19 12:33:35.982  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2023-02-19 12:33:36.193  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 12:33:36.208  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-02-19 12:33:36.211  INFO [,,,] 12364 --- [RMI TCP Connection(110)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-02-19 12:33:46.070  INFO [,,,] 26180 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 12:33:49.417  INFO [,,,] 26180 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 12:33:49.593  INFO [,,,] 26180 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 167ms. Found 17 JPA repository interfaces.
+2023-02-19 12:33:50.004  INFO [,,,] 26180 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 12:33:50.955  INFO [,,,] 26180 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 12:33:50.977  INFO [,,,] 26180 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 12:33:50.977  INFO [,,,] 26180 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 12:33:51.284  INFO [,,,] 26180 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 12:33:51.285  INFO [,,,] 26180 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5175 ms
+2023-02-19 12:33:52.598  WARN [,,,] 26180 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 12:33:52.975  INFO [,,,] 26180 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 12:33:53.084  INFO [,,,] 26180 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 12:33:53.472  INFO [,,,] 26180 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 12:33:53.672  INFO [,,,] 26180 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 12:33:53.885  INFO [,,,] 26180 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 12:33:53.915  INFO [,,,] 26180 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 12:33:55.363  INFO [,,,] 26180 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 12:33:55.372  INFO [,,,] 26180 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 12:33:58.801  INFO [,,,] 26180 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 12:33:59.108  INFO [,,,] 26180 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@755dae57, org.springframework.security.web.context.SecurityContextPersistenceFilter@72e1a349, org.springframework.security.web.header.HeaderWriterFilter@2b82254b, org.springframework.web.filter.CorsFilter@18c49ecb, org.springframework.security.web.authentication.logout.LogoutFilter@216bd6cd, com.naicson.yugioh.data.security.AuthTokenFilter@42c7781a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@b8da646, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@95237fc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@27ffe1d6, org.springframework.security.web.session.SessionManagementFilter@3a95898c, org.springframework.security.web.access.ExceptionTranslationFilter@1727d525, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7a08da83]
+2023-02-19 12:33:59.143  INFO [,,,] 26180 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 12:33:59.337  INFO [,,,] 26180 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 12:34:00.237  INFO [,,,] 26180 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 12:34:00.352  INFO [,,,] 26180 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 12:34:00.376  INFO [,,,] 26180 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 12:34:00.409  INFO [,,,] 26180 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 12:34:00.855  INFO [,,,] 26180 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 12:34:00.859  INFO [,,,] 26180 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 12:34:00.925  INFO [,,,] 26180 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 12:34:00.949  INFO [,,,] 26180 --- [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 12:34:00.949  INFO [,,,] 26180 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 12:34:00.950 DEBUG [,,,] 26180 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 12:34:00.976 DEBUG [,,,] 26180 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 12:34:00.977  INFO [,,,] 26180 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 28 ms
+2023-02-19 12:34:01.009  INFO [,,,] 26180 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 12:34:01.072  INFO [,,,] 26180 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 12:34:02.079  INFO [,,,] 26180 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#66008321:0/SimpleConnection@27c510c5 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 64039]
+2023-02-19 12:34:05.089  INFO [,,,] 26180 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 20.42 seconds (JVM running for 21.557)
+2023-02-19 12:36:01.231 DEBUG [,9dfa84ca1f09d2ce,9dfa84ca1f09d2ce,false] 26180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:36:01.231 DEBUG [,a617c587c1f28902,a617c587c1f28902,true] 26180 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:36:01.322 DEBUG [,a617c587c1f28902,a617c587c1f28902,true] 26180 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:36:01.603 DEBUG [,9dfa84ca1f09d2ce,9dfa84ca1f09d2ce,false] 26180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:36:03.231 DEBUG [,bd610de1cbfbb746,bd610de1cbfbb746,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:36:03.267 DEBUG [,bd610de1cbfbb746,bd610de1cbfbb746,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:36:07.015 DEBUG [,b1bc598165268b9a,b1bc598165268b9a,true] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:36:07.021 DEBUG [,b1bc598165268b9a,b1bc598165268b9a,true] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:36:11.908 DEBUG [,1bc4bacd5370ca90,1bc4bacd5370ca90,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:36:55.943  INFO [,1bc4bacd5370ca90,1bc4bacd5370ca90,true] 26180 --- [http-nio-8080-exec-5] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:36:55.975 DEBUG [,1bc4bacd5370ca90,1bc4bacd5370ca90,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:47:08.879 DEBUG [,ef321f71e1e36dfb,ef321f71e1e36dfb,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:47:08.879 DEBUG [,5ab2a66ae05d72f9,5ab2a66ae05d72f9,false] 26180 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:47:08.886 DEBUG [,ef321f71e1e36dfb,ef321f71e1e36dfb,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:47:08.992 DEBUG [,5ab2a66ae05d72f9,5ab2a66ae05d72f9,false] 26180 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:49:37.888 DEBUG [,1cd63c288b8c6885,1cd63c288b8c6885,false] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:49:37.897 DEBUG [,1cd63c288b8c6885,1cd63c288b8c6885,false] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:49:38.020 DEBUG [,dd25fbf81494a0c7,dd25fbf81494a0c7,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:49:38.080 DEBUG [,dd25fbf81494a0c7,dd25fbf81494a0c7,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:50:18.274 DEBUG [,196dcc581bbf3a9c,196dcc581bbf3a9c,false] 26180 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:50:18.279 DEBUG [,196dcc581bbf3a9c,196dcc581bbf3a9c,false] 26180 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:50:18.393 DEBUG [,12502dd686fc88a2,12502dd686fc88a2,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:50:18.441 DEBUG [,12502dd686fc88a2,12502dd686fc88a2,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:53:10.644 DEBUG [,5fb021feba1a8e2a,5fb021feba1a8e2a,false] 26180 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:53:10.646 DEBUG [,5fb021feba1a8e2a,5fb021feba1a8e2a,false] 26180 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:53:14.512 DEBUG [,84fd9364a6259aec,84fd9364a6259aec,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:53:14.514 DEBUG [,84fd9364a6259aec,84fd9364a6259aec,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:53:19.018 DEBUG [,af36b09047d84449,af36b09047d84449,false] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:53:41.310  INFO [,af36b09047d84449,af36b09047d84449,false] 26180 --- [http-nio-8080-exec-5] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:53:41.315 DEBUG [,af36b09047d84449,af36b09047d84449,false] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:54:03.042 DEBUG [,353e2da397fc4a04,353e2da397fc4a04,true] 26180 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:54:13.224  INFO [,353e2da397fc4a04,353e2da397fc4a04,true] 26180 --- [http-nio-8080-exec-6] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:54:13.230 DEBUG [,353e2da397fc4a04,353e2da397fc4a04,true] 26180 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:54:39.666 DEBUG [,3bfcb9d24e86ebfd,3bfcb9d24e86ebfd,true] 26180 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:54:41.950  INFO [,3bfcb9d24e86ebfd,3bfcb9d24e86ebfd,true] 26180 --- [http-nio-8080-exec-7] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:54:41.956 DEBUG [,3bfcb9d24e86ebfd,3bfcb9d24e86ebfd,true] 26180 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:55:16.705 DEBUG [,db4f376f6c022b5c,db4f376f6c022b5c,true] 26180 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:55:24.596  INFO [,db4f376f6c022b5c,db4f376f6c022b5c,true] 26180 --- [http-nio-8080-exec-9] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:55:34.504 DEBUG [,db4f376f6c022b5c,db4f376f6c022b5c,true] 26180 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:55:38.955 DEBUG [,4231c75e3fe96809,4231c75e3fe96809,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:55:39.002  INFO [,4231c75e3fe96809,4231c75e3fe96809,true] 26180 --- [http-nio-8080-exec-8] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:55:39.005 DEBUG [,4231c75e3fe96809,4231c75e3fe96809,true] 26180 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:56:34.655 DEBUG [,89998c0cdbb7a2a7,89998c0cdbb7a2a7,false] 26180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 12:56:34.660 DEBUG [,89998c0cdbb7a2a7,89998c0cdbb7a2a7,false] 26180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:56:34.778 DEBUG [,f29156deaf0cec69,f29156deaf0cec69,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 12:56:34.857 DEBUG [,f29156deaf0cec69,f29156deaf0cec69,true] 26180 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:56:36.965 DEBUG [,6a59a3e552fdf8e1,6a59a3e552fdf8e1,true] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:56:36.968 DEBUG [,6a59a3e552fdf8e1,6a59a3e552fdf8e1,true] 26180 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:56:39.256 DEBUG [,4397cfc58359c03f,4397cfc58359c03f,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=73", parameters={masked}
+2023-02-19 12:56:39.258 DEBUG [,4397cfc58359c03f,4397cfc58359c03f,true] 26180 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 12:56:42.696 DEBUG [,eedbd5106a8aa54a,eedbd5106a8aa54a,true] 26180 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 12:56:48.308  INFO [,eedbd5106a8aa54a,eedbd5106a8aa54a,true] 26180 --- [http-nio-8080-exec-6] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 12:56:50.244 DEBUG [,eedbd5106a8aa54a,eedbd5106a8aa54a,true] 26180 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:00:39.660  INFO [,,,] 23904 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 13:00:41.806  INFO [,,,] 23904 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 13:00:42.120  INFO [,,,] 23904 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 298ms. Found 17 JPA repository interfaces.
+2023-02-19 13:00:42.876  INFO [,,,] 23904 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 13:00:43.948  INFO [,,,] 23904 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 13:00:43.962  INFO [,,,] 23904 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 13:00:43.963  INFO [,,,] 23904 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 13:00:44.160  INFO [,,,] 23904 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 13:00:44.160  INFO [,,,] 23904 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4451 ms
+2023-02-19 13:00:44.984  WARN [,,,] 23904 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 13:00:45.234  INFO [,,,] 23904 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 13:00:45.297  INFO [,,,] 23904 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 13:00:45.477  INFO [,,,] 23904 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 13:00:45.618  INFO [,,,] 23904 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 13:00:45.805  INFO [,,,] 23904 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 13:00:45.824  INFO [,,,] 23904 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 13:00:48.025  INFO [,,,] 23904 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 13:00:48.040  INFO [,,,] 23904 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 13:00:52.001  INFO [,,,] 23904 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 13:00:52.664  INFO [,,,] 23904 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7203fac0, org.springframework.security.web.context.SecurityContextPersistenceFilter@5802572b, org.springframework.security.web.header.HeaderWriterFilter@e68c09d, org.springframework.web.filter.CorsFilter@6a6a7c53, org.springframework.security.web.authentication.logout.LogoutFilter@c3acda3, com.naicson.yugioh.data.security.AuthTokenFilter@5765cd21, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ee16a4e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@39090979, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@31dd8a0b, org.springframework.security.web.session.SessionManagementFilter@19a920d1, org.springframework.security.web.access.ExceptionTranslationFilter@57441348, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@626a783b]
+2023-02-19 13:00:52.750  INFO [,,,] 23904 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 13:00:53.114  INFO [,,,] 23904 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 13:00:54.136  INFO [,,,] 23904 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 13:00:54.259  INFO [,,,] 23904 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 13:00:54.288  INFO [,,,] 23904 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 13:00:54.327  INFO [,,,] 23904 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 13:00:54.797  INFO [,,,] 23904 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 13:00:54.800  INFO [,,,] 23904 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 13:00:54.843  INFO [,,,] 23904 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 13:00:54.889  INFO [,,,] 23904 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 13:00:54.929  INFO [,,,] 23904 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 13:00:55.110  INFO [,,,] 23904 --- [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 13:00:55.110  INFO [,,,] 23904 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 13:00:55.110 DEBUG [,,,] 23904 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 13:00:55.126 DEBUG [,,,] 23904 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 13:00:55.126  INFO [,,,] 23904 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2023-02-19 13:00:55.990  INFO [,,,] 23904 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#f64f47a:0/SimpleConnection@15bb197 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 64998]
+2023-02-19 13:00:59.030  INFO [,,,] 23904 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 21.286 seconds (JVM running for 23.385)
+2023-02-19 13:01:50.597 DEBUG [,5ba65c58c7547530,5ba65c58c7547530,true] 23904 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 13:02:39.161  INFO [,5ba65c58c7547530,5ba65c58c7547530,true] 23904 --- [http-nio-8080-exec-1] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 13:02:39.198 DEBUG [,5ba65c58c7547530,5ba65c58c7547530,true] 23904 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:07:27.947 DEBUG [,bf72b64b98629f8c,bf72b64b98629f8c,true] 23904 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 13:09:04.862  INFO [,bf72b64b98629f8c,bf72b64b98629f8c,true] 23904 --- [http-nio-8080-exec-3] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 13:09:04.867 DEBUG [,bf72b64b98629f8c,bf72b64b98629f8c,true] 23904 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:23:50.859  INFO [,,,] 15388 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 13:23:53.207  INFO [,,,] 15388 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 13:23:53.398  INFO [,,,] 15388 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 183ms. Found 17 JPA repository interfaces.
+2023-02-19 13:23:53.844  INFO [,,,] 15388 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 13:23:54.874  INFO [,,,] 15388 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 13:23:54.892  INFO [,,,] 15388 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 13:23:54.893  INFO [,,,] 15388 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 13:23:55.078  INFO [,,,] 15388 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 13:23:55.078  INFO [,,,] 15388 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4178 ms
+2023-02-19 13:23:55.817  WARN [,,,] 15388 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 13:23:56.104  INFO [,,,] 15388 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 13:23:56.175  INFO [,,,] 15388 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 13:23:56.523  INFO [,,,] 15388 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 13:23:56.825  INFO [,,,] 15388 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 13:23:57.223  INFO [,,,] 15388 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 13:23:57.264  INFO [,,,] 15388 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 13:23:59.056  INFO [,,,] 15388 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 13:23:59.069  INFO [,,,] 15388 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 13:24:02.797  INFO [,,,] 15388 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 13:24:03.305  INFO [,,,] 15388 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@bb510b, org.springframework.security.web.context.SecurityContextPersistenceFilter@1b84d2e, org.springframework.security.web.header.HeaderWriterFilter@3638ae1c, org.springframework.web.filter.CorsFilter@180c785d, org.springframework.security.web.authentication.logout.LogoutFilter@24555012, com.naicson.yugioh.data.security.AuthTokenFilter@42c7781a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@763a46fe, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@79805d37, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@24028f51, org.springframework.security.web.session.SessionManagementFilter@6df37cc4, org.springframework.security.web.access.ExceptionTranslationFilter@2086dfb8, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4e7fbd6c]
+2023-02-19 13:24:03.347  INFO [,,,] 15388 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 13:24:03.570  INFO [,,,] 15388 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 13:24:04.625  INFO [,,,] 15388 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 13:24:04.744  INFO [,,,] 15388 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 13:24:04.771  INFO [,,,] 15388 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 13:24:04.811  INFO [,,,] 15388 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 13:24:05.259  INFO [,,,] 15388 --- [RMI TCP Connection(4)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 13:24:05.259  INFO [,,,] 15388 --- [RMI TCP Connection(4)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 13:24:05.260 DEBUG [,,,] 15388 --- [RMI TCP Connection(4)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 13:24:05.279 DEBUG [,,,] 15388 --- [RMI TCP Connection(4)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 13:24:05.279  INFO [,,,] 15388 --- [RMI TCP Connection(4)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 20 ms
+2023-02-19 13:24:05.317  INFO [,,,] 15388 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 13:24:05.322  INFO [,,,] 15388 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 13:24:05.386  INFO [,,,] 15388 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 13:24:05.450  INFO [,,,] 15388 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 13:24:05.511  INFO [,,,] 15388 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 13:24:06.476  INFO [,,,] 15388 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#66008321:0/SimpleConnection@14944a7b [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 49370]
+2023-02-19 13:24:09.550  INFO [,,,] 15388 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 20.02 seconds (JVM running for 21.667)
+2023-02-19 13:26:00.422 DEBUG [,6a8002a508b27e90,6a8002a508b27e90,true] 15388 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 13:26:00.422 DEBUG [,05c06995617bcb55,05c06995617bcb55,false] 15388 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 13:26:00.477 DEBUG [,05c06995617bcb55,05c06995617bcb55,false] 15388 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:26:00.613 DEBUG [,6a8002a508b27e90,6a8002a508b27e90,true] 15388 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:26:08.640 DEBUG [,4d008384cd362460,4d008384cd362460,false] 15388 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 13:26:08.645 DEBUG [,4d008384cd362460,4d008384cd362460,false] 15388 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:26:08.767 DEBUG [,7793ddaa7c850152,7793ddaa7c850152,true] 15388 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 13:26:08.961 DEBUG [,7793ddaa7c850152,7793ddaa7c850152,true] 15388 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:45:44.445 DEBUG [,7bca607b2abba263,7bca607b2abba263,true] 15388 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 13:45:44.446 DEBUG [,39a4afa90fad0428,39a4afa90fad0428,false] 15388 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 13:45:44.454 DEBUG [,7bca607b2abba263,7bca607b2abba263,true] 15388 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:45:44.495 DEBUG [,39a4afa90fad0428,39a4afa90fad0428,false] 15388 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 13:46:49.640  INFO [,,,] 4524 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 13:46:51.110  INFO [,,,] 4524 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 13:46:51.279  INFO [,,,] 4524 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 159ms. Found 17 JPA repository interfaces.
+2023-02-19 13:46:51.840  INFO [,,,] 4524 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 13:46:53.203  INFO [,,,] 4524 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 13:46:53.218  INFO [,,,] 4524 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 13:46:53.218  INFO [,,,] 4524 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 13:46:53.373  INFO [,,,] 4524 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 13:46:53.373  INFO [,,,] 4524 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3710 ms
+2023-02-19 13:46:54.010  WARN [,,,] 4524 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 13:46:54.265  INFO [,,,] 4524 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 13:46:54.358  INFO [,,,] 4524 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 13:46:54.613  INFO [,,,] 4524 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 13:46:54.755  INFO [,,,] 4524 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 13:46:54.965  INFO [,,,] 4524 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 13:46:55.012  INFO [,,,] 4524 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 13:46:56.422  INFO [,,,] 4524 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 13:46:56.438  INFO [,,,] 4524 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 13:46:59.962  INFO [,,,] 4524 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 13:47:00.269  INFO [,,,] 4524 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6a5c67cf, org.springframework.security.web.context.SecurityContextPersistenceFilter@70fdecff, org.springframework.security.web.header.HeaderWriterFilter@5e744b4b, org.springframework.web.filter.CorsFilter@26db1100, org.springframework.security.web.authentication.logout.LogoutFilter@5f19da2c, com.naicson.yugioh.data.security.AuthTokenFilter@187c8f96, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a8b10dd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@41e35358, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26d68ea4, org.springframework.security.web.session.SessionManagementFilter@dcdf733, org.springframework.security.web.access.ExceptionTranslationFilter@17ed6578, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@67387eba]
+2023-02-19 13:47:00.306  INFO [,,,] 4524 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 13:47:00.541  INFO [,,,] 4524 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 13:47:01.469  INFO [,,,] 4524 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 13:47:01.636  INFO [,,,] 4524 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 13:47:01.702  INFO [,,,] 4524 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 13:47:01.761  INFO [,,,] 4524 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 13:47:02.454  INFO [,,,] 4524 --- [RMI TCP Connection(1)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 13:47:02.454  INFO [,,,] 4524 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 13:47:02.455 DEBUG [,,,] 4524 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 13:47:02.485 DEBUG [,,,] 4524 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 13:47:02.485  INFO [,,,] 4524 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 30 ms
+2023-02-19 13:47:02.690  INFO [,,,] 4524 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 13:47:02.695  INFO [,,,] 4524 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 13:47:02.787  INFO [,,,] 4524 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 13:47:02.907  INFO [,,,] 4524 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 13:47:02.997  INFO [,,,] 4524 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 13:47:03.939  INFO [,,,] 4524 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#14d5b2ac:0/SimpleConnection@3e5a40e7 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 53464]
+2023-02-19 13:47:06.942  INFO [,,,] 4524 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 18.331 seconds (JVM running for 22.124)
+2023-02-19 14:11:35.228 DEBUG [,761ce0b595fba99f,761ce0b595fba99f,false] 4524 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 14:11:35.228 DEBUG [,5c536f1759352cc0,5c536f1759352cc0,false] 4524 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 14:11:35.287 DEBUG [,761ce0b595fba99f,761ce0b595fba99f,false] 4524 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:11:35.424 DEBUG [,5c536f1759352cc0,5c536f1759352cc0,false] 4524 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:17:52.224 DEBUG [,9edbdcf441978348,9edbdcf441978348,false] 4524 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=12861", parameters={masked}
+2023-02-19 14:17:52.267 DEBUG [,9edbdcf441978348,9edbdcf441978348,false] 4524 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:19:55.333 DEBUG [,d3f57e768e4e5b38,d3f57e768e4e5b38,true] 4524 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 14:19:55.339 DEBUG [,d3f57e768e4e5b38,d3f57e768e4e5b38,true] 4524 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:19:55.427 DEBUG [,6803ae58291c0cbf,6803ae58291c0cbf,false] 4524 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 14:20:46.584 DEBUG [,6803ae58291c0cbf,6803ae58291c0cbf,false] 4524 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:36:10.346 DEBUG [,0fc3edb3d71b1de8,0fc3edb3d71b1de8,true] 4524 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 14:36:10.368 DEBUG [,0fc3edb3d71b1de8,0fc3edb3d71b1de8,true] 4524 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:36:10.468 DEBUG [,a9ef8bdb33be0a8d,a9ef8bdb33be0a8d,true] 4524 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 14:41:46.048 DEBUG [,a9ef8bdb33be0a8d,a9ef8bdb33be0a8d,true] 4524 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:44:25.500  INFO [,,,] 11132 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 14:44:26.882  INFO [,,,] 11132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 14:44:27.108  INFO [,,,] 11132 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 215ms. Found 17 JPA repository interfaces.
+2023-02-19 14:44:27.796  INFO [,,,] 11132 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 14:44:29.054  INFO [,,,] 11132 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 14:44:29.069  INFO [,,,] 11132 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 14:44:29.070  INFO [,,,] 11132 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 14:44:29.229  INFO [,,,] 11132 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 14:44:29.230  INFO [,,,] 11132 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3697 ms
+2023-02-19 14:44:29.887  WARN [,,,] 11132 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 14:44:30.130  INFO [,,,] 11132 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 14:44:30.217  INFO [,,,] 11132 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 14:44:30.476  INFO [,,,] 11132 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 14:44:30.607  INFO [,,,] 11132 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 14:44:30.798  INFO [,,,] 11132 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 14:44:30.823  INFO [,,,] 11132 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 14:44:32.123  INFO [,,,] 11132 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 14:44:32.139  INFO [,,,] 11132 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 14:44:35.929  INFO [,,,] 11132 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 14:44:36.242  INFO [,,,] 11132 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@f11fe28, org.springframework.security.web.context.SecurityContextPersistenceFilter@735beda7, org.springframework.security.web.header.HeaderWriterFilter@60df0131, org.springframework.web.filter.CorsFilter@4f1502d7, org.springframework.security.web.authentication.logout.LogoutFilter@2a7c82e, com.naicson.yugioh.data.security.AuthTokenFilter@4ba29b51, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6eefc125, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1761b129, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1565c047, org.springframework.security.web.session.SessionManagementFilter@f083345, org.springframework.security.web.access.ExceptionTranslationFilter@7dc779bb, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7680cb52]
+2023-02-19 14:44:36.280  INFO [,,,] 11132 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 14:44:36.482  INFO [,,,] 11132 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 14:44:37.765  INFO [,,,] 11132 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 14:44:37.934  INFO [,,,] 11132 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 14:44:37.983  INFO [,,,] 11132 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 14:44:38.047  INFO [,,,] 11132 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 14:44:38.622  INFO [,,,] 11132 --- [RMI TCP Connection(1)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 14:44:38.622  INFO [,,,] 11132 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 14:44:38.623 DEBUG [,,,] 11132 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 14:44:38.651 DEBUG [,,,] 11132 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 14:44:38.651  INFO [,,,] 11132 --- [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 29 ms
+2023-02-19 14:44:38.794  INFO [,,,] 11132 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 14:44:38.797  INFO [,,,] 11132 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 14:44:38.889  INFO [,,,] 11132 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 14:44:39.027  INFO [,,,] 11132 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 14:44:39.118  INFO [,,,] 11132 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 14:44:40.062  INFO [,,,] 11132 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#33c6c4f:0/SimpleConnection@12a96a6e [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 55440]
+2023-02-19 14:44:43.026  INFO [,,,] 11132 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 18.518 seconds (JVM running for 20.258)
+2023-02-19 14:45:01.816 DEBUG [,14cf6406143fc194,14cf6406143fc194,true] 11132 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 14:45:01.816 DEBUG [,88a2d0fa3f6d218e,88a2d0fa3f6d218e,false] 11132 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 14:45:01.872 DEBUG [,14cf6406143fc194,14cf6406143fc194,true] 11132 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:45:20.087 DEBUG [,88a2d0fa3f6d218e,88a2d0fa3f6d218e,false] 11132 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:51:14.109  INFO [,,,] 17520 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 14:51:15.498  INFO [,,,] 17520 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 14:51:15.684  INFO [,,,] 17520 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 176ms. Found 17 JPA repository interfaces.
+2023-02-19 14:51:16.088  INFO [,,,] 17520 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 14:51:16.863  INFO [,,,] 17520 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 14:51:16.877  INFO [,,,] 17520 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 14:51:16.878  INFO [,,,] 17520 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 14:51:17.044  INFO [,,,] 17520 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 14:51:17.044  INFO [,,,] 17520 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2909 ms
+2023-02-19 14:51:18.230  WARN [,,,] 17520 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 14:51:18.669  INFO [,,,] 17520 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 14:51:18.788  INFO [,,,] 17520 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 14:51:19.067  INFO [,,,] 17520 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 14:51:19.226  INFO [,,,] 17520 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 14:51:19.428  INFO [,,,] 17520 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 14:51:19.451  INFO [,,,] 17520 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 14:51:20.714  INFO [,,,] 17520 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 14:51:20.724  INFO [,,,] 17520 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 14:51:24.677  INFO [,,,] 17520 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 14:51:25.036  INFO [,,,] 17520 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@19640d53, org.springframework.security.web.context.SecurityContextPersistenceFilter@1be7b7de, org.springframework.security.web.header.HeaderWriterFilter@5e077a32, org.springframework.web.filter.CorsFilter@32f0a9c2, org.springframework.security.web.authentication.logout.LogoutFilter@492e988c, com.naicson.yugioh.data.security.AuthTokenFilter@7c09037a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ed4e0e9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7959747d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@773bfe56, org.springframework.security.web.session.SessionManagementFilter@7fb57b7c, org.springframework.security.web.access.ExceptionTranslationFilter@74ed1b3d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3817d886]
+2023-02-19 14:51:25.079  INFO [,,,] 17520 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 14:51:25.341  INFO [,,,] 17520 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 14:51:26.131  INFO [,,,] 17520 --- [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 14:51:26.131  INFO [,,,] 17520 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 14:51:26.132 DEBUG [,,,] 17520 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 14:51:26.150 DEBUG [,,,] 17520 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 14:51:26.151  INFO [,,,] 17520 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 19 ms
+2023-02-19 14:51:26.863  INFO [,,,] 17520 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 14:51:27.039  INFO [,,,] 17520 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 14:51:27.109  INFO [,,,] 17520 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 14:51:27.181  INFO [,,,] 17520 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 14:51:28.081  INFO [,,,] 17520 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 14:51:28.086  INFO [,,,] 17520 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 14:51:28.167  INFO [,,,] 17520 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 14:51:28.264  INFO [,,,] 17520 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 14:51:28.335  INFO [,,,] 17520 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 14:51:29.317  INFO [,,,] 17520 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#1e0383d3:0/SimpleConnection@28b992e0 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 55686]
+2023-02-19 14:51:32.332  INFO [,,,] 17520 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 19.804 seconds (JVM running for 20.999)
+2023-02-19 14:51:56.219 DEBUG [,04c3b01babe273ed,04c3b01babe273ed,false] 17520 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 14:51:56.219 DEBUG [,8553d212e12e7a5b,8553d212e12e7a5b,true] 17520 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 14:51:56.286 DEBUG [,8553d212e12e7a5b,8553d212e12e7a5b,true] 17520 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 14:54:44.127 DEBUG [,04c3b01babe273ed,04c3b01babe273ed,false] 17520 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:03:06.859  INFO [,,,] 13092 --- [main] com.naicson.yugioh.YugiohApplication     : No active profile set, falling back to default profiles: default
+2023-02-19 16:03:08.851  INFO [,,,] 13092 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-02-19 16:03:09.221  INFO [,,,] 13092 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 349ms. Found 17 JPA repository interfaces.
+2023-02-19 16:03:10.096  INFO [,,,] 13092 --- [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f7a6f13b-681e-37cb-b3ff-df72fcc66c93
+2023-02-19 16:03:11.151  INFO [,,,] 13092 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-19 16:03:11.166  INFO [,,,] 13092 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-19 16:03:11.167  INFO [,,,] 13092 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2023-02-19 16:03:11.393  INFO [,,,] 13092 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-19 16:03:11.393  INFO [,,,] 13092 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4506 ms
+2023-02-19 16:03:12.189  WARN [,,,] 13092 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-19 16:03:12.517  INFO [,,,] 13092 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-02-19 16:03:12.567  INFO [,,,] 13092 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2023-02-19 16:03:12.837  INFO [,,,] 13092 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-02-19 16:03:13.154  INFO [,,,] 13092 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-02-19 16:03:13.465  INFO [,,,] 13092 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-02-19 16:03:13.506  INFO [,,,] 13092 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-02-19 16:03:15.418  INFO [,,,] 13092 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-02-19 16:03:15.427  INFO [,,,] 13092 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-02-19 16:03:18.420  INFO [,,,] 13092 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2023-02-19 16:03:18.993  INFO [,,,] 13092 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62d59d60, org.springframework.security.web.context.SecurityContextPersistenceFilter@95237fc, org.springframework.security.web.header.HeaderWriterFilter@b8da646, org.springframework.web.filter.CorsFilter@3c532b97, org.springframework.security.web.authentication.logout.LogoutFilter@1e4d3c2e, com.naicson.yugioh.data.security.AuthTokenFilter@4f20ff8e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4a17c516, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@54e24511, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5cffd11d, org.springframework.security.web.session.SessionManagementFilter@6631e6af, org.springframework.security.web.access.ExceptionTranslationFilter@72e1a349, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@74e322fd]
+2023-02-19 16:03:19.058  INFO [,,,] 13092 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-02-19 16:03:19.497  INFO [,,,] 13092 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2023-02-19 16:03:20.553  INFO [,,,] 13092 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-19 16:03:20.699  INFO [,,,] 13092 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2023-02-19 16:03:20.740  INFO [,,,] 13092 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2023-02-19 16:03:20.781  INFO [,,,] 13092 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2023-02-19 16:03:21.305  INFO [,,,] 13092 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_1
+2023-02-19 16:03:21.307  INFO [,,,] 13092 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: handleUsingGET_2
+2023-02-19 16:03:21.347  INFO [,,,] 13092 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllDecksNameUsingGET_1
+2023-02-19 16:03:21.404  INFO [,,,] 13092 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: getAllSetsBySetTypeUsingGET_1
+2023-02-19 16:03:21.452  INFO [,,,] 13092 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-19 16:03:22.055  INFO [,,,] 13092 --- [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-19 16:03:22.056  INFO [,,,] 13092 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-19 16:03:22.056 DEBUG [,,,] 13092 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-02-19 16:03:22.073 DEBUG [,,,] 13092 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-02-19 16:03:22.074  INFO [,,,] 13092 --- [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 18 ms
+2023-02-19 16:03:22.384  INFO [,,,] 13092 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#18e0f894:0/SimpleConnection@21be9ddc [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 58171]
+2023-02-19 16:03:25.481  INFO [,,,] 13092 --- [main] com.naicson.yugioh.YugiohApplication     : Started YugiohApplication in 19.701 seconds (JVM running for 20.704)
+2023-02-19 16:03:59.266 DEBUG [,1f3e3adb76075c52,1f3e3adb76075c52,false] 13092 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/93", parameters={}
+2023-02-19 16:03:59.266 DEBUG [,e5a81fba0c595191,e5a81fba0c595191,false] 13092 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 16:03:59.342 DEBUG [,e5a81fba0c595191,e5a81fba0c595191,false] 13092 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:03:59.476 DEBUG [,1f3e3adb76075c52,1f3e3adb76075c52,false] 13092 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:04:04.505 DEBUG [,9836399b7ab76e34,9836399b7ab76e34,false] 13092 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=2721", parameters={masked}
+2023-02-19 16:04:04.537 DEBUG [,9836399b7ab76e34,9836399b7ab76e34,false] 13092 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:04:16.885 DEBUG [,f94381bf9735aa9f,f94381bf9735aa9f,false] 13092 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/cards/get-alternative-numbers?cardId=5520", parameters={masked}
+2023-02-19 16:04:16.891 DEBUG [,f94381bf9735aa9f,f94381bf9735aa9f,false] 13092 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:04:21.508 DEBUG [,cedda653a1f003b4,cedda653a1f003b4,false] 13092 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-19 16:04:21.700  INFO [,cedda653a1f003b4,cedda653a1f003b4,false] 13092 --- [http-nio-8080-exec-10] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Yu-Gi-Oh! The Dark Side of Dimensions Movie Pack - Gold Edition 
+2023-02-19 16:04:21.713 DEBUG [,cedda653a1f003b4,cedda653a1f003b4,false] 13092 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-19 16:04:26.225 DEBUG [,b3664823919ba6c9,b3664823919ba6c9,true] 13092 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-19 16:04:26.230 DEBUG [,b3664823919ba6c9,b3664823919ba6c9,true] 13092 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
