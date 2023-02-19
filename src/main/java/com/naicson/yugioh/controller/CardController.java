@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -168,5 +169,13 @@ public class CardController {
 		cardService.updateCardsImages(cardImagesJson);
 		
 		return new ResponseEntity<>(JSONObject.quote("Communication Success"), HttpStatus.OK);
+	}
+	
+	@Cacheable("alternatives")
+	@GetMapping(path = {"/get-alternative-numbers"})
+	@ApiOperation(value="Get Card's alternative arts", authorizations = { @Authorization(value="JWT") })	
+	public ResponseEntity<List<Long>> getAlternativeArts(@RequestParam Integer cardId){
+	
+		return new ResponseEntity<>(cardService.getAlternativeArts(cardId), HttpStatus.OK);
 	}
 }

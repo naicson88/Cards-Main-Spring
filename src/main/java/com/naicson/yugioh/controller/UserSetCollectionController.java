@@ -62,7 +62,7 @@ public class UserSetCollectionController {
 	public ResponseEntity<String> saveSetCollection(@RequestBody UserSetCollectionDTO userCollection){
 		String msg = service.saveUserSetCollection(userCollection);
 		
-		return new ResponseEntity<String>(JSONObject.quote(msg), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote(msg), HttpStatus.OK);
 	}
 	
 	@GetMapping("/setsname-by-settype/{setType}")

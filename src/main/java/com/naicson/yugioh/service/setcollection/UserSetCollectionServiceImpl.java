@@ -319,9 +319,7 @@ public class UserSetCollectionServiceImpl {
 			}
 		});
 
-		List<UserRelDeckCards> listRel = new ArrayList<UserRelDeckCards>(mapCards.values());
-
-		return listRel;
+		return new ArrayList<UserRelDeckCards>(mapCards.values());
 	}
 
 	private UserRelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {

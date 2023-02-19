@@ -19,6 +19,7 @@ import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
@@ -28,7 +29,7 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 public class ConsumerUtils {
 
 	@Autowired
-	CardAlternativeNumberRepository alternativeRepository;
+	CardAlternativeNumberService alternativeService;
 
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
 
@@ -52,7 +53,7 @@ public class ConsumerUtils {
 		newDeck.getRel_deck_cards().stream().forEach(rel -> {
 			rel.setDeckId(deckId);
 			rel.setQuantity(1);
-			rel.setCardId(alternativeRepository.findByCardAlternativeNumber(rel.getCardNumber()).getCardId());
+			rel.setCardId(alternativeService.findByCardAlternativeNumber(rel.getCardNumber()).getCardId());
 		});
 
 		return newDeck;

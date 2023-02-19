@@ -15,6 +15,7 @@ import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
@@ -25,9 +26,9 @@ public class CardConsumerRabbitMQ {
 
 	@Autowired
 	CardRegistry cardRegistry;
-
 	@Autowired
-	CardAlternativeNumberRepository cardAlternativeNumberRepository;
+	CardAlternativeNumberService alternativeService;
+	
 
 	@Autowired
 	RelDeckCardsServiceImpl relDeckCardService;
@@ -57,7 +58,7 @@ public class CardConsumerRabbitMQ {
 	}
 
 	private Long verifyIfCardIsAlreadyRegistered(AddNewCardToDeckDTO card) {
-		Card cardFound = cardAlternativeNumberRepository.findCardByCardNumber(card.getNumber());
+		Card cardFound = alternativeService.findCardByCardNumber(card.getNumber());
 
 		if (cardFound == null)
 			cardFound = cardService.findByCardNome(card.getName());

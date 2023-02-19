@@ -64,7 +64,7 @@ public class CardServiceImpl implements CardDetailService {
 	@Autowired
 	CardDAO dao;
 	@Autowired
-	CardAlternativeNumberRepository alternativeRepository;
+	CardAlternativeNumberService alternativeService;
 	@Autowired
 	CardPriceInformationServiceImpl cardPriceService;
 	@Autowired
@@ -200,7 +200,7 @@ public class CardServiceImpl implements CardDetailService {
 		Card card = cardRepository.findByNumero(cardNumero)
 				.orElseThrow(() ->  new EntityNotFoundException("It was not possible find card with number: " + cardNumero));
 		
-		card.setAlternativeCardNumber(alternativeRepository.findAllByCardId(card.getId()));	
+		card.setAlternativeCardNumber(alternativeService.findAllByCardId(card.getId()));	
 		
 		CardDetailsDTO dto = new CardDetailsDTO();
 		
@@ -438,7 +438,7 @@ public class CardServiceImpl implements CardDetailService {
 		Card cardEntity = Optional.ofNullable(this.findByCardNome(cardName.trim()))
 				.orElseThrow(() -> new EntityNotFoundException("Card Not Found with name: " + cardName));
 		
-		List<CardAlternativeNumber> alternativeNumbers = Optional.ofNullable(alternativeRepository.findAllByCardId(cardEntity.getId()))
+		List<CardAlternativeNumber> alternativeNumbers = Optional.ofNullable(alternativeService.findAllByCardId(cardEntity.getId()))
 				.orElseThrow(() -> new EntityNotFoundException("Card Alternative Number not found with Card ID: " + cardEntity.getId()));
 		
 		alternativeNumbers.stream().forEach(alt -> {		
@@ -457,7 +457,7 @@ public class CardServiceImpl implements CardDetailService {
 	public void saveNewAlternativeImages(Integer cardId, Set<Long> numbers) {
 		numbers.stream().forEach(num -> {
 			CardAlternativeNumber alt = new CardAlternativeNumber(null, cardId, num);
-			alternativeRepository.save(alt);
+			alternativeService.save(alt);
 			logger.info("New Alternative Number Saved: " + num);
 		});
 	}
@@ -477,9 +477,22 @@ public class CardServiceImpl implements CardDetailService {
 	public List<CardsSearchDTO> getRandomCards() {		
 		List<Card> list = cardRepository.findRandomCards();
 		
-		List<CardsSearchDTO> listDTO = list.stream().map(card -> CardsSearchDTO.transformInDTO(card)).collect(Collectors.toList());
+		return list.stream().map(CardsSearchDTO::transformInDTO).collect(Collectors.toList());
 	
-		return listDTO;		
+	}
+
+	@Override
+	public List<Long> getAlternativeArts(Integer cardId) {
+		if(cardId == null || cardId == 0)
+			throw new IllegalArgumentException("Invalid Card ID: " + cardId);
+		
+		List<CardAlternativeNumber> alternatives = alternativeService.findAllByCardId(cardId);
+		
+		if(alternatives == null || alternatives.isEmpty())
+			return Collections.emptyList();
+		
+		return alternatives.stream().map(CardAlternativeNumber::getCardAlternativeNumber).collect(Collectors.toList());
+		
 	}
 	
 	
