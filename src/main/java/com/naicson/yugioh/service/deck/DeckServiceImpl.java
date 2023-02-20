@@ -87,10 +87,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (Id == null || Id == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
 
-		Deck deck = deckRepository.findById(Id)
-				.orElseThrow(() -> new EntityNotFoundException("Deck not found."));
-
-		return deck;
+		return deckRepository.findById(Id).orElseThrow(() -> new EntityNotFoundException("Deck not found."));
 	}
 
 	@Override
@@ -103,7 +100,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		List<RelDeckCards> relation = src.findRelationByDeckId(deckId);
 		
-		if (relation == null || relation.size() == 0) 
+		if (relation == null || relation.isEmpty()) 
 			return Collections.emptyList();
 
 		return relation;
@@ -115,7 +112,7 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		List<Card> cards = dao.cardsOfDeck(deckId, table);
 		
-		if(cards == null || cards.size() == 0)
+		if(cards == null || cards.isEmpty())
 			return Collections.emptyList();
 					
 		return cards;
@@ -129,10 +126,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (deck == null)
 			throw new IllegalArgumentException("Invalid Deck informed");
 
-		dao = new DeckDAO();
-		Long id = dao.addDeck(deck);
-
-		return id;
+		return new DeckDAO().addDeck(deck);
 	}
 
 
@@ -269,32 +263,32 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;
 	}
 	
-	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
+	private Deck setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
 	
-	if(deck == null || mapRarities == null)
-		throw new IllegalArgumentException("Invalid information to map rarities");
+		if(deck == null || mapRarities == null)
+			throw new IllegalArgumentException("Invalid information to map rarities");
 	
-	DeckRarityQuantity quantity = new DeckRarityQuantity();
-	
-	mapRarities.forEach((key, value) ->{
-		ECardRarity rarity = ECardRarity.getRarityByName(key);
-		switch (rarity) {		
-			case COMMON: quantity.setCommon(value); break;				
-			case RARE: quantity.setRare(value); break;			
-			case SUPER_RARE: quantity.setSuperRare(value); break;			
-			case ULTRA_RARE: quantity.setUltraRare(value); break;		
-			case SECRET_RARE: quantity.setSecretRare(value); break;				
-			case ULTIMATE_RARE: quantity.setUltimateRare(value); break;
-			case GOLD_RARE: quantity.setGoldRare(value); break;		
-			case PARALLEL_RARE: quantity.setParallelRare(value); break;				
-			case GHOST_RARE: quantity.setGhostRare(value); break;					
-			default:
-				throw new IllegalArgumentException("Invalid Rarity informed! " + key);
-		}
-	});
-	
-	deck.setQuantity(quantity);
-	return deck;
+		DeckRarityQuantity quantity = new DeckRarityQuantity();
+		
+		mapRarities.forEach((key, value) ->{
+			ECardRarity rarity = ECardRarity.getRarityByName(key);
+			switch (rarity) {		
+				case COMMON: quantity.setCommon(value); break;				
+				case RARE: quantity.setRare(value); break;			
+				case SUPER_RARE: quantity.setSuperRare(value); break;			
+				case ULTRA_RARE: quantity.setUltraRare(value); break;		
+				case SECRET_RARE: quantity.setSecretRare(value); break;				
+				case ULTIMATE_RARE: quantity.setUltimateRare(value); break;
+				case GOLD_RARE: quantity.setGoldRare(value); break;		
+				case PARALLEL_RARE: quantity.setParallelRare(value); break;				
+				case GHOST_RARE: quantity.setGhostRare(value); break;					
+				default:
+					throw new IllegalArgumentException("Invalid Rarity informed! " + key + value);
+			}
+		});
+		
+		deck.setQuantity(quantity);
+		return deck;
 }
 
 	@Override
