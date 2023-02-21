@@ -784,3 +784,190 @@ Caused by: com.naicson.yugioh.util.exceptions.ErrorMessage: Rarity Not Found! UR
 2023-02-20 12:02:38.415  INFO [,fb2b876998605781,fb2b876998605781,true] 2504 --- [http-nio-8080-exec-9] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Magnificent Mavens 
 2023-02-20 12:02:38.418 DEBUG [,fb2b876998605781,fb2b876998605781,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
 2023-02-20 12:02:51.670 DEBUG [,a331d6bfb474efdb,a331d6bfb474efdb,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : POST "/yugiohAPI/user-setcollection/save-set-collection", parameters={}
+2023-02-20 12:02:51.701  INFO [,a331d6bfb474efdb,a331d6bfb474efdb,true] 2504 --- [http-nio-8080-exec-8] c.n.y.s.s.UserSetCollectionServiceImpl   : User SetCollection was successfully saved! Magnificent Mavens 
+2023-02-20 12:02:51.705 DEBUG [,a331d6bfb474efdb,a331d6bfb474efdb,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:16:48.622 DEBUG [,2859d36b4390ab6a,2859d36b4390ab6a,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:16:48.627 DEBUG [,2859d36b4390ab6a,2859d36b4390ab6a,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:16:48.704 DEBUG [,39e51c068329286b,39e51c068329286b,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:16:48.801 DEBUG [,39e51c068329286b,39e51c068329286b,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:23:07.420 DEBUG [,d088ca3622f0afec,d088ca3622f0afec,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:23:07.424 DEBUG [,d088ca3622f0afec,d088ca3622f0afec,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:23:07.498 DEBUG [,9f4a82922ec33b33,9f4a82922ec33b33,false] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:23:07.534 DEBUG [,9f4a82922ec33b33,9f4a82922ec33b33,false] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:24:06.512 DEBUG [,f7a2a7ae127bc57d,f7a2a7ae127bc57d,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:24:06.518 DEBUG [,f7a2a7ae127bc57d,f7a2a7ae127bc57d,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:24:06.645 DEBUG [,663c865e153b23b9,663c865e153b23b9,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:24:06.671 DEBUG [,663c865e153b23b9,663c865e153b23b9,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:26:28.245 DEBUG [,89707fac22a26e39,89707fac22a26e39,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:26:28.250 DEBUG [,89707fac22a26e39,89707fac22a26e39,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:26:28.406 DEBUG [,0fd8cb244a217a3a,0fd8cb244a217a3a,true] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:26:28.434 DEBUG [,0fd8cb244a217a3a,0fd8cb244a217a3a,true] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:26:34.743 DEBUG [,5198cf2a115af26c,5198cf2a115af26c,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:26:34.747 DEBUG [,5198cf2a115af26c,5198cf2a115af26c,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:26:34.823 DEBUG [,0304155705daa994,0304155705daa994,false] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:26:34.844 DEBUG [,0304155705daa994,0304155705daa994,false] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:32:32.783 DEBUG [,5fcea16a41353711,5fcea16a41353711,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:32:32.787 DEBUG [,5fcea16a41353711,5fcea16a41353711,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:32:32.866 DEBUG [,b06e2465603622d7,b06e2465603622d7,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:32:32.887 DEBUG [,b06e2465603622d7,b06e2465603622d7,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:35:25.145 DEBUG [,24c81e31b94d8613,24c81e31b94d8613,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:35:25.150 DEBUG [,24c81e31b94d8613,24c81e31b94d8613,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:35:25.247 DEBUG [,240dedbc0916f710,240dedbc0916f710,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:35:25.275 DEBUG [,240dedbc0916f710,240dedbc0916f710,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:35:53.106 DEBUG [,cd6430e08966a15c,cd6430e08966a15c,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:35:53.110 DEBUG [,cd6430e08966a15c,cd6430e08966a15c,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:35:53.191 DEBUG [,6c0c68cade1d01a5,6c0c68cade1d01a5,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:35:53.216 DEBUG [,6c0c68cade1d01a5,6c0c68cade1d01a5,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:36:42.408 DEBUG [,02f5bed5ede468a1,02f5bed5ede468a1,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:36:42.413 DEBUG [,02f5bed5ede468a1,02f5bed5ede468a1,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:36:42.560 DEBUG [,ff6741d790c67e19,ff6741d790c67e19,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:36:42.592 DEBUG [,ff6741d790c67e19,ff6741d790c67e19,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:37:23.113 DEBUG [,0cb7ebde138be8fc,0cb7ebde138be8fc,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:37:23.117 DEBUG [,0cb7ebde138be8fc,0cb7ebde138be8fc,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:37:23.208 DEBUG [,4f4e55f7bab53b9b,4f4e55f7bab53b9b,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:37:23.234 DEBUG [,4f4e55f7bab53b9b,4f4e55f7bab53b9b,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:37:44.366 DEBUG [,1a8adfab901225fe,1a8adfab901225fe,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:37:44.370 DEBUG [,1a8adfab901225fe,1a8adfab901225fe,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:37:44.456 DEBUG [,35ed89831daebc17,35ed89831daebc17,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/user-setcollection/consult/94", parameters={}
+2023-02-20 12:37:44.481 DEBUG [,35ed89831daebc17,35ed89831daebc17,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:39:03.090 DEBUG [,5cfd43008fd30cc5,5cfd43008fd30cc5,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:39:03.102 DEBUG [,5cfd43008fd30cc5,5cfd43008fd30cc5,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:39:03.193 DEBUG [,4a8f5eeaf0b86d7a,4a8f5eeaf0b86d7a,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/get-sets?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-20 12:39:03.197 DEBUG [,c910117d7506f7d6,c910117d7506f7d6,false] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=KONAMI", parameters={masked}
+2023-02-20 12:39:03.201 DEBUG [,c910117d7506f7d6,c910117d7506f7d6,false] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:39:03.311 DEBUG [,4a8f5eeaf0b86d7a,4a8f5eeaf0b86d7a,true] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:39:16.664 DEBUG [,41e42b2a51d28fd2,41e42b2a51d28fd2,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/get-sets?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-20 12:39:16.747 DEBUG [,41e42b2a51d28fd2,41e42b2a51d28fd2,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:39:23.050 DEBUG [,d3d7be0602d46767,d3d7be0602d46767,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/set-details?id=778&source=KONAMI&setType=COLLECTION", parameters={masked}
+2023-02-20 12:39:23.061 DEBUG [,d3d7be0602d46767,d3d7be0602d46767,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:40:11.257 DEBUG [,9b0146e3da8dfafa,9b0146e3da8dfafa,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/get-sets?size=25&page=0&setType=DECK", parameters={masked}
+2023-02-20 12:40:11.262 DEBUG [,36357cf7e915b414,36357cf7e915b414,false] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/autocomplete-sets?source=KONAMI", parameters={masked}
+2023-02-20 12:40:11.264 DEBUG [,36357cf7e915b414,36357cf7e915b414,false] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:40:11.371 DEBUG [,9b0146e3da8dfafa,9b0146e3da8dfafa,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:40:13.809 DEBUG [,889622d1565b7fda,889622d1565b7fda,true] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/decks/get-sets?size=25&page=0&setType=BOOSTER", parameters={masked}
+2023-02-20 12:40:13.874 DEBUG [,889622d1565b7fda,889622d1565b7fda,true] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:49:58.103 DEBUG [,f2ded6bc0a6a8f69,f2ded6bc0a6a8f69,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:49:58.108 DEBUG [,f2ded6bc0a6a8f69,f2ded6bc0a6a8f69,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:49:58.158 DEBUG [,d792db35be608f23,d792db35be608f23,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:49:58.165 DEBUG [,d792db35be608f23,d792db35be608f23,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:50:02.193 DEBUG [,4df39ee1f5d600bc,4df39ee1f5d600bc,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:50:02.198 DEBUG [,4df39ee1f5d600bc,4df39ee1f5d600bc,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:50:02.217 DEBUG [,472f36fa4d431750,472f36fa4d431750,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:50:02.223 DEBUG [,472f36fa4d431750,472f36fa4d431750,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:54:43.337 DEBUG [,9ec393ff98647475,9ec393ff98647475,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:54:43.341 DEBUG [,9ec393ff98647475,9ec393ff98647475,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:54:43.400 DEBUG [,4da05edc6ff191d0,4da05edc6ff191d0,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:54:43.405 DEBUG [,4da05edc6ff191d0,4da05edc6ff191d0,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:55:13.560 DEBUG [,bafe621df0e85ab2,bafe621df0e85ab2,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:55:13.565 DEBUG [,bafe621df0e85ab2,bafe621df0e85ab2,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:55:13.624 DEBUG [,2122e589cce530df,2122e589cce530df,false] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:55:13.627 DEBUG [,2122e589cce530df,2122e589cce530df,false] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:56:22.653 DEBUG [,3ba4f313c581661e,3ba4f313c581661e,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:56:22.658 DEBUG [,3ba4f313c581661e,3ba4f313c581661e,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:56:22.739 DEBUG [,256bdcfa533b9d0b,256bdcfa533b9d0b,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:56:22.744 DEBUG [,256bdcfa533b9d0b,256bdcfa533b9d0b,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:56:56.415 DEBUG [,c793ac225f345dc4,c793ac225f345dc4,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:56:56.420 DEBUG [,c793ac225f345dc4,c793ac225f345dc4,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 12:56:56.441 DEBUG [,e20d592fd2f6e97f,e20d592fd2f6e97f,false] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 12:56:56.446 DEBUG [,e20d592fd2f6e97f,e20d592fd2f6e97f,false] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:27.392 DEBUG [,9f2d3e22194c3617,9f2d3e22194c3617,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:27.397 DEBUG [,9f2d3e22194c3617,9f2d3e22194c3617,true] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:27.477 DEBUG [,f21ae6a0417c63de,f21ae6a0417c63de,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:27.482 DEBUG [,f21ae6a0417c63de,f21ae6a0417c63de,false] 2504 --- [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:41.030 DEBUG [,e2be6430c05ebadb,e2be6430c05ebadb,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:41.034 DEBUG [,e2be6430c05ebadb,e2be6430c05ebadb,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:41.052 DEBUG [,f69947e74a45efd4,f69947e74a45efd4,false] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:41.056 DEBUG [,f69947e74a45efd4,f69947e74a45efd4,false] 2504 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:56.736 DEBUG [,295aed827da85ca2,295aed827da85ca2,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:56.741 DEBUG [,295aed827da85ca2,295aed827da85ca2,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:01:56.763 DEBUG [,e6f775a1a4e3cd71,e6f775a1a4e3cd71,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:01:56.768 DEBUG [,e6f775a1a4e3cd71,e6f775a1a4e3cd71,false] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:02:11.681 DEBUG [,8d92989033de66cc,8d92989033de66cc,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:02:11.686 DEBUG [,8d92989033de66cc,8d92989033de66cc,true] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:02:11.769 DEBUG [,1045b47a0438b9ed,1045b47a0438b9ed,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:02:11.775 DEBUG [,1045b47a0438b9ed,1045b47a0438b9ed,false] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:06:18.767 DEBUG [,6a483f2baa6d930b,6a483f2baa6d930b,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:06:18.772 DEBUG [,6a483f2baa6d930b,6a483f2baa6d930b,true] 2504 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:06:18.844 DEBUG [,0fef9278b9f7aa73,0fef9278b9f7aa73,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:06:18.849 DEBUG [,0fef9278b9f7aa73,0fef9278b9f7aa73,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:12:35.821 DEBUG [,e742490283e68759,e742490283e68759,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:12:35.827 DEBUG [,e742490283e68759,e742490283e68759,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:12:35.962 DEBUG [,a3348cb9b34a355c,a3348cb9b34a355c,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/home/info", parameters={}
+2023-02-20 13:12:36.760 DEBUG [,a3348cb9b34a355c,a3348cb9b34a355c,true] 2504 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:12:40.486 DEBUG [,987d6392b941036a,987d6392b941036a,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:12:40.491 DEBUG [,987d6392b941036a,987d6392b941036a,true] 2504 --- [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:12:40.502 DEBUG [,57068e6e75c8f966,57068e6e75c8f966,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:12:40.507 DEBUG [,57068e6e75c8f966,57068e6e75c8f966,false] 2504 --- [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:13:18.663 DEBUG [,6edc69232234b768,6edc69232234b768,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:13:18.669 DEBUG [,6edc69232234b768,6edc69232234b768,true] 2504 --- [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 13:13:18.775 DEBUG [,b19c6d5853c7d122,b19c6d5853c7d122,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 13:13:18.780 DEBUG [,b19c6d5853c7d122,b19c6d5853c7d122,true] 2504 --- [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 14:33:49.694  WARN [,,,] 2504 --- [AMQP Connection 35.85.123.167:5672] c.r.c.impl.ForgivingExceptionHandler     : An unexpected connection driver error occured (Exception message: Connection reset)
+2023-02-20 14:33:49.874 ERROR [,,,] 2504 --- [AMQP Connection 35.85.123.167:5672] o.s.a.r.c.CachingConnectionFactory       : Channel shutdown: connection error
+2023-02-20 14:33:49.875 ERROR [,,,] 2504 --- [AMQP Connection 35.85.123.167:5672] o.s.a.r.c.CachingConnectionFactory       : Channel shutdown: connection error
+2023-02-20 14:33:49.875 ERROR [,,,] 2504 --- [AMQP Connection 35.85.123.167:5672] o.s.a.r.c.CachingConnectionFactory       : Channel shutdown: connection error
+2023-02-20 14:33:49.876 ERROR [,,,] 2504 --- [AMQP Connection 35.85.123.167:5672] o.s.a.r.c.CachingConnectionFactory       : Channel shutdown: connection error
+2023-02-20 14:33:50.385  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@d57624a: tags=[[amq.ctag-GMBAShO9upVAmPY9wZpdGw]], channel=Cached Rabbit Channel: AMQChannel(amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz,3), conn: Proxy@47c5b16b Shared Rabbit Connection: SimpleConnection@f054e29 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 64748], acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:33:50.408  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:33:50.440  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@7f446346: tags=[[amq.ctag-kQ6iTk8OANzTd1BzmO0YzQ]], channel=Cached Rabbit Channel: AMQChannel(amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz,4), conn: Proxy@47c5b16b Shared Rabbit Connection: null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:33:50.440  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@3a3a0b3b: tags=[[amq.ctag-i21_760M8_ENaA3lCncmOQ]], channel=Cached Rabbit Channel: AMQChannel(amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz,2), conn: Proxy@47c5b16b Shared Rabbit Connection: null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:33:50.442  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:33:50.444  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:33:50.643  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@47b7883c: tags=[[amq.ctag-2i0_Fby6cQELX8uVUMzRZg]], channel=Cached Rabbit Channel: AMQChannel(amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz,1), conn: Proxy@47c5b16b Shared Rabbit Connection: null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:33:50.644  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:51.532  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@537e7644: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:51.516  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@47034059: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:52.473  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:52.471  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@3b2d0f20: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:52.478  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:51.532  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@2e19c4ed: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:52.543  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:52.575  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:57.518  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@ef2e012: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:57.520  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:57.628  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@7d1092c3: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:57.629  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:57.660  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@61526b5d: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:57.661  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:52:57.676  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@78b9e491: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:52:57.677  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:53:02.687  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@5e478925: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:53:02.745  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [beaver-01.rmq.cloudamqp.com:5672]
+2023-02-20 14:53:02.806  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@18e5ea6f: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:53:02.822  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#2-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4db71d43: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:53:02.883  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@551327be: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2023-02-20 14:53:03.629  INFO [,,,] 2504 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#3-5] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#3b538e2a:13/SimpleConnection@2e00cb24 [delegate=amqp://cnfvkpiz@35.85.123.167:5672/cnfvkpiz, localPort= 62302]
+2023-02-20 14:53:07.824  WARN [,,,] 2504 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=19m28s337ms591µs600ns).
+2023-02-20 14:53:08.694 DEBUG [,f76097fb5db309e3,f76097fb5db309e3,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 14:53:08.773 DEBUG [,f76097fb5db309e3,f76097fb5db309e3,false] 2504 --- [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 14:53:08.792 DEBUG [,1d26ab996f2457ed,1d26ab996f2457ed,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/yugiohAPI/User/consulta-usuario/alannaicson", parameters={}
+2023-02-20 14:53:08.798 DEBUG [,1d26ab996f2457ed,1d26ab996f2457ed,true] 2504 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-02-20 15:21:22.072  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-02-20 15:21:22.542  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-20 15:21:22.759  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-20 15:21:22.974  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-20 15:21:23.622  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-20 15:21:23.841  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-20 15:21:24.545  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-20 15:21:24.770  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-02-20 15:21:25.630  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-02-20 15:21:25.712  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-02-20 15:21:25.740  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-02-20 15:21:25.780  WARN [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@16.0.2/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@16.0.2/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@16.0.2/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1661)
+ java.base@16.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@16.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1056)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1116)
+ java.base@16.0.2/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+ java.base@16.0.2/java.lang.Thread.run(Thread.java:831)
+2023-02-20 15:21:25.916  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-20 15:21:25.924  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-20 15:21:25.930  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-20 15:21:25.931  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.a.r.l.SimpleMessageListenerContainer : Shutdown ignored - container is not active already
+2023-02-20 15:21:25.936  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2023-02-20 15:21:26.223  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-02-20 15:21:26.271  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-02-20 15:21:26.276  INFO [,,,] 2504 --- [RMI TCP Connection(209)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
