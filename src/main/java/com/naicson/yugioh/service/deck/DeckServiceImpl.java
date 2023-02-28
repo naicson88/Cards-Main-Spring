@@ -340,19 +340,17 @@ public class DeckServiceImpl implements DeckDetailService {
 	public List<AutocompleteSetDTO> autocompleteSet() {
 		List<Tuple> tuple = deckRepository.autocompleteSet();
 		
-		List<AutocompleteSetDTO> listSetNames = tuple.stream().map(c -> new AutocompleteSetDTO(
+		return tuple.stream().map(c -> new AutocompleteSetDTO(
 				c.get(0, BigInteger.class),
 				c.get(1, String.class)
 				)).collect(Collectors.toList());
-		
-		return listSetNames;
 	}
 
 	public List<DeckAndSetsBySetTypeDTO> getAllDecksName(boolean includeCollectionsDeck) {
 			
 		List<Tuple> tuple =	includeCollectionsDeck == false ?  deckRepository.getAllDecksName() : deckRepository.getAllDecksNameIncludeCollections();
 		
-		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
+		return tuple.stream().map(t -> {
 			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
 					Long.parseLong(String.valueOf(t.get(0))),
 					String.valueOf(t.get(1))
@@ -360,7 +358,6 @@ public class DeckServiceImpl implements DeckDetailService {
 			return dto;
 		}).collect(Collectors.toList());
 		
-		return listDto;
 	}
 
 	public void updateCardsQuantity(String setCodes) {
@@ -403,6 +400,25 @@ public class DeckServiceImpl implements DeckDetailService {
 				relService.save(relCopied);
 			}	
 		}
+	}
+
+	public SetDetailsDTO getDeckToEdit(Integer deckId) {
+		Deck deck = this.findById(deckId.longValue());
+		
+		return this.converDeckInSetDetailsToEdit(deck);
+	}
+	
+	private SetDetailsDTO converDeckInSetDetailsToEdit(Deck deck) {
+		SetDetailsDTO dto = new SetDetailsDTO();
+		InsideDeckDTO insideDeck = new InsideDeckDTO();
+		
+		BeanUtils.copyProperties(deck, dto);		
+		
+		insideDeck.setRelDeckCards(relService.findRelationByDeckId(deck.getId()));
+		dto.setInsideDecks(List.of(insideDeck));
+		dto.setDescription(deck.getDescription());
+
+		return dto;
 	}
 
 

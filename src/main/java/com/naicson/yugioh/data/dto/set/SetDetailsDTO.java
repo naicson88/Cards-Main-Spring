@@ -25,6 +25,7 @@ public class SetDetailsDTO {
 	private String imgurUrl;
 	private int quantityUserHave;
 	private Map<String, Long> quantity;
+	private String setCode;
 	
 	private Map<CardAttributes, Integer> statsQuantityByAttribute;
 	private Map<Integer, Integer> statsQuantityByLevel;
@@ -151,6 +152,12 @@ public class SetDetailsDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getSetCode() {
+		return setCode;
+	}
+	public void setSetCode(String setCode) {
+		this.setCode = setCode;
 	}
 
 }
