@@ -134,5 +134,13 @@ public class DeckController<T> {
 		return new ResponseEntity<>(deckService.getDeckToEdit(deckId), HttpStatus.OK);
 	}
 	
+	@PostMapping("/deck-to-edit")
+	@ApiOperation(value="Deck to edit", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> editDeck(@RequestBody SetDetailsDTO dto){
+		System.out.println(dto);
+		
+		return null;
+	}
+	
 
 }
