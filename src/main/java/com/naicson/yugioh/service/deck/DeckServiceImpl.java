@@ -36,6 +36,7 @@ import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.DeckRarityQuantity;
@@ -402,23 +403,34 @@ public class DeckServiceImpl implements DeckDetailService {
 		}
 	}
 
-	public SetDetailsDTO getDeckToEdit(Integer deckId) {
+	public SetEditDTO getDeckToEdit(Integer deckId) {
 		Deck deck = this.findById(deckId.longValue());
 		
 		return this.converDeckInSetDetailsToEdit(deck);
 	}
 	
-	private SetDetailsDTO converDeckInSetDetailsToEdit(Deck deck) {
-		SetDetailsDTO dto = new SetDetailsDTO();
-		InsideDeckDTO insideDeck = new InsideDeckDTO();
+	private SetEditDTO converDeckInSetDetailsToEdit(Deck deck) {
+		SetEditDTO dto = new SetEditDTO();
 		
 		BeanUtils.copyProperties(deck, dto);		
 		
-		insideDeck.setRelDeckCards(relService.findRelationByDeckId(deck.getId()));
-		dto.setInsideDecks(List.of(insideDeck));
-		dto.setDescription(deck.getDescription());
+		dto.setRelDeckCards(relService.findRelationByDeckId(deck.getId()));
 
 		return dto;
+	}
+
+	public Deck editDeck(SetEditDTO dto) {
+		Deck deck = findById(dto.getId());
+		
+		deck.setNome(dto.getNome().trim());
+		deck.setLancamento(dto.getLancamento());
+		deck.setImagem(dto.getImagem().trim());
+		deck.setSetType(dto.getSetType().trim());
+		deck.setSetCode(dto.getSetCode().trim());
+		deck.setIsSpeedDuel(dto.getIsSpeedDuel());
+		deck.setDescription(dto.getDescription());
+		
+		return deckRepository.save(deck);
 	}
 
 

@@ -332,7 +332,7 @@ public class UserDeckServiceImpl {
 
 		List<DeckDTO> relDeckAndCards = dao.relationDeckAndCards(originalDeckId);
 
-		if (relDeckAndCards == null || relDeckAndCards.size() == 0) 
+		if (relDeckAndCards == null || relDeckAndCards.isEmpty()) 
 			return qtdCardsAddedOrRemoved;
 		
 		if (!flagAddOrRemove.equals("A") && !flagAddOrRemove.equals("R"))

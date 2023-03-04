@@ -1,6 +1,7 @@
 package com.naicson.yugioh.service.setcollection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
@@ -43,8 +46,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	UserSetCollectionRepository userSetRepository;
 	
 	@Autowired
-	DeckServiceImpl deckService;
-	
+	DeckServiceImpl deckService;	
 	@Autowired
 	SetsUtils setsUtils;
 	
@@ -207,6 +209,33 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		logger.info("Association Created!");
 		
 		return dto;
+	}
+
+	@Override
+	public SetEditDTO editCollection(Integer setId) {
+		SetCollection set = setColRepository.findById(setId)
+				.orElseThrow(() -> new RuntimeException("Can't find Collection with ID: " + setId));
+		
+		SetEditDTO dto = new SetEditDTO();
+		dto.setId(set.getId().longValue());
+		dto.setImagem(set.getImgPath());
+		dto.setLancamento(set.getReleaseDate());
+		dto.setNome(set.getName());
+		dto.setRelDeckCards(Collections.emptyList());
+		dto.setSetType(set.getSetCollectionType().toString());
+		dto.setDescription(set.getDescription());
+		dto.setSetCode(set.getSetCode());
+		dto.setIsSpeedDuel(set.getIsSpeedDuel());
+		
+		List<SetEditDTO> insideSets = set.getDecks().stream().map(deck -> {
+			return deckService.getDeckToEdit(deck.getId().intValue());
+
+		}).collect(Collectors.toList());
+		
+		dto.setInsideDecks(insideSets);
+		
+		return dto;
+		
 	}
 
 }
