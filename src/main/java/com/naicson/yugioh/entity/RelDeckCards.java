@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tab_rel_deck_cards")
@@ -22,20 +24,30 @@ public class RelDeckCards implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(name = "deck_id")
+	@NotNull
 	private Long deckId;
 	@Column(name = "card_numero")
+	@NotNull
 	private Long cardNumber;
 	@Column(name = "card_set_code")
+	@NotBlank
 	private String cardSetCode;
 	private Double card_price;
+	@NotBlank
 	private String card_raridade;
 	private Date dt_criacao;	
+	@NotNull
 	private Boolean isSideDeck;
+	@NotNull
 	private Boolean isSpeedDuel;
 	@Column(nullable = false)
+	@NotNull
 	private Integer cardId;
+	@NotNull
 	private Integer quantity;
+	@NotBlank
 	private String setRarityCode;
+	@NotBlank
 	private String rarityDetails;
 	
 	public RelDeckCards(String cardSetCode, Double price, String rarity, String setRarityCode, String rarityDetails) {

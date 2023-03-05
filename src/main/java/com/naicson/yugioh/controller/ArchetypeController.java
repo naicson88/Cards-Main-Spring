@@ -24,8 +24,6 @@ public class ArchetypeController {
 	@Autowired
 	ArchetypeServiceImpl archetypeService;
 	
-	
-	
 	@Cacheable("archetypes")
 	@ApiOperation(value="Return all Archetypes", authorizations = { @Authorization(value="JWT") })
 	@GetMapping("/all")

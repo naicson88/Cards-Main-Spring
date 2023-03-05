@@ -60,5 +60,15 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	public void save(RelDeckCards relCopied) {
 		relDeckCardsRepository.save(relCopied);
 	}
+
+	public RelDeckCards editRelDeckCards(RelDeckCards rel) {	
+		relDeckCardsRepository.findById(rel.getId())
+			.orElseThrow(() -> new RuntimeException("Cannot find Relation with ID: " + rel.getId()));
+		
+		return relDeckCardsRepository.save(rel);
+	}
 	
+	public void removeRelDeckCards(Long relId) {
+		relDeckCardsRepository.deleteById(relId);
+	}
 }
