@@ -14,7 +14,7 @@ public interface SetCollectionService {
 	
 	public SetCollection findById(Integer id);
 	
-	public SetCollection saveSetCollection(SetCollection setCollection)  throws Exception;
+	public SetCollection saveSetCollection(SetCollection setCollection);
 	
 //	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
 
@@ -22,6 +22,8 @@ public interface SetCollectionService {
 
 	public AssociationDTO newAssociation(@Valid AssociationDTO dto);
 
-	public SetEditDTO editCollection(Integer setId);
+	public SetEditDTO getCollectionToEdit(Integer setId);
+
+	public SetCollection editCollection(SetEditDTO dto);
 
 }

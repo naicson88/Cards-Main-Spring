@@ -212,7 +212,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	}
 
 	@Override
-	public SetEditDTO editCollection(Integer setId) {
+	public SetEditDTO getCollectionToEdit(Integer setId) {
 		SetCollection set = setColRepository.findById(setId)
 				.orElseThrow(() -> new RuntimeException("Can't find Collection with ID: " + setId));
 		
@@ -235,6 +235,24 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		dto.setInsideDecks(insideSets);
 		
 		return dto;
+		
+	}
+	
+	@Transactional
+	@Override
+	public SetCollection editCollection(SetEditDTO dto) {
+		SetCollection set = setColRepository.findById(dto.getId().intValue())
+				.orElseThrow(() -> new RuntimeException("Can't find Collection with ID: " + dto.getId().intValue()));
+		
+		set.setImgPath(dto.getImagem().trim());
+		set.setReleaseDate(dto.getLancamento());
+		set.setName(dto.getNome().trim());
+		set.setSetCollectionType(SetType.valueOf(dto.getSetType()));
+		set.setDescription(dto.getDescription());
+		set.setSetCode(dto.getSetCode());
+		set.setIsSpeedDuel(dto.getIsSpeedDuel());
+		
+		return setColRepository.save(set);
 		
 	}
 

@@ -63,11 +63,17 @@ public class SetCollectionController {
 	}
 	
 	@GetMapping("/collection-to-edit")
-	@ApiOperation(value="Edit especific deck", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<SetEditDTO> editCollection(@RequestParam Integer deckId){	
+	@ApiOperation(value="Get especific Collection DTO to edit", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<SetEditDTO> getCollectionToEdit(@RequestParam Integer deckId){	
 		
-		return new ResponseEntity<>( service.editCollection(deckId), HttpStatus.OK);
+		return new ResponseEntity<>( service.getCollectionToEdit(deckId), HttpStatus.OK);
 	}
 	
-
+	@PostMapping("/edit-collection")
+	@ApiOperation(value="Edit especific Collection", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> editCollection(@RequestBody SetEditDTO dto){
+		service.editCollection(dto);
+		return new ResponseEntity<>( JSONObject.quote("SetCollection edited successfully!"), HttpStatus.OK);
+	}
+	
 }

@@ -418,7 +418,8 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		return dto;
 	}
-
+	
+	@Transactional
 	public Deck editDeck(SetEditDTO dto) {
 		Deck deck = findById(dto.getId());
 		
