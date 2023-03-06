@@ -24,8 +24,7 @@ public class CardAlternativeNumber {
 	
 	public CardAlternativeNumber() {}
 
-	public CardAlternativeNumber(Long id, int cardId, Long cardAlternativeNumber) {		
-		this.id = id;
+	public CardAlternativeNumber( int cardId, Long cardAlternativeNumber) {		
 		this.cardId = cardId;
 		this.cardAlternativeNumber = cardAlternativeNumber;
 		this.registrationDate = LocalDateTime.now();

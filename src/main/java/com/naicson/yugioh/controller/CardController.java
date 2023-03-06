@@ -2,6 +2,7 @@ package com.naicson.yugioh.controller;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -177,5 +178,12 @@ public class CardController {
 	public ResponseEntity<List<Long>> getAlternativeArts(@RequestParam Integer cardId){
 	
 		return new ResponseEntity<>(cardService.getAlternativeArts(cardId), HttpStatus.OK);
+	}
+	
+	@Cacheable("card_names")
+	@GetMapping(path = {"/get-all-card-names"})
+	@ApiOperation(value="Get All Card's names and Ids", authorizations = { @Authorization(value="JWT") })	
+	public ResponseEntity<Map<Integer, String>> getAllCardsNamesAndId(){
+		return new ResponseEntity<>(cardService.getAllCardsNamesAndId(), HttpStatus.OK);
 	}
 }

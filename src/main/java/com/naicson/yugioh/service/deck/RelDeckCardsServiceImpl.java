@@ -1,8 +1,10 @@
 package com.naicson.yugioh.service.deck;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
+import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
+import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
+import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
@@ -21,6 +27,15 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	
 	@Autowired
 	RelDeckCardsRepository relDeckCardsRepository;
+	
+	@Autowired
+	CardServiceImpl cardServiceImpl;
+	
+	@Autowired
+	DeckServiceImpl deckService;
+	
+	@Autowired
+	CardAlternativeNumberService numberService;
 	
 	Logger logger = LoggerFactory.getLogger(RelDeckCardsServiceImpl.class);
 
@@ -70,5 +85,21 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	
 	public void removeRelDeckCards(Long relId) {
 		relDeckCardsRepository.deleteById(relId);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public RelDeckCards createRelation(RelDeckCards rel) {
+		
+		cardServiceImpl.cardDetails(rel.getCardId());
+		deckService.findById(rel.getDeckId());
+		ECardRarity.valueOf(rel.getCard_raridade());
+		
+		if(numberService.findCardByCardNumber(rel.getCardNumber()) == null)
+			numberService.save(new CardAlternativeNumber(rel.getCardId(), rel.getCardNumber()));
+		
+		rel.setDt_criacao(new Date());
+		
+		return relDeckCardsRepository.save(rel);
+		
 	}
 }

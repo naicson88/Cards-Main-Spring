@@ -85,8 +85,13 @@ public class CardServiceImpl implements CardDetailService {
 	public Card cardDetails(Integer id) {
 		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :deckId", Card.class);
 		Card card = (Card) query.setParameter("deckId", id).getSingleResult();
+		
+		if(card == null)
+			throw new IllegalArgumentException("Cannot find Card with ID: " + id);
+		
 		return card;
 	}
+	
 	
 	
 	@Override
@@ -456,7 +461,7 @@ public class CardServiceImpl implements CardDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public void saveNewAlternativeImages(Integer cardId, Set<Long> numbers) {
 		numbers.stream().forEach(num -> {
-			CardAlternativeNumber alt = new CardAlternativeNumber(null, cardId, num);
+			CardAlternativeNumber alt = new CardAlternativeNumber(cardId, num);
 			alternativeService.save(alt);
 			logger.info("New Alternative Number Saved: " + num);
 		});
@@ -494,8 +499,17 @@ public class CardServiceImpl implements CardDetailService {
 		return alternatives.stream().map(CardAlternativeNumber::getCardAlternativeNumber).collect(Collectors.toList());
 		
 	}
-	
-	
 
-
+	@Override
+	public Map<Integer, String> getAllCardsNamesAndId() {
+		List<Tuple> cards = cardRepository.findAllCardsNameAndId();
+		
+		 return cards.stream()
+				 .collect(Collectors
+						 .toMap(c -> Integer.parseInt(String.valueOf(c.get(0))), c -> c.get(1, String.class))
+			
+		);
+	}
+	
+	//cardsMap.put(Integer.parseInt(String.valueOf(c.get(0))), c.get(1, String.class))
 }

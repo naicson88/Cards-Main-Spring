@@ -57,4 +57,7 @@ public interface CardDetailService {
 
 	List<Long> getAlternativeArts(Integer cardId);
 
+
+	Map<Integer, String> getAllCardsNamesAndId();
+
 }
