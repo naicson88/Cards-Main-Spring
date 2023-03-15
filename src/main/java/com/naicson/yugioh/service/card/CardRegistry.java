@@ -43,7 +43,7 @@ public class CardRegistry {
 
 					Card cardSaved = cardRepository.save(cardToBeRegistered);
 
-					CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(),
+					CardAlternativeNumber alternative = new CardAlternativeNumber(cardSaved.getId(),
 							cardSaved.getNumero());
 
 					alternativeRepository.save(alternative);
@@ -79,7 +79,7 @@ public class CardRegistry {
 		if (card.getNumero().equals(apiCard.getId()))
 			throw new IllegalArgumentException("Cards with same number and diferent name can't be registered.");
 
-		CardAlternativeNumber alternative = new CardAlternativeNumber(null, card.getId(), apiCard.getId());
+		CardAlternativeNumber alternative = new CardAlternativeNumber(card.getId(), apiCard.getId());
 
 		return saveAlternativerCardNumber(apiCard, alternative);
 	}

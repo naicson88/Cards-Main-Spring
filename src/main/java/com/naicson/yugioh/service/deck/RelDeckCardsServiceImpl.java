@@ -90,16 +90,21 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	@Transactional(rollbackFor = Exception.class)
 	public RelDeckCards createRelation(RelDeckCards rel) {
 		
-		cardServiceImpl.cardDetails(rel.getCardId());
-		deckService.findById(rel.getDeckId());
-		ECardRarity.valueOf(rel.getCard_raridade());
+		this.validateNewRelation(rel);
 		
-		if(numberService.findCardByCardNumber(rel.getCardNumber()) == null)
+		if(numberService.findByCardAlternativeNumber(rel.getCardNumber()) == null)
 			numberService.save(new CardAlternativeNumber(rel.getCardId(), rel.getCardNumber()));
 		
 		rel.setDt_criacao(new Date());
 		
 		return relDeckCardsRepository.save(rel);
 		
+	}
+	
+	private void validateNewRelation(RelDeckCards rel) {
+		
+		cardServiceImpl.cardDetails(rel.getCardId());
+		deckService.findById(rel.getDeckId());
+		ECardRarity.getRarityByName(rel.getCard_raridade());
 	}
 }

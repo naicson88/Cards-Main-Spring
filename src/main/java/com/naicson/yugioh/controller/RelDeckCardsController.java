@@ -48,7 +48,6 @@ public class RelDeckCardsController {
 	@PostMapping("/create-relation")
 	@ApiOperation(value="Create Relation", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<String> createRelation(@Valid @RequestBody RelDeckCards rel){
-		
 		service.createRelation(rel);
 		return new ResponseEntity<>(JSONObject.quote("Relation created!"), HttpStatus.OK);
 	}
