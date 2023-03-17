@@ -129,7 +129,7 @@ public class DeckController<T> {
 	
 	@GetMapping("/get-deck-to-edit")
 	@ApiOperation(value="Edit especific deck", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<SetEditDTO> getDeckToEdit(@RequestParam Integer deckId){	
+	public ResponseEntity<SetEditDTO> getDeckToEdit(@RequestParam Integer deckId) {	
 		return new ResponseEntity<>(deckService.getDeckToEdit(deckId), HttpStatus.OK);
 	}
 	

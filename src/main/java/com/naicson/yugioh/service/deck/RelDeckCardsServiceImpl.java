@@ -107,4 +107,8 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		deckService.findById(rel.getDeckId());
 		ECardRarity.getRarityByName(rel.getCard_raridade());
 	}
+
+	public List<RelDeckCards> getRelationByDeckId(Integer deckId) {
+		return relDeckCardsRepository.findByDeckId(deckId.longValue());
+	}
 }
