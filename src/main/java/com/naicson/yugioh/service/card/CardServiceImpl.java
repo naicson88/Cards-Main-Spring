@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -72,7 +73,7 @@ public class CardServiceImpl implements CardDetailService {
 	
 	Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);	
 	
-	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository, DeckRepository deckRepository) {
+	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository) {
 		this.cardRepository = cardRepository;
 		this.dao = dao;
 		this.relDeckCardsRepository = relDeckCardsRepository;
@@ -108,10 +109,7 @@ public class CardServiceImpl implements CardDetailService {
 	     }	     
 	     cardsNumbersString += "0";
 	     
-	     List<RelUserCardsDTO> relUserCardsList = dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
-		
-	     return relUserCardsList;
-	     
+	     return dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
 	}
 
 
@@ -159,7 +157,7 @@ public class CardServiceImpl implements CardDetailService {
 			
 			Map<String, Long> mapRarity = listCardsSets.stream()
 					.collect(Collectors.groupingBy(
-					card -> card.getRarity(), Collectors.counting()
+							CardsOfUserSetsDTO::getRarity, Collectors.counting()
 					));
 			
 			cardUserDTO.setRarity(mapRarity);
@@ -170,7 +168,7 @@ public class CardServiceImpl implements CardDetailService {
 	}
 
 	protected List<CardsOfUserSetsDTO> createCardsOfUserDTOList(List<Tuple> cardsDetails) {
-		if(cardsDetails == null || cardsDetails.size() == 0)
+		if(cardsDetails == null || cardsDetails.isEmpty())
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid Tuple List of CardsOfUserSetsDTO");
 		
 		return cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
@@ -181,22 +179,14 @@ public class CardServiceImpl implements CardDetailService {
 				Integer.parseInt(String.valueOf(c.get(4))),
 				Integer.parseInt(String.valueOf(c.get(5))),
 				c.get(6, String.class)
-				)).collect(Collectors.toList());
+				)).collect(Collectors.toList());	
 	}
 	
-	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {
-		
-		CardOfUserDetailDTO cardUserDTO = new CardOfUserDetailDTO();
-		
+	private CardOfUserDetailDTO getCardOfUserDetailDTO(Integer cardId) {				
 		Card card = cardRepository.findById(cardId)
 				.orElseThrow(() -> new EntityNotFoundException("No Cards found with id: " + cardId + " #cardOfUserDetails"));
-					
-		cardUserDTO = new CardOfUserDetailDTO();
-		cardUserDTO.setCardImage(card.getImagem());
-		cardUserDTO.setCardName(card.getNome());
-		cardUserDTO.setCardNumber(card.getNumero());
 		
-		return cardUserDTO;
+		return new CardOfUserDetailDTO(card.getNumero(),card.getImagem(), card.getNome());
 	}
 
 	@Override
@@ -251,13 +241,13 @@ public class CardServiceImpl implements CardDetailService {
 		List<Tuple> listKonamiSets = Optional.of(cardRepository.setsOfCard(card.getId()))
 				.orElse(Collections.emptyList());
 		
-		List<KonamiSetsWithCardDTO> listCardSets = listKonamiSets.stream().map(set -> {
-			KonamiSetsWithCardDTO dto = new KonamiSetsWithCardDTO(set);
-			return dto;
-		}).collect(Collectors.toList());
-							
-	return listCardSets;
-}
+		return listKonamiSets.stream().map(KonamiSetsWithCardDTO::new).collect(Collectors.toList());
+		
+//		return listKonamiSets.stream().map(set -> {
+//			return new KonamiSetsWithCardDTO(set);
+//		}).collect(Collectors.toList());
+						
+	}
 
 	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
@@ -270,12 +260,9 @@ public class CardServiceImpl implements CardDetailService {
 		if( list == null || list.isEmpty())
 			return Collections.emptyList();
 		
-		List<CardsSearchDTO> dtoList = list.stream()
-				.map(card -> CardsSearchDTO.transformInDTO(card))
-				.collect(Collectors.toList());
-				
-		return dtoList;		
-		
+		return list.stream()
+				.map(CardsSearchDTO::transformInDTO)
+				.collect(Collectors.toList());	
 	}
 
 	@Override
@@ -284,9 +271,7 @@ public class CardServiceImpl implements CardDetailService {
 		if(spec == null )
 			throw new IllegalArgumentException("No specification for card search");
 		
-		Page<Card> list = cardRepository.findAll(spec, pageable);
-		
-		return list;
+		return cardRepository.findAll(spec, pageable);
 	}
 	
 	@Override
@@ -300,8 +285,8 @@ public class CardServiceImpl implements CardDetailService {
 		Page<Card> list = this.findAll(spec, pageable);
 		
 		List<CardsSearchDTO> dtoList = list.stream()
-				.filter(card -> card != null)
-				.map(card -> CardsSearchDTO.transformInDTO(card))
+				.filter(Objects::nonNull)
+				.map(CardsSearchDTO::transformInDTO)
 				.collect(Collectors.toList());
 		
 		if(!dtoList.isEmpty())
@@ -323,9 +308,7 @@ public class CardServiceImpl implements CardDetailService {
 			spec.add(new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
 			);
 		
-		Page<Card> list = this.findAll(spec, pageable);
-		
-		return list;
+		return this.findAll(spec, pageable);
 	}
 	
 	
@@ -338,20 +321,15 @@ public class CardServiceImpl implements CardDetailService {
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 		
 		Page<Card> cardsList = cardRepository.cardSearchByNameUserCollection(cardName, user.getId(), pageable);
-
-		List<CardsSearchDTO> dtoList = new ArrayList<>();
 		
-		if(cardsList != null && !cardsList.isEmpty()) {
-			
-			dtoList = cardsList.stream()
-					.filter(card -> card != null)
-					.map(card -> CardsSearchDTO.transformInDTO(card))
-					.collect(Collectors.toList());
-		} else {
-			dtoList = Collections.emptyList();
-		}
+		if(cardsList == null || cardsList.isEmpty())
+			return Collections.emptyList();
 		
-		return dtoList;
+		return cardsList.stream()
+				.filter(Objects::nonNull)
+				.map(CardsSearchDTO::transformInDTO)
+				.collect(Collectors.toList());
+		
 	}
 
 	@Override
@@ -388,22 +366,17 @@ public class CardServiceImpl implements CardDetailService {
 				
 		List<Long> cardsRegistered = cardRepository.findAllCardsByListOfCardNumbers(cardsNumber);
 		
-		List<Long> cardsNotRegistered = new ArrayList<>();
-		
 		if(cardsRegistered == null || cardsRegistered.isEmpty()) 
-			cardsNotRegistered = cardsNumber;			
+			return cardsNumber;			
 		else 
-			cardsNotRegistered = this.verifyCardsNotRegistered(cardsNumber, cardsRegistered);
-		
-		
-		return cardsNotRegistered;
+			return this.verifyCardsNotRegistered(cardsNumber, cardsRegistered);
 	}
 
 	private List<Long> verifyCardsNotRegistered(List<Long> cardsNumber, List<Long> cardsRegistered) {
 		
 		List<Long> allCards = new LinkedList<>(cardsNumber);
 		
-		if(allCards == null || allCards.isEmpty())			
+		if(allCards.isEmpty())			
 			throw new IllegalArgumentException("List with card numbers is invalid");		
 		
 		if(cardsRegistered == null || cardsRegistered.isEmpty())			
@@ -422,12 +395,10 @@ public class CardServiceImpl implements CardDetailService {
 		if(nome == null || nome.isBlank())
 			throw new IllegalArgumentException("Invalid Card name to find by");
 		
-		Card card = cardRepository.findByNome(nome.trim());
-				
-		return card;
+		return cardRepository.findByNome(nome.trim());
 	}
 	
-	
+	@Transactional(rollbackFor = Exception.class)
 	public void updateCardsImages(String cardImagesJson) {
 		logger.info("Start register new Alternative Card Numbers...");
 		
@@ -451,10 +422,10 @@ public class CardServiceImpl implements CardDetailService {
 				imagesList.remove(alt.getCardAlternativeNumber());
 		});	
 
-		if(imagesList.size() > 0)
+		if(!imagesList.isEmpty())
 			saveNewAlternativeImages(cardEntity.getId(), imagesList);
 		
-		logger.info("Finish register new Alternative Card Numbers for " + cardName);
+		logger.info("Finish register new Alternative Card Numbers for {}" , cardName);
 				
 	}
 	
@@ -463,7 +434,7 @@ public class CardServiceImpl implements CardDetailService {
 		numbers.stream().forEach(num -> {
 			CardAlternativeNumber alt = new CardAlternativeNumber(cardId, num);
 			alternativeService.save(alt);
-			logger.info("New Alternative Number Saved: " + num);
+			logger.info("New Alternative Number Saved: {}" , num);
 		});
 	}
 	
@@ -471,7 +442,7 @@ public class CardServiceImpl implements CardDetailService {
 		if(array == null || array.isEmpty())
 			throw new IllegalArgumentException("Array with Card images is empty");
 		
-		HashSet<Long> list = new HashSet<Long>();		
+		HashSet<Long> list = new HashSet<>();		
 		for(int i = 0; i < array.length(); i++) { 
 			list.add(array.getLong(i));		
 		}		

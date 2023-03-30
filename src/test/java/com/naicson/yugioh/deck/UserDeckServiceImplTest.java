@@ -123,7 +123,7 @@ public class UserDeckServiceImplTest {
 		Mockito.when(userDeckRepository.save(any())).then(AdditionalAnswers.returnsFirstArg());
 		Mockito.when(userRelService.saveAll(anyList())).thenReturn(null);
 		
-		UserDeck userDeck = deckService.saveUserdeck(deck, null);
+		UserDeck userDeck = deckService.saveUserDeck(deck, null);
 		
 		assertNotNull(userDeck);
 		assertEquals(deck.getNome(), userDeck.getNome());

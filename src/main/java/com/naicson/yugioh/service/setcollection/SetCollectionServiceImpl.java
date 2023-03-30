@@ -58,9 +58,8 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		
 		validSetCollection(setCollection);
 	
-		SetCollection collectionSaved = setColRepository.save(setCollection);
-		
-		return collectionSaved;
+		return setColRepository.save(setCollection);
+
 	}
 	
 	public SetDetailsDTO convertSetCollectionToDeck(SetCollection set, SourceTypes deckSource, String table) {
@@ -197,13 +196,14 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	@Transactional
 	public AssociationDTO newAssociation(@Valid AssociationDTO dto) {
 		
-		logger.info("Starting creating new Association...");
-		
-		List<Long> deckId =  Optional.ofNullable(this.getSetDeckRelationId(dto.getSourceId()))
+		List<Long> listDeckId =  Optional.ofNullable(this.getSetDeckRelationId(dto.getSourceId()))
 				.orElseThrow(() -> new EntityNotFoundException("Deck ID not found: " + dto.getSourceId()));
 		
+		if(listDeckId.isEmpty())
+			throw new EntityNotFoundException("Deck ID not found: " + dto.getSourceId());
+		
 		for(Integer toAssociate : dto.getArrayToAssociate()) {
-			this.saveSetDeckRelation(toAssociate.longValue(), deckId.get(0));
+			this.saveSetDeckRelation(toAssociate.longValue(), listDeckId.get(0));
 		}
 		
 		logger.info("Association Created!");

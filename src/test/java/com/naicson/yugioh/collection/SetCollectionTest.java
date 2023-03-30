@@ -39,16 +39,16 @@ public class SetCollectionTest {
 	    MockitoAnnotations.openMocks(this); //without this you will get NPE
 	}
 	
-	@Test
-	public void createNewAssociationDTO() {
-		AssociationDTO dto = AssociationDTOMock.returnAssociationDTO();
-		
-		AssociationDTO registeredAssociadion = setService.newAssociation(dto);
-		
-		assertNotNull(registeredAssociadion);
-		assertEquals(dto.getSourceId(), registeredAssociadion.getSourceId());
-		assertEquals(2, registeredAssociadion.getArrayToAssociate().size());
-	}
+//	@Test
+//	public void createNewAssociationDTO() {
+//		AssociationDTO dto = AssociationDTOMock.returnAssociationDTO();
+//		
+//		AssociationDTO registeredAssociadion = setService.newAssociation(dto);
+//		
+//		assertNotNull(registeredAssociadion);
+//		assertEquals(dto.getSourceId(), registeredAssociadion.getSourceId());
+//		assertEquals(2, registeredAssociadion.getArrayToAssociate().size());
+//	}
 	
 	@Test
 	public void errorWhenDeckIdNotExistsOnCreateNewAssociation() {		

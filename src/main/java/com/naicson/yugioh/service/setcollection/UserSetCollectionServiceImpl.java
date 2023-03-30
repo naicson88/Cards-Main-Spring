@@ -403,6 +403,6 @@ public class UserSetCollectionServiceImpl {
 		deck.setId(userSet.getId());
 		deck.setSetType(userSet.getSetType());
 
-		userDeckService.saveUserdeck(deck, this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
+		userDeckService.saveUserDeck(deck, this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
 	}
 }

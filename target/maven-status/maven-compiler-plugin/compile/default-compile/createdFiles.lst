@@ -1,4 +1,3 @@
-
 com\naicson\yugioh\entity\auth\JwtResponse.class
 com\naicson\yugioh\service\interfaces\SetCollectionService.class
 com\naicson\yugioh\util\mail\EmailService.class
@@ -139,4 +138,3 @@ com\naicson\yugioh\service\AuthServiceImpl.class
 com\naicson\yugioh\repository\AtributoRepository.class
 com\naicson\yugioh\repository\HomeRepository.class
 com\naicson\yugioh\consumer\ConsumerUtils.class
-

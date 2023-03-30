@@ -67,9 +67,6 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Autowired
 	UserDeckRepository userDeckRepository;
-	
-//	@Autowired
-//	SetsUtils utils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -84,11 +81,11 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public Deck findById(Long Id) {
-		if (Id == null || Id == 0)
+	public Deck findById(Long id) {
+		if (id == null || id == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
 
-		return deckRepository.findById(Id).orElseThrow(() -> new EntityNotFoundException("Deck not found."));
+		return deckRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Deck not found."));
 	}
 
 	@Override
@@ -140,8 +137,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(quantityUserHaveDeck(deckId));
-
-		//dto = utils.getSetStatistics(dto);
 
 		return dto;
 	}
@@ -201,7 +196,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			 deck = this.findById(deckId);
 
 		else if (deckSource.equals(SourceTypes.USER)) {
-			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
+			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException("UserDeck not found! Id: "+deckId));
 			 deck = Deck.deckFromDeckUser(deckUser);
 		}
 		
@@ -254,7 +249,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		List<RelDeckCards> listRel =  deck.getRel_deck_cards();	
 		
 		Map<String, Long> mapRarities = listRel.stream().collect(Collectors.groupingBy(
-				card -> card.getCard_raridade(), Collectors.counting()
+				RelDeckCards::getCard_raridade, Collectors.counting()
 				));
 		
 		deck = setMappedDeckRarities(deck, mapRarities);
@@ -318,24 +313,18 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	@Override
 	public Page<Deck> findAll(Pageable pageable) {
-		Page<Deck> decks = deckRepository.findAll(pageable);
-
-		return decks;
+		return deckRepository.findAll(pageable);
 	}
 
 	public Page<Deck> findAllBySetType(Pageable pageable, String setType) {
-		Page<Deck> decks = deckRepository.findAllBySetTypeOrderByLancamentoDesc(pageable, setType);
-
-		return decks;
+		return deckRepository.findAllBySetTypeOrderByLancamentoDesc(pageable, setType);
 	}
 	
 	public List<Deck> findAllByIds(List<Long> ids){
 		if(ids == null)
 			throw new IllegalArgumentException("Invalid IDs for consulting Decks");
 		
-		List<Deck> decks = deckRepository.findAllById(ids);
-		
-		return decks;
+		return deckRepository.findAllById(ids);
 	}
 	
 	public List<AutocompleteSetDTO> autocompleteSet() {
@@ -352,15 +341,15 @@ public class DeckServiceImpl implements DeckDetailService {
 		List<Tuple> tuple =	includeCollectionsDeck == false ?  deckRepository.getAllDecksName() : deckRepository.getAllDecksNameIncludeCollections();
 		
 		return tuple.stream().map(t -> {
-			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+			return new DeckAndSetsBySetTypeDTO(
 					Long.parseLong(String.valueOf(t.get(0))),
 					String.valueOf(t.get(1))
 			);
-			return dto;
 		}).collect(Collectors.toList());
 		
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public void updateCardsQuantity(String setCodes) {
 		if(setCodes == null)
 			throw new IllegalArgumentException("Invalid Set Codes Payload");
@@ -384,7 +373,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			}			
 		}	
 		
-		logger.info("Ending update Cards Quantity. " + counter + " cards were updated!");		
+		logger.info("Ending update Cards Quantity {} cards were updated!", counter);		
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})

@@ -60,10 +60,8 @@ public class CardRegistry {
 	}
 
 	public Card createCardToBeRegistered(CardYuGiOhAPI apiCard) {
+		return buildCard.createCard(apiCard);
 
-		Card cardToBeRegistered = buildCard.createCard(apiCard);
-
-		return cardToBeRegistered;
 	}
 
 	private boolean checkIfCardAlreadyRegisteredWithAlternativeNumber(CardYuGiOhAPI apiCard) {

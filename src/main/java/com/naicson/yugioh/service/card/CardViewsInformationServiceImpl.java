@@ -7,12 +7,12 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
@@ -41,7 +41,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 			List<RankingForHomeDTO> rankingList = this.fromCardViewsInfoToRankingDTO(cardViews);
 			
 			if(rankingList == null || rankingList.isEmpty()) {
-				logger.error("Ranking list of view is empty".toUpperCase());
+				logger.error("Ranking list of view is empty");
 				throw new NoSuchElementException("Ranking list of VIEW is empty");
 			} 
 			
@@ -50,12 +50,10 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	
 	private List<RankingForHomeDTO> fromCardViewsInfoToRankingDTO(List<CardViewsInformation> cardViews){
 		
-		if(cardViews == null || cardViews.isEmpty()) {
-			logger.error("Card views list is emtpy".toUpperCase());
+		if(cardViews == null || cardViews.isEmpty())
 			throw new NoSuchElementException("Card views list is emtpy");
-		}
 		
-		List<RankingForHomeDTO> rankingViews = cardViews.stream().map(card -> {
+		return cardViews.stream().map(card -> {
 			String cardName = this.returnCardName(Long.parseLong(card.getCardNumber()));
 			
 			RankingForHomeDTO cardRankingViews = new RankingForHomeDTO();
@@ -65,18 +63,13 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 			cardRankingViews.setQtdViewsWeekly(card.getQtdViewsWeekly());
 			
 			return cardRankingViews;
-		}).collect(Collectors.toList());
-		
-		return rankingViews;
-				
+		}).collect(Collectors.toList());				
 	}
 	
 	private String returnCardName(Long cardNumber) {
 		
-		if(cardNumber == null || cardNumber == 0) {
-			logger.error("#rankingViews: Invalid card number".toUpperCase());
+		if(cardNumber == null || cardNumber == 0)
 			throw new IllegalArgumentException("#rankingViews: Invalid card number");
-		}
 		
 		Card card = cardRepository.findByNumero(cardNumber)
 				.orElseThrow(() -> new EntityNotFoundException("Card not found. Number: " + cardNumber)) ;
@@ -84,17 +77,14 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 		return card.getNome();
 	}
 
-	private CardViewsInformation consultCardViews(Long cardNumber) {
+	private CardViewsInformation consultCardViews(Long cardNumber) {		
+		this.validCardNumber(cardNumber);	
 		
-		this.validCardNumber(cardNumber);
-		
-		CardViewsInformation views = cardViewsRepository.findByCardNumber(String.valueOf(cardNumber));
-		
-		return views;
+		return cardViewsRepository.findByCardNumber(String.valueOf(cardNumber));
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public CardViewsInformation updateCardViewsOrInsertInDB(Long cardNumber) {
 		this.validCardNumber(cardNumber);
 		
@@ -113,8 +103,8 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 		return views;
 	}
 
-
-	private CardViewsInformation insertCardViews(Long cardNumber) {
+	@Transactional(rollbackFor = Exception.class)
+	public CardViewsInformation insertCardViews(Long cardNumber) {
 		
 		this.validCardNumber(cardNumber);
 		
@@ -124,14 +114,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 		views.setTotalQtdViews(1L);
 		views.setLastUpdate(LocalDateTime.now());
 		
-		views = cardViewsRepository.save(views);
-		
-		if(views == null || views.getId() == null) {
-			logger.error("It was not possible save card views".toUpperCase());
-			throw new RuntimeException("It was not possible save card views");
-		}
-		
-		return views;
+		return cardViewsRepository.save(views);
 	}
 	
 	private void validCardNumber(Long cardNumber) {
