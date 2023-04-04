@@ -39,13 +39,6 @@ public class AdminFunctions {
 	EntityManager em;
 	@Autowired
 	DeckServiceImpl deckService;
-	/*
-	 * @Autowired RelDeckCards relDeckCards;
-	 * 
-	 * @Autowired RelDeckCardsRepository relDeckCardsRepo;
-	 */
-
-	// @EventListener(ContextRefreshedEvent.class)
 
 	public void InserirNosSets() {
 		try {
@@ -73,19 +66,6 @@ public class AdminFunctions {
 							cardRarity = (String) objCardSet.get("set_rarity");
 							cardSetCode = (String) objCardSet.get("set_code");
 							cardPrice = (String) objCardSet.get("set_price");
-							// InsertOnSets(DECK_ID, card_numero, card_raridade, card_set_code, card_price);
-							// utilController.InsertOnSets(DECK_ID, card_numero, card_raridade,
-							// card_set_code, card_price);
-							/*
-							 * relDeckCards.setDeckId(DECK_ID); relDeckCards.setCard_numero(cardNumber);
-							 * relDeckCards.setCard_raridade(cardRarity);
-							 * relDeckCards.setCard_set_code(cardSetCode);
-							 * relDeckCards.setCard_price(Double.parseDouble(cardPrice));
-							 */
-							// relDeckCardsRepo.save(relDeckCards);
-
-							// impl.InsertOnSets(DECK_ID, card_numero, card_raridade, card_set_code,
-							// card_price);
 
 						}
 					}

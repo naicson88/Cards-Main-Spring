@@ -169,7 +169,7 @@ public class AuthServiceImpl {
 		User user = userRepository.findByVerificationToken(token)
 				.orElseThrow(() -> new EntityNotFoundException("It was not possible find User with this token"));
 
-		if (user.getIsEmailConfirmed()) {
+		if (Boolean.TRUE.equals(user.getIsEmailConfirmed())) {
 			logger.info("User was validated successfully: {} ", user.getUserName());
 			return ResponseEntity.ok().body("Success: User was validated successfully!");
 		}
@@ -216,7 +216,7 @@ public class AuthServiceImpl {
 			return ResponseEntity.badRequest().body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE,
 					"Error: The max date for validation is expired! Try making another request"));
 
-		} else if (!user.getIsEmailConfirmed()) {
+		} else if (Boolean.FALSE.equals(user.getIsEmailConfirmed())) {
 			return ResponseEntity.badRequest()
 					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Email is not confirmed yet!"));
 		} else {

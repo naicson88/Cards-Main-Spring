@@ -87,10 +87,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (setId == null || setId == 0)
 			throw new IllegalArgumentException("Invalid Set Id to get total price.");
 
-		Double totalPrice = homeRepository.findTotalDeckPrice(setId);
-
-		return totalPrice;
-
+		return homeRepository.findTotalDeckPrice(setId);
 	}
 
 	private Double totalSetCollectionPrice(List<Long> deckOfSetCollectionId) {
@@ -98,10 +95,9 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (deckOfSetCollectionId == null || deckOfSetCollectionId.isEmpty())
 			return 0.0;
 
-		Double totalPrice = deckOfSetCollectionId.stream()
+		return deckOfSetCollectionId.stream()
 				.mapToDouble(deckId -> homeRepository.findTotalSetPrice(deckId)).sum();
 
-		return totalPrice;
 	}
 
 	private List<LastAddedDTO> lastCardsAddedToUsuer(List<Tuple> lastCardsAddedTuple) {

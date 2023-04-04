@@ -56,19 +56,19 @@ public abstract class GeneralFunctions {
 //		return moment;
 //	}
 
-	public static void saveCardInFolder(Long cardNumber) {
-		try (InputStream in = new URL("https://images.ygoprodeck.com/images/cards/" + cardNumber + ".jpg")
+	public static void saveCardInFolder(Long cardNumber, String url, String folder) {
+		try (InputStream in = new URL(url + cardNumber + ".jpg")
 				.openStream()) {
 
 			try {
 			
-				Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber + ".jpg"));
+				Files.copy(in, Paths.get(folder + cardNumber + ".jpg"));
 				logger.info("Card saved in folder");
 				
 			} catch (FileAlreadyExistsException e) {
 				logger.warn(e.getLocalizedMessage());
 				String randomString = RandomStringUtils.randomAlphabetic(10);
-				Files.copy(in, Paths.get("C:\\Cards\\" + cardNumber +"-"+randomString+".jpg"));
+				Files.copy(in, Paths.get(folder + cardNumber +"-"+randomString+".jpg"));
 			}
 
 		} catch (IOException e) {
@@ -130,7 +130,6 @@ public abstract class GeneralFunctions {
 				} catch (IOException e) {
 					logger.error("Error while writing information: {}", n);
 				}
-
 			});
 			bw.close();
 			logger.info("File created successfully! {}", fullPath);
