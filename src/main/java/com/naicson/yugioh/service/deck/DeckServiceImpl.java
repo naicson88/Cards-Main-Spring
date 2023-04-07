@@ -67,6 +67,9 @@ public class DeckServiceImpl implements DeckDetailService {
 	
 	@Autowired
 	UserDeckRepository userDeckRepository;
+	
+	@Autowired
+	SetsUtils setsUtils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -217,7 +220,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = this.convertDeckToSetDetailsDTO(deck);
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(this.quantityUserHaveDeck(deckId));
-		//dto = utils.getSetStatistics(dto);
+		dto = setsUtils.getSetStatistics(dto);
 		return dto;
 	}
 
