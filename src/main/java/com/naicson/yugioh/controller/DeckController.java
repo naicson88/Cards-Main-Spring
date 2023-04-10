@@ -88,7 +88,17 @@ public class DeckController<T> {
 		SetDetailsStrategy setDetailStrategy = getDetailByType
 				.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
 
-		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source), HttpStatus.OK) ;
+		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source, false), HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/set-stats")
+	@ApiOperation(value="Return details and stats of a Set", authorizations = { @Authorization(value="JWT") })
+	@Cacheable(value = "setDetails")
+	public ResponseEntity<SetDetailsDTO> getSetStats(@RequestParam Long id, @RequestParam String source, @RequestParam String setType){
+		SetDetailsStrategy setDetailStrategy = getDetailByType
+				.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
+
+		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source, true), HttpStatus.OK) ;
 	}
 
 	

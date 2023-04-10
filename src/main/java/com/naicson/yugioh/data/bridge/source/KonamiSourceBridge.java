@@ -12,8 +12,8 @@ public class KonamiSourceBridge extends SourceBridge {
 
 
 	@Override
-	public SetDetailsDTO getSetDetail(Long setId) {
-		return sourceSet.getDetails(setId);
+	public SetDetailsDTO getSetDetail(Long setId, boolean withStats) {
+		return sourceSet.getDetails(setId, withStats);
 	}
 	
 }

@@ -152,7 +152,6 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
-		SetsUtils setsUtils = new SetsUtils();
 		
 		BeanUtils.copyProperties(deck, dto);		
 		
@@ -212,7 +211,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;
 	}
 	
-	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, SourceTypes source) {
+	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, SourceTypes source, boolean withStats) {
 		
 		deck.setCards(this.cardsOfDeck(deckId, table));
 		deck.setRel_deck_cards(this.relDeckCards(deckId, source));
@@ -220,7 +219,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = this.convertDeckToSetDetailsDTO(deck);
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(this.quantityUserHaveDeck(deckId));
-		dto = setsUtils.getSetStatistics(dto);
+		if(withStats) {
+			dto = setsUtils.getSetStatistics(dto);
+			dto.setInsideDecks(null);
+		}
+			
 		return dto;
 	}
 

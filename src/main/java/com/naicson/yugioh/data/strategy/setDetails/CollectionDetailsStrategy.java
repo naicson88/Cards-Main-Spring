@@ -9,6 +9,7 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.repository.SetCollectionRepository;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
+import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.GeneralFunctions;
 
 @Component
@@ -23,17 +24,25 @@ public class CollectionDetailsStrategy implements SetDetailsStrategy{
 	@Autowired
 	SetCollectionServiceImpl setService;
 	
+	@Autowired
+	SetsUtils setsUtils;
+	
 	@Override
-	public SetDetailsDTO getSetDetails(Long setId, String source) {
+	public SetDetailsDTO getSetDetails(Long setId, String source, boolean withStats) {
 		validSetSource(setId, source);
 	
 		SourceBridge src = SourceTypes
 				.valueOf(source.toUpperCase()).getSetCollectionSource(setService, userSetRepository, setColRepository);
 		
-		SetDetailsDTO setDetailsDto = src.getSetDetail(setId);
+		SetDetailsDTO setDetailsDto = src.getSetDetail(setId, withStats);
 		
 		setDetailsDto.setQuantityUserHave(userSetRepository.countQuantityOfASetUserHave(setId.intValue(), GeneralFunctions.userLogged().getId()));
-	//	setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
+		
+		if(withStats) {
+			setDetailsDto = setsUtils.getSetStatistics(setDetailsDto);
+			setDetailsDto.setInsideDecks(null); 
+		}
+				
 		return setDetailsDto;
 		
 	}

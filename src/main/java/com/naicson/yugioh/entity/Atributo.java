@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tab_atributo")
@@ -17,6 +18,8 @@ public class Atributo {
 	private Long id;
 	private String name;
 	private String atributoImgPath;
+	@Transient
+	private int quantity;
 	
 	public Atributo() {}
 
@@ -43,6 +46,16 @@ public class Atributo {
 	public void setAtributoImgPath(String atributoImgPath) {
 		this.atributoImgPath = atributoImgPath;
 	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	
 
 	
 }

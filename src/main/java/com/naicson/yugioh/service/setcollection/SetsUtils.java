@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import com.naicson.yugioh.data.dto.cards.CardRarityDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetStatsDTO;
+import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.util.enums.CardAttributes;
 import com.naicson.yugioh.util.enums.CardProperty;
@@ -26,27 +29,31 @@ public class SetsUtils {
 		if(detailDTO == null)
 			throw new IllegalArgumentException("Invalid DetailDTO informed");
 		
+		SetStatsDTO statsDTO = new SetStatsDTO();
+		
 		Map<CardAttributes, Integer> mapAttr = setQuantityByAttributeType(detailDTO.getInsideDecks());
-		detailDTO.setStatsQuantityByAttribute(mapAttr);
+		statsDTO.setStatsQuantityByAttribute(mapAttr);
 		
 		Map<Integer, Integer> mapCardAttribute = this.setQuantityStars(detailDTO.getInsideDecks());
-		detailDTO.setStatsQuantityByLevel(mapCardAttribute);
+		statsDTO.setStatsQuantityByLevel(mapCardAttribute);
 		
 		Map<String, Integer> setQuantityByProperty = this.setQuantityByProperty(detailDTO.getInsideDecks());
-		detailDTO.setStatsQuantityByProperty(setQuantityByProperty);
+		statsDTO.setStatsQuantityByProperty(setQuantityByProperty);
 		
 		Map<String, Integer> setQuantityByGenericType= this.setQuantityByGenericType(detailDTO.getInsideDecks());
-		detailDTO.setStatsQuantityByGenericType(setQuantityByGenericType);	
+		statsDTO.setStatsQuantityByGenericType(setQuantityByGenericType);	
 		
 		Map<String, Integer> setQuantityByType = this.setQuantityByType(detailDTO.getInsideDecks());
-		detailDTO.setStatsQuantityByType(setQuantityByType);
+		statsDTO.setStatsQuantityByType(setQuantityByType);
 		
 		Map<Integer, Integer> atkMap = this.infoAtk(detailDTO.getInsideDecks());
-		detailDTO.setStatsAtk(atkMap);	
+		statsDTO.setStatsAtk(atkMap);	
 		
 		Map<Integer, Integer> defMap = this.infoDef(detailDTO.getInsideDecks());
-		detailDTO.setStatsDef(defMap);
+		statsDTO.setStatsDef(defMap);
 		
+		 detailDTO.setSetStats(statsDTO);
+		 
 		return detailDTO;
 	}
 
@@ -70,6 +77,16 @@ public class SetsUtils {
 		});
 		
 		return mapCardAttribute;
+	}
+	
+	private List<Atributo> setNewQuantityByAttribute(List<InsideDeckDTO> insideDeck){
+		
+		 return insideDeck.stream()
+				.flatMap(card -> card.getCards().stream())
+				.collect(Collectors.groupingBy(c -> c.getAtributo(), Collectors.counting()))
+				.forEach((c, count) -> {
+					return c.setQuantity(count.intValue());
+				}).collect(Collectors.toList());
 	}
 	
 	private Map<Integer, Integer> setQuantityStars(List<InsideDeckDTO> insideDeck) {
