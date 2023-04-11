@@ -1,5 +1,7 @@
 package com.naicson.yugioh.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +22,8 @@ public class Atributo {
 	private String atributoImgPath;
 	@Transient
 	private int quantity;
+	@Transient
+	private double percentage;
 	
 	public Atributo() {}
 
@@ -54,8 +58,30 @@ public class Atributo {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	
-	
 
+	public double getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(double percentage) {
+		this.percentage = percentage;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Atributo other = (Atributo) obj;
+		return Objects.equals(id, other.id);
+	}
 	
 }

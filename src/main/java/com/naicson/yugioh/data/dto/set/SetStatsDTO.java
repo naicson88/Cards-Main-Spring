@@ -1,25 +1,25 @@
 package com.naicson.yugioh.data.dto.set;
 
+import java.util.List;
 import java.util.Map;
 
+import com.naicson.yugioh.data.dto.GenericTypeDTO;
+import com.naicson.yugioh.entity.Atributo;
+import com.naicson.yugioh.entity.TipoCard;
 import com.naicson.yugioh.util.enums.CardAttributes;
 
 public class SetStatsDTO {
 	
-	private Map<CardAttributes, Integer> statsQuantityByAttribute;
 	private Map<Integer, Integer> statsQuantityByLevel;
 	private Map<String, Integer> statsQuantityByProperty;
 	private Map<String, Integer> statsQuantityByGenericType;
 	private Map<String, Integer> statsQuantityByType;
 	private Map<Integer, Integer> statsAtk;
 	private Map<Integer, Integer> statsDef;
+	private List<Atributo> atributos;
+	private List<GenericTypeDTO> genericTypes;
+	private List<TipoCard> tipoCard;
 	
-	public Map<CardAttributes, Integer> getStatsQuantityByAttribute() {
-		return statsQuantityByAttribute;
-	}
-	public void setStatsQuantityByAttribute(Map<CardAttributes, Integer> statsQuantityByAttribute) {
-		this.statsQuantityByAttribute = statsQuantityByAttribute;
-	}
 	public Map<Integer, Integer> getStatsQuantityByLevel() {
 		return statsQuantityByLevel;
 	}
@@ -55,6 +55,24 @@ public class SetStatsDTO {
 	}
 	public void setStatsDef(Map<Integer, Integer> statsDef) {
 		this.statsDef = statsDef;
+	}
+	public List<Atributo> getAtributos() {
+		return atributos;
+	}
+	public void setAtributos(List<Atributo> atributos) {
+		this.atributos = atributos;
+	}
+	public List<GenericTypeDTO> getGenericTypes() {
+		return genericTypes;
+	}
+	public void setGenericTypes(List<GenericTypeDTO> genericTypes) {
+		this.genericTypes = genericTypes;
+	}
+	public List<TipoCard> getTipoCard() {
+		return tipoCard;
+	}
+	public void setTipoCard(List<TipoCard> tipoCard) {
+		this.tipoCard = tipoCard;
 	}
 	
 	

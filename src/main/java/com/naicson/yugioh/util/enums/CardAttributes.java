@@ -7,8 +7,8 @@ public enum CardAttributes {
 	LIGHT("Light", "assets/img/outras/LUZ.png"),
 	DARK("Dark", "assets/img/outras/DARK.png"),
 	WIND("Wind", "assets/img/outras/WIND.png"),
-	SPELL_CARD("Spell","assets/img/outras/MAGIA.png" ),
-	TRAP_CARD("Trap", "assets/img/outras/ARMADILHA.png"),
+	SPELL("Spell","assets/img/outras/MAGIA.png" ),
+	TRAP("Trap", "assets/img/outras/ARMADILHA.png"),
 	DIVINE("Divine", "assets/img/outras/LUZ.png"),
 	SKILL("Skill", "assets/img/outras/SKILL.png");
 	

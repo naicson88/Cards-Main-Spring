@@ -7,9 +7,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.dto.GenericTypeDTO;
 import com.naicson.yugioh.data.dto.cards.CardRarityDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
@@ -17,12 +20,14 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.SetStatsDTO;
 import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.util.enums.CardAttributes;
+import com.naicson.yugioh.entity.TipoCard;
 import com.naicson.yugioh.util.enums.CardProperty;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
 
 @Service
 public class SetsUtils {
+	
+	Logger logger = LoggerFactory.getLogger(SetsUtils.class);
 	
 	public SetDetailsDTO getSetStatistics(SetDetailsDTO detailDTO) {
 		
@@ -31,62 +36,64 @@ public class SetsUtils {
 		
 		SetStatsDTO statsDTO = new SetStatsDTO();
 		
-		Map<CardAttributes, Integer> mapAttr = setQuantityByAttributeType(detailDTO.getInsideDecks());
-		statsDTO.setStatsQuantityByAttribute(mapAttr);
+		statsDTO.setStatsQuantityByLevel(this.setQuantityStars(detailDTO.getInsideDecks()));
+
+		statsDTO.setStatsQuantityByProperty(this.setQuantityByProperty(detailDTO.getInsideDecks()));
 		
-		Map<Integer, Integer> mapCardAttribute = this.setQuantityStars(detailDTO.getInsideDecks());
-		statsDTO.setStatsQuantityByLevel(mapCardAttribute);
+		statsDTO.setGenericTypes(this.setQuantityByGenericType(detailDTO.getInsideDecks()));
 		
-		Map<String, Integer> setQuantityByProperty = this.setQuantityByProperty(detailDTO.getInsideDecks());
-		statsDTO.setStatsQuantityByProperty(setQuantityByProperty);
+		statsDTO.setTipoCard(this.setQuantityByCardType(detailDTO.getInsideDecks()));
+//		statsDTO.setStatsQuantityByType(this.setQuantityByType(detailDTO.getInsideDecks()));
 		
-		Map<String, Integer> setQuantityByGenericType= this.setQuantityByGenericType(detailDTO.getInsideDecks());
-		statsDTO.setStatsQuantityByGenericType(setQuantityByGenericType);	
+		statsDTO.setStatsAtk(this.infoAtk(detailDTO.getInsideDecks()));	
 		
-		Map<String, Integer> setQuantityByType = this.setQuantityByType(detailDTO.getInsideDecks());
-		statsDTO.setStatsQuantityByType(setQuantityByType);
+		statsDTO.setStatsDef(this.infoDef(detailDTO.getInsideDecks()));
 		
-		Map<Integer, Integer> atkMap = this.infoAtk(detailDTO.getInsideDecks());
-		statsDTO.setStatsAtk(atkMap);	
+		statsDTO.setAtributos(setNewQuantityByAttribute(detailDTO.getInsideDecks()));
 		
-		Map<Integer, Integer> defMap = this.infoDef(detailDTO.getInsideDecks());
-		statsDTO.setStatsDef(defMap);
-		
-		 detailDTO.setSetStats(statsDTO);
+		detailDTO.setSetStats(statsDTO);
 		 
 		return detailDTO;
-	}
-
-	private Map<CardAttributes, Integer> setQuantityByAttributeType(List<InsideDeckDTO> insideDeck) {
-		
-		if(insideDeck == null || insideDeck.isEmpty())
-			throw new IllegalArgumentException("The Inside Deck is empty");
-		
-		Map<CardAttributes, Integer> mapCardAttribute = new HashMap<>();
-		
-		insideDeck.stream().forEach(i -> {
-			
-			for(int j = 0; j < i.getCards().size() ; j++) {
-				CardAttributes attr = CardAttributes.valueOf(i.getCards().get(j).getAtributo().getName());
-				
-				if(!mapCardAttribute.containsKey(attr)) 
-					mapCardAttribute.put(attr, 1);					
-				else 				
-					mapCardAttribute.put(attr, mapCardAttribute.get(attr) + 1);				
-			}
-		});
-		
-		return mapCardAttribute;
 	}
 	
 	private List<Atributo> setNewQuantityByAttribute(List<InsideDeckDTO> insideDeck){
 		
-		 return insideDeck.stream()
-				.flatMap(card -> card.getCards().stream())
-				.collect(Collectors.groupingBy(c -> c.getAtributo(), Collectors.counting()))
-				.forEach((c, count) -> {
-					return c.setQuantity(count.intValue());
-				}).collect(Collectors.toList());
+		List<Atributo> attrListAux = insideDeck.stream().flatMap(card -> card.getCards().stream())
+				.map(CardSetDetailsDTO::getAtributo)
+				.filter(at -> !at.getName().equals("SPELL") && !at.getName().equals("TRAP"))
+				.collect(Collectors.toList());
+		
+		Map<Long, Long> quantityByAttributeId = attrListAux.stream().collect(Collectors.groupingBy(Atributo::getId, Collectors.counting()));
+		
+		List<Atributo> finalAttrList = attrListAux.stream().distinct().collect(Collectors.toList());
+		
+		Long totalAttributes = quantityByAttributeId.values().stream().mapToLong(Long::longValue).sum();
+		
+		for (Atributo attr : finalAttrList) {
+			attr.setQuantity(quantityByAttributeId.get(attr.getId()).intValue());
+			attr.setPercentage(this.calculatePercentage(attr.getQuantity(), totalAttributes.intValue()));
+		}
+		
+		return finalAttrList;
+	}
+	
+	private List<TipoCard> setQuantityByCardType(List<InsideDeckDTO> insideDeck){	
+		
+		List<CardSetDetailsDTO> listDetails = insideDeck.stream().flatMap(card -> card.getCards().stream())
+				.filter(c -> c.getTipo() != null && c.getTipo().getId() > 1).collect(Collectors.toList());
+		
+		Map<Long, Long> quantityByTipo = listDetails.stream()
+				.map(CardSetDetailsDTO::getTipo)
+				.collect(Collectors.groupingBy(TipoCard::getId, Collectors.counting()));
+		
+		List<TipoCard> tipoList =  listDetails.stream().map(CardSetDetailsDTO::getTipo).distinct().collect(Collectors.toList());
+		
+		for (TipoCard tipo : tipoList) {
+			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
+		}
+		
+		return tipoList;
+	
 	}
 	
 	private Map<Integer, Integer> setQuantityStars(List<InsideDeckDTO> insideDeck) {
@@ -137,53 +144,46 @@ public class SetsUtils {
 		return mapCardProperty;
 	}
 	
-	private Map<String, Integer> setQuantityByGenericType(List<InsideDeckDTO> insideDeck) {
+	
+	private List<GenericTypeDTO> setQuantityByGenericType(List<InsideDeckDTO> insideDeck){
 		
-		if(insideDeck == null || insideDeck.isEmpty())
-			throw new IllegalArgumentException("The Inside Deck is empty");
+		Map<String, Long> mapCardsByType = insideDeck.stream()
+				.flatMap(card -> card.getCards().stream())
+				.collect(Collectors.groupingBy(CardSetDetailsDTO::getGenericType, Collectors.counting()));
 		
-			Map<String, Integer> mapCardGenericType= new HashMap<>();
-			
-			insideDeck.stream().forEach(i -> {
-			
-			for(int j = 0; j < i.getCards().size() ; j++) {
-				if(i.getCards().get(j).getGenericType() != null) {
-					
-					GenericTypesCards generic = GenericTypesCards.valueOf(i.getCards().get(j).getGenericType());
-					
-					if(!mapCardGenericType.containsKey(generic.name())) 
-						mapCardGenericType.put(generic.name(), 1);					
-					else 				
-						mapCardGenericType.put(generic.name(), mapCardGenericType.get(generic.name()) + 1);	
-				}
-							
-			}
-		});
+		List<GenericTypeDTO> listTypes = new ArrayList<>();
 		
-		return mapCardGenericType;
+		for(Map.Entry<String, Long> entry : mapCardsByType.entrySet()) {			
+			GenericTypesCards generic = GenericTypesCards.valueOf(entry.getKey());		
+			listTypes.add(new GenericTypeDTO(entry.getKey(), generic.getPath(), entry.getValue().intValue()));
+		}
+		
+		return listTypes;
+		
 	}
 	
-	private Map<String, Integer> setQuantityByType(List<InsideDeckDTO> insideDeck){
-		if(insideDeck == null || insideDeck.isEmpty())
-			throw new IllegalArgumentException("The Inside Deck is empty");
-		
-		Map<String, Integer> mapCardsByType = new HashMap<>();
-		
-		insideDeck.stream().forEach(i -> {
-			for(int j = 0; j < i.getCards().size(); j++) {
-				//Get the card type if exists; 
-				String type = i.getCards().get(j).getTipo() != null && !i.getCards().get(j).getTipo().getName().isEmpty() ? i.getCards().get(j).getTipo().getName() : "";
-				if(!type.isEmpty()) {
-					if(!mapCardsByType.containsKey(type))
-						mapCardsByType.put(type, 1);
-					else
-						mapCardsByType.put(type, mapCardsByType.get(type) + 1);
-				}
-			}
-		});
-		
-		return mapCardsByType;
-	}
+//	
+//	private Map<String, Integer> setQuantityByType(List<InsideDeckDTO> insideDeck){
+//		if(insideDeck == null || insideDeck.isEmpty())
+//			throw new IllegalArgumentException("The Inside Deck is empty");
+//		
+//		Map<String, Integer> mapCardsByType = new HashMap<>();
+//		
+//		insideDeck.stream().forEach(i -> {
+//			for(int j = 0; j < i.getCards().size(); j++) {
+//				//Get the card type if exists; 
+//				String type = i.getCards().get(j).getTipo() != null && !i.getCards().get(j).getTipo().getName().isEmpty() ? i.getCards().get(j).getTipo().getName() : "";
+//				if(!type.isEmpty()) {
+//					if(!mapCardsByType.containsKey(type))
+//						mapCardsByType.put(type, 1);
+//					else
+//						mapCardsByType.put(type, mapCardsByType.get(type) + 1);
+//				}
+//			}
+//		});
+//		
+//		return mapCardsByType;
+//	}
 	
 	private Map<Integer, Integer> infoAtk(List<InsideDeckDTO> insideDeck) {
 		
@@ -243,6 +243,19 @@ public class SetsUtils {
 						
 			});
 			return listRarity;
+	}
+	
+	private double calculatePercentage(int value, int totalValue) {	
+		double raturnedValue = 0.0;
+		try {
+			
+			raturnedValue = value * 100  / totalValue;
+			
+		} catch (Exception e) {
+			logger.error("Error when trying to calculate percentage: {} e {}", value, totalValue);
+		}
+		
+		return raturnedValue;
 	}
 		
 }
