@@ -43,11 +43,10 @@ public class SetsUtils {
 		statsDTO.setGenericTypes(this.setQuantityByGenericType(detailDTO.getInsideDecks()));
 		
 		statsDTO.setTipoCard(this.setQuantityByCardType(detailDTO.getInsideDecks()));
-//		statsDTO.setStatsQuantityByType(this.setQuantityByType(detailDTO.getInsideDecks()));
 		
-		statsDTO.setStatsAtk(this.infoAtk(detailDTO.getInsideDecks()));	
+		statsDTO.setListAtk(this.infoAtk(detailDTO.getInsideDecks()));
 		
-		statsDTO.setStatsDef(this.infoDef(detailDTO.getInsideDecks()));
+		statsDTO.setListDef(this.infoDef(detailDTO.getInsideDecks()));
 		
 		statsDTO.setAtributos(setNewQuantityByAttribute(detailDTO.getInsideDecks()));
 		
@@ -161,75 +160,90 @@ public class SetsUtils {
 		return listTypes;
 		
 	}
+
+	private List<Map<String, Integer>> infoAtk(List<InsideDeckDTO> insideDeck) {
+		
+		Map<Integer, Long> mapAtk = insideDeck.stream().flatMap(card -> card.getCards()
+				.stream())
+				.filter(c -> c.getAtk() != null)
+				.collect(Collectors.groupingBy(CardSetDetailsDTO::getAtk, Collectors.counting()));
+		
+		mapAtk = new TreeMap<>(mapAtk);
+		
+		return mapAttackAndDefense(mapAtk);		
+	}
 	
-//	
-//	private Map<String, Integer> setQuantityByType(List<InsideDeckDTO> insideDeck){
+	private List<Map<String, Integer>> infoDef(List<InsideDeckDTO> insideDeck) {
+		
+		Map<Integer, Long> defMap = insideDeck.stream().flatMap(card -> card.getCards()
+				.stream())
+				.filter(c -> c.getDef() != null)
+				.collect(Collectors.groupingBy(CardSetDetailsDTO::getDef, Collectors.counting()));
+		
+		defMap = new TreeMap<>(defMap);
+		
+		return mapAttackAndDefense(defMap);		
+	}
+
+	private List<Map<String, Integer>> mapAttackAndDefense(Map<Integer, Long> mapAtk) {
+		List<Map<String, Integer>> mapList = new ArrayList<>();
+		
+		for(Map.Entry<Integer, Long> entry : mapAtk.entrySet()) {
+			Map<String, Integer> mapInfo = new HashMap<>(2);
+			mapInfo.put("value", entry.getKey());
+			mapInfo.put("quantity", entry.getValue().intValue());
+			mapList.add(mapInfo);
+		}
+		
+		return mapList;
+	}
+	
+//	private Map<Integer, Integer> infoAtk(List<InsideDeckDTO> insideDeck) {
+//		
 //		if(insideDeck == null || insideDeck.isEmpty())
 //			throw new IllegalArgumentException("The Inside Deck is empty");
 //		
-//		Map<String, Integer> mapCardsByType = new HashMap<>();
+//		Map<Integer, Integer> mapAtk = new TreeMap<>();
 //		
 //		insideDeck.stream().forEach(i -> {
-//			for(int j = 0; j < i.getCards().size(); j++) {
-//				//Get the card type if exists; 
-//				String type = i.getCards().get(j).getTipo() != null && !i.getCards().get(j).getTipo().getName().isEmpty() ? i.getCards().get(j).getTipo().getName() : "";
-//				if(!type.isEmpty()) {
-//					if(!mapCardsByType.containsKey(type))
-//						mapCardsByType.put(type, 1);
-//					else
-//						mapCardsByType.put(type, mapCardsByType.get(type) + 1);
+//			for(int j =0; j < i.getCards().size(); j++) {
+//				Integer atk = i.getCards().get(j).getAtk();
+//				if(atk != null) {
+//					
+//					if(!mapAtk.containsKey(atk))
+//						mapAtk.put(atk, 1);					
+//					else 				
+//						mapAtk.put(atk, mapAtk.get(atk) + 1);	
 //				}
 //			}
 //		});
 //		
-//		return mapCardsByType;
+//		return mapAtk;
 //	}
 	
-	private Map<Integer, Integer> infoAtk(List<InsideDeckDTO> insideDeck) {
-		
-		if(insideDeck == null || insideDeck.isEmpty())
-			throw new IllegalArgumentException("The Inside Deck is empty");
-		
-		Map<Integer, Integer> mapAtk = new TreeMap<>();
-		
-		insideDeck.stream().forEach(i -> {
-			for(int j =0; j < i.getCards().size(); j++) {
-				Integer atk = i.getCards().get(j).getAtk();
-				if(atk != null) {
-					
-					if(!mapAtk.containsKey(atk))
-						mapAtk.put(atk, 1);					
-					else 				
-						mapAtk.put(atk, mapAtk.get(atk) + 1);	
-				}
-			}
-		});
-		
-		return mapAtk;
-	}
 	
-	private Map<Integer, Integer> infoDef(List<InsideDeckDTO> insideDeck) {
-		
-		if(insideDeck == null || insideDeck.isEmpty())
-			throw new IllegalArgumentException("The Inside Deck is empty");
-		
-		Map<Integer, Integer> mapDef = new TreeMap<>();
-		
-		insideDeck.stream().forEach(i -> {
-			for(int j =0; j < i.getCards().size(); j++) {
-				Integer def = i.getCards().get(j).getDef();
-				
-				if(def != null) {				
-					if(!mapDef.containsKey(def))
-						mapDef.put(def, 1);					
-					else 				
-						mapDef.put(def, mapDef.get(def) + 1);	
-				}
-			}
-		});
-		
-		return mapDef;
-	}
+//	private Map<Integer, Integer> infoDef(List<InsideDeckDTO> insideDeck) {
+//		
+//		if(insideDeck == null || insideDeck.isEmpty())
+//			throw new IllegalArgumentException("The Inside Deck is empty");
+//		
+//		Map<Integer, Integer> mapDef = new TreeMap<>();
+//		
+//		insideDeck.stream().forEach(i -> {
+//			for(int j =0; j < i.getCards().size(); j++) {
+//				Integer def = i.getCards().get(j).getDef();
+//				
+//				if(def != null) {				
+//					if(!mapDef.containsKey(def))
+//						mapDef.put(def, 1);					
+//					else 				
+//						mapDef.put(def, mapDef.get(def) + 1);	
+//				}
+//			}
+//		});
+//		
+//		return mapDef;
+//	}
 	
 	public List<CardRarityDTO> listCardRarity(CardSetDetailsDTO cardDetail, List<RelDeckCards> listRelDeckCards ){
 		List<CardRarityDTO> listRarity = new ArrayList<>();	

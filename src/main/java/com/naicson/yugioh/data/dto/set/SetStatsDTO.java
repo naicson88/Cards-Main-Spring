@@ -19,6 +19,8 @@ public class SetStatsDTO {
 	private List<Atributo> atributos;
 	private List<GenericTypeDTO> genericTypes;
 	private List<TipoCard> tipoCard;
+	private List<Map<String, Integer>> listAtk;
+	private List<Map<String, Integer>> listDef;
 	
 	public Map<Integer, Integer> getStatsQuantityByLevel() {
 		return statsQuantityByLevel;
@@ -73,6 +75,18 @@ public class SetStatsDTO {
 	}
 	public void setTipoCard(List<TipoCard> tipoCard) {
 		this.tipoCard = tipoCard;
+	}
+	public List<Map<String, Integer>> getListAtk() {
+		return listAtk;
+	}
+	public void setListAtk(List<Map<String, Integer>> listAtk) {
+		this.listAtk = listAtk;
+	}
+	public List<Map<String, Integer>> getListDef() {
+		return listDef;
+	}
+	public void setListDef(List<Map<String, Integer>> listDef) {
+		this.listDef = listDef;
 	}
 	
 	
