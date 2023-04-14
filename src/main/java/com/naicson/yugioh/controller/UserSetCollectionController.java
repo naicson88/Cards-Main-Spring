@@ -36,7 +36,7 @@ public class UserSetCollectionController {
 		
 		service.addSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>(JSONObject.quote("SetCollection Added Successfully!"), HttpStatus.CREATED);
+		return new ResponseEntity<>(JSONObject.quote("SetCollection Added Successfully!"), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/remove/{setId}")
@@ -45,16 +45,14 @@ public class UserSetCollectionController {
 		
 		service.removeSetCollectionInUsersCollection(setId);
 		
-		return new ResponseEntity<String>(JSONObject.quote("SetCollection has been removed Successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote("SetCollection has been removed Successfully!"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/consult/{setId}")
 	@ApiOperation(value="Consults DTO to User Set Collection", authorizations = { @Authorization(value="JWT") })
 	public ResponseEntity<UserSetCollectionDTO> consultUserSetCollection(@PathVariable("setId") Long setId){
 		
-		UserSetCollectionDTO dto = service.consultUserSetCollection(setId);
-		
-		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(service.consultUserSetCollection(setId), HttpStatus.OK);
 	}
 	
 	@PostMapping("/save-set-collection")
@@ -62,7 +60,7 @@ public class UserSetCollectionController {
 	public ResponseEntity<String> saveSetCollection(@RequestBody UserSetCollectionDTO userCollection){
 		String msg = service.saveUserSetCollection(userCollection);
 		
-		return new ResponseEntity<String>(JSONObject.quote(msg), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote(msg), HttpStatus.OK);
 	}
 	
 	@GetMapping("/setsname-by-settype/{setType}")
@@ -70,7 +68,7 @@ public class UserSetCollectionController {
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllSetsBySetType(@PathVariable("setType") String setType){
 		List<DeckAndSetsBySetTypeDTO> dto = service.getAllSetsBySetType(setType);
 		
-		return new ResponseEntity<List<DeckAndSetsBySetTypeDTO>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/set-collection-for-transfer")
@@ -78,7 +76,7 @@ public class UserSetCollectionController {
 	public ResponseEntity<UserSetCollectionDTO> getUserSetCollectionForTransfer(@RequestParam("setId") Integer setId){
 		UserSetCollectionDTO dto = service.getUserSetCollectionForTransfer(setId);
 		
-		return new ResponseEntity<UserSetCollectionDTO>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/save-transfer")
@@ -86,7 +84,7 @@ public class UserSetCollectionController {
 	public ResponseEntity<String> saveTransfer(@RequestBody List<UserSetCollectionDTO> setsToBeSaved ){
 		String msg = service.saveTransfer(setsToBeSaved);
 		
-		return new ResponseEntity<String>(JSONObject.quote(msg), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote(msg), HttpStatus.OK);
 	}
 	
 }

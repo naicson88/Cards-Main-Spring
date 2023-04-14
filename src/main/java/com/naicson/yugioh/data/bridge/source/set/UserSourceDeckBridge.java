@@ -23,13 +23,13 @@ public class UserSourceDeckBridge implements SourceSetBridge {
 	}
 
 	@Override
-	public SetDetailsDTO getDetails(Long deckId) {
+	public SetDetailsDTO getDetails(Long deckId, boolean withStats) {
 		
 		UserDeck deckUser = userDeckRepository.findById(deckId)
 				.orElseThrow(() -> new EntityNotFoundException("Can't find UserDeck with ID: " + deckId));
 		Deck deck = Deck.deckFromDeckUser(deckUser);
 		
-		return  deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.USER);
+		return  deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.USER, withStats);
 
 	}
 

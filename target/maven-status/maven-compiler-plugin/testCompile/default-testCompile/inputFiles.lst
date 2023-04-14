@@ -6,9 +6,10 @@ C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\mocks\RelUserDeckDTOMock.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\consumer\ConsumerUtilsTest.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\deck\DeckServiceImplTest.java
-C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\mocks\CardSetDetailsDTOMock.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\mocks\CardPriceInformationMock.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\YugiohApplicationTests.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\card\CardServiceImplTest.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\util\ValidObjects.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\collection\SetCollectionTest.java
+C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\mocks\AssociationDTOMock.java
 C:\Users\USER\Documents\workspace-spring-tool-suite-4-4.12.0.RELEASE\Cards-Main-MS\src\test\java\com\naicson\yugioh\mocks\CardAlternativeNumberMock.java

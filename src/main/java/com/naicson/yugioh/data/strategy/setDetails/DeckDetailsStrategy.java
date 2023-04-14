@@ -28,11 +28,11 @@ public class DeckDetailsStrategy implements SetDetailsStrategy {
 	}
 
 	@Override
-	public SetDetailsDTO getSetDetails(Long deckId, String deckSource) {
+	public SetDetailsDTO getSetDetails(Long deckId, String deckSource, boolean withStats) {
 
 		SourceBridge src =  SourceTypes.valueOf(deckSource.toUpperCase()).getDeckSource(deckService, relService, userDeckRepository);
 
-		return src.getSetDetail(deckId);
+		return src.getSetDetail(deckId, withStats);
 		
 	}
 

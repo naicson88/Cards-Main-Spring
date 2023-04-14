@@ -60,6 +60,7 @@ import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
@@ -94,6 +95,8 @@ public class CardServiceImplTest {
 	CardViewsInformationServiceImpl viewsService;
 	@Mock
 	CardPriceInformationServiceImpl cardPriceService;
+	@Mock
+	CardAlternativeNumberService alternativeService;
 	
 //	@BeforeEach
 //	public void setUp() {
@@ -250,7 +253,7 @@ public class CardServiceImplTest {
 		
 		Mockito.when(cardRepository.findByNumero(anyLong())).thenReturn(Optional.of(card));		
 	
-		Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
+		//Mockito.when(alternativeRepository.findAllByCardId(anyInt())).thenReturn(listAlternativeNumber);
 		Mockito.when(cardPriceService.getAllPricesOfACardById(anyInt())).thenReturn(priceInfo);
 		
 		doReturn(mapUser).when(cardService).findQtdCardUserHaveByCollection(anyInt());
@@ -403,8 +406,45 @@ public class CardServiceImplTest {
 		assertTrue(actual.contains(expected));
 	}
 	
+	@Test
+	public void errorGetAlternativeCardsInvalidId() {
+		
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cardService.getAlternativeArts(0);			  
+		});
+		
+		String expected = "Invalid Card ID: 0";
+		String actual = exception.getMessage();
+		
+		assertTrue(actual.contains(expected));
+	}
 	
-
+	@Test
+	public void returnEmptyArrayAlternativeCard() {
+		
+		Mockito.when(alternativeService.findAllByCardId(1)).thenReturn(null);
+		
+		List<Long> alternatives = cardService.getAlternativeArts(1);
+		
+		assertNotNull(alternatives);
+		assertTrue(alternatives.isEmpty());
+	}
+	
+	@Test
+	public void returnArrayAlternativeCard() {
+		CardAlternativeNumber alt = new CardAlternativeNumber();
+		alt.setCardAlternativeNumber(123456L);
+		CardAlternativeNumber alt2 = new CardAlternativeNumber();
+		alt2.setCardAlternativeNumber(654321L);
+			
+		Mockito.when(alternativeService.findAllByCardId(1)).thenReturn(List.of(alt, alt2));
+		
+		List<Long> alternatives = cardService.getAlternativeArts(1);
+		
+		assertTrue(alternatives.contains(alt.getCardAlternativeNumber()));
+		assertTrue(alternatives.size() == 2);
+	}
+	
 	private void mockAuth() {
 		UserDetailsImpl user = ValidObjects.generateValidUser();
 		
@@ -414,6 +454,7 @@ public class CardServiceImplTest {
         SecurityContextHolder.setContext(securityContext);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 	}
+	
 	
 	
 

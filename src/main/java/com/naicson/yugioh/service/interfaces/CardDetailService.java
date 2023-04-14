@@ -55,4 +55,9 @@ public interface CardDetailService {
 	
 	List<CardsSearchDTO> getRandomCards();
 
+	List<Long> getAlternativeArts(Integer cardId);
+
+
+	Map<Integer, String> getAllCardsNamesAndId();
+
 }

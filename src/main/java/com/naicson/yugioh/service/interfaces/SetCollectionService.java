@@ -7,18 +7,23 @@ import javax.validation.Valid;
 import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.sets.SetCollection;
 
 public interface SetCollectionService {
 	
 	public SetCollection findById(Integer id);
 	
-	public SetCollection saveSetCollection(SetCollection setCollection)  throws Exception;
+	public SetCollection saveSetCollection(SetCollection setCollection);
 	
 //	public SetDetailsDTO setCollectionDetailsAsDeck(Long setId, String source);
 
 	public List<DeckAndSetsBySetTypeDTO> getAllSetsBySetType(String setType);
 
 	public AssociationDTO newAssociation(@Valid AssociationDTO dto);
+
+	public SetEditDTO getCollectionToEdit(Integer setId);
+
+	public SetCollection editCollection(SetEditDTO dto);
 
 }

@@ -14,6 +14,17 @@ public class CardOfUserDetailDTO {
 	private List<CardsOfUserSetsDTO> setsWithThisCard;
 	private List<CardsOfUserSetsDTO> setsUserDontHave;
 	
+	public CardOfUserDetailDTO() {
+
+	}
+	
+	public CardOfUserDetailDTO(Long cardNumber, String cardImage, String cardName) {
+		super();
+		this.cardNumber = cardNumber;
+		this.cardImage = cardImage;
+		this.cardName = cardName;
+	}
+	
 	public String getCardImage() {
 		return cardImage;
 	}

@@ -65,14 +65,11 @@ public class BuildCardFromYuGiOhAPI {
 	}
 	
 	private TipoCard getCardType(String race) {
-		TipoCard type = new TipoCard();
 
 		if (!"Normal".equalsIgnoreCase(race)) // Trap and Spell cards has "normal" type
-			type = cardTypeRepository.findByName(race != null ? race.trim() : null);
+			return cardTypeRepository.findByName(race != null ? race.trim() : null);
 		else
-			type = null;
-
-		return type;
+			return null;
 	}
 	
 	private String getCardProperty(String race, String categoria) {	

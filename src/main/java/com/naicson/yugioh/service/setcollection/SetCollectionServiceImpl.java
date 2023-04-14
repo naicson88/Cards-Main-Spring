@@ -1,6 +1,7 @@
 package com.naicson.yugioh.service.setcollection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naicson.yugioh.data.bridge.source.SourceTypes;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
@@ -43,8 +46,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	UserSetCollectionRepository userSetRepository;
 	
 	@Autowired
-	DeckServiceImpl deckService;
-	
+	DeckServiceImpl deckService;	
 	@Autowired
 	SetsUtils setsUtils;
 	
@@ -56,9 +58,8 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		
 		validSetCollection(setCollection);
 	
-		SetCollection collectionSaved = setColRepository.save(setCollection);
-		
-		return collectionSaved;
+		return setColRepository.save(setCollection);
+
 	}
 	
 	public SetDetailsDTO convertSetCollectionToDeck(SetCollection set, SourceTypes deckSource, String table) {
@@ -195,18 +196,64 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 	@Transactional
 	public AssociationDTO newAssociation(@Valid AssociationDTO dto) {
 		
-		logger.info("Starting creating new Association...");
-		
-		List<Long> deckId =  Optional.ofNullable(this.getSetDeckRelationId(dto.getSourceId()))
+		List<Long> listDeckId =  Optional.ofNullable(this.getSetDeckRelationId(dto.getSourceId()))
 				.orElseThrow(() -> new EntityNotFoundException("Deck ID not found: " + dto.getSourceId()));
 		
+		if(listDeckId.isEmpty())
+			throw new EntityNotFoundException("Deck ID not found: " + dto.getSourceId());
+		
 		for(Integer toAssociate : dto.getArrayToAssociate()) {
-			this.saveSetDeckRelation(toAssociate.longValue(), deckId.get(0));
+			this.saveSetDeckRelation(toAssociate.longValue(), listDeckId.get(0));
 		}
 		
 		logger.info("Association Created!");
 		
 		return dto;
+	}
+
+	@Override
+	public SetEditDTO getCollectionToEdit(Integer setId) {
+		SetCollection set = setColRepository.findById(setId)
+				.orElseThrow(() -> new RuntimeException("Can't find Collection with ID: " + setId));
+		
+		SetEditDTO dto = new SetEditDTO();
+		dto.setId(set.getId().longValue());
+		dto.setImagem(set.getImgPath());
+		dto.setLancamento(set.getReleaseDate());
+		dto.setNome(set.getName());
+		dto.setRelDeckCards(Collections.emptyList());
+		dto.setSetType(set.getSetCollectionType().toString());
+		dto.setDescription(set.getDescription());
+		dto.setSetCode(set.getSetCode());
+		dto.setIsSpeedDuel(set.getIsSpeedDuel());
+		
+		List<SetEditDTO> insideSets = set.getDecks().stream().map(deck -> {
+			return deckService.getDeckToEdit(deck.getId().intValue());
+
+		}).collect(Collectors.toList());
+		
+		dto.setInsideDecks(insideSets);
+		
+		return dto;
+		
+	}
+	
+	@Transactional
+	@Override
+	public SetCollection editCollection(SetEditDTO dto) {
+		SetCollection set = setColRepository.findById(dto.getId().intValue())
+				.orElseThrow(() -> new RuntimeException("Can't find Collection with ID: " + dto.getId().intValue()));
+		
+		set.setImgPath(dto.getImagem().trim());
+		set.setReleaseDate(dto.getLancamento());
+		set.setName(dto.getNome().trim());
+		set.setSetCollectionType(SetType.valueOf(dto.getSetType()));
+		set.setDescription(dto.getDescription());
+		set.setSetCode(dto.getSetCode());
+		set.setIsSpeedDuel(dto.getIsSpeedDuel());
+		
+		return setColRepository.save(set);
+		
 	}
 
 }

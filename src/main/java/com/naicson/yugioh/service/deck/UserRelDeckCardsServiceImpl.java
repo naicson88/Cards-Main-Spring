@@ -37,7 +37,7 @@ public class UserRelDeckCardsServiceImpl {
 		
 		List<RelDeckCards> relDeckCards = relDeckCardsService.findRelationByDeckId(originalDeckId);
 		
-		if(relDeckCards == null || relDeckCards.size() == 0)
+		if(relDeckCards == null || relDeckCards.isEmpty())
 			throw new NoSuchElementException("Can't find cards for Konami Deck: " + originalDeckId);
 		
 		 List<UserRelDeckCards> listUserRel = relDeckCards.stream().map(rel -> {
@@ -58,14 +58,10 @@ public class UserRelDeckCardsServiceImpl {
 	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class})
 	public List<UserRelDeckCards> saveAll(List<UserRelDeckCards> list){
 		
-		if(list == null || list.size() == 0)
+		if(list == null || list.isEmpty())
 			return Collections.emptyList();
 		
-		List<UserRelDeckCards> listSaved = userRelRepository.saveAll(list);
-		
-		if(listSaved == null || listSaved.isEmpty())
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible save UserRelDeckCards");
-		
-		return listSaved;
+		return userRelRepository.saveAll(list);
+
 	}
 }

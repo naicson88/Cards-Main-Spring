@@ -12,5 +12,5 @@ public abstract class SourceBridge {
 		this.sourceSet = sourceSet;
 	}
 	
-	abstract public SetDetailsDTO getSetDetail(Long setId);
+	abstract public SetDetailsDTO getSetDetail(Long setId, boolean withStats);
 }

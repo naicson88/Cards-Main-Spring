@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 public enum ECardRarity {
@@ -13,15 +14,15 @@ public enum ECardRarity {
 	COMMON("Common", List.of("(NR)","(SP)", "(HFR)", "(DNPR)", "(SSP)")),
 	RARE("Rare", List.of("(R)","(DNRPR)", "(DRPR)")),
 	SUPER_RARE("Super Rare", List.of("(SPR)", "(DSPR)")),
-	ULTRA_RARE("Ultra Rare", List.of("(UR(PR))", "(UPR)", "(DUPR)", "(PG)")),
+	ULTRA_RARE("Ultra Rare", List.of("(UR)","(UR(PR))", "(UPR)", "(DUPR)", "(PG)")),
 	SECRET_RARE("Secret Rare", 
 			List.of("(PS)", "(ScR)","(HGR)","(PlR)", "(StR)","(PScR)","(EScR)","(PlScR)", "(UScR)","(20ScR)", "(ScUR)","(10000ScR)", "(ScPR)", "(EScPR)", "(DScPR)")),
 	ULTIMATE_RARE("Ultimate Rare",List.of("(UtR)")),
 	GOLD_RARE("Gold Rare", List.of("(GScR)", "(GGR)", "(PGR)")),
 	PARALLEL_RARE("Parallel Rare",
 			List.of("(NPR)", "(SFR)", "(MSR)", "(SHR)", "(CR)", "(HGPR)", "(KCC)", "(KCR)", "(KCUR)")),
-	GHOST_RARE("Ghost Rare", List.of("(GR)")),
-	UNKNOWN("Not Defined", List.of(""));
+	GHOST_RARE("Ghost Rare", List.of("(GR)"));
+	//UNKNOWN("Not Defined", List.of(""));
 	
 	private final String name;
 	private final List<String> listRarityCode;
@@ -45,6 +46,17 @@ public enum ECardRarity {
 			.filter(r -> r.name.equals(name))
 			.findFirst()
 			.orElseThrow(() -> new NoSuchElementException("Cant find Rarity with name: " + name));
+	}
+	
+	public static RelDeckCards checkOtherRarities(RelDeckCards rel) {
+		
+		if(rel.getCard_raridade().equals("Ultra Rare (Pharaoh's Rare)")) {
+			rel.setSetRarityCode("(UR)");
+			rel.setCard_raridade("Ultra Rare");
+			rel.setRarityDetails("Ultra Rare (Pharaoh's Rare)");
+		}
+			
+		return rel;
 	}
 	
 	public String getCardRarity() {

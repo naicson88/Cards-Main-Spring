@@ -4,7 +4,7 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 
 public interface SetDetailsStrategy {
 	
-	 SetDetailsDTO getSetDetails(Long deckId, String source);
+	 SetDetailsDTO getSetDetails(Long deckId, String source, boolean withStats);
 	
 	 SetDetailsType setDetailsType();
 }

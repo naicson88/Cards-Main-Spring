@@ -36,6 +36,7 @@ import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.DeckRarityQuantity;
@@ -67,8 +68,8 @@ public class DeckServiceImpl implements DeckDetailService {
 	@Autowired
 	UserDeckRepository userDeckRepository;
 	
-//	@Autowired
-//	SetsUtils utils;
+	@Autowired
+	SetsUtils setsUtils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
 
@@ -83,14 +84,11 @@ public class DeckServiceImpl implements DeckDetailService {
 	}
 
 	@Override
-	public Deck findById(Long Id) {
-		if (Id == null || Id == 0)
+	public Deck findById(Long id) {
+		if (id == null || id == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
 
-		Deck deck = deckRepository.findById(Id)
-				.orElseThrow(() -> new EntityNotFoundException("Deck not found."));
-
-		return deck;
+		return deckRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Deck not found."));
 	}
 
 	@Override
@@ -103,7 +101,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		List<RelDeckCards> relation = src.findRelationByDeckId(deckId);
 		
-		if (relation == null || relation.size() == 0) 
+		if (relation == null || relation.isEmpty()) 
 			return Collections.emptyList();
 
 		return relation;
@@ -115,7 +113,7 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		List<Card> cards = dao.cardsOfDeck(deckId, table);
 		
-		if(cards == null || cards.size() == 0)
+		if(cards == null || cards.isEmpty())
 			return Collections.emptyList();
 					
 		return cards;
@@ -129,10 +127,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		if (deck == null)
 			throw new IllegalArgumentException("Invalid Deck informed");
 
-		dao = new DeckDAO();
-		Long id = dao.addDeck(deck);
-
-		return id;
+		return new DeckDAO().addDeck(deck);
 	}
 
 
@@ -146,8 +141,6 @@ public class DeckServiceImpl implements DeckDetailService {
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(quantityUserHaveDeck(deckId));
 
-		//dto = utils.getSetStatistics(dto);
-
 		return dto;
 	}
 
@@ -159,7 +152,6 @@ public class DeckServiceImpl implements DeckDetailService {
 
 		SetDetailsDTO dto = new SetDetailsDTO();
 		InsideDeckDTO insideDeck = new InsideDeckDTO();
-		SetsUtils setsUtils = new SetsUtils();
 		
 		BeanUtils.copyProperties(deck, dto);		
 		
@@ -175,6 +167,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		  .collect(Collectors.toList());
 		
 		insideDeck.setCards(cardDetailsList);
+		insideDeck.setRelDeckCards(deck.getRel_deck_cards());
 		dto.setInsideDecks(List.of(insideDeck));
 		dto.setDescription(deck.getDescription());
 
@@ -206,7 +199,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			 deck = this.findById(deckId);
 
 		else if (deckSource.equals(SourceTypes.USER)) {
-			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException());
+			UserDeck deckUser = userDeckRepository.findById(deckId).orElseThrow(() -> new EntityNotFoundException("UserDeck not found! Id: "+deckId));
 			 deck = Deck.deckFromDeckUser(deckUser);
 		}
 		
@@ -219,7 +212,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;
 	}
 	
-	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, SourceTypes source) {
+	public SetDetailsDTO constructDeckDetails(Long deckId, Deck deck, String table, SourceTypes source, boolean withStats) {
 		
 		deck.setCards(this.cardsOfDeck(deckId, table));
 		deck.setRel_deck_cards(this.relDeckCards(deckId, source));
@@ -227,7 +220,11 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = this.convertDeckToSetDetailsDTO(deck);
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(this.quantityUserHaveDeck(deckId));
-		//dto = utils.getSetStatistics(dto);
+		if(withStats) {
+			dto = setsUtils.getSetStatistics(dto);
+			dto.setInsideDecks(null);
+		}
+			
 		return dto;
 	}
 
@@ -259,7 +256,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		List<RelDeckCards> listRel =  deck.getRel_deck_cards();	
 		
 		Map<String, Long> mapRarities = listRel.stream().collect(Collectors.groupingBy(
-				card -> card.getCard_raridade(), Collectors.counting()
+				RelDeckCards::getCard_raridade, Collectors.counting()
 				));
 		
 		deck = setMappedDeckRarities(deck, mapRarities);
@@ -269,32 +266,32 @@ public class DeckServiceImpl implements DeckDetailService {
 		return deck;
 	}
 	
-	private Deck  setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
+	private Deck setMappedDeckRarities(Deck deck, Map<String, Long> mapRarities) {
 	
-	if(deck == null || mapRarities == null)
-		throw new IllegalArgumentException("Invalid information to map rarities");
+		if(deck == null || mapRarities == null)
+			throw new IllegalArgumentException("Invalid information to map rarities");
 	
-	DeckRarityQuantity quantity = new DeckRarityQuantity();
-	
-	mapRarities.forEach((key, value) ->{
-		ECardRarity rarity = ECardRarity.getRarityByName(key);
-		switch (rarity) {		
-			case COMMON: quantity.setCommon(value); break;				
-			case RARE: quantity.setRare(value); break;			
-			case SUPER_RARE: quantity.setSuperRare(value); break;			
-			case ULTRA_RARE: quantity.setUltraRare(value); break;		
-			case SECRET_RARE: quantity.setSecretRare(value); break;				
-			case ULTIMATE_RARE: quantity.setUltimateRare(value); break;
-			case GOLD_RARE: quantity.setGoldRare(value); break;		
-			case PARALLEL_RARE: quantity.setParallelRare(value); break;				
-			case GHOST_RARE: quantity.setGhostRare(value); break;					
-			default:
-				throw new IllegalArgumentException("Invalid Rarity informed! " + key);
-		}
-	});
-	
-	deck.setQuantity(quantity);
-	return deck;
+		DeckRarityQuantity quantity = new DeckRarityQuantity();
+		
+		mapRarities.forEach((key, value) ->{
+			ECardRarity rarity = ECardRarity.getRarityByName(key);
+			switch (rarity) {		
+				case COMMON: quantity.setCommon(value); break;				
+				case RARE: quantity.setRare(value); break;			
+				case SUPER_RARE: quantity.setSuperRare(value); break;			
+				case ULTRA_RARE: quantity.setUltraRare(value); break;		
+				case SECRET_RARE: quantity.setSecretRare(value); break;				
+				case ULTIMATE_RARE: quantity.setUltimateRare(value); break;
+				case GOLD_RARE: quantity.setGoldRare(value); break;		
+				case PARALLEL_RARE: quantity.setParallelRare(value); break;				
+				case GHOST_RARE: quantity.setGhostRare(value); break;					
+				default:
+					throw new IllegalArgumentException("Invalid Rarity informed! " + key + value);
+			}
+		});
+		
+		deck.setQuantity(quantity);
+		return deck;
 }
 
 	@Override
@@ -323,52 +320,43 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	@Override
 	public Page<Deck> findAll(Pageable pageable) {
-		Page<Deck> decks = deckRepository.findAll(pageable);
-
-		return decks;
+		return deckRepository.findAll(pageable);
 	}
 
 	public Page<Deck> findAllBySetType(Pageable pageable, String setType) {
-		Page<Deck> decks = deckRepository.findAllBySetTypeOrderByLancamentoDesc(pageable, setType);
-
-		return decks;
+		return deckRepository.findAllBySetTypeOrderByLancamentoDesc(pageable, setType);
 	}
 	
 	public List<Deck> findAllByIds(List<Long> ids){
 		if(ids == null)
 			throw new IllegalArgumentException("Invalid IDs for consulting Decks");
 		
-		List<Deck> decks = deckRepository.findAllById(ids);
-		
-		return decks;
+		return deckRepository.findAllById(ids);
 	}
 	
 	public List<AutocompleteSetDTO> autocompleteSet() {
 		List<Tuple> tuple = deckRepository.autocompleteSet();
 		
-		List<AutocompleteSetDTO> listSetNames = tuple.stream().map(c -> new AutocompleteSetDTO(
+		return tuple.stream().map(c -> new AutocompleteSetDTO(
 				c.get(0, BigInteger.class),
 				c.get(1, String.class)
 				)).collect(Collectors.toList());
-		
-		return listSetNames;
 	}
 
 	public List<DeckAndSetsBySetTypeDTO> getAllDecksName(boolean includeCollectionsDeck) {
 			
 		List<Tuple> tuple =	includeCollectionsDeck == false ?  deckRepository.getAllDecksName() : deckRepository.getAllDecksNameIncludeCollections();
 		
-		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(t -> {
-			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+		return tuple.stream().map(t -> {
+			return new DeckAndSetsBySetTypeDTO(
 					Long.parseLong(String.valueOf(t.get(0))),
 					String.valueOf(t.get(1))
 			);
-			return dto;
 		}).collect(Collectors.toList());
 		
-		return listDto;
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public void updateCardsQuantity(String setCodes) {
 		if(setCodes == null)
 			throw new IllegalArgumentException("Invalid Set Codes Payload");
@@ -392,7 +380,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			}			
 		}	
 		
-		logger.info("Ending update Cards Quantity. " + counter + " cards were updated!");		
+		logger.info("Ending update Cards Quantity {} cards were updated!", counter);		
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
@@ -409,6 +397,37 @@ public class DeckServiceImpl implements DeckDetailService {
 				relService.save(relCopied);
 			}	
 		}
+	}
+
+	public SetEditDTO getDeckToEdit(Integer deckId) {
+		Deck deck = this.findById(deckId.longValue());
+		
+		return this.converDeckInSetDetailsToEdit(deck);
+	}
+	
+	private SetEditDTO converDeckInSetDetailsToEdit(Deck deck) {
+		SetEditDTO dto = new SetEditDTO();
+		
+		BeanUtils.copyProperties(deck, dto);		
+		
+		dto.setRelDeckCards(relService.findRelationByDeckId(deck.getId()));
+
+		return dto;
+	}
+	
+	@Transactional
+	public Deck editDeck(SetEditDTO dto) {
+		Deck deck = findById(dto.getId());
+		
+		deck.setNome(dto.getNome().trim());
+		deck.setLancamento(dto.getLancamento());
+		deck.setImagem(dto.getImagem().trim());
+		deck.setSetType(dto.getSetType().trim());
+		deck.setSetCode(dto.getSetCode().trim());
+		deck.setIsSpeedDuel(dto.getIsSpeedDuel());
+		deck.setDescription(dto.getDescription());
+		
+		return deckRepository.save(deck);
 	}
 
 

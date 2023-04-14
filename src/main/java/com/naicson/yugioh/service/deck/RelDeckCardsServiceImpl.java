@@ -1,8 +1,10 @@
 package com.naicson.yugioh.service.deck;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
+import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
+import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
+import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
@@ -21,6 +27,15 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	
 	@Autowired
 	RelDeckCardsRepository relDeckCardsRepository;
+	
+	@Autowired
+	CardServiceImpl cardServiceImpl;
+	
+	@Autowired
+	DeckServiceImpl deckService;
+	
+	@Autowired
+	CardAlternativeNumberService numberService;
 	
 	Logger logger = LoggerFactory.getLogger(RelDeckCardsServiceImpl.class);
 
@@ -60,5 +75,40 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	public void save(RelDeckCards relCopied) {
 		relDeckCardsRepository.save(relCopied);
 	}
+
+	public RelDeckCards editRelDeckCards(RelDeckCards rel) {	
+		relDeckCardsRepository.findById(rel.getId())
+			.orElseThrow(() -> new RuntimeException("Cannot find Relation with ID: " + rel.getId()));
+		
+		return relDeckCardsRepository.save(rel);
+	}
 	
+	public void removeRelDeckCards(Long relId) {
+		relDeckCardsRepository.deleteById(relId);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public RelDeckCards createRelation(RelDeckCards rel) {
+		
+		this.validateNewRelation(rel);
+		
+		if(numberService.findByCardAlternativeNumber(rel.getCardNumber()) == null)
+			numberService.save(new CardAlternativeNumber(rel.getCardId(), rel.getCardNumber()));
+		
+		rel.setDt_criacao(new Date());
+		
+		return relDeckCardsRepository.save(rel);
+		
+	}
+	
+	private void validateNewRelation(RelDeckCards rel) {
+		
+		cardServiceImpl.cardDetails(rel.getCardId());
+		deckService.findById(rel.getDeckId());
+		ECardRarity.getRarityByName(rel.getCard_raridade());
+	}
+
+	public List<RelDeckCards> getRelationByDeckId(Integer deckId) {
+		return relDeckCardsRepository.findByDeckId(deckId.longValue());
+	}
 }

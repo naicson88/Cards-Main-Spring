@@ -21,7 +21,7 @@ public class KonamiSourceCollectionBridge implements SourceSetBridge{
 	}
 
 	@Override
-	public SetDetailsDTO getDetails(Long setId) {
+	public SetDetailsDTO getDetails(Long setId, boolean withStats) {
 		
 		 SetCollection setCollection = setRepository.findById(setId.intValue())
 					.orElseThrow(() -> new EntityNotFoundException("Set Collection not found! ID: " + setId));

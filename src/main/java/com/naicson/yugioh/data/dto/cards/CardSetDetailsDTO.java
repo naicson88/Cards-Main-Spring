@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Atributo;
+import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.TipoCard;

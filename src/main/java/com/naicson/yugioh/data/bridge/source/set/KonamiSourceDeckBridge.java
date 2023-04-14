@@ -22,11 +22,11 @@ public class KonamiSourceDeckBridge implements SourceSetBridge {
 	}
 
 	@Override
-	public SetDetailsDTO getDetails(Long deckId) {
+	public SetDetailsDTO getDetails(Long deckId, boolean withStats) {
 			
 		Deck deck = deckService.findById(deckId);
 		
-		return deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.KONAMI) ;
+		return deckService.constructDeckDetails(deckId, deck, TABLE, SourceTypes.KONAMI, withStats) ;
 
 	}
 

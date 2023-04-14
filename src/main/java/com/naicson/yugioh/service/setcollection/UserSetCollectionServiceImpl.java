@@ -217,21 +217,18 @@ public class UserSetCollectionServiceImpl {
 
 	}
 
-
-
 	public List<CardSetCollectionDTO> cardsOfSetCollection(UserSetCollection set) {
 
-		List<Long> deckId = userSetRepository.consultSetUserDeckRelation(set.getId());
+		List<Long> deckIds = userSetRepository.consultSetUserDeckRelation(set.getId());
 
-		if (deckId == null || deckId.size() == 0)
+		if (deckIds == null || deckIds.isEmpty())
 			throw new ErrorMessage("There is no UserDeck for UserSetCollection: " + set.getId());
 
-		List<Tuple> tuple = userSetRepository.consultUserSetCollection(deckId.get(0),
+		List<Tuple> tuple = userSetRepository.consultUserSetCollection(deckIds.get(0),
 				GeneralFunctions.userLogged().getId(), set.getKonamiSetCopied());
 
-		List<CardSetCollectionDTO> cardsList = transformTupleInCardSetCollectionDTO(tuple);
+		return transformTupleInCardSetCollectionDTO(tuple);
 
-		return cardsList;
 	}
 
 	public List<CardSetCollectionDTO> transformTupleInCardSetCollectionDTO(List<Tuple> tuple) {
@@ -241,10 +238,15 @@ public class UserSetCollectionServiceImpl {
 			RelDeckCards rel = new RelDeckCards(c.get(4, String.class), Double.parseDouble(vlr), c.get(5, String.class),
 					c.get(6, String.class), c.get(7, String.class));
 
-			CardSetCollectionDTO card = new CardSetCollectionDTO(Integer.parseInt(String.valueOf(c.get(0))),
-					Integer.parseInt(String.valueOf(c.get(1))), c.get(2, String.class),
-					Integer.parseInt(String.valueOf(c.get(8))), Integer.parseInt(String.valueOf(c.get(9))), rel,
-					Boolean.parseBoolean(String.valueOf(c.get(10))), c.get(11, String.class));
+			CardSetCollectionDTO card = new CardSetCollectionDTO(
+					Integer.parseInt(String.valueOf(c.get(0))),
+					Integer.parseInt(String.valueOf(c.get(1))),
+					c.get(2, String.class),
+					Integer.parseInt(String.valueOf(c.get(8))),
+					Integer.parseInt(String.valueOf(c.get(9))), 
+					rel,
+					Boolean.parseBoolean(String.valueOf(c.get(10))),
+					c.get(11, String.class));
 
 			card.setListSetCode(List.of(card.getRelDeckCards().getCard_set_code()));
 			return card;
@@ -257,7 +259,7 @@ public class UserSetCollectionServiceImpl {
 		if (userCollection == null)
 			throw new IllegalArgumentException("Invalid User SetCollection to be saved!");
 
-		Long deckId = userCollection.getId() > 0 ? this.saveExistingDeck(userCollection)
+		Long deckId = userCollection.getId() > 0 ? this.removeRelFromExistingSet(userCollection)
 				: this.createNewSetCollection(userCollection);
 
 		List<UserRelDeckCards> listRel = this.createRelDeckCardsOfSetCollection(userCollection, deckId);
@@ -289,7 +291,7 @@ public class UserSetCollectionServiceImpl {
 		return userDeck.getId();
 	}
 
-	private Long saveExistingDeck(UserSetCollectionDTO userCollection) {
+	private Long removeRelFromExistingSet(UserSetCollectionDTO userCollection) {
 
 		UserSetCollection set = userSetRepository.findById(userCollection.getId())
 				.orElseThrow(() -> new EntityNotFoundException("Set not found with ID: " + userCollection.getId()));
@@ -319,9 +321,7 @@ public class UserSetCollectionServiceImpl {
 			}
 		});
 
-		List<UserRelDeckCards> listRel = new ArrayList<UserRelDeckCards>(mapCards.values());
-
-		return listRel;
+		return new ArrayList<UserRelDeckCards>(mapCards.values());
 	}
 
 	private UserRelDeckCards createRelObject(Long deckId, CardSetCollectionDTO cardSet) {
@@ -403,6 +403,6 @@ public class UserSetCollectionServiceImpl {
 		deck.setId(userSet.getId());
 		deck.setSetType(userSet.getSetType());
 
-		userDeckService.saveUserdeck(deck, this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
+		userDeckService.saveUserDeck(deck, this.createRelDeckCardsOfSetCollection(userSet, userSet.getId()));
 	}
 }

@@ -104,5 +104,8 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	@Query(value = " SELECT COALESCE(sum(quantity),0) AS qtd FROM tab_rel_deckusers_cards WHERE card_id = :cardId", nativeQuery = true)
 	int findQtdUserHave(Integer cardId);
 	
+	@Query(value = "SELECT ID, NOME FROM TAB_CARDS ORDER BY NOME", nativeQuery = true)
+	List<Tuple> findAllCardsNameAndId();
+	
 	
 }

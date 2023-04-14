@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.naicson.yugioh.entity.RelDeckCards;
 
 @Repository
-public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Integer>{
+public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long>{
 	
 	@Query(value = " select * from tab_rel_deck_cards rel "
 			+ " inner join tab_decks deck on deck.id = rel.deck_id "

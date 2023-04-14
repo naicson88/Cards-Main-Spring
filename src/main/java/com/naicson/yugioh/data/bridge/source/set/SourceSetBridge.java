@@ -7,5 +7,5 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 @Component
 public interface SourceSetBridge {
 	
-	public SetDetailsDTO getDetails(Long setId);
+	public SetDetailsDTO getDetails(Long setId, boolean withStats);
 }

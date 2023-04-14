@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
@@ -30,6 +31,16 @@ public class CardRegistry {
 	BuildCardFromYuGiOhAPI buildCard;
 
 	Logger logger = LoggerFactory.getLogger(CardRegistry.class);
+	
+	private static final String CARD_FOLDER = "C:\\Cards\\";
+	private static final String CROPPED_CARD_FOLDER = "C:\\Cropped\\";
+	
+	@Value("${yugioh.api.url.img}")
+	private String imgCardUrl;
+	@Value("${yugioh.api.url.img.cropped}")
+	private String imgCroppedCardUrl;
+	
+
 
 	@Transactional
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
@@ -43,14 +54,15 @@ public class CardRegistry {
 
 					Card cardSaved = cardRepository.save(cardToBeRegistered);
 
-					CardAlternativeNumber alternative = new CardAlternativeNumber(null, cardSaved.getId(),
+					CardAlternativeNumber alternative = new CardAlternativeNumber(cardSaved.getId(),
 							cardSaved.getNumero());
 
 					alternativeRepository.save(alternative);
 
 					logger.info("Card successfuly saved! {}", cardSaved.getNome());
 
-					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero());
+					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero(), imgCardUrl, CARD_FOLDER);
+					GeneralFunctions.saveCardInFolder(cardToBeRegistered.getNumero(), imgCroppedCardUrl, CROPPED_CARD_FOLDER);
 
 					cardsSaved.add(cardSaved);
 				}
@@ -60,10 +72,8 @@ public class CardRegistry {
 	}
 
 	public Card createCardToBeRegistered(CardYuGiOhAPI apiCard) {
+		return buildCard.createCard(apiCard);
 
-		Card cardToBeRegistered = buildCard.createCard(apiCard);
-
-		return cardToBeRegistered;
 	}
 
 	private boolean checkIfCardAlreadyRegisteredWithAlternativeNumber(CardYuGiOhAPI apiCard) {
@@ -79,7 +89,7 @@ public class CardRegistry {
 		if (card.getNumero().equals(apiCard.getId()))
 			throw new IllegalArgumentException("Cards with same number and diferent name can't be registered.");
 
-		CardAlternativeNumber alternative = new CardAlternativeNumber(null, card.getId(), apiCard.getId());
+		CardAlternativeNumber alternative = new CardAlternativeNumber(card.getId(), apiCard.getId());
 
 		return saveAlternativerCardNumber(apiCard, alternative);
 	}
@@ -89,7 +99,8 @@ public class CardRegistry {
 			alternativeRepository.save(alternative);
 			
 			logger.info("Alternative card number saved!");
-			GeneralFunctions.saveCardInFolder(apiCard.getId());
+			GeneralFunctions.saveCardInFolder(apiCard.getId(), imgCardUrl, CARD_FOLDER);
+			GeneralFunctions.saveCardInFolder(apiCard.getId(), imgCroppedCardUrl, CROPPED_CARD_FOLDER);
 			return true;
 	}
 

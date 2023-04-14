@@ -32,7 +32,7 @@ public class UserSourceCollectionBridge implements SourceSetBridge{
 
 
 	@Override
-	public SetDetailsDTO getDetails(Long setId) {
+	public SetDetailsDTO getDetails(Long setId, boolean withStats) {
 		SetCollection setCollection = new SetCollection();
 
 		UserSetCollection userSet = userSetRepository.findById(setId)

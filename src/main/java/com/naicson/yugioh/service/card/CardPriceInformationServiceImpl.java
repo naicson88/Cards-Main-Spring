@@ -35,7 +35,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	@Autowired
 	private CardRepository cardRepository;
 
-	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);	
+	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);	
 	
 	@Override
 	public void calculateWeeklyPercentageVariable(CardPriceInformation cardInfo)  {
@@ -69,12 +69,12 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			}
 			
 			if(cardInfo.getCurrentPrice() == null || cardInfo.getCurrentPrice() == 0.0 ) {
-				logger.error("Card current price is invalid to calculate weekly percentage".toUpperCase());
+				logger.error("Card current price is invalid to calculate weekly percentage");
 				throw new ErrorMessage("Card current price is invalid to calculate weekly percentage");
 			}
 			
 			if(cardInfo.getPrice2() == null || cardInfo.getPrice2() == 0.0 ) {
-				logger.error("Card price_2  is invalid to calculate weekly percentage".toUpperCase());
+				logger.error("Card price_2  is invalid to calculate weekly percentage");
 				throw new ErrorMessage("Card price_2 is invalid to calculate weekly percentage");
 			}
 		}catch(Exception e){
@@ -86,14 +86,12 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	
 	@Override
 	public List<RankingForHomeDTO> getWeeklyHighStats() {	
-		List<RankingForHomeDTO> highCards = this.findWeeklyCards(CardStats.HIGH);
-		return highCards;		
+		return this.findWeeklyCards(CardStats.HIGH);	
 	}
 	
 	@Override
 	public List<RankingForHomeDTO> getWeeklyLowStats() {	
-		List<RankingForHomeDTO> lowCards = this.findWeeklyCards(CardStats.LOW);	
-		return lowCards;		
+		return this.findWeeklyCards(CardStats.LOW);			
 	}
 	
 	@Override
@@ -104,7 +102,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 		try {
 			
 			if(stats == null){
-				logger.error("Invalid stats for weekly consulting".toUpperCase());
+				logger.error("Invalid stats for weekly consulting");
 				throw new IllegalArgumentException("Invalid stats for weekly consulting");
 			}
 			
@@ -116,12 +114,12 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			 rankingByStatsList = this.convertFromCardInfoToRankingDTO(cardsByStats, stats);
 			
 			if(rankingByStatsList == null || rankingByStatsList.isEmpty()) {
-				logger.error("Ranking stats list is empty".toUpperCase());
+				logger.error("Ranking stats list is empty");
 				throw new NoSuchElementException("Ranking stats list is empty");
 			}
 				
 		}catch(Exception e) {
-			logger.error("Something bad happened: " + e.getMessage());
+			logger.error("Something bad happened: {}" , e.getMessage());
 		}
 		
 		return rankingByStatsList;		
@@ -130,7 +128,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	private List<RankingForHomeDTO> convertFromCardInfoToRankingDTO(List<CardPriceInformation> cardsByStats, CardStats stats) {
 		this.validadeStatsList(cardsByStats, stats);
 		
-		List<RankingForHomeDTO> listCards = cardsByStats.stream().map(card -> {			
+		return cardsByStats.stream().map(card -> {			
 			String cardName = this.getCardName(card.getCardNumber().longValue());
 			RankingForHomeDTO cardByStats = new RankingForHomeDTO();
 			
@@ -142,8 +140,6 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			
 			return cardByStats;
 		}).collect(Collectors.toList());
-		
-		return listCards;
 	}
 	
 	private String getCardName(Long cardNumber) {
@@ -152,7 +148,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 				.orElseThrow(() -> new EntityNotFoundException("Card with number " + cardNumber + " not found."));
 		
 		if(card.getNome() == null || card.getNome().isBlank()) {
-			logger.error("Invalid card name of card = " + card.getNumero());
+			logger.error("Invalid card name of card: {} " , card.getNumero());
 			throw new NoSuchElementException("Invalid card name of card = " + card.getNumero() + "".toUpperCase());
 		}
 		
@@ -164,11 +160,11 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 		
 		try {
 			if(cardsByStats == null || cardsByStats.isEmpty()) {
-				logger.error("List of cards with stats " + stats.toString() + " is empty".toUpperCase());
+				logger.error("List of cards with stats " + stats.toString() + " is empty");
 				throw new ErrorMessage("List of cards with stats " + stats.toString() + " is empty");
 			}
 		}catch(Exception e) {
-			logger.error("Something bad happened: " + e.getMessage());
+			logger.error("Something bad happened: {}" , e.getMessage());
 		}
 		
 	}

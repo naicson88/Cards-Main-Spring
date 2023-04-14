@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import com.naicson.yugioh.data.dto.set.AutocompleteSetDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.data.strategy.setDetails.SetDetailsStrategy;
 import com.naicson.yugioh.data.strategy.setDetails.SetDetailsType;
 import com.naicson.yugioh.entity.Deck;
@@ -56,7 +58,6 @@ public class DeckController<T> {
 	private final Map<SetDetailsType, SetDetailsStrategy> getDetailByType;
 	
 	public DeckController(Map<SetDetailsType, SetDetailsStrategy> getDetailByType) {
-		super();
 		this.getDetailByType = getDetailByType;
 	}
 
@@ -84,9 +85,20 @@ public class DeckController<T> {
 	@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		
-		SetDetailsStrategy setDetailStrategy = getDetailByType.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
+		SetDetailsStrategy setDetailStrategy = getDetailByType
+				.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
 
-		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source), HttpStatus.OK) ;
+		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source, false), HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/set-stats")
+	@ApiOperation(value="Return details and stats of a Set", authorizations = { @Authorization(value="JWT") })
+	//@Cacheable(value = "setStats")
+	public ResponseEntity<SetDetailsDTO> getSetStats(@RequestParam Long id, @RequestParam String source, @RequestParam String setType){
+		SetDetailsStrategy setDetailStrategy = getDetailByType
+				.getOrDefault(SetDetailsType.valueOf(setType.toUpperCase()), null);
+
+		return new ResponseEntity<>(setDetailStrategy.getSetDetails(id, source, true), HttpStatus.OK) ;
 	}
 
 	
@@ -122,7 +134,21 @@ public class DeckController<T> {
 	public ResponseEntity<String> updateCardsQuantity(@RequestBody String setCodes){
 		deckService.updateCardsQuantity(setCodes);
 
-		return new ResponseEntity<String>(JSONObject.quote("Update received!"), HttpStatus.OK);
+		return new ResponseEntity<>(JSONObject.quote("Update received!"), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-deck-to-edit")
+	@ApiOperation(value="Edit especific deck", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<SetEditDTO> getDeckToEdit(@RequestParam Integer deckId) {	
+		return new ResponseEntity<>(deckService.getDeckToEdit(deckId), HttpStatus.OK);
+	}
+	
+	@PostMapping("/edit-deck")
+	@ApiOperation(value="Deck to edit", authorizations = { @Authorization(value="JWT") })
+	public ResponseEntity<String> editDeck(@RequestBody SetEditDTO dto){
+		deckService.editDeck(dto);
+		
+		return new ResponseEntity<>(JSONObject.quote("Deck edited successfully!"), HttpStatus.OK);
 	}
 	
 
