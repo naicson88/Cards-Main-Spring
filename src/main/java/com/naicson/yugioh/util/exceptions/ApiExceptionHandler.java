@@ -30,7 +30,7 @@ ZonedDateTime time =  ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
 		   List<FieldError> fieldErrors = em.getBindingResult().getFieldErrors(); 
 	       String errorMessage = fieldErrors.get(0).getDefaultMessage();
 	       ApiExceptions ex = new ApiExceptions(errorMessage,HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, this.time);
-		   logger.error("ConstraintViolationException: " + errorMessage);			
+		   logger.error("ConstraintViolationException: " + errorMessage);
 		   return new ResponseEntity<Object>(ex, HttpStatus.BAD_REQUEST );
 		}
 			
@@ -52,6 +52,7 @@ ZonedDateTime time =  ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
 		public ResponseEntity<Object> handleNotFoundlErros(NoSuchElementException e){	
 			ApiExceptions ex = new ApiExceptions(e.getMessage(),HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND, ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));	
 			logger.error(e.getMessage());
+			logger.error("Exception: {}", e);
 			return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
 		}
 		
