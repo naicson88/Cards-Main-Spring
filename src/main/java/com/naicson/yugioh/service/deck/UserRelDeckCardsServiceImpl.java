@@ -1,6 +1,5 @@
 package com.naicson.yugioh.service.deck;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,4 +62,26 @@ public class UserRelDeckCardsServiceImpl {
 		return userRelRepository.saveAll(list);
 
 	}
+	
+	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class})
+	public List<UserRelDeckCards> saveUserRelDeckCards(Long deckId, List<UserRelDeckCards> list) {
+		
+		list.stream().filter(rel -> rel.getDeckId().equals(0L))
+		  	.forEach( rel -> rel.setDeckId(deckId));
+		 
+		 userRelRepository.deleteByDeckId(deckId);
+		 	
+		 userRelRepository.saveAll(list);
+		 
+		 return list;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void removeRelUserDeckByDeckId(Long deckId) {
+		if(deckId == null || deckId == 0)
+			throw new IllegalArgumentException("Invalid Deck Id to remove Relation");
+		
+		userRelRepository.deleteRelUserDeckByDeckId(deckId);
+	}
+
 }

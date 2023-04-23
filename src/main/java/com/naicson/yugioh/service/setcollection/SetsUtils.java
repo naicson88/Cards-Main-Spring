@@ -95,8 +95,8 @@ public class SetsUtils {
 			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
 		}
 		
-		return tipoList;
-	
+		return tipoList.stream().sorted((v1, v2) -> Long.compare(v2.getQuantity(), v1.getQuantity())).collect(Collectors.toList());
+		
 	}
 	
 	private List<GenericTypeDTO> setQuantityByGenericType(List<CardSetDetailsDTO> listDetails){

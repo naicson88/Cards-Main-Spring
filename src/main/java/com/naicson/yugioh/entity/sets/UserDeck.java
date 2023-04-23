@@ -13,11 +13,14 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.naicson.yugioh.data.builders.UserDeckBuilder;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.enums.SetType;
 
 @Entity
 @Table(name = "tab_user_deck")
@@ -38,6 +41,7 @@ public class UserDeck {
 	private Boolean isSpeedDuel;
 	private String imgurUrl;
 	@Transient
+	@JsonAlias("rel_deck_cards")
 	private List<UserRelDeckCards> relDeckCards;
 	
 
@@ -66,17 +70,17 @@ public class UserDeck {
 	}
 	
 	public static UserDeck userDeckFromUserSetCollectionDTO(UserSetCollectionDTO userCollection) {
-		UserDeck userDeck = new UserDeck();
-		userDeck.setDtCriacao(new Date());
-		userDeck.setImagem(GeneralFunctions.getRandomDeckCase());
-		userDeck.setImgurUrl(userDeck.getImagem());
-		userDeck.setIsSpeedDuel(false);
-		userDeck.setKonamiDeckCopied(null);
-		userDeck.setNome(userCollection.getName()+"_"+GeneralFunctions.getRandomDeckCase());
-		userDeck.setSetType(userCollection.getSetType());
-		userDeck.setUserId(GeneralFunctions.userLogged().getId());
 		
-		return userDeck;
+		return UserDeckBuilder.builder()
+			.dtCriacao(new Date())
+			.imagem(GeneralFunctions.getRandomDeckCase())
+			.isSpeedDuel(false)
+			.konamiDeckCopied(null)
+			.nome(userCollection.getName())
+			.setType(SetType.USER_NEW_COLLECTION.getType())
+			.userId(GeneralFunctions.userLogged().getId())
+			.build();
+
 	}
 	
 	public List<UserRelDeckCards> getRelDeckCards() {

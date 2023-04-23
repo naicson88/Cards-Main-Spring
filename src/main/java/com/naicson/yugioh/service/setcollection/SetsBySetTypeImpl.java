@@ -75,12 +75,8 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	
 	private Page<DeckSummaryDTO> convertPageDeck(Page<Deck> deck){
 		
-		Page<DeckSummaryDTO> pageDeck = deck.map(originalPage -> {
-			DeckSummaryDTO deckDTO =  this.convertDeckToDTO(originalPage);
-			return deckDTO;
-		});
-		
-		return pageDeck;		
+		return deck.map(this::convertDeckToDTO);
+			
 	}
 
 	private DeckSummaryDTO convertDeckToDTO(Deck originalDeck) {
@@ -113,14 +109,11 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	}
 	
 	
-	private Page<DeckSummaryDTO> convertPageUserSetToPageDeck(Page<UserSetCollection> pageSet){
-		
-		Page<DeckSummaryDTO> pageDeck = pageSet.map(originalPage -> {
-			DeckSummaryDTO deck =  this.convertSetCollectionToDTO(originalPage);
-			return deck;
+	private Page<DeckSummaryDTO> convertPageUserSetToPageDeck(Page<UserSetCollection> pageSet){		
+		return pageSet.map(originalPage -> {
+			return this.convertSetCollectionToDTO(originalPage);
 		});
 		
-		return pageDeck;		
 	}
 	
 	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {

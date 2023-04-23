@@ -75,6 +75,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 			InsideDeckDTO insideDeck = new InsideDeckDTO();			
 			insideDeck.setInsideDeckName(d.getNome());
 			insideDeck.setInsideDeckImage(d.getImgurUrl());
+			insideDeck.setRelDeckCards(d.getRel_deck_cards());
 			
 			//Iterate over Cards
 			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {			
@@ -85,7 +86,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 				
 				return cardDetail;		
 				
-			}).collect(Collectors.toList()); ;			
+			}).collect(Collectors.toList());		
 		
 			insideDeck.setCards(listSetDetails);
 			listInsideDeck.add(insideDeck);				

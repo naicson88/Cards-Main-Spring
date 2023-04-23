@@ -59,14 +59,6 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		return relDeckCardsRepository.findByDeckId(deckId);	
 	}
 	
-	@Transactional(rollbackFor = Exception.class)
-	public void removeRelUserDeckByDeckId(Long deckId) {
-		if(deckId == null || deckId == 0)
-			throw new IllegalArgumentException("Invalid Deck Id to remove Relation");
-		
-		relDeckCardsRepository.deleteRelUserDeckByDeckId(deckId);
-	}
-
 	public List<RelDeckCards> findByCardSetCodeLike(String setCode) {
 		return relDeckCardsRepository.findByCardSetCodeLike(setCode)
 				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));

@@ -179,97 +179,76 @@ public class UserDeckServiceImpl {
 		
 		int qtdRemoved = 0;
 
-		UserDeck setOrigem = userDeckRepository
-				.findById(setId).orElseThrow(() -> new NoSuchElementException("Set not found with this code. ID = " + setId));
+		userDeckRepository.findById(setId).orElseThrow(() -> new NoSuchElementException("Set not found with this code. ID = " + setId));
 		
-		if(!dao.findRelationByDeckId(setId).isEmpty()) {
+		if(!dao.findRelationByDeckId(setId).isEmpty())
 			 qtdRemoved = dao.removeCardsFromUserSet(setId);
-
-			if (qtdRemoved <= 0)
-				throw new ErrorMessage("It was not possible remove cards from Deck: " + setId);
-		}
-
-		userDeckRepository.deleteById(setOrigem.getId());
 		
 		logger.info("Cards removed from User Deck: {}", setId);
 		
+		userDeckRepository.deleteById(setId);
+		
+		logger.info("User Deck removed! ID: {}", setId);
+				
 		return qtdRemoved;
 	}
 
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
-	public UserDeck saveUserDeck(Deck deck, List<UserRelDeckCards> listRel) {
-		logger.info("Starting saving UserDeck...");
-		this.validUserDeck(deck);
-		
-		//Check if it is a new deck or a existing deck
-		UserDeck userDeck = deck.getId() != null && deck.getId() != 0 ? this.updateDeck(deck) : this.createNewUserDeck(deck);
-		
-		//FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
-		userDeck = userDeckRepository.save(userDeck);
-		
-		this.saveRelDeckCardsOnSavingUserDeck(listRel, deck);
-		
-		logger.info("User Deck was saved successfully! ID: {}", deck.getId());
-		
-		return userDeck;
-
-	}
-
-
-	private UserDeck updateDeck(Deck deck) {	
-		UserDeck userDeck;
-		dao.deleteCardsDeckuserByDeckId(deck.getId());
-		userDeck = userDeckRepository.getOne(deck.getId());
-		userDeck.setNome(deck.getNome());
-		return userDeck;
-	}
+//	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+//	public UserDeck saveUserDeck(UserDeck deck, List<UserRelDeckCards> listRel) {
+//		logger.info("Starting saving UserDeck...");
+//		this.validUserDeck(deck);
+//		
+//		//Check if it is a new deck or a existing deck
+//		UserDeck userDeck = deck.getId() != null && deck.getId() != 0 ? this.updateDeck(deck) : this.createNewUserDeck(deck);
+//
+//		//FUTURAMENTE COLOCAR PARA EDITAR IMAGEM DO DECK
+//		userDeck = userDeckRepository.save(userDeck);
+//		
+//		this.saveRelDeckCardsOnSavingUserDeck(listRel, deck);
+//		
+//		logger.info("User Deck was saved successfully! ID: {}", deck.getId());
+//		
+//		return userDeck;
+//
+//	}
 	
 	
-	private void validUserDeck(Deck deck) {
+	private void validUserDeck(UserDeck deck) {
 
 		if (deck.getNome() == null || deck.getNome().equals(""))
 			throw new IllegalArgumentException("UserDeck name cannot be null or empty");
 
-		if (deck.getRel_deck_cards() == null || deck.getRel_deck_cards().isEmpty())
-			throw new IllegalArgumentException("There is no card in this deck");
+//		if (deck.getRelDeckCards() == null || deck.getRelDeckCards().isEmpty())
+//			throw new IllegalArgumentException("There is no card in this deck");
 		
 		SetType.valueOf(deck.getSetType().toUpperCase());		
 	}
-	
-	private void saveRelDeckCardsOnSavingUserDeck(List<UserRelDeckCards> listRel, Deck deck) {
-		//If its null means dont came from a SetCollection
-		if(listRel == null) {
-			listRel = deck.getRel_deck_cards().stream().map(rel -> {
-				UserRelDeckCards userRel = new UserRelDeckCards();
-				BeanUtils.copyProperties(rel, userRel);
-				return userRel;
-			}).collect(Collectors.toList());			
-		}
-			
-		userRelService.saveAll(listRel);
-	}
 
-	private UserDeck createNewUserDeck(Deck deck) {		
+	private UserDeck createNewUserDeck(UserDeck deck) {		
 		return  UserDeckBuilder
 				.builder()
 				.userId(GeneralFunctions.userLogged().getId())
 				.dtCriacao(new Date())
 				.setType("DECK")
-				.nome(deck.getNome())
+				.nome(deck.getNome()+"_"+GeneralFunctions.randomUniqueValue())
 				.imagem(GeneralFunctions.getRandomDeckCase())
 				.isSpeedDuel(false)
+				.relDeckCards(deck.getRelDeckCards())
 				.build();
 	}
 	
 	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
 	public UserDeck saveUserDeck(UserDeck userDeck) {
 		
-	  userDeck = UserDeckBuilder.builder(userDeck).build();
-		
+	  if(userDeck.getId() == null && userDeck.getKonamiDeckCopied() == null)
+		  userDeck = this.createNewUserDeck(userDeck);
+
+	  this.validUserDeck(userDeck);
+	  
 	  UserDeck userDeckSaved = userDeckRepository.save(userDeck);
-	 	
-	  if(userDeck.getRelDeckCards() != null && !userDeck.getRelDeckCards().isEmpty()) 
-		 userRelService.saveAll(userDeck.getRelDeckCards());
+	  
+	  if(userDeck.getRelDeckCards() != null && !userDeck.getRelDeckCards().isEmpty())
+		  userRelService.saveUserRelDeckCards(userDeck.getId(),  userDeck.getRelDeckCards());
 	
 	  logger.info("Save User Deck and RelDeckCards of UserDeck: {}", userDeckSaved.getId());
 		

@@ -7,6 +7,7 @@ import com.naicson.yugioh.data.dto.set.DeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.enums.ECardRarity;
 
@@ -81,6 +82,20 @@ public abstract class ValidObjects {
 	  return newDeck;  
 
 	}
+	
+	public static UserDeck generateValidUserDeck() {
+		
+		UserDeck newDeck = new UserDeck();
+		   
+		newDeck.setImagem("Imagem Deck");
+		newDeck.setNome("Deck Teste");
+		newDeck.setSetType("DECK");
+		newDeck.setDtCriacao(new Date());
+ 		newDeck.setIsSpeedDuel(false);
+	  return newDeck;  
+
+	}
+	
 	
 	
 	public static DeckDTO generateValidDeckDTO(Integer id) {

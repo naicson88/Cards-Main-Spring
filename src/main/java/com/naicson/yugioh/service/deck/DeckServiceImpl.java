@@ -220,6 +220,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		SetDetailsDTO dto = this.convertDeckToSetDetailsDTO(deck);
 		dto.setQuantity(this.countDeckRarityQuantity(dto));
 		dto.setQuantityUserHave(this.quantityUserHaveDeck(deckId));
+		
 		if(withStats) {
 			dto = setsUtils.getSetStatistics(dto);
 			dto.setInsideDecks(null);

@@ -34,10 +34,6 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long
 	List<RelDeckCards> findByCardId(Integer cardId);
 	
 	@Modifying
-	@Query(value = "delete from tab_rel_deckusers_cards where deck_id = :deckId", nativeQuery = true)
-	void deleteRelUserDeckByDeckId(Long deckId);
-	
-	@Modifying
 	@Query(value = "insert into tab_rel_deckusers_cards ("
 			+ " deck_id, card_numero, card_raridade, card_set_code, card_price, dt_criacao, is_side_deck, card_id, is_speed_duel, quantity) "
 			+ " values (:deckId, :cardNumber, :card_raridade, :card_set_code, :card_price, :dt_criacao, :isSideDeck, :cardId, :isSpeedDuel, :quantity)" , nativeQuery = true)
