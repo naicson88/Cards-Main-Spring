@@ -11,7 +11,7 @@ import com.naicson.yugioh.util.ApiResponse;
 @Component
 public class ResponseBuilder {
 	
-	public ResponseEntity<ApiResponse<Object>> buildResponse(
+	public ResponseEntity<ApiResponse<Object>> buildFullResponse(
 			HttpHeaders header, int statusCode, String message, Object data, Map<String, Object> otherParams){
 		
 		return new ApiResponse.ApiResponseBuilder<>(statusCode, message)
@@ -24,37 +24,46 @@ public class ResponseBuilder {
     public ResponseEntity<ApiResponse<Object>> buildResponse(
             int httpStatusCode, String message, Object data, Map <String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withData(data).withOtherParams(otherParams).build();
+                .withData(data)
+                .withOtherParams(otherParams)
+                .build();
     }
 
     public ResponseEntity <ApiResponse<Object>>buildResponse(
     		//Teste sonar
             int httpStatusCode, String message, Map <String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withOtherParams(otherParams).build();
+                .withOtherParams(otherParams)
+                .build();
     }
 
     public ResponseEntity <ApiResponse<Object>> buildResponse(
             HttpHeaders httpHeader, int httpStatusCode, String message, Object data) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withHttpHeader(httpHeader).withData(data).build();
+                .withHttpHeader(httpHeader)
+                .withData(data)
+                .build();
     }
 
     public ResponseEntity <ApiResponse<Object>> buildResponse(
             HttpHeaders httpHeader, int httpStatusCode, String message, Map <String, Object> otherParams) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withHttpHeader(httpHeader).withOtherParams(otherParams).build();
+                .withHttpHeader(httpHeader)
+                .withOtherParams(otherParams)
+                .build();
     }
 
     public ResponseEntity <ApiResponse<Object>> buildResponse(
             HttpHeaders httpHeader, int httpStatusCode, String message) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withHttpHeader(httpHeader).build();
+                .withHttpHeader(httpHeader)
+                .build();
     }
 
     public ResponseEntity <ApiResponse<Object>> buildResponse(
             int httpStatusCode, String message, Object data) {
         return new ApiResponse.ApiResponseBuilder <> (httpStatusCode, message)
-                .withData(data).build();
+                .withData(data)
+                .build();
     }
 }
