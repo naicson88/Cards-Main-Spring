@@ -76,8 +76,10 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<Object>> changeAccountInformation(@RequestBody AccountManageDTO dto){	
 		
 		authService.changeAccountInformation(dto);
+		
 		ResponseBuilder response = new ResponseBuilder();
-		return response.buildFullResponse(null , HttpStatus.OK.value(), "Account information changed successfully", dto, null);			
+		return response
+				.buildFullResponse(null , HttpStatus.OK.value(), "Account information changed successfully", dto, null);			
 	} 
 
 }

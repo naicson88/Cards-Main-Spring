@@ -9,7 +9,7 @@ public class AccountManageDTO {
 	private String newpass;
 	private String email;
 	private String newemail;
-	private User user;
+//	private User user;
 	
 	public AccountManageDTO() {}
 	
@@ -62,12 +62,12 @@ public class AccountManageDTO {
 		this.newemail = newemail;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-		
+//	public User getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
+//		
 }

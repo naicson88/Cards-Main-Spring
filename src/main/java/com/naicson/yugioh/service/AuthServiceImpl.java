@@ -24,6 +24,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.chainResponsability.user.UserValidationChain;
+import com.naicson.yugioh.data.chainResponsability.user.ValidateUser;
 import com.naicson.yugioh.data.dto.AccountManageDTO;
 import com.naicson.yugioh.data.security.JwtUtils;
 import com.naicson.yugioh.entity.auth.ERole;
@@ -35,6 +37,7 @@ import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
 import com.naicson.yugioh.util.mail.EmailService;
@@ -227,7 +230,7 @@ public class AuthServiceImpl {
 		}
 	}
 	
-	public User findUserById(Integer id) {
+	public User findUserById(int id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Something bad happened! Try again later"));
 	}
@@ -243,48 +246,22 @@ public class AuthServiceImpl {
 		return new ResponseEntity<>(userFound, HttpStatus.OK);
 	}
 	
-	public AccountManageDTO changeAccountInformation(AccountManageDTO dto) {
-		this.validAccountManage(dto);
+	public AccountManageDTO changeAccountInformation(AccountManageDTO dto) {		
+		User user = this.findUserById((int) GeneralFunctions.userLogged().getId());
 		
-		User userFound = setUserEdition(findUserById(dto.getUser().getId()), dto);
+		userRepository.save(this.validAccountManage(user, dto));
 		
-		userRepository.save(userFound);
-		
-		return dto;
-		
+		return dto;		
 	}
 	
-	private User setUserEdition(User userFound, AccountManageDTO dto) {
-		
-		if(!dto.getUsername().isBlank())
-			userFound.setUserName(dto.getUsername());
-		if(!dto.getPass().isBlank())
-			userFound.setPassword(encoder.encode(dto.getPass()));
-		if(!dto.getEmail().isBlank())
-			userFound.setEmail(dto.getEmail());
-		
-		return userFound;
-	}
-	
-	private void validAccountManage(AccountManageDTO dto) {
+	private User validAccountManage( User userFound, AccountManageDTO dto) {
 		if(dto == null)
 			throw new IllegalArgumentException("Invalid Account Manage DTO");
 		
-		if(dto.getUsername() == null || dto.getUsername().length() < 6)
-			throw new IllegalArgumentException("Invalid Username");
-			
-		if(dto.getPass() != null) {
-			if(!dto.getPass().equals(dto.getNewpass()))
-				throw new IllegalArgumentException("Passwords value dont match!");
-			if(dto.getPass().length() < 6)
-				throw new IllegalArgumentException("Password value is too small");
-		}
-			
-		if(dto.getEmail() != null) {
-			if(!dto.getEmail().equals(dto.getNewemail()))
-				throw new IllegalArgumentException("Emails value dont match!");
-			if(dto.getEmail().length() < 6)
-				throw new IllegalArgumentException("Email value is too small");
-		}
+		new UserValidationChain(encoder, userFound, dto);
+		
+		return userFound;
+
 	}
 }
+	
