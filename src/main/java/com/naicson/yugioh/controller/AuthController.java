@@ -2,6 +2,7 @@ package com.naicson.yugioh.controller;
 
 import javax.validation.Valid;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,16 @@ public class AuthController {
 		return response
 				.buildFullResponse(null , HttpStatus.OK.value(), "Account information changed successfully", dto, null);			
 	} 
+	
+	@ApiOperation(value = "Confirm User's password")
+	@GetMapping("/confirm-password")
+	public ResponseEntity<String> isPasswordCorrect(@RequestParam("pass") String password){
+		
+		if(	authService.isPasswordCorrect(password) )
+			return new ResponseEntity<>(JSONObject.quote("Correct!"), HttpStatus.OK);
+		else
+			return new ResponseEntity<>("Wrong!", HttpStatus.FORBIDDEN);
+	}
+	
 
 }

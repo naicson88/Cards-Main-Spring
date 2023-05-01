@@ -49,10 +49,8 @@ public class ValidateUser implements HandleUserValidation {
 	public class ValidateUserEmail implements HandleUserValidation{
 
 		@Override
-		public User validateUserAttribute(User user, AccountManageDTO dto) {
-			
-			if(dto.getEmail() != null && !dto.getEmail().isBlank()) {
-				
+		public User validateUserAttribute(User user, AccountManageDTO dto) {			
+			if(dto.getEmail() != null && !dto.getEmail().isBlank()) {				
 				if(!dto.getEmail().equals(dto.getNewemail()))
 					throw new IllegalArgumentException("Emails value dont match!");
 				if(dto.getEmail().length() < 6)

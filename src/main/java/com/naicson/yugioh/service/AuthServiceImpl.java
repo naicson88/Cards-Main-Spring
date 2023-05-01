@@ -97,31 +97,7 @@ public class AuthServiceImpl {
 			user.setRole(userRole);
 			// roles.add(userRole);
 		}
-//			else {
-//			strRoles.forEach(role -> {				
-//				switch (role) {
-//				case "admin":
-//					Role adminRole = roleRepository.findByRoleName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//					break;
-//					
-//				case "mod":
-//					Role modRole = roleRepository.findByRoleName(ERole.ROLE_MODERATOR)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByRoleName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//				}
-//			});
-//			
-//		}
 
-		// user.setRoles(roles);
 		userRepository.save(user);
 		logger.info("New User registered! {}", LocalDateTime.now());
 		emailService.sendEmail(user);
@@ -263,5 +239,11 @@ public class AuthServiceImpl {
 		return userFound;
 
 	}
+
+	public boolean isPasswordCorrect(String password) {
+		String curPass = GeneralFunctions.userLogged().getPassword();		
+		return encoder.matches(password, curPass);
+	}
+	
 }
 	
