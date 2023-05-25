@@ -25,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.chainResponsability.user.UserValidationChain;
-import com.naicson.yugioh.data.chainResponsability.user.ValidateUser;
 import com.naicson.yugioh.data.dto.AccountManageDTO;
 import com.naicson.yugioh.data.security.JwtUtils;
 import com.naicson.yugioh.entity.auth.ERole;

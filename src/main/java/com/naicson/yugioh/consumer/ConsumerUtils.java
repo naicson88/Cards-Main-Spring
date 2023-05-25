@@ -38,11 +38,19 @@ public class ConsumerUtils {
 		if (kDeck == null)
 			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
 
-		return DeckBuilder.builder().dt_criacao(new Date()).imagem(kDeck.getImagem()).lancamento(kDeck.getLancamento())
-				.nome(kDeck.getNome().trim()).relDeckCards(kDeck.getListRelDeckCards())
-				.setType(SetType.valueOf(kDeck.getSetType())).isSpeedDuel(kDeck.getIsSpeedDuel())
-				.imgurUrl(kDeck.getImagem()).isBasedDeck(kDeck.getIsBasedDeck()).setCode(kDeck.getSetCode())
-				.description(kDeck.getDescription()).build();
+		return DeckBuilder.builder()
+				.dt_criacao(new Date())
+				.imagem(kDeck.getImagem())
+				.lancamento(kDeck.getLancamento())
+				.nome(kDeck.getNome().trim())
+				.relDeckCards(kDeck.getListRelDeckCards())
+				.setType(SetType.valueOf(kDeck.getSetType()))
+				.isSpeedDuel(kDeck.getIsSpeedDuel())
+				.imgurUrl(kDeck.getImagem())
+				.isBasedDeck(kDeck.getIsBasedDeck())
+				.setCode(kDeck.getSetCode())
+				.description(kDeck.getDescription())
+				.build();
 	}
 
 	public Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
@@ -75,7 +83,6 @@ public class ConsumerUtils {
 	}
 
 	public Object convertJsonToSetCollectionDto(String json, String obj) {
-
 		try {
 
 			for (JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {

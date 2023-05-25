@@ -61,8 +61,6 @@ public class DeckController<T> {
 		this.getDetailByType = getDetailByType;
 	}
 
-	Page<DeckSummaryDTO> setList = null;
-
 	@GetMapping("/todos")
 	public List<Deck> consultar() {
 		return deckRepository.findAll();
@@ -74,7 +72,7 @@ public class DeckController<T> {
 		@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 		@RequestParam String setType) {
 			
-	    setList =  setsBySetType.findAllSetsByType(pageable, setType);
+		Page<DeckSummaryDTO> setList =  setsBySetType.findAllSetsByType(pageable, setType);
 	
 	    return new ResponseEntity<>(setList, HttpStatus.OK);
 

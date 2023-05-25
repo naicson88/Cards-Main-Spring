@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -85,8 +84,7 @@ public class AuthController {
 	
 	@ApiOperation(value = "Confirm User's password")
 	@GetMapping("/confirm-password")
-	public ResponseEntity<String> isPasswordCorrect(@RequestParam("pass") String password){
-		
+	public ResponseEntity<String> isPasswordCorrect(@RequestParam("pass") String password){	
 		if(	authService.isPasswordCorrect(password) )
 			return new ResponseEntity<>(JSONObject.quote("Correct!"), HttpStatus.OK);
 		else

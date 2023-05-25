@@ -35,12 +35,10 @@ import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.entity.sets.UserSetCollection;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.service.deck.UserRelDeckCardsServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
-import com.naicson.yugioh.util.enums.SetType;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service

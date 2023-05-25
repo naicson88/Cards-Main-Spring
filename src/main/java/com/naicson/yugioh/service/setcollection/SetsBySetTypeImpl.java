@@ -36,15 +36,12 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	public Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType) {
 		
 		SetType type = SetType.valueOf(setType);
-				
-		Page<DeckSummaryDTO> pageDTO  = null;
 		
 		if(type.equals(SetType.DECK))
-			 pageDTO = convertPageDeck(deckService.findAllBySetType(pageable, setType)); 
-		else
-			pageDTO = this.convertPageSetToPageDeck(setRepository.findAllBySetType(pageable, type.toString()));
-						
-		 return pageDTO;
+			return convertPageDeck(deckService.findAllBySetType(pageable, setType)); 
+			
+		return this.convertPageSetToPageDeck(setRepository.findAllBySetType(pageable, type.toString()));
+
 	}
 	
 

@@ -27,7 +27,7 @@ public class HomeController {
 	public ResponseEntity<HomeDTO> homeInformations(){
 		HomeDTO home = homeService.getHomeDto();
 		
-		return new ResponseEntity<HomeDTO>(home, HttpStatus.OK);
+		return new ResponseEntity<>(home, HttpStatus.OK);
 	}
 	
 	@GetMapping("/general-search")
@@ -36,6 +36,6 @@ public class HomeController {
 		
 		List<GeneralSearchDTO> listDto = homeService.getEntitiesByParam();
 		
-		return new ResponseEntity<List<GeneralSearchDTO>>(listDto, HttpStatus.OK);
+		return new ResponseEntity<>(listDto, HttpStatus.OK);
 	}
 }

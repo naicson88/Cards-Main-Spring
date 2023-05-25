@@ -352,7 +352,7 @@ public class CardServiceImpl implements CardDetailService {
 		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
 
 		if(list == null)
-			list = Collections.emptyList();
+			return Collections.emptyList();
 		
 		return list;
 		
@@ -477,10 +477,8 @@ public class CardServiceImpl implements CardDetailService {
 		
 		 return cards.stream()
 				 .collect(Collectors
-						 .toMap(c -> Integer.parseInt(String.valueOf(c.get(0))), c -> c.get(1, String.class))
+				 .toMap(c -> Integer.parseInt(String.valueOf(c.get(0))), c -> c.get(1, String.class))
 			
 		);
 	}
-	
-	//cardsMap.put(Integer.parseInt(String.valueOf(c.get(0))), c.get(1, String.class))
 }

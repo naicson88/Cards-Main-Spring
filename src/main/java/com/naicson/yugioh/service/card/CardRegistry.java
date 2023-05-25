@@ -1,10 +1,13 @@
 package com.naicson.yugioh.service.card;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.mapping.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,9 @@ public class CardRegistry {
 
 	@Transactional
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
+		
+		if(cardsToBeRegistered == null)
+			return Collections.emptyList();
 		
 		List<Card> cardsSaved = new LinkedList<>();
 		
