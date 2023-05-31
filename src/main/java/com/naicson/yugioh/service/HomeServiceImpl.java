@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
@@ -40,6 +43,9 @@ public class HomeServiceImpl implements HomeDetailService {
 	CardPriceInformationServiceImpl cardInfoService;
 	@Autowired
 	CardViewsInformationServiceImpl cardViewService;
+	
+	 @Autowired
+	 CacheManager cacheManager;
 	
 	@Value("${yugioh.api.url.img}")
 	private String yugiohAPIUrlImg;
@@ -179,9 +185,15 @@ public class HomeServiceImpl implements HomeDetailService {
 		}).collect(Collectors.toList());
 		
 	}
-
-	public List<GeneralSearchDTO> getEntitiesByParam() {	
-		
+	
+	public List<GeneralSearchDTO> retrieveSearchedData(final String param, List<GeneralSearchDTO> dto){		
+		return dto.stream()
+				.filter( data -> data.getName().toLowerCase().contains(param.toLowerCase()))
+				.collect((Collectors.toList()));
+	}
+	
+	@Cacheable("generalSearch")
+	public List<GeneralSearchDTO> getGeneralData() {	
 		return homeRepository.generalSearch().stream().map(data -> {
 			
 			GeneralSearchDTO dto = new GeneralSearchDTO(
