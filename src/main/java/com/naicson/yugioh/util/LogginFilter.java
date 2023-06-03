@@ -30,6 +30,9 @@ public class LogginFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
+		String ip = request.getHeader("X-Forwarded-For");
+		LOGGER.info("IP: {}", ip);
 	
 		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
