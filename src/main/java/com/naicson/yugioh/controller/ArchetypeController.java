@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.service.ArchetypeServiceImpl;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping({"yugiohAPI/arch"})
@@ -25,13 +25,13 @@ public class ArchetypeController {
 	ArchetypeServiceImpl archetypeService;
 	
 	@Cacheable("archetypes")
-	@ApiOperation(value="Return all Archetypes", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return all Archetypes", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping("/all")
 	public List<Archetype> getAllArchetypes(){	
 		return archetypeService.getAllArchetypes();
 	}
 	
-	@ApiOperation(value="Return a single Archetype by ID.", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return a single Archetype by ID.", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping("/archetype/{archId}")
 	public Archetype getByArchetypeId(@PathVariable("archId") Integer archId) {		
 		return archetypeService.getByArchetypeId(archId);

@@ -9,12 +9,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardServiceImpl;
@@ -32,7 +34,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	CardServiceImpl cardServiceImpl;
 	
 	@Autowired
-	DeckServiceImpl deckService;
+	DeckRepository deckRepository;
 	
 	@Autowired
 	CardAlternativeNumberService numberService;
@@ -93,9 +95,9 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		
 	}
 	
-	private void validateNewRelation(RelDeckCards rel) {
-		
+	private void validateNewRelation(RelDeckCards rel) {	
 		cardServiceImpl.cardDetails(rel.getCardId());
+		DeckServiceImpl deckService = new DeckServiceImpl(deckRepository);
 		deckService.findById(rel.getDeckId());
 		ECardRarity.getRarityByName(rel.getCard_raridade());
 	}

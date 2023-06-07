@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.naicson.yugioh.util.ApiResponse;
 
 @Component
-public class ResponseBuilder {
+public class ResponseBuilderAPI {
 	
 	public ResponseEntity<ApiResponse<Object>> buildFullResponse(
 			HttpHeaders header, int statusCode, String message, Object data, Map<String, Object> otherParams){

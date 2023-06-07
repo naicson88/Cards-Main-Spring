@@ -3,7 +3,6 @@ package com.naicson.yugioh.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,8 +15,8 @@ import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.service.HomeServiceImpl;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping({"yugiohAPI/home"})
@@ -28,7 +27,7 @@ public class HomeController {
 	HomeServiceImpl homeService;
 	
 	@GetMapping(path = "/info")
-	@ApiOperation(value="Get informations of Home", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get informations of Home", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<HomeDTO> homeInformations(){
 		
 		HomeDTO home = homeService.getHomeDto();
@@ -37,7 +36,7 @@ public class HomeController {
 	}
 	
 	@GetMapping("/general-search")
-	@ApiOperation(value="Return Search by Param", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return Search by Param", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<GeneralSearchDTO>> getEntitiesByParam(@RequestParam String param){
 		//Need to be here fot Cache work!!
 		List<GeneralSearchDTO> dto = homeService.getGeneralData(); 

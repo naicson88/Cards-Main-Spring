@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -72,16 +73,12 @@ public class DeckServiceImpl implements DeckDetailService {
 	SetsUtils setsUtils;
 
 	Logger logger = LoggerFactory.getLogger(DeckServiceImpl.class);
-
-	public DeckServiceImpl(DeckRepository deckRepository, RelDeckCardsServiceImpl relService, DeckDAO dao) {
-		this.deckRepository = deckRepository;
-		this.relService = relService;
-		this.dao = dao;
+	
+	public DeckServiceImpl(DeckRepository repo) {
+		this.deckRepository = repo;
 	}
-
-	public DeckServiceImpl() {
-
-	}
+	
+	public DeckServiceImpl( ) {}
 
 	@Override
 	public Deck findById(Long id) {

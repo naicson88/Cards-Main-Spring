@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,8 +34,8 @@ import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.SetCollectionService;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping({ "yugiohAPI/decks" })
@@ -66,8 +65,9 @@ public class DeckController<T> {
 		return deckRepository.findAll();
 	}
 
+
 	@GetMapping("/get-sets")
-	@ApiOperation(value="Return summary Set informations with Pagination", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return summary Set informations with Pagination", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Page<DeckSummaryDTO>> deckPagination(
 		@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 		@RequestParam String setType) {
@@ -79,7 +79,7 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/set-details")
-	@ApiOperation(value="Return details of a Set", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return details of a Set", security = { @SecurityRequirement(name = "bearer-key") })
 	@Cacheable(value = "setDetails")
 	public ResponseEntity<SetDetailsDTO> setDetails(@RequestParam Long id, @RequestParam String source, @RequestParam String setType) {
 		
@@ -90,7 +90,7 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/set-stats")
-	@ApiOperation(value="Return details and stats of a Set", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return details and stats of a Set", security = { @SecurityRequirement(name = "bearer-key") })
 	//@Cacheable(value = "setStats")
 	public ResponseEntity<SetDetailsDTO> getSetStats(@RequestParam Long id, @RequestParam String source, @RequestParam String setType){
 		SetDetailsStrategy setDetailStrategy = getDetailByType
@@ -101,7 +101,7 @@ public class DeckController<T> {
 
 	
 	@GetMapping("/search-by-set-name")
-	@ApiOperation(value="Search a Set by its Name and Source", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Search a Set by its Name and Source", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Page<DeckSummaryDTO>> searchBySetName(@RequestParam("setName") String setName, 
 			@RequestParam("source") SourceTypes source) {
 		Page<DeckSummaryDTO> setsFound = this.deckService.searchBySetName(setName, source);
@@ -110,7 +110,7 @@ public class DeckController<T> {
 	}
 
 	@GetMapping("/autocomplete-sets")
-	@ApiOperation(value="Return All Sets Name for Autocomplete ", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return All Sets Name for Autocomplete ", security = { @SecurityRequirement(name = "bearer-key") })
 	@Cacheable(value = "autocompleteSets")
 	public ResponseEntity<List<AutocompleteSetDTO>> autocompleteSets(@RequestParam("source") String source) {
 		
@@ -120,7 +120,7 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/get-all-decksname")
-	@ApiOperation(value="Get all Decks Name", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get all Decks Name", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(@RequestParam("collectionDeck") boolean collectionDeck){
 		List<DeckAndSetsBySetTypeDTO> listDto = deckService.getAllDecksName(collectionDeck);
 		
@@ -128,7 +128,7 @@ public class DeckController<T> {
 	}
 	
 	@PostMapping("/update-cards-quantity")
-	@ApiOperation(value="Update cards quantity in a Deck", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Update cards quantity in a Deck", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> updateCardsQuantity(@RequestBody String setCodes){
 		deckService.updateCardsQuantity(setCodes);
 
@@ -136,13 +136,13 @@ public class DeckController<T> {
 	}
 	
 	@GetMapping("/get-deck-to-edit")
-	@ApiOperation(value="Edit especific deck", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Edit especific deck", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<SetEditDTO> getDeckToEdit(@RequestParam Integer deckId) {	
 		return new ResponseEntity<>(deckService.getDeckToEdit(deckId), HttpStatus.OK);
 	}
 	
 	@PostMapping("/edit-deck")
-	@ApiOperation(value="Deck to edit", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Deck to edit", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> editDeck(@RequestBody SetEditDTO dto){
 		deckService.editDeck(dto);
 		

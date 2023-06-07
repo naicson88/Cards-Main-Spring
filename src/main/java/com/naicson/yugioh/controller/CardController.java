@@ -36,8 +36,8 @@ import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
@@ -52,13 +52,13 @@ public class CardController {
 	
 	Logger logger = LoggerFactory.getLogger(CardController.class);
 	
-	@ApiOperation(value="Return Card by its Number", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return Card by its Number", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(path = {"num/{numero}"})
 	public Card listarNumero(@PathVariable("numero") Long numero) {
 		return cardService.listarNumero(numero);
 	}
 	
-	@ApiOperation(value="Return Card details by its Number", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return Card details by its Number", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {
 
@@ -68,7 +68,7 @@ public class CardController {
 	}	
 	
 	@PostMapping(path = {"/searchCard"})
-	@ApiOperation(value="Search cards and return a Pagination", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Search cards and return a Pagination", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<CardsSearchDTO>> cardSearch(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable, 
 			@RequestBody List<SearchCriteria> criterias, String join){
 			
@@ -78,7 +78,7 @@ public class CardController {
 	}
 	
 	@PostMapping(path = {"/searchCardDetailed"})
-	@ApiOperation(value="Search cards and return detailed information with Pagination", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Search cards and return detailed information with Pagination", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Page<Card>> cardSearchDetailed(@PageableDefault(page = 1, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable, 
 			@RequestBody List<SearchCriteria> criterias, String join){
 		Page<Card> listCards = cardService.searchCardDetailed(criterias, join, pageable);
@@ -87,7 +87,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/randomCards"})
-	@ApiOperation(value="Bring random Cards informations", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Bring random Cards informations", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<CardsSearchDTO>> getRandomCards(){		
 		List<CardsSearchDTO> dtoList = cardService.getRandomCards();
 			
@@ -95,7 +95,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/randomCardsDetailed"})
-	@ApiOperation(value="Bring detailed random Cards informations", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Bring detailed random Cards informations", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<Card>> randomCardsDetailed(){
 		
 		List<Card> cards = cardService.randomCardsDetailed();
@@ -104,7 +104,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/rel-user-cards"})
-	@ApiOperation(value="Search for cards that user have", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Search for cards that user have", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<RelUserCardsDTO>> searchForCardsUserHave(@RequestParam int[] cardsNumbers) throws SQLException, ErrorMessage {
 
 		List<RelUserCardsDTO> relList =	cardService.searchForCardsUserHave(cardsNumbers);
@@ -114,7 +114,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/load-cards-userscollection"})
-	@ApiOperation(value="Search for cards from user collection", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Search for cards from user collection", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<CardsSearchDTO>> loadCardsUserHave(@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String genericType) {
 			
@@ -124,7 +124,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/card-user-details"})
-	@ApiOperation(value="Get details of a card that user have", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Get details of a card that user have", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<CardOfUserDetailDTO> cardOfUserDetails(@RequestParam Integer cardId) {
 
 		CardOfUserDetailDTO cardDetailDTO = cardService.cardOfUserDetails(cardId);	
@@ -133,7 +133,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/cardname-usercollection"})
-	@ApiOperation(value="Search card by name of a user collection", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Search card by name of a user collection", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<List<CardsSearchDTO>> cardSearchByNameUserCollection(
 			@PageableDefault(page = 0, size = 30, sort = "nome", direction = Sort.Direction.ASC)
 			Pageable pageable, @RequestParam String cardName) {
@@ -145,7 +145,7 @@ public class CardController {
 	}
 	
 	@GetMapping(path = {"/search-cardSetcodes"})
-	@ApiOperation(value="Find all decks of a card by its Number", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Find all decks of a card by its Number", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<List<RelDeckCards>> findAllRelDeckCardsByCardNumber(@RequestParam Integer cardId){
 		List<RelDeckCards> relation = this.cardService.findAllRelDeckCardsByCardNumber(cardId);
 		
@@ -153,7 +153,7 @@ public class CardController {
 	}
 	
 	@PostMapping(path = {"/search-cards-not-registered"})
-	@ApiOperation(value="Search Cards by its Numbers", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Search Cards by its Numbers", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<List<Long>> searchCardsByCardNumbers(@RequestBody List<Long> cardNumbers){
 		
 		logger.info("Start request for cards not registered...");
@@ -164,7 +164,7 @@ public class CardController {
 	}
 	
 	@PostMapping(path = {"/update-images"})
-	@ApiOperation(value="Update Card images passing the numbers", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Update Card images passing the numbers", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<String> updateCardsImages(@RequestBody String cardImagesJson){
 		
 		cardService.updateCardsImages(cardImagesJson);
@@ -174,7 +174,7 @@ public class CardController {
 	
 	@Cacheable("alternatives")
 	@GetMapping(path = {"/get-alternative-numbers"})
-	@ApiOperation(value="Get Card's alternative arts", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Get Card's alternative arts", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<List<Long>> getAlternativeArts(@RequestParam Integer cardId){
 	
 		return new ResponseEntity<>(cardService.getAlternativeArts(cardId), HttpStatus.OK);
@@ -182,7 +182,7 @@ public class CardController {
 	
 	@Cacheable("card_names")
 	@GetMapping(path = {"/get-all-card-names"})
-	@ApiOperation(value="Get All Card's names and Ids", authorizations = { @Authorization(value="JWT") })	
+	@Operation(summary="Get All Card's names and Ids", security = { @SecurityRequirement(name = "bearer-key") })	
 	public ResponseEntity<Map<Integer, String>> getAllCardsNamesAndId(){
 		return new ResponseEntity<>(cardService.getAllCardsNamesAndId(), HttpStatus.OK);
 	}

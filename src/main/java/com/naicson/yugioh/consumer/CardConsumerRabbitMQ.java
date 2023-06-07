@@ -29,7 +29,6 @@ public class CardConsumerRabbitMQ {
 	@Autowired
 	CardAlternativeNumberService alternativeService;
 	
-
 	@Autowired
 	RelDeckCardsServiceImpl relDeckCardService;
 
