@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,21 +59,25 @@ public class CardAlternativeNumberService {
 		for(CardAlternativeNumber card : listCards) {
 			try (InputStream in = new URL(url + card.getCardAlternativeNumber() + ".jpg")
 					.openStream()) {
-				try {			
-					Files.copy(in, Paths.get("C:\\Cropped\\" + card.getCardAlternativeNumber() + ".jpg"));
-					
-					Thread.sleep(500);
-					
-				} catch (FileAlreadyExistsException e) {
-					LOGGER.warn(e.getLocalizedMessage());
-					String randomString = RandomStringUtils.randomAlphabetic(10);
-					Files.copy(in, Paths.get("C:\\Cropped\\" + card.getCardAlternativeNumber() +"-"+randomString+".jpg"));
-				} catch (Exception e) {
-					LOGGER.error("Error when saving cropped card: {}", card.getCardAlternativeNumber());
-				}
+				
+				Files.copy(in, Paths.get("C:\\Cropped\\" + card.getCardAlternativeNumber() + ".jpg"), StandardCopyOption.REPLACE_EXISTING);
+				
+				Thread.sleep(500);
+//				try {			
+//					
+//					
+//				} catch (FileAlreadyExistsException e) {
+//					LOGGER.warn(e.getLocalizedMessage());
+//					String randomString = RandomStringUtils.randomAlphabetic(10);
+//					Files.copy(in, Paths.get("C:\\Cropped\\" + card.getCardAlternativeNumber() +"-"+randomString+".jpg"));
+//				} catch (Exception e) {
+//					LOGGER.error("Error when saving cropped card: {}", card.getCardAlternativeNumber());
+//				}
 
 			} catch (IOException e) {
 				LOGGER.error("Error when saving cropped card: {}", card.getCardAlternativeNumber());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

@@ -6,14 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -24,6 +23,8 @@ import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 public abstract class GeneralFunctions {
+	
+	private GeneralFunctions() {}
 
 	static Logger logger = LoggerFactory.getLogger(GeneralFunctions.class);
 
@@ -82,17 +83,19 @@ public abstract class GeneralFunctions {
 	public static void saveCardInFolder(Long cardNumber, String url, String folder) {
 		try (InputStream in = new URL(url + cardNumber + ".jpg")
 				.openStream()) {
-
-			try {
 			
-				Files.copy(in, Paths.get(folder + cardNumber + ".jpg"));
-				logger.info("Card saved in folder");
-				
-			} catch (FileAlreadyExistsException e) {
-				logger.warn(e.getLocalizedMessage());
-				String randomString = RandomStringUtils.randomAlphabetic(10);
-				Files.copy(in, Paths.get(folder + cardNumber +"-"+randomString+".jpg"));
-			}
+			Files.copy(in, Paths.get(folder + cardNumber + ".jpg"), StandardCopyOption.REPLACE_EXISTING);
+			logger.info("Card saved in folder");
+
+//			try {
+//			
+//				
+//				
+//			} catch (FileAlreadyExistsException e) {
+//				logger.warn(e.getLocalizedMessage());
+//				String randomString = RandomStringUtils.randomAlphabetic(10);
+//				Files.copy(in, Paths.get(folder + cardNumber +"-"+randomString+".jpg"));
+//			}
 
 		} catch (IOException e) {
 			e.getMessage();
@@ -131,17 +134,17 @@ public abstract class GeneralFunctions {
 		if (fileExtension == null || fileExtension.isBlank() || informations == null || fileName == null
 				|| fileName.isBlank())
 			throw new IllegalArgumentException("Invalid file extension or file name informed");
-
-		try {
-			logger.info("Starting creating a new File...");
-
+		
 			path = path == null || path.isBlank() ? "C:\\Cards\\" : path;
 			String fullPath = path + fileName + fileExtension;
 			File file = new File(fullPath);
 
+		try (
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			fw.close();
+			){
+			
+			logger.info("Starting creating a new File...");
 
 			if (!file.exists())
 				file.createNewFile();
@@ -154,12 +157,10 @@ public abstract class GeneralFunctions {
 					logger.error("Error while writing information: {}", n);
 				}
 			});
-			bw.close();
+
 			logger.info("File created successfully! {}", fullPath);
 		} catch (Exception e) {
 			logger.error("Error while generaton File: {}", e.getMessage());
-
-		} finally {
 
 		}
 	}
