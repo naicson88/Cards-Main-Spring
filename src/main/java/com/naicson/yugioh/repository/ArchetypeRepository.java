@@ -9,7 +9,7 @@ import com.naicson.yugioh.entity.Archetype;
 
 
 @Repository
-public interface ArchetypeRepository extends JpaRepository<Archetype, Integer>{
+public interface ArchetypeRepository extends JpaRepository<Archetype, Integer> {
 
 	Optional<Archetype> findById(Integer archId);
 

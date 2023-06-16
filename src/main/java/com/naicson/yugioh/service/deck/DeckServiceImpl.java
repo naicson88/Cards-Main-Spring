@@ -14,6 +14,7 @@ import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -90,7 +91,6 @@ public class DeckServiceImpl implements DeckDetailService {
 
 	@Override
 	public List<RelDeckCards> relDeckCards(Long deckId, SourceTypes setSource) {
-
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Deck Id informed is invalid.");
 		
@@ -157,6 +157,7 @@ public class DeckServiceImpl implements DeckDetailService {
 			BeanUtils.copyProperties(c, cardDetail);
 			
 			cardDetail.setListCardRarity(setsUtils.listCardRarity(cardDetail, deck.getRel_deck_cards()));
+			cardDetail.setFullCardTypeDescription(fullCardTypeDescription(cardDetail));
 
 			return cardDetail;
 
@@ -169,6 +170,24 @@ public class DeckServiceImpl implements DeckDetailService {
 		dto.setDescription(deck.getDescription());
 
 		return dto;
+	}
+	
+	private String fullCardTypeDescription(CardSetDetailsDTO card) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		builder.append(card.getTipo().getName()+" ");
+		if(card.getCategoria() != null && !card.getCategoria().isBlank()) {
+			if(card.getCategoria().equals("Tuner"))
+				builder.append("/ Tuner ");
+			if(card.getCategoria().contains("Flip Effect"))
+				builder.append("/ Flip Effect ");
+			if(card.getCategoria().equals("Effect Monster"))
+				builder.append("/ Effect ");			
+		}	
+		builder.append(" / " + WordUtils.capitalizeFully(card.getGenericType()));
+		builder.append("]");
+		
+		return builder.toString();
 	}
 	
 	public Map<String, Long> countDeckRarityQuantity(SetDetailsDTO dto){
@@ -427,6 +446,4 @@ public class DeckServiceImpl implements DeckDetailService {
 		
 		return deckRepository.save(deck);
 	}
-
-
 }

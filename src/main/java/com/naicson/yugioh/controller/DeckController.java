@@ -149,5 +149,13 @@ public class DeckController<T> {
 		return new ResponseEntity<>(JSONObject.quote("Deck edited successfully!"), HttpStatus.OK);
 	}
 	
+//	@GetMapping("/update-deck-price")
+//	@Operation(summary="Update price's Cards of a Deck", security = { @SecurityRequirement(name = "bearer-key") })
+//	public ResponseEntity<String> updateDeckPrice(@RequestParam String deckName){
+//		deckService.updateDeckPrice(deckName);
+//		
+//		return new ResponseEntity<>(JSONObject.quote("Deck price updated successfully!"), HttpStatus.OK);
+//	}
+//	
 
 }
