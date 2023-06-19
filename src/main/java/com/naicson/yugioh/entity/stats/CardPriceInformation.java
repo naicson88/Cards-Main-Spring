@@ -17,7 +17,7 @@ public class CardPriceInformation {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer cardNumber;
+	private Long cardNumber;
 	@Column(unique=true)
 	private String cardSetCode;
 	private Double currentPrice;
@@ -31,7 +31,7 @@ public class CardPriceInformation {
 	
 	public CardPriceInformation() {}
 	
-	public CardPriceInformation(Integer cardNumber, String cardSetCode, Double currentPrice, LocalDateTime lastUpdate, int cardId) {
+	public CardPriceInformation(Long cardNumber, String cardSetCode, Double currentPrice, LocalDateTime lastUpdate, int cardId) {
 		super();
 		this.cardNumber = cardNumber;
 		this.cardSetCode = cardSetCode;
@@ -54,10 +54,10 @@ public class CardPriceInformation {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Integer getCardNumber() {
+	public Long getCardNumber() {
 		return cardNumber;
 	}
-	public void setCardNumber(Integer cardNumber) {
+	public void setCardNumber(Long cardNumber) {
 		this.cardNumber = cardNumber;
 	}
 	public String getCardSetCode() {

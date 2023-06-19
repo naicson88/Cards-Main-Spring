@@ -30,6 +30,7 @@ import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.deck.DeckServiceImpl;
 import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.util.GeneralFunctions;
@@ -46,18 +47,18 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class CardController {
 	
 	@Autowired
-	CardDetailService cardService;
+	CardServiceImpl cardService;
 	@Autowired
 	DeckServiceImpl deckService;
 	
 	Logger logger = LoggerFactory.getLogger(CardController.class);
 	
-	@Operation(summary="Return Card by its Number", security = { @SecurityRequirement(name = "bearer-key") })
-	@GetMapping(path = {"num/{numero}"})
-	public Card listarNumero(@PathVariable("numero") Long numero) {
-		return cardService.listarNumero(numero);
-	}
-	
+//	@Operation(summary="Return Card by its Number", security = { @SecurityRequirement(name = "bearer-key") })
+//	@GetMapping(path = {"num/{numero}"})
+//	public Card listarNumero(@PathVariable("numero") Long numero) {
+//		return cardService.listarNumero(numero);
+//	}
+//	
 	@Operation(summary="Return Card details by its Number", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {

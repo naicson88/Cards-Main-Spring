@@ -1,5 +1,6 @@
 package com.naicson.yugioh.consumer;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,12 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.PriceDTO;
+import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 
 @Component
 public class PriceConsumerRabbitMQ {
 	
 	@Autowired
 	ConsumerUtils consumerUtils;
+	
+	@Autowired
+	CardPriceInformationServiceImpl priceService;
 	
 	Logger logger = LoggerFactory.getLogger(PriceConsumerRabbitMQ.class);
 	
@@ -31,7 +36,8 @@ public class PriceConsumerRabbitMQ {
 			@SuppressWarnings("unchecked")
 			PriceDTO[] prices = (PriceDTO[]) consumerUtils.convertJsonToDTO(json, JsonConverterValidationFactory.SET_PRICE);
 			
-			logger.info("{}", prices);
+			priceService.updateCardPrice(Arrays.asList(prices));
+			
 		} catch (ListenerExecutionFailedException e) {
 			logger.error( "Error while trying consume SET_PRICE: {}", json);
 		}

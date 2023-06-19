@@ -23,6 +23,7 @@ import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
 import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Service
 public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
@@ -59,6 +60,10 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	@Override
 	public List<RelDeckCards> findRelationByDeckId(Long deckId){
 		return relDeckCardsRepository.findByDeckId(deckId);	
+	}
+	
+	public List<RelDeckCards> findByCriterias(GeneralSpecification<RelDeckCards> specs){
+		return relDeckCardsRepository.findAll(specs);
 	}
 	
 	public List<RelDeckCards> findByCardSetCodeLike(String setCode) {

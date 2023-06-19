@@ -4,21 +4,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Repository
-public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long>{
+public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long>, JpaSpecificationExecutor<RelDeckCards> {
 	
 	@Query(value = " select * from tab_rel_deck_cards rel "
 			+ " inner join tab_decks deck on deck.id = rel.deck_id "
 			+ " inner join tab_cards card on card.numero = rel.card_numero "
 			+ " where card_numero = :cardNumber and deck.is_konami_deck = 'S'",			
 			nativeQuery = true)
+	
+//	@Override
+//	List<RelDeckCards> findAll(Specification<GeneralSpecification> spec);
+	
 	List<RelDeckCards> findCardByNumberAndIsKonamiDeck(Long cardNumber);
 
 	List<RelDeckCards> findByDeckId(Long deckId);
@@ -31,8 +39,8 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long
 	
 	Optional<List<RelDeckCards>> findByCardSetCodeLike(String setCode);
 	
-	Optional<RelDeckCards> findByCardRaridadeAndCardSetCodeContaining(String raridade, String cardSetCode);
-	 
+//	Optional<RelDeckCards> findByCardRaridadeAndCardSetCodeContaining(String raridade, String cardSetCode);
+	
 	@Query(value = "SELECT * FROM yugioh.tab_rel_deck_cards where card_id = :cardId", nativeQuery = true)
 	List<RelDeckCards> findByCardId(Integer cardId);
 	

@@ -10,7 +10,7 @@ public class CardPriceInformationMock {
 		
 		CardPriceInformation info = new CardPriceInformation();
 		info.setCardId(123);
-		info.setCardNumber(6506006);
+		info.setCardNumber(6506006L);
 		info.setCardSetCode("AAA-123");
 		info.setCurrentPrice(10.99);
 		info.setId(id);

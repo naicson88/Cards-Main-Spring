@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,16 +42,12 @@ import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
-import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
-import com.naicson.yugioh.service.HomeServiceImpl;
-import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
-import com.naicson.yugioh.util.search.CardSpecification;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
 @Service
@@ -66,17 +63,19 @@ public class CardServiceImpl  {
 	CardDAO dao;
 	@Autowired
 	CardAlternativeNumberService alternativeService;
-	@Autowired
+
 	CardPriceInformationServiceImpl cardPriceService;
 	@Autowired
 	CardViewsInformationServiceImpl viewsService;
 	
 	Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);	
 	
-	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository) {
+	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository,
+			@Lazy CardPriceInformationServiceImpl cardPriceService) {
 		this.cardRepository = cardRepository;
 		this.dao = dao;
 		this.relDeckCardsRepository = relDeckCardsRepository;
+		this.cardPriceService = cardPriceService;
 	}
 
 	public CardServiceImpl() {
@@ -254,7 +253,7 @@ public class CardServiceImpl  {
 				.collect(Collectors.toList());	
 	}
 
-	public Page<Card> findAll(CardSpecification spec, Pageable pageable) {
+	public Page<Card> findAll(GeneralSpecification spec, Pageable pageable) {
 		
 		if(spec == null )
 			throw new IllegalArgumentException("No specification for card search");
@@ -264,10 +263,11 @@ public class CardServiceImpl  {
 	
 	public List<CardsSearchDTO> cardSearch(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		
-		CardSpecification spec = new CardSpecification();
+		GeneralSpecification spec = new GeneralSpecification();
 		
 		 criterias.stream().forEach(criterio -> 
-			spec.add( new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue())));
+			spec.add( new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
+		);
 		 			
 		Page<Card> list = this.findAll(spec, pageable);
 		
@@ -289,7 +289,7 @@ public class CardServiceImpl  {
 		if(criterias == null || criterias.isEmpty())
 			throw new IllegalArgumentException("Criterias is invalid");
 		
-		CardSpecification spec = new CardSpecification();
+		GeneralSpecification spec = new GeneralSpecification();
 		
 		criterias.stream().forEach(criterio ->
 			spec.add(new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
