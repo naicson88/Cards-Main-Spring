@@ -16,12 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.dto.PriceDTO;
 import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.stats.CardPriceInformation;
 import com.naicson.yugioh.repository.CardPriceInformationRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.service.HomeServiceImpl;
+import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.interfaces.CardPriceInformationService;
 import com.naicson.yugioh.util.enums.CardStats;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
@@ -33,7 +36,10 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	private CardPriceInformationRepository cardInfoRepository;
 	
 	@Autowired
-	private CardRepository cardRepository;
+	private CardServiceImpl cardService;
+	@Autowired
+	private RelDeckCardsServiceImpl relDeckService;
+	
 
 	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);	
 	
@@ -142,11 +148,9 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 		}).collect(Collectors.toList());
 	}
 	
-	private String getCardName(Long cardNumber) {
-		
-		Card card = cardRepository.findByNumero(cardNumber)
-				.orElseThrow(() -> new EntityNotFoundException("Card with number " + cardNumber + " not found."));
-		
+	private String getCardName(Long cardNumber) {		
+		Card card = cardService.findByNumero(cardNumber);
+				
 		if(card.getNome() == null || card.getNome().isBlank()) {
 			logger.error("Invalid card name of card: {} " , card.getNumero());
 			throw new NoSuchElementException("Invalid card name of card = " + card.getNumero() + "".toUpperCase());
@@ -160,11 +164,11 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 		
 		try {
 			if(cardsByStats == null || cardsByStats.isEmpty()) {
-				logger.error("List of cards with stats " + stats.toString() + " is empty");
+				logger.error("List of cards with stats {} is empty", stats);
 				throw new ErrorMessage("List of cards with stats " + stats.toString() + " is empty");
 			}
 		}catch(Exception e) {
-			logger.error("Something bad happened: {}" , e.getMessage());
+			throw new ErrorMessage("Something Bad Happened when validade Stats List");
 		}
 		
 	}
@@ -181,6 +185,14 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			return Collections.emptyList();
 		
 		return prices;
+	}
+	
+	public void updateCardPrice(List<PriceDTO> prices) {
+		try {
+			System.out.println("OK");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 

@@ -54,7 +54,7 @@ import com.naicson.yugioh.util.search.CardSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
 @Service
-public class CardServiceImpl implements CardDetailService {
+public class CardServiceImpl  {
 	
 	@Autowired
 	private CardRepository cardRepository;
@@ -93,9 +93,6 @@ public class CardServiceImpl implements CardDetailService {
 		return card;
 	}
 	
-	
-	
-	@Override
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
 		if(cardsNumbers == null || cardsNumbers.length == 0) 
@@ -112,15 +109,11 @@ public class CardServiceImpl implements CardDetailService {
 	     return dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
 	}
 
-
-	@Override
-	public Card listarNumero(Long numero) {
+	public Card findByNumero(Long numero) {
 		return cardRepository.findByNumero(numero)
 				.orElseThrow(() -> new EntityNotFoundException("Card not found with number: " + numero));
 	}
 	
-
-	@Override
 	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
 		
 		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
@@ -139,8 +132,7 @@ public class CardServiceImpl implements CardDetailService {
 		return listDTO;
 	}
 
-	
-	@Override
+
 	public CardOfUserDetailDTO cardOfUserDetails(Integer cardId) {
 		
 			if(cardId == null || cardId == 0)
@@ -189,7 +181,6 @@ public class CardServiceImpl implements CardDetailService {
 		return new CardOfUserDetailDTO(card.getNumero(),card.getImagem(), card.getNome());
 	}
 
-	@Override
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
 		Card card = cardRepository.findByNumero(cardNumero)
@@ -210,7 +201,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId) {
 
 	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
@@ -249,7 +239,6 @@ public class CardServiceImpl implements CardDetailService {
 						
 	}
 
-	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
 		
 		if(page == null || genericType == null || userId == 0)
@@ -265,7 +254,6 @@ public class CardServiceImpl implements CardDetailService {
 				.collect(Collectors.toList());	
 	}
 
-	@Override
 	public Page<Card> findAll(CardSpecification spec, Pageable pageable) {
 		
 		if(spec == null )
@@ -274,7 +262,6 @@ public class CardServiceImpl implements CardDetailService {
 		return cardRepository.findAll(spec, pageable);
 	}
 	
-	@Override
 	public List<CardsSearchDTO> cardSearch(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		
 		CardSpecification spec = new CardSpecification();
@@ -296,7 +283,7 @@ public class CardServiceImpl implements CardDetailService {
 			
 	}
 	
-	@Override
+
 	public Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		
 		if(criterias == null || criterias.isEmpty())
@@ -312,7 +299,7 @@ public class CardServiceImpl implements CardDetailService {
 	}
 	
 	
-	@Override
+
 	public List<CardsSearchDTO> cardSearchByNameUserCollection(String cardName, Pageable pageable) {
 		
 		if(cardName == null || cardName.isEmpty())
@@ -332,7 +319,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public List<Card> randomCardsDetailed()  {
 			
 		List<Card> cards = cardRepository.findRandomCards();
@@ -343,7 +329,6 @@ public class CardServiceImpl implements CardDetailService {
 		return cards;		
 	}
 
-	@Override
 	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Integer cardId) {
 		
 		if(cardId == null || cardId == 0)
@@ -358,7 +343,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public List<Long> findCardsNotRegistered(List<Long> cardsNumber) {
 		
 		if(cardsNumber == null || cardsNumber.isEmpty()) 
@@ -449,7 +433,6 @@ public class CardServiceImpl implements CardDetailService {
 		return list;
 	}
 
-	@Override
 	public List<CardsSearchDTO> getRandomCards() {		
 		List<Card> list = cardRepository.findRandomCards();
 		
@@ -457,7 +440,6 @@ public class CardServiceImpl implements CardDetailService {
 	
 	}
 
-	@Override
 	public List<Long> getAlternativeArts(Integer cardId) {
 		if(cardId == null || cardId == 0)
 			throw new IllegalArgumentException("Invalid Card ID: " + cardId);
@@ -471,7 +453,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public Map<Integer, String> getAllCardsNamesAndId() {
 		List<Tuple> cards = cardRepository.findAllCardsNameAndId();
 		

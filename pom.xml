@@ -80,8 +80,6 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -94,25 +92,16 @@
 			<version>1.4.200</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.springdoc</groupId> <artifactId>springdoc-openapi-starter-common</artifactId> 
-			<version>2.0.0</version> </dependency> <dependency> <groupId>org.springdoc</groupId> 
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId> <version>2.0.0</version> 
-			</dependency> -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.7.0</version>
 		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
 			<version>2.4.9</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
@@ -124,15 +113,12 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.7</version>
 		</dependency>
-
-		<!-- junit 5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 			<version>5.6.3</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -153,13 +139,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 			<version>2.7.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>

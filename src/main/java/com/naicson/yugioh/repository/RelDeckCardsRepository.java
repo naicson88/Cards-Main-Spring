@@ -28,6 +28,10 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long
 	List<RelDeckCards> findByCardNumber(Long cardNumber);
 	 
 	List<RelDeckCards> findByCardSetCode(String card_set_code);
+	
+	Optional<List<RelDeckCards>> findByCardSetCodeLike(String setCode);
+	
+	Optional<RelDeckCards> findByCardRaridadeAndCardSetCodeContaining(String raridade, String cardSetCode);
 	 
 	@Query(value = "SELECT * FROM yugioh.tab_rel_deck_cards where card_id = :cardId", nativeQuery = true)
 	List<RelDeckCards> findByCardId(Integer cardId);
@@ -39,5 +43,5 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long
 	void saveRelUserDeckCards(Long deckId, Long cardNumber, String card_raridade, String card_set_code,
 			Double card_price, Date dt_criacao, Boolean isSideDeck, Integer cardId, Boolean isSpeedDuel,Integer quantity);
 
-	Optional<List<RelDeckCards>> findByCardSetCodeLike(String setCode);
+
 }

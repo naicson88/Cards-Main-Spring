@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.naicson.yugioh.data.dto.CollectionDeck;
 import com.naicson.yugioh.data.dto.KonamiDeck;
+import com.naicson.yugioh.data.dto.PriceDTO;
 import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 
@@ -15,6 +16,7 @@ public class JsonConverterValidationFactory {
 	public static final String ADD_NEW_CARD = "ADD NEW CARD";
 	public static final String COLLECTION_DECK = "COLLECTION DECK";
 	public static final String SET_COLLECTION = "SET COLLECTION";
+	public static final String SET_PRICE = "SET PRICE";
 	
 //	 Exemplo com mais de um argumento 
 //	IValidation assiantSalesAssociate = new DepartmentValidation(Department.SALES,
@@ -44,6 +46,10 @@ public class JsonConverterValidationFactory {
 		JsonConverterValidationComposite setCollectionDeck = new ConsumerTypeValidation(SET_COLLECTION);
 		setCollectionDeck.objetoRetorno = SetCollectionDto.class;
 		criterias.add(setCollectionDeck);
+		
+		JsonConverterValidationComposite setPrice = new ConsumerTypeValidation(SET_PRICE);
+		setPrice.objetoRetorno = PriceDTO[].class; // Array
+		criterias.add(setPrice);
 		
 		return criterias;
 	}

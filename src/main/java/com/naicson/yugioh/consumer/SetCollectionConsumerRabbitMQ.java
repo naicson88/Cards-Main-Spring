@@ -30,7 +30,7 @@ public class SetCollectionConsumerRabbitMQ {
 			
 		logger.info("Start consuming new Set Collection: {}" , json);
 		
-		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.SET_COLLECTION);
+		SetCollectionDto setCollection = (SetCollectionDto) consumerUtils.convertJsonToDTO(json, JsonConverterValidationFactory.SET_COLLECTION);
 		
 		SetCollection setCollectionEntity = SetCollection.setCollectionDtoToEntity(setCollection);
 	

@@ -105,4 +105,6 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	public List<RelDeckCards> getRelationByDeckId(Integer deckId) {
 		return relDeckCardsRepository.findByDeckId(deckId.longValue());
 	}
+	
+	
 }
