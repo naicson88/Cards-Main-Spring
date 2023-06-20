@@ -70,11 +70,13 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		return relDeckCardsRepository.findByCardSetCodeLike(setCode)
 				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public void save(RelDeckCards relCopied) {
 		relDeckCardsRepository.save(relCopied);
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public RelDeckCards editRelDeckCards(RelDeckCards rel) {	
 		relDeckCardsRepository.findById(rel.getId())
 			.orElseThrow(() -> new RuntimeException("Cannot find Relation with ID: " + rel.getId()));
@@ -82,6 +84,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		return relDeckCardsRepository.save(rel);
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public void removeRelDeckCards(Long relId) {
 		relDeckCardsRepository.deleteById(relId);
 	}

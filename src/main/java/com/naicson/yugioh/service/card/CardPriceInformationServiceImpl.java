@@ -44,25 +44,27 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);
 
 	@Override
-	public void calculateWeeklyPercentageVariable(CardPriceInformation cardInfo) {
-
+	public void saveWeeklyPercentageVariable(CardPriceInformation cardInfo) {
 		this.validateWeeklyPercentageObj(cardInfo);
-
-		Double diference = cardInfo.getCurrentPrice() - cardInfo.getPrice2();
-
-		if (diference != 0.0) {
-			Double percentDiff = (diference / cardInfo.getPrice2()) * 100;
-			cardInfo.setWeeklyPercentVariable(
-					BigDecimal.valueOf(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue());
-		} else {
-			cardInfo.setWeeklyPercentVariable(diference);
-		}
-
+		
+		cardInfo.setWeeklyPercentVariable(calculateWeeklyPercentageVariable(cardInfo));
 		cardInfo.setLastUpdate(LocalDateTime.now());
 		this.saveCardPriceInfo(cardInfo);
 
 	}
+	
+	private double calculateWeeklyPercentageVariable(CardPriceInformation cardInfo) {
+		Double diference = cardInfo.getCurrentPrice() - cardInfo.getPrice2();
 
+		if (diference == 0.0) 
+			return diference;
+		
+		Double percentDiff = (diference / cardInfo.getPrice2()) * 100;
+		
+		return BigDecimal.valueOf(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	public CardPriceInformation saveCardPriceInfo(CardPriceInformation cardInfo) {
 		return cardInfoRepository.save(cardInfo);
 	}
@@ -189,37 +191,33 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 
 	@Transactional(rollbackFor = Exception.class)
 	public void updateCardPrice(List<PriceDTO> prices) {
-		try {
-			List<PriceDTO> listCardsNotFound = new ArrayList<>();
+		List<PriceDTO> listCardsNotFound = new ArrayList<>();
 
-			for (PriceDTO price : prices) {
-				List<RelDeckCards> listRel = findRelDeckByCriterias(price);
+		for (PriceDTO price : prices) {
+			List<RelDeckCards> listRel = findRelDeckByCriterias(price);
 
-				if (listRel == null || listRel.isEmpty()) {
-					listCardsNotFound.add(price);
+			if (listRel == null || listRel.isEmpty()) {
+				listCardsNotFound.add(price);
+				
+			} else {
+				listRel.stream().forEach(rel -> {
+					List<CardPriceInformation> cardsInfo = cardInfoRepository.findByCardSetCode(rel.getCardSetCode());
 					
-				} else {
-					listRel.stream().forEach(rel -> {
-						List<CardPriceInformation> cardsInfo = cardInfoRepository.findByCardSetCode(rel.getCardSetCode());
-						
-						if (cardsInfo == null || cardsInfo.isEmpty())
-							createNewCardInfoFromRelDeckCards(price, rel);
-						else if (price.getPrice() > 0.0)
-							updateHistoricalCardPrice(price, cardsInfo);
-					});
+					if (cardsInfo == null || cardsInfo.isEmpty())
+						createNewCardInfoFromRelDeckCards(price, rel);
+					else if (price.getPrice() > 0.0)
+						updateHistoricalCardPrice(price, cardsInfo);
+				});
 
-					this.saveNewCardPrice(price, listRel);
-				}
-
+				this.saveNewCardPrice(price, listRel);
 			}
 
-			this.updateCardsNotFound(listCardsNotFound);
-
-		} catch (Exception e) {
-			logger.error(" Error when Updating Card Price {}", e.getMessage());
 		}
-	}
 
+		this.updateCardsNotFound(listCardsNotFound);
+
+	}
+	
 	private void saveNewCardPrice(PriceDTO price, List<RelDeckCards> listRel) {
 		RelDeckCards rel = listRel.get(0);
 		rel.setCard_price(price.getPrice() > 0.0 ? price.getPrice() : rel.getCard_price());
@@ -229,14 +227,17 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 
 	private void updateHistoricalCardPrice(PriceDTO price, List<CardPriceInformation> cardsInfo) {
 		CardPriceInformation cardInfo = cardsInfo.get(0);
-		cardInfo.setPrice5(cardInfo.getPrice4());
-		cardInfo.setPrice4(cardInfo.getPrice3());
-		cardInfo.setPrice3(cardInfo.getPrice2());
-		cardInfo.setPrice2(cardInfo.getCurrentPrice());
-		cardInfo.setCurrentPrice(price.getPrice());
-		cardInfo.setLastUpdate(LocalDateTime.now());
-		logger.info("Updating Card Price {}", cardInfo.getCardSetCode());
-		this.saveCardPriceInfo(cardInfo);
+		if(cardInfo.getLastUpdate().plusDays(3L).isBefore(LocalDateTime.now())) {
+			cardInfo.setPrice5(cardInfo.getPrice4());
+			cardInfo.setPrice4(cardInfo.getPrice3());
+			cardInfo.setPrice3(cardInfo.getPrice2());
+			cardInfo.setPrice2(cardInfo.getCurrentPrice());
+			cardInfo.setCurrentPrice(price.getPrice());
+			cardInfo.setLastUpdate(LocalDateTime.now());
+			cardInfo.setWeeklyPercentVariable(this.calculateWeeklyPercentageVariable(cardInfo));
+			logger.info("Updating Card Price {}", cardInfo.getCardSetCode());
+			this.saveCardPriceInfo(cardInfo);			
+		}	
 	}
 
 	private void createNewCardInfoFromRelDeckCards(PriceDTO price, RelDeckCards rel) {
@@ -257,12 +258,11 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			List<RelDeckCards> relCards = relDeckService.findByCriterias(spec);
 
 			if (relCards != null && !relCards.isEmpty() && relCards.size() == 1) {
-				logger.info("Updating Card NOT FOUND {} - {}", price.getCardSetCode(), price.getCardRarity());
+				logger.info("Updating Card NOT FOUND {} - {}", price.getCardSetCode(), price.getCardRarity());			
 				this.saveNewCardPrice(price, relCards);
 			} else
 				logger.warn(" Cannot update card price of {}", price.getCardSetCode());
 		}
-
 	}
 
 	private List<RelDeckCards> findRelDeckByCriterias(PriceDTO price) {
