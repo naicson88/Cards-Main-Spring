@@ -37,6 +37,7 @@ public class CardSetDetailsDTO {
 	private TipoCard tipo;
 	private Archetype archetype;
 	private Date registryDate;
+	private String fullCardTypeDescription;
 	private List<CardAlternativeNumber> alternativeCardNumber;
 	private List<CardRarityDTO> listCardRarity;
 
@@ -210,6 +211,14 @@ public class CardSetDetailsDTO {
 
 	public void setListCardRarity(List<CardRarityDTO> listCardRarity) {
 		this.listCardRarity = listCardRarity;
+	}
+
+	public String getFullCardTypeDescription() {
+		return fullCardTypeDescription;
+	}
+
+	public void setFullCardTypeDescription(String fullCardTypeDescription) {
+		this.fullCardTypeDescription = fullCardTypeDescription;
 	}
 
 }

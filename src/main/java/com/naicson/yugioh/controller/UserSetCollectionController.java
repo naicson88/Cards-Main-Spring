@@ -19,8 +19,8 @@ import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping({ "yugiohAPI/user-setcollection" })
@@ -31,7 +31,7 @@ public class UserSetCollectionController {
 	private UserSetCollectionServiceImpl service;
 	
 	@GetMapping("/add/{setId}")
-	@ApiOperation(value="Add a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Add a Set Collection in Users collections", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> addSetCollectionInUsersCollection(@PathVariable("setId") Integer setId) {
 		
 		service.addSetCollectionInUsersCollection(setId);
@@ -40,7 +40,7 @@ public class UserSetCollectionController {
 	}
 	
 	@GetMapping("/remove/{setId}")
-	@ApiOperation(value="Remove a Set Collection in Users collections", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Remove a Set Collection in Users collections", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> removeSetCollectionInUsersCollection(@PathVariable("setId") Long setId) {
 		
 		service.removeSetCollectionInUsersCollection(setId);
@@ -49,14 +49,14 @@ public class UserSetCollectionController {
 	}
 	
 	@GetMapping("/consult/{setId}")
-	@ApiOperation(value="Consults DTO to User Set Collection", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Consults DTO to User Set Collection", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<UserSetCollectionDTO> consultUserSetCollection(@PathVariable("setId") Long setId){
 		
 		return new ResponseEntity<>(service.consultUserSetCollection(setId), HttpStatus.OK);
 	}
 	
 	@PostMapping("/save-set-collection")
-	@ApiOperation(value="Save a SetCollection", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Save a SetCollection", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> saveSetCollection(@RequestBody UserSetCollectionDTO userCollection){
 		String msg = service.saveUserSetCollection(userCollection);
 		
@@ -64,7 +64,7 @@ public class UserSetCollectionController {
 	}
 	
 	@GetMapping("/setsname-by-settype/{setType}")
-	@ApiOperation(value="Get all Decks and Sets by SetType", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get all Decks and Sets by SetType", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllSetsBySetType(@PathVariable("setType") String setType){
 		List<DeckAndSetsBySetTypeDTO> dto = service.getAllSetsBySetType(setType);
 		
@@ -72,7 +72,7 @@ public class UserSetCollectionController {
 	}
 	
 	@GetMapping("/set-collection-for-transfer")
-	@ApiOperation(value="Get Set Collection sorted for transfer Cards", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get Set Collection sorted for transfer Cards", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<UserSetCollectionDTO> getUserSetCollectionForTransfer(@RequestParam("setId") Integer setId){
 		UserSetCollectionDTO dto = service.getUserSetCollectionForTransfer(setId);
 		
@@ -80,7 +80,7 @@ public class UserSetCollectionController {
 	}
 	
 	@PostMapping("/save-transfer")
-	@ApiOperation(value="Save the transfer from a Set to another", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Save the transfer from a Set to another", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> saveTransfer(@RequestBody List<UserSetCollectionDTO> setsToBeSaved ){
 		String msg = service.saveTransfer(setsToBeSaved);
 		

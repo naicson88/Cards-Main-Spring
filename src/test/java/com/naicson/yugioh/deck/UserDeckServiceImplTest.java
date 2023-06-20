@@ -116,14 +116,14 @@ public class UserDeckServiceImplTest {
 	@Test
 	public void saveUserdeckWhenItIsNew() {
 		mockAuth();
-		Deck deck = ValidObjects.generateValidDeck();
-		deck.setRel_deck_cards(listRel);
+		UserDeck deck = ValidObjects.generateValidUserDeck();
+		deck.setRelDeckCards(Collections.emptyList());
 		deck.setId(null);
 		
 		Mockito.when(userDeckRepository.save(any())).then(AdditionalAnswers.returnsFirstArg());
 		Mockito.when(userRelService.saveAll(anyList())).thenReturn(null);
 		
-		UserDeck userDeck = deckService.saveUserDeck(deck, null);
+		UserDeck userDeck = deckService.saveUserDeck(deck);
 		
 		assertNotNull(userDeck);
 		assertEquals(deck.getNome(), userDeck.getNome());

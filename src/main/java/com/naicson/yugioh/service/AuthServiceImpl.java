@@ -19,10 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.naicson.yugioh.data.chainResponsability.user.UserValidationChain;
+import com.naicson.yugioh.data.dto.AccountManageDTO;
 import com.naicson.yugioh.data.security.JwtUtils;
 import com.naicson.yugioh.entity.auth.ERole;
 import com.naicson.yugioh.entity.auth.JwtResponse;
@@ -33,6 +36,7 @@ import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.exceptions.MessageResponse;
 import com.naicson.yugioh.util.mail.EmailService;
@@ -66,7 +70,7 @@ public class AuthServiceImpl {
 		String jwt = jwtUtils.generateJwtToken(auth);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+		List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
@@ -92,31 +96,7 @@ public class AuthServiceImpl {
 			user.setRole(userRole);
 			// roles.add(userRole);
 		}
-//			else {
-//			strRoles.forEach(role -> {				
-//				switch (role) {
-//				case "admin":
-//					Role adminRole = roleRepository.findByRoleName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//					break;
-//					
-//				case "mod":
-//					Role modRole = roleRepository.findByRoleName(ERole.ROLE_MODERATOR)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByRoleName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//				}
-//			});
-//			
-//		}
 
-		// user.setRoles(roles);
 		userRepository.save(user);
 		logger.info("New User registered! {}", LocalDateTime.now());
 		emailService.sendEmail(user);
@@ -224,10 +204,14 @@ public class AuthServiceImpl {
 			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
 	}
-
-	public ResponseEntity<?> changeUserPassword(User user) {
-		User userFound = userRepository.findById(user.getId())
+	
+	public User findUserById(int id) {
+		return userRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Something bad happened! Try again later"));
+	}
+	
+	public ResponseEntity<?> changeUserPassword(User user) {
+		User userFound = findUserById(user.getId());
 
 		userFound.setPassword(encoder.encode(user.getPassword()));
 		userFound.setVerificationToken(UUID.randomUUID().toString());
@@ -236,4 +220,29 @@ public class AuthServiceImpl {
 
 		return new ResponseEntity<>(userFound, HttpStatus.OK);
 	}
+	
+	public AccountManageDTO changeAccountInformation(AccountManageDTO dto) {		
+		User user = this.findUserById((int) GeneralFunctions.userLogged().getId());
+		
+		userRepository.save(this.validAccountManage(user, dto));
+		
+		return dto;		
+	}
+	
+	private User validAccountManage( User userFound, AccountManageDTO dto) {
+		if(dto == null)
+			throw new IllegalArgumentException("Invalid Account Manage DTO");
+		
+		new UserValidationChain(encoder, userFound, dto);
+		
+		return userFound;
+
+	}
+
+	public boolean isPasswordCorrect(String password) {
+		String curPass = GeneralFunctions.userLogged().getPassword();		
+		return encoder.matches(password, curPass);
+	}
+	
 }
+	

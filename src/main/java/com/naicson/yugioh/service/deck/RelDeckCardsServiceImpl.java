@@ -9,18 +9,21 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.bridge.source.set.RelDeckCardsRelationBySource;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
 import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Service
 public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
@@ -32,7 +35,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	CardServiceImpl cardServiceImpl;
 	
 	@Autowired
-	DeckServiceImpl deckService;
+	DeckRepository deckRepository;
 	
 	@Autowired
 	CardAlternativeNumberService numberService;
@@ -59,23 +62,21 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		return relDeckCardsRepository.findByDeckId(deckId);	
 	}
 	
-	@Transactional(rollbackFor = Exception.class)
-	public void removeRelUserDeckByDeckId(Long deckId) {
-		if(deckId == null || deckId == 0)
-			throw new IllegalArgumentException("Invalid Deck Id to remove Relation");
-		
-		relDeckCardsRepository.deleteRelUserDeckByDeckId(deckId);
+	public List<RelDeckCards> findByCriterias(GeneralSpecification<RelDeckCards> specs){
+		return relDeckCardsRepository.findAll(specs);
 	}
-
+	
 	public List<RelDeckCards> findByCardSetCodeLike(String setCode) {
 		return relDeckCardsRepository.findByCardSetCodeLike(setCode)
 				.orElseThrow(() -> new EntityNotFoundException("Cannot find SetCode: " + setCode));
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public void save(RelDeckCards relCopied) {
 		relDeckCardsRepository.save(relCopied);
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	public RelDeckCards editRelDeckCards(RelDeckCards rel) {	
 		relDeckCardsRepository.findById(rel.getId())
 			.orElseThrow(() -> new RuntimeException("Cannot find Relation with ID: " + rel.getId()));
@@ -83,6 +84,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		return relDeckCardsRepository.save(rel);
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public void removeRelDeckCards(Long relId) {
 		relDeckCardsRepository.deleteById(relId);
 	}
@@ -101,9 +103,9 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		
 	}
 	
-	private void validateNewRelation(RelDeckCards rel) {
-		
+	private void validateNewRelation(RelDeckCards rel) {	
 		cardServiceImpl.cardDetails(rel.getCardId());
+		DeckServiceImpl deckService = new DeckServiceImpl(deckRepository);
 		deckService.findById(rel.getDeckId());
 		ECardRarity.getRarityByName(rel.getCard_raridade());
 	}
@@ -111,4 +113,6 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	public List<RelDeckCards> getRelationByDeckId(Integer deckId) {
 		return relDeckCardsRepository.findByDeckId(deckId.longValue());
 	}
+	
+	
 }

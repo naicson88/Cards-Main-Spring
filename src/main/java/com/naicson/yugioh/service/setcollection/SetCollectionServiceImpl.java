@@ -75,6 +75,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 			InsideDeckDTO insideDeck = new InsideDeckDTO();			
 			insideDeck.setInsideDeckName(d.getNome());
 			insideDeck.setInsideDeckImage(d.getImgurUrl());
+			insideDeck.setRelDeckCards(d.getRel_deck_cards());
 			
 			//Iterate over Cards
 			List<CardSetDetailsDTO> listSetDetails = d.getCards().stream().map(c -> {			
@@ -85,7 +86,7 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 				
 				return cardDetail;		
 				
-			}).collect(Collectors.toList()); ;			
+			}).collect(Collectors.toList());		
 		
 			insideDeck.setCards(listSetDetails);
 			listInsideDeck.add(insideDeck);				
@@ -165,15 +166,13 @@ public class SetCollectionServiceImpl implements SetCollectionService {
 		
 		List<Tuple> tuple = setColRepository.getAllSetsBySetType(setType);
 		
-		List<DeckAndSetsBySetTypeDTO> listDto = tuple.stream().map(c-> {
-			DeckAndSetsBySetTypeDTO dto = new DeckAndSetsBySetTypeDTO(
+		return tuple.stream().map(c-> {
+			return new DeckAndSetsBySetTypeDTO(
 					Long.parseLong(String.valueOf(c.get(0))),
 					String.valueOf(c.get(1))
-			);		
-			return dto;			
+			);			
 		}).collect(Collectors.toList());
-		
-		return listDto;
+
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

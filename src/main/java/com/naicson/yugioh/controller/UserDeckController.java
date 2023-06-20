@@ -23,12 +23,13 @@ import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.DeckSummaryDTO;
 import com.naicson.yugioh.data.dto.set.UserSetCollectionDTO;
 import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.sets.UserDeck;
 import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.service.setcollection.ISetsByType;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping({ "yugiohAPI/userDeck" })
@@ -48,7 +49,7 @@ public class UserDeckController<T> {
 	
 
 	@GetMapping("/sets-of-user")
-	@ApiOperation(value="Return Sets of a User", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Return Sets of a User", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Page<DeckSummaryDTO>> setsOfUser(
 			@PageableDefault(page = 0, size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
 			@RequestParam String setType) {
@@ -59,7 +60,7 @@ public class UserDeckController<T> {
 	}
 	
 	@GetMapping("/edit-deck")
-	@ApiOperation(value="Edit a Set by its ID and Source type", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Edit a Set by its ID and Source type", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
 		Deck deck = userDeckService.editUserDeck(deckId);
 		
@@ -67,17 +68,17 @@ public class UserDeckController<T> {
 	}
 	
 	@PostMapping(path = "/save-userdeck")
-	@ApiOperation(value="Save a User Set", authorizations = { @Authorization(value="JWT") })
-	public ResponseEntity<String> saveUserDeck(@RequestBody Deck deck) {
+	@Operation(summary="Save a User Set", security = { @SecurityRequirement(name = "bearer-key") })
+	public ResponseEntity<String> saveUserDeck(@RequestBody UserDeck deck) {
 		
-		this.userDeckService.saveUserDeck(deck, null);
+		this.userDeckService.saveUserDeck(deck);
 		
 		return new ResponseEntity<String>( JSONObject.quote("Deck saved successfully!"), HttpStatus.OK);
 
 	}
 
 	@GetMapping(path = { "/remove-set-to-user-collection/{deckId}" })
-	@ApiOperation(value="Remove a Set from User collection", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Remove a Set from User collection", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<String> removeSetFromUsersCollection(@PathVariable("deckId") Long deckId) {
 		
 		 userDeckService.removeSetFromUsersCollection(deckId);
@@ -87,7 +88,7 @@ public class UserDeckController<T> {
 	}
 	
 	@GetMapping(path = { "/add-deck-to-user-collection/{deckId}" })
-	@ApiOperation(value="Add a Set to User collection", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Add a Set to User collection", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Integer> addSetToUserCollection(@PathVariable("deckId") Long deckId) {
 		
 		 userDeckService.addSetToUserCollection(deckId);
@@ -97,7 +98,7 @@ public class UserDeckController<T> {
 	}
 	
 	@GetMapping("/get-all-decksname")
-	@ApiOperation(value="Get all Decks Name of user", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get all Decks Name of user", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<List<DeckAndSetsBySetTypeDTO>> getAllDecksName(){
 		List<DeckAndSetsBySetTypeDTO> listDto = userDeckService.getAllDecksName();
 		
@@ -105,7 +106,7 @@ public class UserDeckController<T> {
 	}
 	
 	@GetMapping("/deck-transfer")
-	@ApiOperation(value="Get a Deck and Cards for transfer", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Get a Deck and Cards for transfer", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<UserSetCollectionDTO> getDeckAndCardsForTransfer(@RequestParam("deckId") Integer deckId){
 		
 		UserSetCollectionDTO dto = userDeckService.getDeckAndCardsForTransfer(deckId.longValue());
@@ -114,7 +115,7 @@ public class UserDeckController<T> {
 	}
 	
 	@PostMapping("/create-based-deck")
-	@ApiOperation(value="Create a Based Deck", authorizations = { @Authorization(value="JWT") })
+	@Operation(summary="Create a Based Deck", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<Long> createBasedDeck(@RequestBody Integer konamiDeckId){
 		Long createdDeckId = userDeckService.createBasedDeck(konamiDeckId.longValue());
 		

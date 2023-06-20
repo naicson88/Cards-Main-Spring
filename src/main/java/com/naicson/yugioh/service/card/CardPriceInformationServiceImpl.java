@@ -9,179 +9,267 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.naicson.yugioh.data.dto.PriceDTO;
 import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.stats.CardPriceInformation;
 import com.naicson.yugioh.repository.CardPriceInformationRepository;
-import com.naicson.yugioh.repository.CardRepository;
-import com.naicson.yugioh.service.HomeServiceImpl;
+import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.service.interfaces.CardPriceInformationService;
 import com.naicson.yugioh.util.enums.CardStats;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import com.naicson.yugioh.util.search.GeneralSpecification;
+import com.naicson.yugioh.util.search.SearchCriteria;
+import com.naicson.yugioh.util.search.SearchOperation;
 
 @Service
-public class CardPriceInformationServiceImpl implements CardPriceInformationService{
+public class CardPriceInformationServiceImpl implements CardPriceInformationService {
 
 	@Autowired
 	private CardPriceInformationRepository cardInfoRepository;
-	
-	@Autowired
-	private CardRepository cardRepository;
 
-	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);	
-	
+	@Autowired
+	private CardServiceImpl cardService;
+
+	@Autowired
+	private RelDeckCardsServiceImpl relDeckService;
+
+	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);
+
 	@Override
-	public void calculateWeeklyPercentageVariable(CardPriceInformation cardInfo)  {
-		
+	public void saveWeeklyPercentageVariable(CardPriceInformation cardInfo) {
 		this.validateWeeklyPercentageObj(cardInfo);
 		
-		Double diference = cardInfo.getCurrentPrice() - cardInfo.getPrice2();
-		
-		if(diference != 0.0) {
-			Double percentDiff = (diference / cardInfo.getPrice2()) * 100;
-			cardInfo.setWeeklyPercentVariable(BigDecimal.valueOf(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue());
-		} else {
-			cardInfo.setWeeklyPercentVariable(diference);
-		}
-		
+		cardInfo.setWeeklyPercentVariable(calculateWeeklyPercentageVariable(cardInfo));
 		cardInfo.setLastUpdate(LocalDateTime.now());
 		this.saveCardPriceInfo(cardInfo);
-	
-	}
 
+	}
+	
+	private double calculateWeeklyPercentageVariable(CardPriceInformation cardInfo) {
+		Double diference = cardInfo.getCurrentPrice() - cardInfo.getPrice2();
+
+		if (diference == 0.0) 
+			return diference;
+		
+		Double percentDiff = (diference / cardInfo.getPrice2()) * 100;
+		
+		return BigDecimal.valueOf(percentDiff).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	public CardPriceInformation saveCardPriceInfo(CardPriceInformation cardInfo) {
 		return cardInfoRepository.save(cardInfo);
 	}
-	
-	private void validateWeeklyPercentageObj(CardPriceInformation cardInfo)  {
-		
+
+	private void validateWeeklyPercentageObj(CardPriceInformation cardInfo) {
+
 		try {
-			if(cardInfo == null) {
+			if (cardInfo == null) {
 				logger.error("CARD INFORMATION WAS NULL, CANNOT CALCULATE WEEKLY PERCENTAGE");
 				throw new ErrorMessage("Card Information is null, cannot calculate weekly percentage");
 			}
-			
-			if(cardInfo.getCurrentPrice() == null || cardInfo.getCurrentPrice() == 0.0 ) {
+
+			if (cardInfo.getCurrentPrice() == null || cardInfo.getCurrentPrice() == 0.0) {
 				logger.error("Card current price is invalid to calculate weekly percentage");
 				throw new ErrorMessage("Card current price is invalid to calculate weekly percentage");
 			}
-			
-			if(cardInfo.getPrice2() == null || cardInfo.getPrice2() == 0.0 ) {
+
+			if (cardInfo.getPrice2() == null || cardInfo.getPrice2() == 0.0) {
 				logger.error("Card price_2  is invalid to calculate weekly percentage");
 				throw new ErrorMessage("Card price_2 is invalid to calculate weekly percentage");
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.getMessage();
 		}
-		
-		
+
 	}
-	
+
 	@Override
-	public List<RankingForHomeDTO> getWeeklyHighStats() {	
-		return this.findWeeklyCards(CardStats.HIGH);	
+	public List<RankingForHomeDTO> getWeeklyHighStats() {
+		return this.findWeeklyCards(CardStats.HIGH);
 	}
-	
+
 	@Override
-	public List<RankingForHomeDTO> getWeeklyLowStats() {	
-		return this.findWeeklyCards(CardStats.LOW);			
+	public List<RankingForHomeDTO> getWeeklyLowStats() {
+		return this.findWeeklyCards(CardStats.LOW);
 	}
-	
+
 	@Override
 	public List<RankingForHomeDTO> findWeeklyCards(CardStats stats) {
-		
+
 		List<RankingForHomeDTO> rankingByStatsList = new ArrayList<>();
-		
+
 		try {
-			
-			if(stats == null){
+
+			if (stats == null) {
 				logger.error("Invalid stats for weekly consulting");
 				throw new IllegalArgumentException("Invalid stats for weekly consulting");
 			}
-			
+
 			CardStats.valueOf(stats.toString());
-			List<CardPriceInformation> cardsByStats =  stats.getStats(cardInfoRepository);
-			
+			List<CardPriceInformation> cardsByStats = stats.getStats(cardInfoRepository);
+
 			this.validadeStatsList(cardsByStats, stats);
-			
-			 rankingByStatsList = this.convertFromCardInfoToRankingDTO(cardsByStats, stats);
-			
-			if(rankingByStatsList == null || rankingByStatsList.isEmpty()) {
+
+			rankingByStatsList = this.convertFromCardInfoToRankingDTO(cardsByStats, stats);
+
+			if (rankingByStatsList == null || rankingByStatsList.isEmpty()) {
 				logger.error("Ranking stats list is empty");
 				throw new NoSuchElementException("Ranking stats list is empty");
 			}
-				
-		}catch(Exception e) {
-			logger.error("Something bad happened: {}" , e.getMessage());
+
+		} catch (Exception e) {
+			logger.error("Something bad happened: {}", e.getMessage());
 		}
-		
-		return rankingByStatsList;		
+
+		return rankingByStatsList;
 	}
 
-	private List<RankingForHomeDTO> convertFromCardInfoToRankingDTO(List<CardPriceInformation> cardsByStats, CardStats stats) {
+	private List<RankingForHomeDTO> convertFromCardInfoToRankingDTO(List<CardPriceInformation> cardsByStats,
+			CardStats stats) {
 		this.validadeStatsList(cardsByStats, stats);
-		
-		return cardsByStats.stream().map(card -> {			
+
+		return cardsByStats.stream().map(card -> {
 			String cardName = this.getCardName(card.getCardNumber().longValue());
 			RankingForHomeDTO cardByStats = new RankingForHomeDTO();
-			
+
 			cardByStats.setCardName(cardName);
 			cardByStats.setCardNumber(String.valueOf(card.getCardNumber()));
 			cardByStats.setCardPrice(card.getCurrentPrice());
 			cardByStats.setPercentVariable(card.getWeeklyPercentVariable());
 			cardByStats.setSetCode(card.getCardSetCode());
-			
+
 			return cardByStats;
 		}).collect(Collectors.toList());
 	}
-	
+
 	private String getCardName(Long cardNumber) {
-		
-		Card card = cardRepository.findByNumero(cardNumber)
-				.orElseThrow(() -> new EntityNotFoundException("Card with number " + cardNumber + " not found."));
-		
-		if(card.getNome() == null || card.getNome().isBlank()) {
-			logger.error("Invalid card name of card: {} " , card.getNumero());
+		Card card = cardService.findByNumero(cardNumber);
+
+		if (card.getNome() == null || card.getNome().isBlank()) {
+			logger.error("Invalid card name of card: {} ", card.getNumero());
 			throw new NoSuchElementException("Invalid card name of card = " + card.getNumero() + "".toUpperCase());
 		}
-		
-		return card.getNome();		
+
+		return card.getNome();
 	}
-	
 
 	private void validadeStatsList(List<CardPriceInformation> cardsByStats, CardStats stats) {
-		
+
 		try {
-			if(cardsByStats == null || cardsByStats.isEmpty()) {
-				logger.error("List of cards with stats " + stats.toString() + " is empty");
+			if (cardsByStats == null || cardsByStats.isEmpty()) {
+				logger.error("List of cards with stats {} is empty", stats);
 				throw new ErrorMessage("List of cards with stats " + stats.toString() + " is empty");
 			}
-		}catch(Exception e) {
-			logger.error("Something bad happened: {}" , e.getMessage());
+		} catch (Exception e) {
+			throw new ErrorMessage("Something Bad Happened when validade Stats List");
 		}
-		
+
 	}
-	
+
 	@Override
 	public List<CardPriceInformation> getAllPricesOfACardById(Integer cardId) {
-		
-		if(cardId == null || cardId == 0)
+
+		if (cardId == null || cardId == 0)
 			throw new IllegalArgumentException("Invalid card id for search prices");
-		
+
 		List<CardPriceInformation> prices = cardInfoRepository.findByCardId(cardId);
-		
-		if(prices == null || prices.isEmpty())
+
+		if (prices == null || prices.isEmpty())
 			return Collections.emptyList();
-		
+
 		return prices;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
+	public void updateCardPrice(List<PriceDTO> prices) {
+		List<PriceDTO> listCardsNotFound = new ArrayList<>();
+
+		for (PriceDTO price : prices) {
+			List<RelDeckCards> listRel = findRelDeckByCriterias(price);
+
+			if (listRel == null || listRel.isEmpty()) {
+				listCardsNotFound.add(price);
+				
+			} else {
+				listRel.stream().forEach(rel -> {
+					List<CardPriceInformation> cardsInfo = cardInfoRepository.findByCardSetCode(rel.getCardSetCode());
+					
+					if (cardsInfo == null || cardsInfo.isEmpty())
+						createNewCardInfoFromRelDeckCards(price, rel);
+					else if (price.getPrice() > 0.0)
+						updateHistoricalCardPrice(price, cardsInfo);
+				});
+
+				this.saveNewCardPrice(price, listRel);
+			}
+
+		}
+
+		this.updateCardsNotFound(listCardsNotFound);
+
+	}
+	
+	private void saveNewCardPrice(PriceDTO price, List<RelDeckCards> listRel) {
+		RelDeckCards rel = listRel.get(0);
+		rel.setCard_price(price.getPrice() > 0.0 ? price.getPrice() : rel.getCard_price());
+		logger.info("Saving new Card Price {} on RelDeckCards", rel.getCard_price());
+		relDeckService.save(rel);
+	}
+
+	private void updateHistoricalCardPrice(PriceDTO price, List<CardPriceInformation> cardsInfo) {
+		CardPriceInformation cardInfo = cardsInfo.get(0);
+		if(cardInfo.getLastUpdate().plusDays(3L).isBefore(LocalDateTime.now())) {
+			cardInfo.setPrice5(cardInfo.getPrice4());
+			cardInfo.setPrice4(cardInfo.getPrice3());
+			cardInfo.setPrice3(cardInfo.getPrice2());
+			cardInfo.setPrice2(cardInfo.getCurrentPrice());
+			cardInfo.setCurrentPrice(price.getPrice());
+			cardInfo.setLastUpdate(LocalDateTime.now());
+			cardInfo.setWeeklyPercentVariable(this.calculateWeeklyPercentageVariable(cardInfo));
+			logger.info("Updating Card Price {}", cardInfo.getCardSetCode());
+			this.saveCardPriceInfo(cardInfo);			
+		}	
+	}
+
+	private void createNewCardInfoFromRelDeckCards(PriceDTO price, RelDeckCards rel) {
+		CardPriceInformation cardInfo = new CardPriceInformation();
+		cardInfo.setCardId(rel.getCardId());
+		cardInfo.setCardNumber(rel.getCardNumber());
+		cardInfo.setCardSetCode(rel.getCard_set_code());
+		cardInfo.setCurrentPrice(price.getPrice());
+		cardInfo.setLastUpdate(LocalDateTime.now());
+		logger.info("Creating New Card Price {}", cardInfo.getCardSetCode());
+		this.saveCardPriceInfo(cardInfo);
+	}
+
+	private void updateCardsNotFound(List<PriceDTO> prices) {
+		for (PriceDTO price : prices) {
+			GeneralSpecification<RelDeckCards> spec = new GeneralSpecification<>();
+			spec.add(new SearchCriteria("cardSetCode", SearchOperation.MATCH, price.getCardSetCode()));
+			List<RelDeckCards> relCards = relDeckService.findByCriterias(spec);
+
+			if (relCards != null && !relCards.isEmpty() && relCards.size() == 1) {
+				logger.info("Updating Card NOT FOUND {} - {}", price.getCardSetCode(), price.getCardRarity());			
+				this.saveNewCardPrice(price, relCards);
+			} else
+				logger.warn(" Cannot update card price of {}", price.getCardSetCode());
+		}
+	}
+
+	private List<RelDeckCards> findRelDeckByCriterias(PriceDTO price) {
+		GeneralSpecification<RelDeckCards> spec = new GeneralSpecification<>();
+		spec.add(new SearchCriteria("card_raridade", SearchOperation.EQUAL, price.getCardRarity()));
+		spec.add(new SearchCriteria("cardSetCode", SearchOperation.MATCH, price.getCardSetCode()));
+		return relDeckService.findByCriterias(spec);
+	}
 
 }

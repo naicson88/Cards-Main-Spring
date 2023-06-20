@@ -35,7 +35,7 @@ public class DeckConsumerRabbitMQ {
 			
 		logger.info("Start consuming new KonamiDeck: {}" , json);
 		
-		KonamiDeck kDeck = (KonamiDeck) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.KONAMI_DECK);
+		KonamiDeck kDeck = (KonamiDeck) consumerUtils.convertJsonToDTO(json, JsonConverterValidationFactory.KONAMI_DECK);
 		
 		if(!deckService.findByNome(kDeck.getNome()).isEmpty())
 			throw new ErrorMessage("Deck already registered with that name: " + kDeck.getNome());

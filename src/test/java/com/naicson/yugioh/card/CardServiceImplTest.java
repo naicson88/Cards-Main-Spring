@@ -10,12 +10,10 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +45,6 @@ import com.naicson.yugioh.data.dao.CardDAO;
 import com.naicson.yugioh.data.dto.RelUserCardsDTO;
 import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
-import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
 import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
@@ -67,7 +64,7 @@ import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.ValidObjects;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
-import com.naicson.yugioh.util.search.CardSpecification;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 import com.naicson.yugioh.util.search.SearchOperation;
 
@@ -298,7 +295,7 @@ public class CardServiceImplTest {
 		List<Card> cardList = List.of(ValidObjects.generateValidCard(1), ValidObjects.generateValidCard(2));	
 		Page<Card> pageCard = new PageImpl<Card>(cardList);
 		
-		doReturn(pageCard).when(cardService).findAll(any(CardSpecification.class), any(Pageable.class));
+		doReturn(pageCard).when(cardService).findAll(any(GeneralSpecification.class), any(Pageable.class));
 		
 		Page<Card> page = cardService.searchCardDetailed(list, null, pageable);
 		

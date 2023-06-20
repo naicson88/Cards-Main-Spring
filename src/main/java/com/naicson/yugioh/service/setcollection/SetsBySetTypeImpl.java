@@ -36,15 +36,12 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	public Page<DeckSummaryDTO> findAllSetsByType(Pageable pageable, String setType) {
 		
 		SetType type = SetType.valueOf(setType);
-				
-		Page<DeckSummaryDTO> pageDTO  = null;
 		
 		if(type.equals(SetType.DECK))
-			 pageDTO = convertPageDeck(deckService.findAllBySetType(pageable, setType)); 
-		else
-			pageDTO = this.convertPageSetToPageDeck(setRepository.findAllBySetType(pageable, type.toString()));
-						
-		 return pageDTO;
+			return convertPageDeck(deckService.findAllBySetType(pageable, setType)); 
+			
+		return this.convertPageSetToPageDeck(setRepository.findAllBySetType(pageable, type.toString()));
+
 	}
 	
 
@@ -75,12 +72,8 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	
 	private Page<DeckSummaryDTO> convertPageDeck(Page<Deck> deck){
 		
-		Page<DeckSummaryDTO> pageDeck = deck.map(originalPage -> {
-			DeckSummaryDTO deckDTO =  this.convertDeckToDTO(originalPage);
-			return deckDTO;
-		});
-		
-		return pageDeck;		
+		return deck.map(this::convertDeckToDTO);
+			
 	}
 
 	private DeckSummaryDTO convertDeckToDTO(Deck originalDeck) {
@@ -113,14 +106,11 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	}
 	
 	
-	private Page<DeckSummaryDTO> convertPageUserSetToPageDeck(Page<UserSetCollection> pageSet){
-		
-		Page<DeckSummaryDTO> pageDeck = pageSet.map(originalPage -> {
-			DeckSummaryDTO deck =  this.convertSetCollectionToDTO(originalPage);
-			return deck;
+	private Page<DeckSummaryDTO> convertPageUserSetToPageDeck(Page<UserSetCollection> pageSet){		
+		return pageSet.map(originalPage -> {
+			return this.convertSetCollectionToDTO(originalPage);
 		});
 		
-		return pageDeck;		
 	}
 	
 	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {

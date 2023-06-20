@@ -42,7 +42,7 @@ public class CollectionDeckConsumerRabbitMQ {
 	public void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
 		
-		CollectionDeck cDeck = (CollectionDeck) consumerUtils.convertJsonToSetCollectionDto(json, JsonConverterValidationFactory.COLLECTION_DECK);
+		CollectionDeck cDeck = (CollectionDeck) consumerUtils.convertJsonToDTO(json, JsonConverterValidationFactory.COLLECTION_DECK);
 		
 		if(cDeck.getSetId() == null)
 			throw new IllegalArgumentException("Invalid Set ID");

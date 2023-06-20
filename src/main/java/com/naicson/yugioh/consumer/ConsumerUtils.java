@@ -18,7 +18,6 @@ import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.enums.SetType;
@@ -38,11 +37,19 @@ public class ConsumerUtils {
 		if (kDeck == null)
 			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
 
-		return DeckBuilder.builder().dt_criacao(new Date()).imagem(kDeck.getImagem()).lancamento(kDeck.getLancamento())
-				.nome(kDeck.getNome().trim()).relDeckCards(kDeck.getListRelDeckCards())
-				.setType(SetType.valueOf(kDeck.getSetType())).isSpeedDuel(kDeck.getIsSpeedDuel())
-				.imgurUrl(kDeck.getImagem()).isBasedDeck(kDeck.getIsBasedDeck()).setCode(kDeck.getSetCode())
-				.description(kDeck.getDescription()).build();
+		return DeckBuilder.builder()
+				.dt_criacao(new Date())
+				.imagem(kDeck.getImagem())
+				.lancamento(kDeck.getLancamento())
+				.nome(kDeck.getNome().trim())
+				.relDeckCards(kDeck.getListRelDeckCards())
+				.setType(SetType.valueOf(kDeck.getSetType()))
+				.isSpeedDuel(kDeck.getIsSpeedDuel())
+				.imgurUrl(kDeck.getImagem())
+				.isBasedDeck(kDeck.getIsBasedDeck())
+				.setCode(kDeck.getSetCode())
+				.description(kDeck.getDescription())
+				.build();
 	}
 
 	public Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
@@ -74,22 +81,23 @@ public class ConsumerUtils {
 		return listRelDeckCards;
 	}
 
-	public Object convertJsonToSetCollectionDto(String json, String obj) {
-
+	public Object convertJsonToDTO(String json, String obj) {
 		try {
 
 			for (JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {
 
 				if (criteria.validate(obj)) {
-					return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-							.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true)
-							.readValue(json, criteria.objetoRetorno);
+					return new ObjectMapper()
+								.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+								.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true)
+								.readValue(json, criteria.objetoRetorno);
 				}
 			}
 
 			throw new IllegalArgumentException(" Invalid Object to mapper: " + obj);
 
 		} catch (JsonProcessingException e) {
+			logger.error(" Error while trying parse JSON #convertJsonToDTO");
 			e.printStackTrace();
 			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}

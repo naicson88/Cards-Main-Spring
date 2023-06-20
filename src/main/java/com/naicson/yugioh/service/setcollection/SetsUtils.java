@@ -95,8 +95,8 @@ public class SetsUtils {
 			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
 		}
 		
-		return tipoList;
-	
+		return tipoList.stream().sorted((v1, v2) -> Long.compare(v2.getQuantity(), v1.getQuantity())).collect(Collectors.toList());
+		
 	}
 	
 	private List<GenericTypeDTO> setQuantityByGenericType(List<CardSetDetailsDTO> listDetails){
@@ -128,7 +128,7 @@ public class SetsUtils {
 	
 	private List<Map<String, Object>> infoProperties(List<CardSetDetailsDTO> listDetails){
 		Map<String, Long> mapProperties = listDetails.stream()
-				.filter(c -> c.getPropriedade() != null && !c.getDescricaoPortugues().isBlank())
+				.filter(c -> c.getPropriedade() != null && !c.getPropriedade().isBlank())
 				.filter(c -> !c.getPropriedade().equalsIgnoreCase("NORMAL"))
 				.collect(Collectors.groupingBy(CardSetDetailsDTO::getPropriedade, Collectors.counting()));
 		
@@ -168,8 +168,7 @@ public class SetsUtils {
 				
 	}
 	
-	private List<Map<String, Integer>> infoDef(List<CardSetDetailsDTO> listDetails) {
-		
+	private List<Map<String, Integer>> infoDef(List<CardSetDetailsDTO> listDetails) {	
 		Map<Integer, Long> defMap = listDetails.stream()
 				.filter(c -> c.getDef() != null)
 				.collect(Collectors.groupingBy(CardSetDetailsDTO::getDef, Collectors.counting()));

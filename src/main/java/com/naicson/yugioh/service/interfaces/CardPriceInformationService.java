@@ -12,7 +12,7 @@ import com.naicson.yugioh.util.enums.CardStats;
 @Service
 public interface CardPriceInformationService {
 	
-	public void calculateWeeklyPercentageVariable(CardPriceInformation cardInfo);
+	public void saveWeeklyPercentageVariable(CardPriceInformation cardInfo);
 	
 	public List<RankingForHomeDTO> getWeeklyHighStats();
 	

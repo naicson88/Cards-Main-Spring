@@ -57,133 +57,84 @@ public class UserSetCollection {
 	
 	@Enumerated(EnumType.STRING)
 	private SetType setCollectionType;
-	
+
 	public UserSetCollection() {}
 	
-	public static UserSetCollection convertToUserSetCollection(SetCollection set) {
-		
-		UserSetCollection userSet = new UserSetCollection();
-		BeanUtils.copyProperties(set, userSet);
-		
-		userSet.setDtUpdate(new Date());
-		userSet.setId(null);
-		userSet.setName(set.getName());
-		userSet.setRegistrationDate(new Date());
-		userSet.setUserId(GeneralFunctions.userLogged().getId());
-		userSet.setImgPath(set.getImgurUrl());
-		userSet.setKonamiSetCopied(set.getId());
-		UserDeck ud = UserDeck.userDeckFromDeck(set.getDecks().get(0));		
-		ud.setNome(set.getName());
-		
-		userSet.setUserDeck(List.of(ud));
-		
-		return userSet;
-	
+	public UserSetCollection(Long id, Long userId, String name, String portugueseName, String imgPath,
+			Boolean onlyDefaultDeck, Date releaseDate, Date registrationDate, Boolean isSpeedDuel, String imgurUrl,
+			Date dtUpdate, Integer konamiSetCopied, List<UserDeck> userDeck, SetType setCollectionType) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.name = name;
+		this.portugueseName = portugueseName;
+		this.imgPath = imgPath;
+		this.onlyDefaultDeck = onlyDefaultDeck;
+		this.releaseDate = releaseDate;
+		this.registrationDate = registrationDate;
+		this.isSpeedDuel = isSpeedDuel;
+		this.imgurUrl = imgurUrl;
+		this.DtUpdate = dtUpdate;
+		this.konamiSetCopied = konamiSetCopied;
+		this.userDeck = userDeck;
+		this.setCollectionType = setCollectionType;
 	}
-	
-	public static UserSetCollection convertFromUserSetCollectionDTO(UserSetCollectionDTO userCollection, UserDeck userDeck) {
-		UserSetCollection userSetCollection = new UserSetCollection();
-		userSetCollection.setDtUpdate(new Date());
-		userSetCollection.setImgPath(GeneralFunctions.getRandomCollectionCase());
-		userSetCollection.setImgurUrl(userSetCollection.getImgPath());
-		userSetCollection.setIsSpeedDuel(false);
-		userSetCollection.setName(userCollection.getName());
-		userSetCollection.setOnlyDefaultDeck(true);
-		userSetCollection.setRegistrationDate(new Date());
-		userSetCollection.setReleaseDate(new Date());
-		userSetCollection.setSetCollectionType(SetType.USER_NEW_COLLECTION);
-		userSetCollection.setUserDeck(List.of(userDeck));
-		userSetCollection.setUserId(GeneralFunctions.userLogged().getId());
-		
-		return userSetCollection;
-	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public String getPortugueseName() {
 		return portugueseName;
 	}
-	public void setPortugueseName(String portugueseName) {
-		this.portugueseName = portugueseName;
-	}
+
 	public String getImgPath() {
 		return imgPath;
 	}
-	public void setImgPath(String imgPath) {
-		this.imgPath = imgPath;
-	}
+
 	public Boolean getOnlyDefaultDeck() {
 		return onlyDefaultDeck;
 	}
-	public void setOnlyDefaultDeck(Boolean onlyDefaultDeck) {
-		this.onlyDefaultDeck = onlyDefaultDeck;
-	}
+
 	public Date getReleaseDate() {
 		return releaseDate;
 	}
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
+
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
-	}
+
 	public Boolean getIsSpeedDuel() {
 		return isSpeedDuel;
 	}
-	public void setIsSpeedDuel(Boolean isSpeedDuel) {
-		this.isSpeedDuel = isSpeedDuel;
-	}
+
 	public String getImgurUrl() {
 		return imgurUrl;
 	}
-	public void setImgurUrl(String imgurUrl) {
-		this.imgurUrl = imgurUrl;
-	}
+
 	public Date getDtUpdate() {
 		return DtUpdate;
-	}
-	public void setDtUpdate(Date dtUpdate) {
-		DtUpdate = dtUpdate;
-	}
-	public List<UserDeck> getUserDeck() {
-		return userDeck;
-	}
-	public void setUserDeck(List<UserDeck> userDeck) {
-		this.userDeck = userDeck;
-	}
-	public SetType getSetCollectionType() {
-		return setCollectionType;
-	}
-	public void setSetCollectionType(SetType setCollectionType) {
-		this.setCollectionType = setCollectionType;
 	}
 
 	public Integer getKonamiSetCopied() {
 		return konamiSetCopied;
 	}
 
-	public void setKonamiSetCopied(Integer konamiSetCopied) {
-		this.konamiSetCopied = konamiSetCopied;
+	public List<UserDeck> getUserDeck() {
+		return userDeck;
 	}
+
+	public SetType getSetCollectionType() {
+		return setCollectionType;
+	}	
 	
 	
 	

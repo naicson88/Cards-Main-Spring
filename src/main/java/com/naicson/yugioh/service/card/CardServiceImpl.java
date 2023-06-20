@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,20 +42,16 @@ import com.naicson.yugioh.data.dto.set.CardsOfUserSetsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
-import com.naicson.yugioh.repository.DeckRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
-import com.naicson.yugioh.service.HomeServiceImpl;
-import com.naicson.yugioh.service.interfaces.CardDetailService;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
-import com.naicson.yugioh.util.search.CardSpecification;
+import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
 @Service
-public class CardServiceImpl implements CardDetailService {
+public class CardServiceImpl  {
 	
 	@Autowired
 	private CardRepository cardRepository;
@@ -66,17 +63,19 @@ public class CardServiceImpl implements CardDetailService {
 	CardDAO dao;
 	@Autowired
 	CardAlternativeNumberService alternativeService;
-	@Autowired
+
 	CardPriceInformationServiceImpl cardPriceService;
 	@Autowired
 	CardViewsInformationServiceImpl viewsService;
 	
 	Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);	
 	
-	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository) {
+	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository,
+			@Lazy CardPriceInformationServiceImpl cardPriceService) {
 		this.cardRepository = cardRepository;
 		this.dao = dao;
 		this.relDeckCardsRepository = relDeckCardsRepository;
+		this.cardPriceService = cardPriceService;
 	}
 
 	public CardServiceImpl() {
@@ -93,9 +92,6 @@ public class CardServiceImpl implements CardDetailService {
 		return card;
 	}
 	
-	
-	
-	@Override
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
 		if(cardsNumbers == null || cardsNumbers.length == 0) 
@@ -112,15 +108,11 @@ public class CardServiceImpl implements CardDetailService {
 	     return dao.searchForCardsUserHave(GeneralFunctions.userLogged().getId(), cardsNumbersString);
 	}
 
-
-	@Override
-	public Card listarNumero(Long numero) {
+	public Card findByNumero(Long numero) {
 		return cardRepository.findByNumero(numero)
 				.orElseThrow(() -> new EntityNotFoundException("Card not found with number: " + numero));
 	}
 	
-
-	@Override
 	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
 		
 		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
@@ -139,8 +131,7 @@ public class CardServiceImpl implements CardDetailService {
 		return listDTO;
 	}
 
-	
-	@Override
+
 	public CardOfUserDetailDTO cardOfUserDetails(Integer cardId) {
 		
 			if(cardId == null || cardId == 0)
@@ -189,7 +180,6 @@ public class CardServiceImpl implements CardDetailService {
 		return new CardOfUserDetailDTO(card.getNumero(),card.getImagem(), card.getNome());
 	}
 
-	@Override
 	public CardDetailsDTO findCardByNumberWithDecks(Long cardNumero) {
 		
 		Card card = cardRepository.findByNumero(cardNumero)
@@ -210,7 +200,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public Map<String, List<String>> findQtdCardUserHaveByCollection(Integer cardId) {
 
 	    List<Tuple> total  = cardRepository.findQtdUserHaveByUserCollection(cardId, GeneralFunctions.userLogged().getId());
@@ -249,7 +238,6 @@ public class CardServiceImpl implements CardDetailService {
 						
 	}
 
-	@Override
 	public List<CardsSearchDTO> getByGenericType(Pageable page, String genericType, long userId) {
 		
 		if(page == null || genericType == null || userId == 0)
@@ -265,8 +253,7 @@ public class CardServiceImpl implements CardDetailService {
 				.collect(Collectors.toList());	
 	}
 
-	@Override
-	public Page<Card> findAll(CardSpecification spec, Pageable pageable) {
+	public Page<Card> findAll(GeneralSpecification spec, Pageable pageable) {
 		
 		if(spec == null )
 			throw new IllegalArgumentException("No specification for card search");
@@ -274,13 +261,13 @@ public class CardServiceImpl implements CardDetailService {
 		return cardRepository.findAll(spec, pageable);
 	}
 	
-	@Override
 	public List<CardsSearchDTO> cardSearch(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		
-		CardSpecification spec = new CardSpecification();
+		GeneralSpecification spec = new GeneralSpecification();
 		
 		 criterias.stream().forEach(criterio -> 
-			spec.add( new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue())));
+			spec.add( new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
+		);
 		 			
 		Page<Card> list = this.findAll(spec, pageable);
 		
@@ -296,13 +283,13 @@ public class CardServiceImpl implements CardDetailService {
 			
 	}
 	
-	@Override
+
 	public Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		
 		if(criterias == null || criterias.isEmpty())
 			throw new IllegalArgumentException("Criterias is invalid");
 		
-		CardSpecification spec = new CardSpecification();
+		GeneralSpecification spec = new GeneralSpecification();
 		
 		criterias.stream().forEach(criterio ->
 			spec.add(new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
@@ -312,7 +299,7 @@ public class CardServiceImpl implements CardDetailService {
 	}
 	
 	
-	@Override
+
 	public List<CardsSearchDTO> cardSearchByNameUserCollection(String cardName, Pageable pageable) {
 		
 		if(cardName == null || cardName.isEmpty())
@@ -332,7 +319,6 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public List<Card> randomCardsDetailed()  {
 			
 		List<Card> cards = cardRepository.findRandomCards();
@@ -343,7 +329,6 @@ public class CardServiceImpl implements CardDetailService {
 		return cards;		
 	}
 
-	@Override
 	public List<RelDeckCards> findAllRelDeckCardsByCardNumber(Integer cardId) {
 		
 		if(cardId == null || cardId == 0)
@@ -352,13 +337,12 @@ public class CardServiceImpl implements CardDetailService {
 		List<RelDeckCards> list = this.relDeckCardsRepository.findByCardId(cardId);
 
 		if(list == null)
-			list = Collections.emptyList();
+			return Collections.emptyList();
 		
 		return list;
 		
 	}
 
-	@Override
 	public List<Long> findCardsNotRegistered(List<Long> cardsNumber) {
 		
 		if(cardsNumber == null || cardsNumber.isEmpty()) 
@@ -449,7 +433,6 @@ public class CardServiceImpl implements CardDetailService {
 		return list;
 	}
 
-	@Override
 	public List<CardsSearchDTO> getRandomCards() {		
 		List<Card> list = cardRepository.findRandomCards();
 		
@@ -457,7 +440,6 @@ public class CardServiceImpl implements CardDetailService {
 	
 	}
 
-	@Override
 	public List<Long> getAlternativeArts(Integer cardId) {
 		if(cardId == null || cardId == 0)
 			throw new IllegalArgumentException("Invalid Card ID: " + cardId);
@@ -471,16 +453,13 @@ public class CardServiceImpl implements CardDetailService {
 		
 	}
 
-	@Override
 	public Map<Integer, String> getAllCardsNamesAndId() {
 		List<Tuple> cards = cardRepository.findAllCardsNameAndId();
 		
 		 return cards.stream()
 				 .collect(Collectors
-						 .toMap(c -> Integer.parseInt(String.valueOf(c.get(0))), c -> c.get(1, String.class))
+				 .toMap(c -> Integer.parseInt(String.valueOf(c.get(0))), c -> c.get(1, String.class))
 			
 		);
 	}
-	
-	//cardsMap.put(Integer.parseInt(String.valueOf(c.get(0))), c.get(1, String.class))
 }
