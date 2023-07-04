@@ -3,6 +3,7 @@ package com.naicson.yugioh.consumer;
 import java.util.Date;
 import java.util.List;
 
+import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,35 +25,38 @@ import com.naicson.yugioh.util.exceptions.ErrorMessage;
 @Component
 public class CardConsumerRabbitMQ {
 
-	@Autowired
-	CardRegistry cardRegistry;
+//	@Autowired
+//	CardRegistry cardRegistry;
 	@Autowired
 	CardAlternativeNumberService alternativeService;
 	
-	@Autowired
-	RelDeckCardsServiceImpl relDeckCardService;
+//	@Autowired
+//	RelDeckCardsServiceImpl relDeckCardService;
 
 	@Autowired
 	CardServiceImpl cardService;
 	
+//	@Autowired
+//	ConsumerUtils consumerUtils;
+
 	@Autowired
-	ConsumerUtils consumerUtils;
+	RabbitMQConsumerFacade facade;
 
 	Logger logger = LoggerFactory.getLogger(CardConsumerRabbitMQ.class);
 
 	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class })
 	public void consumer(String json) {
-		logger.info("Start saving Card on Deck: {}", json);
+		logger.info(" Start saving Card on Deck: {}", json);
 
-		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) consumerUtils
+		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) facade
 				.convertJsonToDTO(json, JsonConverterValidationFactory.ADD_NEW_CARD);
 
 		Long cardId = this.verifyIfCardIsAlreadyRegistered(card);
 
 		RelDeckCards cardToBeAdded = this.createRelDeckCards(cardId, card);
 
-		relDeckCardService.saveRelDeckCards(List.of(cardToBeAdded));
+		facade.saveRelDeckCards(List.of(cardToBeAdded));
 
 		logger.info("Card successfully saved on Deck: {}", cardToBeAdded.getCardNumber());
 	}
@@ -64,7 +68,7 @@ public class CardConsumerRabbitMQ {
 			cardFound = cardService.findByCardNome(card.getName());
 
 		if (cardFound == null)
-			cardFound = cardRegistry.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered()).get(0);
+			cardFound = facade.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered());//.get(0);
 
 		return cardFound.getId().longValue();
 	}

@@ -17,7 +17,6 @@ import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 
 @Component
 public class PriceConsumerRabbitMQ {
-	
 	@Autowired
 	ConsumerUtils consumerUtils;
 	
@@ -29,7 +28,6 @@ public class PriceConsumerRabbitMQ {
 	@RabbitListener(queues = "${rabbitmq.queue.setprice}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class})
 	public void consumer(String json) {
-		
 		try {
 			logger.info("Starting Update Set Price {} ", json);
 			
@@ -39,7 +37,7 @@ public class PriceConsumerRabbitMQ {
 			priceService.updateCardPrice(Arrays.asList(prices));
 			
 		} catch (ListenerExecutionFailedException e) {
-			logger.error( "Error while trying consume SET_PRICE: {}", json);
+			logger.error( " Error while trying consume SET_PRICE: {}", json);
 		}
 
 	}

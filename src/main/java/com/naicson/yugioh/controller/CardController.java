@@ -53,12 +53,6 @@ public class CardController {
 	
 	Logger logger = LoggerFactory.getLogger(CardController.class);
 	
-//	@Operation(summary="Return Card by its Number", security = { @SecurityRequirement(name = "bearer-key") })
-//	@GetMapping(path = {"num/{numero}"})
-//	public Card listarNumero(@PathVariable("numero") Long numero) {
-//		return cardService.listarNumero(numero);
-//	}
-//	
 	@Operation(summary="Return Card details by its Number", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {

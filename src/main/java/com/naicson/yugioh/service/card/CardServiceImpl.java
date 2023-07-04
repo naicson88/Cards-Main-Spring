@@ -113,8 +113,7 @@ public class CardServiceImpl  {
 				.orElseThrow(() -> new EntityNotFoundException("Card not found with number: " + numero));
 	}
 	
-	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {
-		
+	public List<CardOfArchetypeDTO> findCardByArchetype(Integer archId) {		
 		List<Card> cardsOfArchetype = cardRepository.findByArchetype(archId)
 				.orElseThrow(() -> new NoSuchElementException("It was not possible found cards of Archetype: " + archId));
 		
@@ -253,8 +252,7 @@ public class CardServiceImpl  {
 				.collect(Collectors.toList());	
 	}
 
-	public Page<Card> findAll(GeneralSpecification spec, Pageable pageable) {
-		
+	public Page<Card> findAll(GeneralSpecification spec, Pageable pageable) {		
 		if(spec == null )
 			throw new IllegalArgumentException("No specification for card search");
 		
@@ -262,10 +260,10 @@ public class CardServiceImpl  {
 	}
 	
 	public List<CardsSearchDTO> cardSearch(List<SearchCriteria> criterias, String join, Pageable pageable) {
-		
+
 		GeneralSpecification spec = new GeneralSpecification();
-		
-		 criterias.stream().forEach(criterio -> 
+
+		criterias.forEach(criterio ->
 			spec.add( new SearchCriteria(criterio.getKey(), criterio.getOperation(), criterio.getValue()))
 		);
 		 			
@@ -282,7 +280,6 @@ public class CardServiceImpl  {
 		return dtoList;
 			
 	}
-	
 
 	public Page<Card> searchCardDetailed(List<SearchCriteria> criterias, String join, Pageable pageable) {
 		

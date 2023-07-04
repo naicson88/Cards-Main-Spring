@@ -175,7 +175,8 @@ public class DeckServiceImpl implements DeckDetailService {
 	private String fullCardTypeDescription(CardSetDetailsDTO card) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		builder.append(card.getTipo().getName()+" ");
+		if(card.getTipo() != null)
+			builder.append(card.getTipo().getName()+" ");
 		if(card.getCategoria() != null && !card.getCategoria().isBlank()) {
 			if(card.getCategoria().equals("Tuner"))
 				builder.append("/ Tuner ");
@@ -276,7 +277,7 @@ public class DeckServiceImpl implements DeckDetailService {
 				RelDeckCards::getCard_raridade, Collectors.counting()
 				));
 		
-		deck = setMappedDeckRarities(deck, mapRarities);
+		setMappedDeckRarities(deck, mapRarities);
 		
 		deck.getQuantity().setTotal(listRel.size());
 		

@@ -64,7 +64,7 @@ public class CollectionDeckConsumerRabbitMQ {
 		
 		this.setCollectionService.saveSetDeckRelation(cDeck.getSetId().longValue(), deckId);
 		
-		logger.info("Deck successfully saved! {}", newDeck.getNome());
+		logger.info("Collection Deck successfully saved! {}", newDeck.getNome());
 				
 	}
 	
