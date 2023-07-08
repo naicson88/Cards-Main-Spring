@@ -2,6 +2,7 @@ package com.naicson.yugioh.repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,6 @@ public interface CardAlternativeNumberRepository extends JpaRepository<CardAlter
 	
 	@Query(value = "select * from tab_cards where id = (select card_id from tab_card_alternative_numbers where  card_alternative_number  = :cardNumber)"
 			, nativeQuery = true)
-	Card findCardByCardNumber(Long cardNumber);
+	Optional<Card> findCardByCardNumber(Long cardNumber);
 
 }

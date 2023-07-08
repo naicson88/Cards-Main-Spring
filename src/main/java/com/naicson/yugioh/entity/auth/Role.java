@@ -46,7 +46,6 @@ public class Role {
 	}
 
 	public Object stream() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

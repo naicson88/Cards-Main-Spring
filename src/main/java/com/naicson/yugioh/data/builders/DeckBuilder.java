@@ -1,16 +1,18 @@
 package com.naicson.yugioh.data.builders;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
-
+import cardscommons.dto.RelDeckCardsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.util.enums.SetType;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class DeckBuilder {
 
@@ -95,6 +97,18 @@ public class DeckBuilder {
 
 	public DeckBuilder relDeckCards(List<RelDeckCards> listRelDeckCards) {
 		this.deck.setRel_deck_cards(listRelDeckCards);
+		return this;
+	}
+
+	public DeckBuilder relDeckCardsFromDTO(List<RelDeckCardsDTO> listRelDeckCards){
+		List<RelDeckCards> relList = new ArrayList<>();
+		listRelDeckCards.forEach(dto -> {
+			RelDeckCards rel = new RelDeckCards();
+			BeanUtils.copyProperties(rel, dto);
+			relList.add(rel);
+		});
+
+		this.relDeckCards(relList);
 		return this;
 	}
 	

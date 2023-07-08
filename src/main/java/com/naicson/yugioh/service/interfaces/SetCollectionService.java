@@ -1,14 +1,12 @@
 package com.naicson.yugioh.service.interfaces;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import com.naicson.yugioh.data.dto.set.AssociationDTO;
+import cardscommons.dto.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
-import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.entity.sets.SetCollection;
+
+import javax.validation.Valid;
+import java.util.List;
 
 public interface SetCollectionService {
 	

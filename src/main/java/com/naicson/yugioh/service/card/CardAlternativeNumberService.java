@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -37,7 +38,9 @@ public class CardAlternativeNumberService {
 	Logger LOGGER = LoggerFactory.getLogger(CardAlternativeNumberService.class);
 	
 	public Card findCardByCardNumber(Long cardNumber) {
-		return repository.findCardByCardNumber(cardNumber);
+		return repository.findCardByCardNumber(cardNumber)
+				.orElseThrow(() -> new EntityNotFoundException("Cant find Card with number: "+ cardNumber)) ;
+
 	}
 	
 	public List<CardAlternativeNumber> findAllByCardId(Integer cardId) {

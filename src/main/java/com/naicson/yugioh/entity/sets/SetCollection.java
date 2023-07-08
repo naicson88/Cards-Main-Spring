@@ -16,8 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import cardscommons.dto.SetCollectionDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.naicson.yugioh.data.dto.set.SetCollectionDto;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.util.enums.SetType;
 
@@ -55,7 +55,7 @@ public class SetCollection {
 		
 	}
 	
-	public static SetCollection setCollectionDtoToEntity(SetCollectionDto dto) {
+	public static SetCollection setCollectionDtoToEntity(SetCollectionDTO dto) {
 		
 		SetCollection collection = new SetCollection();
 		collection.setImgurUrl(dto.getImgPath().trim());

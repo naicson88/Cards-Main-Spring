@@ -1,27 +1,22 @@
 package com.naicson.yugioh.consumer;
 
-import java.util.Date;
-import java.util.List;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naicson.yugioh.data.composite.JsonConverterValidationComposite;
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
+import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
+import com.naicson.yugioh.util.enums.ECardRarity;
+import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.naicson.yugioh.data.builders.DeckBuilder;
-import com.naicson.yugioh.data.composite.JsonConverterValidationComposite;
-import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.dto.KonamiDeck;
-import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.service.card.CardAlternativeNumberService;
-import com.naicson.yugioh.util.enums.ECardRarity;
-import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import java.util.List;
 
 @Component
 @SuppressWarnings("rawtypes")
@@ -31,26 +26,6 @@ public class ConsumerUtils {
 	CardAlternativeNumberService alternativeService;
 
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
-
-	public Deck createNewDeck(KonamiDeck kDeck) {
-
-		if (kDeck == null)
-			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
-
-		return DeckBuilder.builder()
-				.dt_criacao(new Date())
-				.imagem(kDeck.getImagem())
-				.lancamento(kDeck.getLancamento())
-				.nome(kDeck.getNome().trim())
-				.relDeckCards(kDeck.getListRelDeckCards())
-				.setType(SetType.valueOf(kDeck.getSetType()))
-				.isSpeedDuel(kDeck.getIsSpeedDuel())
-				.imgurUrl(kDeck.getImagem())
-				.isBasedDeck(kDeck.getIsBasedDeck())
-				.setCode(kDeck.getSetCode())
-				.description(kDeck.getDescription())
-				.build();
-	}
 
 	public Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
 

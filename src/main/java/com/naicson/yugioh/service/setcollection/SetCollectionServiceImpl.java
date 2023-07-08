@@ -1,15 +1,19 @@
 package com.naicson.yugioh.service.setcollection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Tuple;
-import javax.validation.Valid;
-
+import cardscommons.dto.AssociationDTO;
+import com.naicson.yugioh.data.bridge.source.SourceTypes;
+import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
+import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
+import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
+import com.naicson.yugioh.data.dto.set.SetEditDTO;
+import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.repository.SetCollectionRepository;
+import com.naicson.yugioh.repository.UserSetCollectionRepository;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.service.interfaces.SetCollectionService;
+import com.naicson.yugioh.util.enums.SetType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,23 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.naicson.yugioh.data.bridge.source.SourceTypes;
-import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
-import com.naicson.yugioh.data.dto.set.AssociationDTO;
-import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
-import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
-import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
-import com.naicson.yugioh.data.dto.set.SetEditDTO;
-import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.sets.SetCollection;
-import com.naicson.yugioh.entity.sets.UserSetCollection;
-import com.naicson.yugioh.repository.SetCollectionRepository;
-import com.naicson.yugioh.repository.UserSetCollectionRepository;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.service.interfaces.SetCollectionService;
-import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.enums.SetType;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SetCollectionServiceImpl implements SetCollectionService {

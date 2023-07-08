@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import cardscommons.dto.AssociationDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.data.dto.set.DeckAndSetsBySetTypeDTO;
 import com.naicson.yugioh.data.dto.set.SetEditDTO;
 import com.naicson.yugioh.data.strategy.setDetails.CollectionDetailsStrategy;
@@ -53,7 +52,7 @@ public class SetCollectionController {
 	}
 	
 	@PostMapping("/new-association")
-	public ResponseEntity<String> newAssociation(@Valid @RequestBody AssociationDTO dto){		
+	public ResponseEntity<String> newAssociation(@Valid @RequestBody AssociationDTO dto){
 		service.newAssociation(dto);
 		
 		return new ResponseEntity<>(JSONObject.quote("Association confirmed!"), HttpStatus.OK);

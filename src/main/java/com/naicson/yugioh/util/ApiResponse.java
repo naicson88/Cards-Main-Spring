@@ -44,8 +44,6 @@ public class ApiResponse<T> {
 	public Map<String, Object> getOtherParams() {
 		return otherParams;
 	}
-
-    
 	public static class ApiResponseBuilder<T> {
 		private HttpHeaders httpHeaders = new HttpHeaders();
 		private final int httpStatusCode;

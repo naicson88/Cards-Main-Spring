@@ -3,6 +3,7 @@ package com.naicson.yugioh.consumer;
 import java.util.Date;
 import java.util.List;
 
+import cardscommons.dto.AddNewCardToDeckDTO;
 import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,32 +13,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
-import com.naicson.yugioh.service.card.CardRegistry;
 import com.naicson.yugioh.service.card.CardServiceImpl;
-import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class CardConsumerRabbitMQ {
 
-//	@Autowired
-//	CardRegistry cardRegistry;
 	@Autowired
 	CardAlternativeNumberService alternativeService;
-	
-//	@Autowired
-//	RelDeckCardsServiceImpl relDeckCardService;
 
 	@Autowired
 	CardServiceImpl cardService;
-	
-//	@Autowired
-//	ConsumerUtils consumerUtils;
 
 	@Autowired
 	RabbitMQConsumerFacade facade;
@@ -59,6 +48,7 @@ public class CardConsumerRabbitMQ {
 		facade.saveRelDeckCards(List.of(cardToBeAdded));
 
 		logger.info("Card successfully saved on Deck: {}", cardToBeAdded.getCardNumber());
+
 	}
 
 	private Long verifyIfCardIsAlreadyRegistered(AddNewCardToDeckDTO card) {
