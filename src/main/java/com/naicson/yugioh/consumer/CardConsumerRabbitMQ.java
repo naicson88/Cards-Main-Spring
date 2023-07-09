@@ -17,7 +17,6 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardServiceImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class CardConsumerRabbitMQ {
@@ -34,7 +33,7 @@ public class CardConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(CardConsumerRabbitMQ.class);
 
 	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class })
+	@Transactional(rollbackFor = { Exception.class })
 	public void consumer(String json) {
 		logger.info(" Start saving Card on Deck: {}", json);
 

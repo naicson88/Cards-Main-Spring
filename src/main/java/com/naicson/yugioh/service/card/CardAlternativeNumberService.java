@@ -1,19 +1,8 @@
 package com.naicson.yugioh.service.card;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityNotFoundException;
-
-import org.apache.commons.lang3.RandomStringUtils;
+import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.CardAlternativeNumber;
+import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.CardAlternativeNumber;
-import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Service
 public class CardAlternativeNumberService {

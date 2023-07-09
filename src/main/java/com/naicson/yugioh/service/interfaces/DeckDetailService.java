@@ -13,20 +13,19 @@ import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public interface DeckDetailService {
 	
-	List<Card> cardsOfDeck(Long deckId, String table) throws ErrorMessage;
+	List<Card> cardsOfDeck(Long deckId, String table);
 	
 	Page<Deck> findAll(Pageable pageable);
 	
 	Deck findById(Long Id);
 
-	Long addDeck(Deck deck) throws SQLException, ErrorMessage;
+	Long addDeck(Deck deck) throws SQLException;
 
-	SetDetailsDTO deckAndCards(Long deckId, SourceTypes setType, String table) throws Exception;
+	SetDetailsDTO deckAndCards(Long deckId, SourceTypes setType, String table);
 
 	Page<DeckSummaryDTO> searchBySetName(String setName, SourceTypes source);
 	

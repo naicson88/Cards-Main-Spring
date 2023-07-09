@@ -9,11 +9,9 @@ import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.util.enums.ECardRarity;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -74,7 +72,7 @@ public class ConsumerUtils {
 		} catch (JsonProcessingException e) {
 			logger.error(" Error while trying parse JSON #convertJsonToDTO");
 			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 

@@ -37,8 +37,6 @@ import com.naicson.yugioh.repository.RoleRepository;
 import com.naicson.yugioh.repository.UserRepository;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
-import com.naicson.yugioh.util.exceptions.MessageResponse;
 import com.naicson.yugioh.util.mail.EmailService;
 
 @Service
@@ -101,7 +99,7 @@ public class AuthServiceImpl {
 		logger.info("New User registered! {}", LocalDateTime.now());
 		emailService.sendEmail(user);
 
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok("User registered successfully!");
 	}
 
 	private ResponseEntity<?> validateRegisterData(SignupRequest signUpRequest) {
@@ -109,19 +107,19 @@ public class AuthServiceImpl {
 		if (signUpRequest.getUsername() == null || signUpRequest.getUsername().length() <= 3) {
 			logger.error("Error: User Name too short! {}", signUpRequest.getUsername());
 			return ResponseEntity.badRequest()
-					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: User Name too short!"));
+					.body(new IllegalArgumentException("Error: User Name too short!"));
 		}
 
 		if (userRepository.existsByUserName(signUpRequest.getUsername())) {
 			logger.error("Error: Username is already taken! {}", signUpRequest.getUsername());
 			return ResponseEntity.badRequest()
-					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Username is already taken!"));
+					.body(new IllegalArgumentException("Error: Username is already taken!"));
 		}
 
 		if (signUpRequest.getEmail() == null || signUpRequest.getEmail().isBlank()) {
 			logger.error("Error: Invalid Email informed! {}", signUpRequest.getEmail());
 			return ResponseEntity.badRequest()
-					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Invalid Email informed!"));
+					.body(new IllegalArgumentException("Error: Invalid Email informed!"));
 		} else {
 			Pattern pattern = Pattern.compile(regexEmailPattern);
 			Matcher matcher = pattern.matcher(signUpRequest.getEmail());
@@ -129,14 +127,14 @@ public class AuthServiceImpl {
 			if (!matcher.matches()) {
 				logger.error("Error: Invalid Email pattern! {}", signUpRequest.getEmail());
 				return ResponseEntity.badRequest()
-						.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Invalid Email informed!"));
+						.body(new IllegalArgumentException("Error: Invalid Email informed!"));
 			}
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			logger.error("Error: Email is already in use! {}", signUpRequest.getEmail());
 			return ResponseEntity.badRequest()
-					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Email is already in use!"));
+					.body(new IllegalArgumentException( "Error: Email is already in use!"));
 		}
 
 		return null;
@@ -161,7 +159,7 @@ public class AuthServiceImpl {
 			userRepository.save(user);
 			emailService.sendEmail(user);
 
-			return ResponseEntity.badRequest().body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE,
+			return ResponseEntity.badRequest().body(new IllegalArgumentException(
 					"Error: The max date for validation is expired! We sent another Email to: " + user.getEmail()));
 		} else {
 			user.setIsEmailConfirmed(true);
@@ -193,12 +191,12 @@ public class AuthServiceImpl {
 				"It was not possible change password with this email! Try making another request"));
 
 		if (user.getMaxDateValidation().isBefore(LocalDateTime.now())) {
-			return ResponseEntity.badRequest().body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE,
+			return ResponseEntity.badRequest().body(new IllegalArgumentException(
 					"Error: The max date for validation is expired! Try making another request"));
 
 		} else if (Boolean.FALSE.equals(user.getIsEmailConfirmed())) {
 			return ResponseEntity.badRequest()
-					.body(new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Error: Email is not confirmed yet!"));
+					.body(new IllegalArgumentException( "Error: Email is not confirmed yet!"));
 		} else {
 			logger.info("User was validated successfully: {} ", user.getUserName());
 			return new ResponseEntity<>(user, HttpStatus.OK);

@@ -13,7 +13,6 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.entity.auth.User;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class EmailService {
@@ -46,7 +45,7 @@ public class EmailService {
 			mailSender.send(messagePreparator);
 			logger.info("Email sent for confirmation! {}", LocalDateTime.now());
 		}catch(MailException e) {
-			throw new ErrorMessage("Something bad happened when tried to send email to: " + user.getEmail() + ". " + e.getMessage());
+			throw new IllegalArgumentException("Something bad happened when tried to send email to: " + user.getEmail() + ". " + e.getMessage());
 		}
 	
 	}
@@ -67,7 +66,7 @@ public class EmailService {
 			mailSender.send(messagePreparator);
 			logger.info("Email sent for change password! {}", LocalDateTime.now());
 		}catch(MailException e) {
-			throw new ErrorMessage("Something bad happened when tried to send email to: " + user.getEmail() + ". " + e.getMessage());
+			throw new IllegalArgumentException("Something bad happened when tried to send email to: " + user.getEmail() + ". " + e.getMessage());
 		}
 	}
 	

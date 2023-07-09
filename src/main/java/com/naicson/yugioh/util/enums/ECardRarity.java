@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 public enum ECardRarity {
 	
@@ -38,7 +37,7 @@ public enum ECardRarity {
 		return Arrays.stream(ECardRarity.values())
 				.filter(rarity -> rarity.listRarityCode
 				.contains(rarityCode))
-				.findFirst().orElseThrow(() -> new ErrorMessage("Rarity Not Found! " + rarityCode));
+				.findFirst().orElseThrow(() -> new IllegalArgumentException("Rarity Not Found! " + rarityCode));
 	}
 	
 	public static ECardRarity getRarityByName(String name) {

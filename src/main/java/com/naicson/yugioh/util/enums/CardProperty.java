@@ -1,8 +1,5 @@
 package com.naicson.yugioh.util.enums;
 import java.util.Arrays;
-import java.util.logging.ErrorManager;
-
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 public enum CardProperty {
 	
@@ -35,6 +32,6 @@ public enum CardProperty {
 	public static final CardProperty getByValue(String value){
 	    return Arrays.stream(CardProperty.values())
 	    		.filter(enumRole -> enumRole.property.equals(value)).findFirst()
-	    		.orElseThrow(() -> new ErrorMessage("UNKNOWN Propertie: " + value));
+	    		.orElseThrow(() -> new IllegalArgumentException("UNKNOWN Propertie: " + value));
 	} 
 }

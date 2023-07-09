@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Component
 public class SetCollectionConsumerRabbitMQ {
@@ -25,7 +24,7 @@ public class SetCollectionConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(SetCollectionConsumerRabbitMQ.class);
 		
 	@RabbitListener(queues = "${rabbitmq.queue.setcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public void consumerSetCollectionQueue(String json) {
 			
 		logger.info("Start consuming new Set Collection: {}" , json);

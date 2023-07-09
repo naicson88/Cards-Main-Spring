@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.persistence.EntityNotFoundException;
 
+import cardscommons.dto.AssociationDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.naicson.yugioh.data.dto.set.AssociationDTO;
 import com.naicson.yugioh.mocks.AssociationDTOMock;
 import com.naicson.yugioh.repository.SetCollectionRepository;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;

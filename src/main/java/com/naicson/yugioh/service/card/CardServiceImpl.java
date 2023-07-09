@@ -46,7 +46,6 @@ import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.repository.RelDeckCardsRepository;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 
@@ -95,7 +94,7 @@ public class CardServiceImpl  {
 	public List<RelUserCardsDTO> searchForCardsUserHave(int[] cardsNumbers) {
 				
 		if(cardsNumbers == null || cardsNumbers.length == 0) 
-			 throw new ErrorMessage("Unable to query user cards, decks IDs not informed");
+			 throw new IllegalArgumentException("Unable to query user cards, decks IDs not informed");
 				
 	     String cardsNumbersString = "";
 	     
@@ -159,7 +158,7 @@ public class CardServiceImpl  {
 
 	protected List<CardsOfUserSetsDTO> createCardsOfUserDTOList(List<Tuple> cardsDetails) {
 		if(cardsDetails == null || cardsDetails.isEmpty())
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid Tuple List of CardsOfUserSetsDTO");
+			throw new IllegalArgumentException("Invalid Tuple List of CardsOfUserSetsDTO");
 		
 		return cardsDetails.stream().map(c -> new CardsOfUserSetsDTO(											
 				c.get(0, String.class),
@@ -321,7 +320,7 @@ public class CardServiceImpl  {
 		List<Card> cards = cardRepository.findRandomCards();
 		
 		if(cards == null || cards.isEmpty())
-			 throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Can't find Random cards");		
+			 throw new IllegalArgumentException("Can't find Random cards");
 	
 		return cards;		
 	}

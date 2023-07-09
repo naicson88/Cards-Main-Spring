@@ -39,7 +39,6 @@ import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
 import com.naicson.yugioh.service.deck.UserRelDeckCardsServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class UserSetCollectionServiceImpl {
@@ -75,7 +74,7 @@ public class UserSetCollectionServiceImpl {
 		UserSetCollection setSaved = userSetRepository.save(userSet);
 
 		if (setSaved.getId() == null || setSaved.getId() == 0)
-			throw new ErrorMessage("It was not possible save User SetCollection");
+			throw new IllegalArgumentException("It was not possible save User SetCollection");
 
 		logger.info("Saving Decks from SetCollection... {}", LocalDateTime.now());
 
@@ -214,7 +213,7 @@ public class UserSetCollectionServiceImpl {
 		List<Long> deckIds = userSetRepository.consultSetUserDeckRelation(set.getId());
 
 		if (deckIds == null || deckIds.isEmpty())
-			throw new ErrorMessage("There is no UserDeck for UserSetCollection: " + set.getId());
+			throw new IllegalArgumentException("There is no UserDeck for UserSetCollection: " + set.getId());
 
 		List<Tuple> tuple = userSetRepository.consultUserSetCollection(deckIds.get(0),
 				GeneralFunctions.userLogged().getId(), set.getKonamiSetCopied());
@@ -263,7 +262,7 @@ public class UserSetCollectionServiceImpl {
 		return "User SetCollection was successfully saved!";
 	}
 
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 	public Long createNewSetCollection(UserSetCollectionDTO userCollection) {
 		
 		UserDeck userDeck = UserDeck.userDeckFromUserSetCollectionDTO(userCollection);
@@ -271,7 +270,7 @@ public class UserSetCollectionServiceImpl {
 		userDeck = userDeckService.saveUserDeck(userDeck);
 
 		if (userDeck == null || userDeck.getId() == 0)
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create the Set User Deck");
+			throw new IllegalArgumentException("It was not possible create the Set User Deck");
 
 		UserSetCollectionBuilder builder = new UserSetCollectionBuilder();
 		UserSetCollectionConstructors.convertFromUserSetCollectionDTO(builder,userCollection, userDeck);
@@ -284,7 +283,7 @@ public class UserSetCollectionServiceImpl {
 		userSet = userSetRepository.save(userSet);
 
 		if (userSet.getId() == 0)
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "It was not possible create the Set Collection");
+			throw new IllegalArgumentException( "It was not possible create the Set Collection");
 
 		return userDeck.getId();
 	}

@@ -6,11 +6,11 @@ import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
 import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +25,7 @@ public class DeckConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deck}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public void consumer(String json) {		
 			
 		logger.info("Start consuming new KonamiDeck: {}" , json);
@@ -33,7 +33,7 @@ public class DeckConsumerRabbitMQ {
 		KonamiDeckDTO kDeck = (KonamiDeckDTO) facade.convertJsonToDTO(json, JsonConverterValidationFactory.KONAMI_DECK);
 		
 		if(!facade.findDeckByNome(kDeck.getNome()).isEmpty())
-			throw new ErrorMessage("Deck already registered with that name: " + kDeck.getNome());
+			throw new DuplicateKeyException("Deck already registered with that name: " + kDeck.getNome());
 		
 		facade.registryCardFromYuGiOhAPI(kDeck.getCardsToBeRegistered());
 		

@@ -46,8 +46,10 @@ public class ArchetypeController {
 	}
 	
 	@PostMapping("/teste")
-	public ResponseEntity<TesteDTO> teste(@RequestBody TesteDTO dto, HttpServletRequest request){	
-		
+	public ResponseEntity<TesteDTO> teste(@RequestBody TesteDTO dto){
+
+		if(dto != null)
+			throw new IllegalArgumentException("Teste Retorno");
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 		
 	}

@@ -1,24 +1,5 @@
 package com.naicson.yugioh.service.deck;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Tuple;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.builders.UserDeckBuilder;
 import com.naicson.yugioh.data.dao.DeckDAO;
@@ -35,7 +16,18 @@ import com.naicson.yugioh.repository.sets.UserDeckRepository;
 import com.naicson.yugioh.service.setcollection.UserSetCollectionServiceImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDeckServiceImpl {
@@ -68,7 +60,7 @@ public class UserDeckServiceImpl {
 				 .orElseThrow(() -> new EntityNotFoundException("UserDeck id = " + deckId));
 
 		if (GeneralFunctions.userLogged().getId() != deckUser.getUserId())
-			throw new ErrorMessage("This Deck dont belong to user: " + GeneralFunctions.userLogged().getId() + " Deck ID: " + deckUser.getId());
+			throw new IllegalArgumentException("This Deck dont belong to user: " + GeneralFunctions.userLogged().getId() + " Deck ID: " + deckUser.getId());
 
 		Deck deck = createDeckObject(deckId, deckUser);
 		
@@ -84,7 +76,7 @@ public class UserDeckServiceImpl {
 		int sumDecks = deck.getCards().size() + deck.getExtraDeck().size() + deck.getSideDeckCards().size();
 
 		if (sumDecks != deck.getRel_deck_cards().size())
-			throw new ErrorMessage("Cards quantity don't match relation quantity." + "Param received: deckId = "
+			throw new IllegalArgumentException("Cards quantity don't match relation quantity." + "Param received: deckId = "
 					+ deckId + " setType = User" + " SumDecks: " + sumDecks + " Deck Rel.Total: " + deck.getRel_deck_cards().size());
 	}
 
@@ -193,7 +185,7 @@ public class UserDeckServiceImpl {
 		return qtdRemoved;
 	}
 
-//	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+//	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 //	public UserDeck saveUserDeck(UserDeck deck, List<UserRelDeckCards> listRel) {
 //		logger.info("Starting saving UserDeck...");
 //		this.validUserDeck(deck);
@@ -237,7 +229,7 @@ public class UserDeckServiceImpl {
 				.build();
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 	public UserDeck saveUserDeck(UserDeck userDeck) {
 		
 	  if(userDeck.getId() == null && userDeck.getKonamiDeckCopied() == null)
@@ -256,7 +248,7 @@ public class UserDeckServiceImpl {
 	}
 
 	
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 	public UserDeck addSetToUserCollection(Long originalDeckId) {
 		
 		logger.info("Starting copy Konami Deck to User's collection");
@@ -272,10 +264,10 @@ public class UserDeckServiceImpl {
 		List<UserRelDeckCards> listUserRelCards = userRelService.addCardsToUserDeck(originalDeckId, generatedDeckUser.getId());
 
 		if (listUserRelCards == null || listUserRelCards.isEmpty())
-				throw new ErrorMessage("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
+				throw new IllegalArgumentException("It was not possible add cards to the new Deck. Original Deck ID: " + originalDeckId);
 
 		if (this.addOrRemoveCardsToUserCollection(originalDeckId, GeneralFunctions.userLogged().getId(), "A") < 1)
-				throw new ErrorMessage("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
+				throw new IllegalArgumentException("Unable to include Cards for User's Collection! Original Deck ID: " + originalDeckId);
 		
 		logger.info("Konami Deck has been copied to User's collection: {}", deckOrigem.getNome());
 
@@ -383,7 +375,7 @@ public class UserDeckServiceImpl {
 		return dto;
 	}
 
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 	public Long createBasedDeck(Long konamiDeckId) {
 		if(konamiDeckId == null)
 			throw new IllegalArgumentException("Invalid Konamid Deck ID for create a Based Deck");

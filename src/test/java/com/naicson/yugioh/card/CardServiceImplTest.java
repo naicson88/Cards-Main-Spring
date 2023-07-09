@@ -63,7 +63,6 @@ import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.card.CardViewsInformationServiceImpl;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.ValidObjects;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 import com.naicson.yugioh.util.search.SearchOperation;
@@ -392,13 +391,13 @@ public class CardServiceImplTest {
 	public void returnErrorListRandomCardsDetailed() {
 		List<Card> cards = null;
 		Mockito.when(cardRepository.findRandomCards()).thenReturn(cards);
-		
-		ErrorMessage exception = Assertions.assertThrows(ErrorMessage.class, () -> {
+
+		IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			cardService.randomCardsDetailed();			  
 		});
 		
 		String expected = "Can't find Random cards";
-		String actual = exception.getMsg();
+		String actual = exception.getMessage();
 		
 		assertTrue(actual.contains(expected));
 	}

@@ -7,7 +7,6 @@ import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class CollectionDeckConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
 		

@@ -1,6 +1,6 @@
 package com.naicson.yugioh.mocks;
 
-import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
+import cardscommons.dto.CardYuGiOhAPI;
 
 public class CardYuGiOhAPIMock {
 	

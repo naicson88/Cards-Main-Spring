@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -30,17 +31,21 @@ public class LogginFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
+//		try {
+//
+//		}catch (HttpMessageNotReadableException e){
+//			logger.error(e.getMessage());
+//		}
 		String ip = request.getHeader("X-Forwarded-For");
 		LOGGER.info("IP: {}", ip);
-	
+
 		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-		
+
 //		//LocalDateTime startTime = LocalDateTime.now();
 //		filterChain.doFilter(requestWrapper, responseWrapper);
 //		LocalDateTime timeTaken = LocalDateTime.now();
-//		
+//
 //		String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), request.getCharacterEncoding());
 ////		String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), response.getCharacterEncoding());
 ////		RESPONSE={}; responseBody,
@@ -50,10 +55,10 @@ public class LogginFilter extends OncePerRequestFilter {
 //					 request.getMethod(), request.getRequestURI(), requestBody, response.getStatus(), timeTaken
 //					);
 //		}
-		
+
 		//responseWrapper.addHeader("Request-Id", tracer.currentSpan().context().traceIdString());
 		filterChain.doFilter(requestWrapper, responseWrapper);
-		
+
 		responseWrapper.setHeader("Request-Id", tracer.currentSpan().context().traceIdString());
 		responseWrapper.copyBodyToResponse();
 	}
