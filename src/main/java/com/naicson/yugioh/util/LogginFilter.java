@@ -23,24 +23,20 @@ import brave.Tracer;
 @Component
 public class LogginFilter extends OncePerRequestFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogginFilter.class);
-	
-	 @Autowired
-     Tracer tracer;
-	 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-//		try {
-//
-//		}catch (HttpMessageNotReadableException e){
-//			logger.error(e.getMessage());
-//		}
-		String ip = request.getHeader("X-Forwarded-For");
-		LOGGER.info("IP: {}", ip);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogginFilter.class);
 
-		ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
-		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+    @Autowired
+    Tracer tracer;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String ip = request.getHeader("X-Forwarded-For");
+        LOGGER.info("IP: {}", ip);
+
+        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
 //		//LocalDateTime startTime = LocalDateTime.now();
 //		filterChain.doFilter(requestWrapper, responseWrapper);
@@ -56,21 +52,21 @@ public class LogginFilter extends OncePerRequestFilter {
 //					);
 //		}
 
-		//responseWrapper.addHeader("Request-Id", tracer.currentSpan().context().traceIdString());
-		filterChain.doFilter(requestWrapper, responseWrapper);
+        //responseWrapper.addHeader("Request-Id", tracer.currentSpan().context().traceIdString());
+        filterChain.doFilter(requestWrapper, responseWrapper);
 
-		responseWrapper.setHeader("Request-Id", tracer.currentSpan().context().traceIdString());
-		responseWrapper.copyBodyToResponse();
-	}
-	
-	private String getStringValue(byte[] contentAsByteArray, String characterEncoding) {
-		try {
-			return new String(contentAsByteArray, 0, contentAsByteArray.length, characterEncoding);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        responseWrapper.setHeader("Request-Id", tracer.currentSpan().context().traceIdString());
+        responseWrapper.copyBodyToResponse();
+    }
 
-		return "";
-	}
+    private String getStringValue(byte[] contentAsByteArray, String characterEncoding) {
+        try {
+            return new String(contentAsByteArray, 0, contentAsByteArray.length, characterEncoding);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
 
 }
