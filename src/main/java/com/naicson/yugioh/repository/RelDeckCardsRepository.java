@@ -21,12 +21,8 @@ public interface RelDeckCardsRepository extends JpaRepository<RelDeckCards, Long
 	@Query(value = " select * from tab_rel_deck_cards rel "
 			+ " inner join tab_decks deck on deck.id = rel.deck_id "
 			+ " inner join tab_cards card on card.numero = rel.card_numero "
-			+ " where card_numero = :cardNumber and deck.is_konami_deck = 'S'",			
+			+ " where card_numero = :cardNumber and deck.is_konami_deck = 'S'",
 			nativeQuery = true)
-	
-//	@Override
-//	List<RelDeckCards> findAll(Specification<GeneralSpecification> spec);
-	
 	List<RelDeckCards> findCardByNumberAndIsKonamiDeck(Long cardNumber);
 
 	List<RelDeckCards> findByDeckId(Long deckId);

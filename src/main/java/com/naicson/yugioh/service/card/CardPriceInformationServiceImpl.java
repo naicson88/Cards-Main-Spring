@@ -228,7 +228,7 @@ public class CardPriceInformationServiceImpl {
 			spec.add(new SearchCriteria("cardSetCode", SearchOperation.MATCH, price.getCardSetCode()));
 			List<RelDeckCards> relCards = relDeckService.findByCriterias(spec);
 
-			if (relCards != null && !relCards.isEmpty() && relCards.size() == 1) {
+			if (relCards != null && relCards.size() == 1) {
 				logger.info("Updating Card NOT FOUND {} - {}", price.getCardSetCode(), price.getCardRarity());			
 				this.saveNewCardPrice(price, relCards);
 			} else

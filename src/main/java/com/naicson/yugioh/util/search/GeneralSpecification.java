@@ -20,9 +20,7 @@ import com.naicson.yugioh.entity.TipoCard;
 public class GeneralSpecification<T> implements Specification<T> {
 
 	private static final long serialVersionUID = 1L;
-
 	private List<SearchCriteria> list;
-
 
 	public GeneralSpecification() {
 		this.list = new ArrayList<>();
