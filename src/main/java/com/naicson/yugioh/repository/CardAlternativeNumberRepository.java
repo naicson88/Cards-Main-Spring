@@ -18,7 +18,7 @@ public interface CardAlternativeNumberRepository extends JpaRepository<CardAlter
 
 	List<CardAlternativeNumber> findAllByCardId(Integer id);
 	
-	@Query(value = "select * from tab_cards where id = (select card_id from tab_card_alternative_numbers where card_alternative_number  = :cardNumber)"
+	@Query(value = "select * from tab_cards where id = (select card_id from tab_card_alternative_numbers where card_alternative_number = :cardNumber)"
 			, nativeQuery = true)
 	Optional<Card> findCardByCardNumber(Long cardNumber);
 

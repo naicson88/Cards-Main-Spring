@@ -10,7 +10,6 @@ com\naicson\yugioh\data\bridge\source\set\RelDeckCardsRelationBySource.class
 com\naicson\yugioh\controller\UserController.class
 com\naicson\yugioh\service\setcollection\UserSetCollectionServiceImpl.class
 com\naicson\yugioh\entity\RelDeckCards.class
-com\naicson\yugioh\util\exceptions\ErrorMessage.class
 com\naicson\yugioh\data\dto\cards\CardRarityDTO.class
 com\naicson\yugioh\entity\RelDeckCards$RelDeckCardsBuilder.class
 com\naicson\yugioh\data\dto\home\HomeDTO.class
@@ -44,14 +43,12 @@ com\naicson\yugioh\service\setcollection\SetsBySetTypeImpl.class
 com\naicson\yugioh\entity\Archetype.class
 com\naicson\yugioh\util\LogginFilter.class
 com\naicson\yugioh\entity\auth\User.class
-com\naicson\yugioh\util\exceptions\MessageResponse.class
 com\naicson\yugioh\util\enums\CardStats.class
 com\naicson\yugioh\controller\ArchetypeController.class
 com\naicson\yugioh\service\interfaces\CardViewsInformationDetails.class
 com\naicson\yugioh\data\bridge\source\KonamiSourceBridge.class
 com\naicson\yugioh\entity\stats\CardPriceInformation.class
 com\naicson\yugioh\service\user\UserDetailsImpl.class
-com\naicson\yugioh\data\dto\cards\AddNewCardToDeckDTO.class
 com\naicson\yugioh\entity\auth\SignupRequest.class
 com\naicson\yugioh\service\deck\UserDeckServiceImpl.class
 com\naicson\yugioh\service\interfaces\UtilitariosService.class
@@ -71,7 +68,6 @@ com\naicson\yugioh\service\deck\DeckServiceImpl$1.class
 com\naicson\yugioh\data\dao\CardDAO.class
 com\naicson\yugioh\repository\RelDeckCardsRepository.class
 com\naicson\yugioh\util\GeneralFunctions.class
-com\naicson\yugioh\repository\UtilitariosRepository.class
 com\naicson\yugioh\data\strategy\setDetails\DeckDetailsStrategy.class
 com\naicson\yugioh\util\enums\GenericTypesCards.class
 com\naicson\yugioh\util\mail\EmailContentBuilder.class
@@ -79,12 +75,9 @@ com\naicson\yugioh\data\dto\set\CardsOfUserSetsDTO.class
 com\naicson\yugioh\util\enums\CardStats$1.class
 com\naicson\yugioh\data\bridge\source\set\KonamiSourceDeckBridge.class
 com\naicson\yugioh\entity\UserRelDeckCards.class
-com\naicson\yugioh\data\dto\CardYuGiOhAPI.class
-com\naicson\yugioh\util\exceptions\ApiExceptions.class
 com\naicson\yugioh\data\builders\UserSetCollectionBuilder.class
 com\naicson\yugioh\YugiohApplication.class
 com\naicson\yugioh\data\bridge\source\set\UserSourceCollectionBridge.class
-com\naicson\yugioh\util\search\CardSpecification.class
 com\naicson\yugioh\repository\RoleRepository.class
 com\naicson\yugioh\data\dao\DeckDAO.class
 com\naicson\yugioh\service\user\UserDetailsServiceImpl.class
@@ -94,7 +87,6 @@ com\naicson\yugioh\data\chainResponsability\user\ValidateUser$ValidateUserPasswo
 com\naicson\yugioh\service\setcollection\SetsUtils.class
 com\naicson\yugioh\entity\UserRelDeckCards$Builder.class
 com\naicson\yugioh\repository\CardViewsInformationRepository.class
-com\naicson\yugioh\data\dto\CollectionDeck.class
 com\naicson\yugioh\controller\SetCollectionController.class
 com\naicson\yugioh\service\deck\RelDeckCardsServiceImpl.class
 com\naicson\yugioh\data\dto\set\DeckDTO.class
@@ -104,14 +96,12 @@ com\naicson\yugioh\consumer\CardConsumerRabbitMQ.class
 com\naicson\yugioh\repository\ArchetypeRepository.class
 com\naicson\yugioh\entity\DeckRarityQuantity.class
 com\naicson\yugioh\data\bridge\source\set\SourceSetBridge.class
-com\naicson\yugioh\data\dto\KonamiDeck.class
 com\naicson\yugioh\entity\Atributo.class
 com\naicson\yugioh\repository\UserRepository.class
 com\naicson\yugioh\service\deck\UserRelDeckCardsServiceImpl.class
 com\naicson\yugioh\util\enums\SetType.class
 com\naicson\yugioh\repository\sets\UserDeckRepository.class
 com\naicson\yugioh\util\enums\CardStats$3.class
-com\naicson\yugioh\data\dto\set\SetCollectionDto.class
 com\naicson\yugioh\data\dto\home\RankingForHomeDTO.class
 com\naicson\yugioh\data\bridge\source\set\UserSourceDeckBridge.class
 com\naicson\yugioh\data\composite\JsonConverterValidationComposite.class
@@ -119,12 +109,10 @@ com\naicson\yugioh\data\strategy\setDetails\SetDetailsType.class
 com\naicson\yugioh\repository\UserSetCollectionRepository.class
 com\naicson\yugioh\data\bridge\source\SourceBridge.class
 com\naicson\yugioh\entity\stats\CardViewsInformation.class
-com\naicson\yugioh\data\builders\ResponseBuilder.class
 com\naicson\yugioh\entity\Deck.class
 com\naicson\yugioh\controller\UserDeckController.class
 com\naicson\yugioh\service\setcollection\ISetsByType.class
 com\naicson\yugioh\data\dto\set\DeckAndSetsBySetTypeDTO.class
-com\naicson\yugioh\util\exceptions\ApiExceptionHandler.class
 com\naicson\yugioh\data\dto\cards\CardDetailsDTO.class
 com\naicson\yugioh\data\composite\ConsumerTypeValidation.class
 com\naicson\yugioh\controller\UserSetCollectionController.class
@@ -145,7 +133,6 @@ com\naicson\yugioh\service\card\CardRegistry.class
 com\naicson\yugioh\util\enums\ECardRarity.class
 com\naicson\yugioh\data\security\AuthEntryPointJwt.class
 com\naicson\yugioh\data\dto\cards\CardOfArchetypeDTO.class
-com\naicson\yugioh\entity\Utilitarios.class
 com\naicson\yugioh\data\bridge\source\SourceTypes.class
 com\naicson\yugioh\data\bridge\source\UserSourceBridge.class
 com\naicson\yugioh\util\enums\CardAttributes.class
@@ -167,7 +154,6 @@ com\naicson\yugioh\controller\HomeController.class
 com\naicson\yugioh\data\dto\set\SetEditDTO.class
 com\naicson\yugioh\controller\CardController.class
 com\naicson\yugioh\data\builders\DeckBuilder.class
-com\naicson\yugioh\data\dto\set\AssociationDTO.class
 com\naicson\yugioh\controller\CacheController.class
 com\naicson\yugioh\data\dto\home\GeneralSearchDTO.class
 com\naicson\yugioh\service\card\CardServiceImpl.class

@@ -7,7 +7,6 @@ import com.naicson.yugioh.entity.TipoCard;
 
 @Repository
 public interface TipoCardRepository extends JpaRepository<TipoCard, Long> {
-
 	TipoCard findByName(String race);
 
 }

@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GeneralConfigs {
-//    @Bean
-//    public ApiExceptionHandler handler (){
-//        return new ApiExceptionHandler();
-//    }
+    @Bean
+    public ApiExceptionHandler handler (){
+        return new ApiExceptionHandler();
+    }
 }

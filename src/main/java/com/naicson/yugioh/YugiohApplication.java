@@ -4,7 +4,6 @@ package com.naicson.yugioh;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -14,11 +13,10 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class YugiohApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(YugiohApplication.class, args);
-
-	}	
-	
+	}
 	
 // Open Browser tab when start aplication
 	@PostConstruct

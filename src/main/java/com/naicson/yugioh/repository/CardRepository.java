@@ -1,18 +1,16 @@
  package com.naicson.yugioh.repository;
 
-import java.util.List;
-import java.util.Optional;
+ import com.naicson.yugioh.entity.Card;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.Pageable;
+ import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+ import org.springframework.data.jpa.repository.Query;
+ import org.springframework.stereotype.Repository;
 
-import javax.persistence.Tuple;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-
-import com.naicson.yugioh.entity.Card;
+ import javax.persistence.Tuple;
+ import java.util.List;
+ import java.util.Optional;
 
 
 @Repository
@@ -29,8 +27,8 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 	void delete (Card card);
 	
 	Card findByNumero(String numero);
-	
-	@Query(value = "SELECT * FROM tab_cards WHERE COD_ARCHETYPE = :archId",  nativeQuery = true)	
+
+	@Query(value = "SELECT * FROM tab_cards WHERE COD_ARCHETYPE = :archId",  nativeQuery = true)
 	Optional<List<Card>> findByArchetype(Integer archId);
 	
 	@Query(value = "SELECT * FROM tab_cards ORDER BY RAND() LIMIT 30",  nativeQuery = true)

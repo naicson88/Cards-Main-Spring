@@ -1,21 +1,17 @@
 package com.naicson.yugioh.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.TesteDTO;
@@ -48,10 +44,24 @@ public class ArchetypeController {
 	@PostMapping("/teste")
 	public ResponseEntity<TesteDTO> teste(@RequestBody TesteDTO dto){
 
-		if(dto != null)
+		if(dto.getTeste().equals("bbb"))
 			throw new IllegalArgumentException("Teste Retorno");
+
+		if(dto.getTeste().equals("aaa"))
+			throw new NoSuchElementException("Retorno NoSuch");
+
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 		
+	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<String> handleNoSuchElementFoundException(NoSuchElementException exception, HttpServletRequest request) {
+		System.out.println(request.getContextPath().toString());
+		System.out.println(request.getRequestURL().toString());
+		return ResponseEntity
+				.status(HttpStatus.NOT_FOUND)
+				.body(exception.getMessage());
 	}
 	
 	

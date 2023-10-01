@@ -59,6 +59,7 @@ public class CardConsumerRabbitMQ {
 		if (cardFound == null)
 			cardFound = facade.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered());//.get(0);
 
+
 		return cardFound.getId().longValue();
 	}
 
