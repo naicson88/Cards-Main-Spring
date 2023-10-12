@@ -1,12 +1,15 @@
 package com.naicson.yugioh.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Schema
 public class TesteDTO {
-	
+	@Schema(defaultValue = "Teste Schema")
 	private String teste;
 	private LocalDate date;
 	private Integer age;

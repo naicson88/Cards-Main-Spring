@@ -4,10 +4,10 @@ import cardscommons.exceptions.ApiExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class GeneralConfigs {
-    @Bean
-    public ApiExceptionHandler handler (){
-        return new ApiExceptionHandler();
-    }
+//    @Bean
+//    public ApiExceptionHandler handler (){
+//        return new ApiExceptionHandler();
+//    }
 }

@@ -3,6 +3,7 @@ package com.naicson.yugioh.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.naicson.yugioh.entity.Archetype;
@@ -45,24 +47,26 @@ public class ArchetypeController {
 	public ResponseEntity<TesteDTO> teste(@RequestBody TesteDTO dto){
 
 		if(dto.getTeste().equals("bbb"))
-			throw new IllegalArgumentException("Teste Retorno");
+			throw new SecurityException("Teste Retorno");
 
 		if(dto.getTeste().equals("aaa"))
-			throw new NoSuchElementException("Retorno NoSuch");
+			throw new EntityNotFoundException("EntityNotFound bad request");
+
+		Double.parseDouble(dto.getTeste());
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 		
 	}
 
-	@ExceptionHandler(NoSuchElementException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<String> handleNoSuchElementFoundException(NoSuchElementException exception, HttpServletRequest request) {
-		System.out.println(request.getContextPath().toString());
-		System.out.println(request.getRequestURL().toString());
-		return ResponseEntity
-				.status(HttpStatus.NOT_FOUND)
-				.body(exception.getMessage());
-	}
+//	@ExceptionHandler(Exception.class)
+//	@ResponseStatus(HttpStatus.NOT_FOUND)
+//	public ResponseEntity<String> handleNoSuchElementFoundException(Exception exception, HttpServletRequest request) {
+//		System.out.println(request.getContextPath().toString());
+//		System.out.println(request.getRequestURL().toString());
+//		return ResponseEntity
+//				.status(HttpStatus.NOT_FOUND)
+//				.body(exception.getMessage());
+//	}
 	
 	
 }
