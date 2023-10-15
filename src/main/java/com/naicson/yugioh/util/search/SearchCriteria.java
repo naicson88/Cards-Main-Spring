@@ -22,13 +22,13 @@ public class SearchCriteria {
 		
 	}
 	
-	public SearchCriteria(final String key, final SearchOperation operation, final List<String> values) {
-		super();
-		this.key = key;
-		this.operation = operation;
-		this.values = values;
-		
-	}
+//	public SearchCriteria(final String key, final SearchOperation operation, final List<String> values) {
+//		super();
+//		this.key = key;
+//		this.operation = operation;
+//		this.values = values;
+//
+//	}
 	
 	
 	public String getKey() {

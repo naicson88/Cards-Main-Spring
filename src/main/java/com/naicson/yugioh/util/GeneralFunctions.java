@@ -20,8 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.naicson.yugioh.service.user.UserDetailsImpl;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
-
 public abstract class GeneralFunctions {
 	
 	private GeneralFunctions() {}
@@ -98,8 +96,8 @@ public abstract class GeneralFunctions {
 //			}
 
 		} catch (IOException e) {
-			e.getMessage();
-			throw new ErrorMessage(e.getMessage());
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getMessage());
 		}
 	}
 

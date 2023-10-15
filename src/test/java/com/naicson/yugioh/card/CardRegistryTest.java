@@ -15,7 +15,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
+
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.Card;

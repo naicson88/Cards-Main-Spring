@@ -20,6 +20,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- DEPENDENCIA PRÓPRIA, QUANDO DA NPM INSTALL O MAVEN COLOCA A DEPENDENCIA NO REPO LOCAL -->
+		<dependency>
+			<groupId>cardscommons</groupId>
+			<artifactId>Cards-Commons</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -148,6 +154,11 @@
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 			<version>1.10.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 
 	</dependencies>

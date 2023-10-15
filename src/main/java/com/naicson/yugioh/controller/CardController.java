@@ -1,9 +1,17 @@
 package com.naicson.yugioh.controller;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
+import com.naicson.yugioh.data.dto.RelUserCardsDTO;
+import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
+import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
+import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
+import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.service.card.CardServiceImpl;
+import com.naicson.yugioh.service.deck.DeckServiceImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.search.SearchCriteria;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,30 +23,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.naicson.yugioh.data.dto.RelUserCardsDTO;
-import com.naicson.yugioh.data.dto.cards.CardDetailsDTO;
-import com.naicson.yugioh.data.dto.cards.CardOfUserDetailDTO;
-import com.naicson.yugioh.data.dto.cards.CardsSearchDTO;
-import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.service.card.CardServiceImpl;
-import com.naicson.yugioh.service.deck.DeckServiceImpl;
-import com.naicson.yugioh.service.interfaces.CardDetailService;
-import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
-import com.naicson.yugioh.util.search.SearchCriteria;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -53,12 +41,6 @@ public class CardController {
 	
 	Logger logger = LoggerFactory.getLogger(CardController.class);
 	
-//	@Operation(summary="Return Card by its Number", security = { @SecurityRequirement(name = "bearer-key") })
-//	@GetMapping(path = {"num/{numero}"})
-//	public Card listarNumero(@PathVariable("numero") Long numero) {
-//		return cardService.listarNumero(numero);
-//	}
-//	
 	@Operation(summary="Return Card details by its Number", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(path = {"number/{cardNumero}"})
 	public ResponseEntity<CardDetailsDTO> procuraPorCardNumero(@PathVariable("cardNumero") Long cardNumero) {
@@ -106,7 +88,7 @@ public class CardController {
 	
 	@GetMapping(path = {"/rel-user-cards"})
 	@Operation(summary="Search for cards that user have", security = { @SecurityRequirement(name = "bearer-key") })
-	public ResponseEntity<List<RelUserCardsDTO>> searchForCardsUserHave(@RequestParam int[] cardsNumbers) throws SQLException, ErrorMessage {
+	public ResponseEntity<List<RelUserCardsDTO>> searchForCardsUserHave(@RequestParam int[] cardsNumbers) {
 
 		List<RelUserCardsDTO> relList =	cardService.searchForCardsUserHave(cardsNumbers);
 		

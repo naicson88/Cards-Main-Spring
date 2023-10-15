@@ -1,8 +1,8 @@
 package com.naicson.yugioh.consumer;
 
 import java.util.Arrays;
-import java.util.List;
 
+import cardscommons.dto.PriceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,12 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.dto.PriceDTO;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
 
 @Component
 public class PriceConsumerRabbitMQ {
-	
 	@Autowired
 	ConsumerUtils consumerUtils;
 	
@@ -29,7 +27,6 @@ public class PriceConsumerRabbitMQ {
 	@RabbitListener(queues = "${rabbitmq.queue.setprice}", autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class})
 	public void consumer(String json) {
-		
 		try {
 			logger.info("Starting Update Set Price {} ", json);
 			
@@ -39,7 +36,7 @@ public class PriceConsumerRabbitMQ {
 			priceService.updateCardPrice(Arrays.asList(prices));
 			
 		} catch (ListenerExecutionFailedException e) {
-			logger.error( "Error while trying consume SET_PRICE: {}", json);
+			logger.error( " Error while trying consume SET_PRICE: {}", json);
 		}
 
 	}

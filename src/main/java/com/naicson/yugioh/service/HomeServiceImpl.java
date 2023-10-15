@@ -60,18 +60,18 @@ public class HomeServiceImpl implements HomeDetailService {
 		HomeDTO homeDto = new HomeDTO();
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 
-			homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
-			homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
-			homeDto.setQtdTins(homeRepository.returnQuantitySetType(SetType.TIN.getType(), user.getId()));
-			homeDto.setQtdCards(homeRepository.returnQuantityCardsUserHave(user.getId()));
+		homeDto.setQtdDeck(homeRepository.returnQuantitySetType(SetType.DECK.getType(), user.getId()));
+		homeDto.setQtdBoxes(homeRepository.returnQuantitySetType(SetType.BOX.getType(), user.getId()));
+		homeDto.setQtdTins(homeRepository.returnQuantitySetType(SetType.TIN.getType(), user.getId()));
+		homeDto.setQtdCards(homeRepository.returnQuantityCardsUserHave(user.getId()));
 
-			homeDto.setLastSets(this.lastSetsAddedToUser());
-			homeDto.setLastCards(this.lastCardsAddedToUsuer(homeRepository.lastCardsAddedToUser(user.getId())));
-			homeDto.setHotNews(this.hotNews(homeRepository.getHotNews()));
+		homeDto.setLastSets(this.lastSetsAddedToUser());
+		homeDto.setLastCards(this.lastCardsAddedToUsuer(homeRepository.lastCardsAddedToUser(user.getId())));
+		homeDto.setHotNews(this.hotNews(homeRepository.getHotNews()));
 
-			homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
-			homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
-			homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());
+		homeDto.setHighCards(this.cardInfoService.getWeeklyHighStats());
+		homeDto.setLowCards(this.cardInfoService.getWeeklyLowStats());
+		homeDto.setWeeklyMostView(this.cardViewService.getWeeklyMostViewed());
 
 		return homeDto;
 	}

@@ -1,22 +1,7 @@
 package com.naicson.yugioh.service.card;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.naicson.yugioh.consumer.CollectionDeckConsumerRabbitMQ;
+import cardscommons.dto.CardYuGiOhAPI;
 import com.naicson.yugioh.data.builders.CardBuilder;
-import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
 import com.naicson.yugioh.entity.Archetype;
 import com.naicson.yugioh.entity.Atributo;
 import com.naicson.yugioh.entity.Card;
@@ -26,6 +11,17 @@ import com.naicson.yugioh.repository.TipoCardRepository;
 import com.naicson.yugioh.service.ArchetypeServiceImpl;
 import com.naicson.yugioh.util.enums.CardProperty;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class BuildCardFromYuGiOhAPI {
@@ -42,7 +38,7 @@ public class BuildCardFromYuGiOhAPI {
 	Logger logger = LoggerFactory.getLogger(BuildCardFromYuGiOhAPI.class);
 	
 	public Card createCard(CardYuGiOhAPI apiCard) {
-
+		logger.info("Creating new Card... {}", apiCard.getName());
 		return  CardBuilder.builder()
 				.numero(apiCard.getId())
 				.categoria(apiCard.getType())
@@ -105,7 +101,7 @@ public class BuildCardFromYuGiOhAPI {
 		String attr = null;
 
 		if (card.getType().contains("Spell") || card.getType().contains("Trap"))
-			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
+			attr = card.getType().contains("Spell") ? "SPELL" : "TRAP";
 		else if (card.getType().equalsIgnoreCase("Skill Card"))
 			attr = "SKILL";
 		else

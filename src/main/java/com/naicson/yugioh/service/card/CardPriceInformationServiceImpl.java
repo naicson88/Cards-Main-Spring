@@ -9,28 +9,26 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import cardscommons.dto.PriceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.data.dto.PriceDTO;
 import com.naicson.yugioh.data.dto.home.RankingForHomeDTO;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.stats.CardPriceInformation;
 import com.naicson.yugioh.repository.CardPriceInformationRepository;
 import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
-import com.naicson.yugioh.service.interfaces.CardPriceInformationService;
 import com.naicson.yugioh.util.enums.CardStats;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 import com.naicson.yugioh.util.search.SearchCriteria;
 import com.naicson.yugioh.util.search.SearchOperation;
 
 @Service
-public class CardPriceInformationServiceImpl implements CardPriceInformationService {
+public class CardPriceInformationServiceImpl {
 
 	@Autowired
 	private CardPriceInformationRepository cardInfoRepository;
@@ -43,7 +41,6 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 
 	Logger logger = LoggerFactory.getLogger(CardPriceInformationServiceImpl.class);
 
-	@Override
 	public void saveWeeklyPercentageVariable(CardPriceInformation cardInfo) {
 		this.validateWeeklyPercentageObj(cardInfo);
 		
@@ -70,39 +67,22 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	}
 
 	private void validateWeeklyPercentageObj(CardPriceInformation cardInfo) {
-
-		try {
-			if (cardInfo == null) {
-				logger.error("CARD INFORMATION WAS NULL, CANNOT CALCULATE WEEKLY PERCENTAGE");
-				throw new ErrorMessage("Card Information is null, cannot calculate weekly percentage");
-			}
-
-			if (cardInfo.getCurrentPrice() == null || cardInfo.getCurrentPrice() == 0.0) {
-				logger.error("Card current price is invalid to calculate weekly percentage");
-				throw new ErrorMessage("Card current price is invalid to calculate weekly percentage");
-			}
-
-			if (cardInfo.getPrice2() == null || cardInfo.getPrice2() == 0.0) {
-				logger.error("Card price_2  is invalid to calculate weekly percentage");
-				throw new ErrorMessage("Card price_2 is invalid to calculate weekly percentage");
-			}
-		} catch (Exception e) {
-			e.getMessage();
-		}
+		if (cardInfo == null)
+			throw new IllegalArgumentException("Card Information is null, cannot calculate weekly percentage");
+		if (cardInfo.getCurrentPrice() == null || cardInfo.getCurrentPrice() == 0.0)
+			throw new IllegalArgumentException("Card current price is invalid to calculate weekly percentage");
+		if (cardInfo.getPrice2() == null || cardInfo.getPrice2() == 0.0)
+			throw new IllegalArgumentException("Card price_2 is invalid to calculate weekly percentage");
 
 	}
-
-	@Override
 	public List<RankingForHomeDTO> getWeeklyHighStats() {
 		return this.findWeeklyCards(CardStats.HIGH);
 	}
 
-	@Override
 	public List<RankingForHomeDTO> getWeeklyLowStats() {
 		return this.findWeeklyCards(CardStats.LOW);
 	}
 
-	@Override
 	public List<RankingForHomeDTO> findWeeklyCards(CardStats stats) {
 
 		List<RankingForHomeDTO> rankingByStatsList = new ArrayList<>();
@@ -163,19 +143,10 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 	}
 
 	private void validadeStatsList(List<CardPriceInformation> cardsByStats, CardStats stats) {
-
-		try {
-			if (cardsByStats == null || cardsByStats.isEmpty()) {
-				logger.error("List of cards with stats {} is empty", stats);
-				throw new ErrorMessage("List of cards with stats " + stats.toString() + " is empty");
-			}
-		} catch (Exception e) {
-			throw new ErrorMessage("Something Bad Happened when validade Stats List");
-		}
-
+		if (cardsByStats == null || cardsByStats.isEmpty())
+			throw new IllegalArgumentException("List of cards with stats " + stats.toString() + " is empty");
 	}
 
-	@Override
 	public List<CardPriceInformation> getAllPricesOfACardById(Integer cardId) {
 
 		if (cardId == null || cardId == 0)
@@ -257,7 +228,7 @@ public class CardPriceInformationServiceImpl implements CardPriceInformationServ
 			spec.add(new SearchCriteria("cardSetCode", SearchOperation.MATCH, price.getCardSetCode()));
 			List<RelDeckCards> relCards = relDeckService.findByCriterias(spec);
 
-			if (relCards != null && !relCards.isEmpty() && relCards.size() == 1) {
+			if (relCards != null && relCards.size() == 1) {
 				logger.info("Updating Card NOT FOUND {} - {}", price.getCardSetCode(), price.getCardRarity());			
 				this.saveNewCardPrice(price, relCards);
 			} else

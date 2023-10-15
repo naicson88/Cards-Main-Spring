@@ -1,11 +1,11 @@
 package com.naicson.yugioh.repository;
 
+import com.naicson.yugioh.entity.LogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.naicson.yugioh.entity.Utilitarios;
+import java.util.UUID;
 
 @Repository
-public interface UtilitariosRepository extends JpaRepository<Utilitarios, Integer>{
-	
+public interface LogEntityRepository extends JpaRepository<LogEntity, UUID> {
 }

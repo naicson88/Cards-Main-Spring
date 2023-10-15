@@ -12,7 +12,6 @@ import com.naicson.yugioh.entity.Archetype;
 public interface ArchetypeRepository extends JpaRepository<Archetype, Integer> {
 
 	Optional<Archetype> findById(Integer archId);
-
 	Archetype findByArcName(String archetype);
 
 

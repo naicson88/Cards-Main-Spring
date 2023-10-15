@@ -1,25 +1,21 @@
 package com.naicson.yugioh.service.card;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.mapping.Collection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.naicson.yugioh.data.dto.CardYuGiOhAPI;
+import cardscommons.dto.CardYuGiOhAPI;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 import com.naicson.yugioh.repository.CardAlternativeNumberRepository;
 import com.naicson.yugioh.repository.CardRepository;
 import com.naicson.yugioh.util.GeneralFunctions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class CardRegistry {
@@ -42,10 +38,10 @@ public class CardRegistry {
 	private String imgCardUrl;
 	@Value("${yugioh.api.url.img.cropped}")
 	private String imgCroppedCardUrl;
-	
 
 
-	@Transactional
+
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
 		
 		if(cardsToBeRegistered == null)

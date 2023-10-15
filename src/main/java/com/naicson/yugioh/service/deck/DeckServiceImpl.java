@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +49,6 @@ import com.naicson.yugioh.service.interfaces.DeckDetailService;
 import com.naicson.yugioh.service.setcollection.SetsUtils;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.ECardRarity;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class DeckServiceImpl implements DeckDetailService {
@@ -175,7 +173,8 @@ public class DeckServiceImpl implements DeckDetailService {
 	private String fullCardTypeDescription(CardSetDetailsDTO card) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		builder.append(card.getTipo().getName()+" ");
+		if(card.getTipo() != null)
+			builder.append(card.getTipo().getName()+" ");
 		if(card.getCategoria() != null && !card.getCategoria().isBlank()) {
 			if(card.getCategoria().equals("Tuner"))
 				builder.append("/ Tuner ");
@@ -276,7 +275,7 @@ public class DeckServiceImpl implements DeckDetailService {
 				RelDeckCards::getCard_raridade, Collectors.counting()
 				));
 		
-		deck = setMappedDeckRarities(deck, mapRarities);
+		setMappedDeckRarities(deck, mapRarities);
 		
 		deck.getQuantity().setTotal(listRel.size());
 		
@@ -312,7 +311,7 @@ public class DeckServiceImpl implements DeckDetailService {
 }
 
 	@Override
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public Deck saveKonamiDeck(Deck kDeck) {
 		
 		if(kDeck == null || StringUtils.isBlank(kDeck.getNome()))
@@ -321,7 +320,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		List<Deck> isAlreadyRegistered = findByNome(kDeck.getNome());
 
 		if (isAlreadyRegistered != null && !isAlreadyRegistered.isEmpty())
-			throw new ErrorMessage(HttpStatus.NOT_ACCEPTABLE, "Deck is already registered: " + kDeck.getNome());
+			throw new IllegalArgumentException("Deck is already registered: " + kDeck.getNome());
 		
 		kDeck = deckRepository.save(kDeck);	
 
@@ -400,7 +399,7 @@ public class DeckServiceImpl implements DeckDetailService {
 		logger.info("Ending update Cards Quantity {} cards were updated!", counter);		
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public void updateSetCodeQuantity(String setCode, Integer quantity) {	
 		if(quantity == null || setCode == null)
 			throw new IllegalAccessError("Invalid information to update SetCode Quantity");

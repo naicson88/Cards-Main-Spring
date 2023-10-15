@@ -1,27 +1,20 @@
 package com.naicson.yugioh.consumer;
 
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.composite.JsonConverterValidationComposite;
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.dto.KonamiDeck;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.util.enums.ECardRarity;
-import com.naicson.yugioh.util.enums.SetType;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @SuppressWarnings("rawtypes")
@@ -32,32 +25,12 @@ public class ConsumerUtils {
 
 	Logger logger = LoggerFactory.getLogger(ConsumerUtils.class);
 
-	public Deck createNewDeck(KonamiDeck kDeck) {
-
-		if (kDeck == null)
-			throw new IllegalArgumentException("Informed Konami Deck is invalid!");
-
-		return DeckBuilder.builder()
-				.dt_criacao(new Date())
-				.imagem(kDeck.getImagem())
-				.lancamento(kDeck.getLancamento())
-				.nome(kDeck.getNome().trim())
-				.relDeckCards(kDeck.getListRelDeckCards())
-				.setType(SetType.valueOf(kDeck.getSetType()))
-				.isSpeedDuel(kDeck.getIsSpeedDuel())
-				.imgurUrl(kDeck.getImagem())
-				.isBasedDeck(kDeck.getIsBasedDeck())
-				.setCode(kDeck.getSetCode())
-				.description(kDeck.getDescription())
-				.build();
-	}
-
 	public Deck setDeckIdInRelDeckCards(Deck newDeck, Long deckId) {
 
 		if (deckId == null || deckId == 0)
 			throw new IllegalArgumentException("Generated Deck Id is invalid.");
 
-		newDeck.getRel_deck_cards().stream().forEach(rel -> {
+		newDeck.getRel_deck_cards().forEach(rel -> {
 			rel.setDeckId(deckId);
 			rel.setQuantity(1);
 			rel.setCardId(alternativeService.findByCardAlternativeNumber(rel.getCardNumber()).getCardId());
@@ -82,6 +55,7 @@ public class ConsumerUtils {
 	}
 
 	public Object convertJsonToDTO(String json, String obj) {
+		logger.info("Converting JSON to DTO...{}", json);
 		try {
 
 			for (JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {
@@ -99,7 +73,7 @@ public class ConsumerUtils {
 		} catch (JsonProcessingException e) {
 			logger.error(" Error while trying parse JSON #convertJsonToDTO");
 			e.printStackTrace();
-			throw new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 

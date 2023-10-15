@@ -1,8 +1,8 @@
 package com.naicson.yugioh.mocks;
 
-import java.util.List;
+import cardscommons.dto.AssociationDTO;
 
-import com.naicson.yugioh.data.dto.set.AssociationDTO;
+import java.util.List;
 
 public class AssociationDTOMock {
 	

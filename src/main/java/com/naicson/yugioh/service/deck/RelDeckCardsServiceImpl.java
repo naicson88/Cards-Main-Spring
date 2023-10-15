@@ -22,7 +22,6 @@ import com.naicson.yugioh.service.card.CardAlternativeNumberService;
 import com.naicson.yugioh.service.card.CardServiceImpl;
 import com.naicson.yugioh.service.interfaces.RelDeckCardsDetails;
 import com.naicson.yugioh.util.enums.ECardRarity;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Service
@@ -52,7 +51,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 		List<RelDeckCards> relSaved  = relDeckCardsRepository.saveAll(listRelDeckCards);
 		
 		if(listRelDeckCards.size() != relSaved.size()) 
-			throw new ErrorMessage("It was not possible save all Relations");	
+			throw new IllegalArgumentException("It was not possible save all Relations");
 		
 		return relSaved;
 	}

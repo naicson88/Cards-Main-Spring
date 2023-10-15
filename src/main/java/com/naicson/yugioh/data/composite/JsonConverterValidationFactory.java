@@ -3,11 +3,7 @@ package com.naicson.yugioh.data.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.naicson.yugioh.data.dto.CollectionDeck;
-import com.naicson.yugioh.data.dto.KonamiDeck;
-import com.naicson.yugioh.data.dto.PriceDTO;
-import com.naicson.yugioh.data.dto.cards.AddNewCardToDeckDTO;
-import com.naicson.yugioh.data.dto.set.SetCollectionDto;
+import cardscommons.dto.*;
 
 @SuppressWarnings("rawtypes")
 public class JsonConverterValidationFactory {
@@ -32,7 +28,7 @@ public class JsonConverterValidationFactory {
 		List<JsonConverterValidationComposite> criterias = new ArrayList<>();
 		
 		JsonConverterValidationComposite konamiDeckValidation = new ConsumerTypeValidation(KONAMI_DECK);
-		konamiDeckValidation.objetoRetorno = KonamiDeck.class;
+		konamiDeckValidation.objetoRetorno = KonamiDeckDTO.class;
 		criterias.add(konamiDeckValidation);
 		
 		JsonConverterValidationComposite consumerTypeValidation = new ConsumerTypeValidation(ADD_NEW_CARD);
@@ -40,11 +36,11 @@ public class JsonConverterValidationFactory {
 		criterias.add(consumerTypeValidation);
 		
 		JsonConverterValidationComposite collectionDeckValidation = new ConsumerTypeValidation(COLLECTION_DECK);
-		collectionDeckValidation.objetoRetorno = CollectionDeck.class;
+		collectionDeckValidation.objetoRetorno = CollectionDeckDTO.class;
 		criterias.add(collectionDeckValidation);
 		
 		JsonConverterValidationComposite setCollectionDeck = new ConsumerTypeValidation(SET_COLLECTION);
-		setCollectionDeck.objetoRetorno = SetCollectionDto.class;
+		setCollectionDeck.objetoRetorno = SetCollectionDTO.class;
 		criterias.add(setCollectionDeck);
 		
 		JsonConverterValidationComposite setPrice = new ConsumerTypeValidation(SET_PRICE);

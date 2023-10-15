@@ -17,7 +17,7 @@ public class CorrelationIdFilter  extends HttpFilter {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdFilter.class);
 	
 	private static final  String CORRELATION_ID = "correlation-id";
-	
+
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws IOException, ServletException {

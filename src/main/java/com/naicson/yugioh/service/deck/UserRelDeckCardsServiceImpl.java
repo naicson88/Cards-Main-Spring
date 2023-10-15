@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.UserRelDeckCards;
 import com.naicson.yugioh.repository.UserRelDeckCardsRepository;
-import com.naicson.yugioh.util.exceptions.ErrorMessage;
 
 @Service
 public class UserRelDeckCardsServiceImpl {
@@ -53,7 +52,7 @@ public class UserRelDeckCardsServiceImpl {
 		return userRelRepository.saveAll(listUserRel);	
 	}
 	
-	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = { Exception.class})
 	public List<UserRelDeckCards> saveAll(List<UserRelDeckCards> list){
 		
 		if(list == null || list.isEmpty())
@@ -63,7 +62,7 @@ public class UserRelDeckCardsServiceImpl {
 
 	}
 	
-	@Transactional(rollbackFor = { Exception.class, ErrorMessage.class})
+	@Transactional(rollbackFor = { Exception.class})
 	public List<UserRelDeckCards> saveUserRelDeckCards(Long deckId, List<UserRelDeckCards> list) {
 		
 		list.stream().filter(rel -> rel.getDeckId().equals(0L))

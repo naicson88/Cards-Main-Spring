@@ -2,7 +2,6 @@ package com.naicson.yugioh.data.dto.set;
 
 public class CardsOfUserSetsDTO {
 	
-
 	private String setName;
 	private String cardSetCode;
 	private String rarity;
@@ -10,8 +9,6 @@ public class CardsOfUserSetsDTO {
 	private Integer quantity;
 	private Integer id;
 	private String setType;
-	
-	
 	
 	public CardsOfUserSetsDTO(String setName, String cardSetCode, String rarity, Double price, Integer quantity,
 			Integer id, String setType) {
