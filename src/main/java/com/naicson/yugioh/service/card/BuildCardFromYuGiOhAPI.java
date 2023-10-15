@@ -38,7 +38,7 @@ public class BuildCardFromYuGiOhAPI {
 	Logger logger = LoggerFactory.getLogger(BuildCardFromYuGiOhAPI.class);
 	
 	public Card createCard(CardYuGiOhAPI apiCard) {
-
+		logger.info("Creating new Card... {}", apiCard.getName());
 		return  CardBuilder.builder()
 				.numero(apiCard.getId())
 				.categoria(apiCard.getType())
@@ -101,7 +101,7 @@ public class BuildCardFromYuGiOhAPI {
 		String attr = null;
 
 		if (card.getType().contains("Spell") || card.getType().contains("Trap"))
-			attr = card.getType().contains("Spell") ? "SPELL_CARD" : "TRAP_CARD";
+			attr = card.getType().contains("Spell") ? "SPELL" : "TRAP";
 		else if (card.getType().equalsIgnoreCase("Skill Card"))
 			attr = "SKILL";
 		else

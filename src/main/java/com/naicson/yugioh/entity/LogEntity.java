@@ -21,14 +21,27 @@ public class LogEntity {
     private ZonedDateTime time;
     private String path;
     private String exceptionType;
+    private String exceptionClassOccurred;
+    private String exceptionMethodOccurred;
 
-    public LogEntity(String message, int httpStatusCode, String httpStatus, ZonedDateTime time, String path, String exceptionType) {
+    public LogEntity(String message, int httpStatusCode, String httpStatus, ZonedDateTime time, String path, String exceptionType, String exceptionClassOccurred, String exceptionMethodOccurred) {
         this.message = message;
-        this.httpStatus = httpStatus;
         this.httpStatusCode = httpStatusCode;
+        this.httpStatus = httpStatus;
         this.time = time;
         this.path = path;
         this.exceptionType = exceptionType;
+        this.exceptionClassOccurred = exceptionClassOccurred;
+        this.exceptionMethodOccurred = exceptionMethodOccurred;
+    }
+
+    public LogEntity(String message, String path, String exceptionType) {
+        this.message = message;
+        this.path = path;
+        this.exceptionType = exceptionType;
+        this.time = ZonedDateTime.now();
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+        this.httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
     }
 
     public UUID getId() {
@@ -81,5 +94,33 @@ public class LogEntity {
 
     public void setTime(ZonedDateTime time) {
         this.time = time;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public int getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
+    public void setHttpStatusCode(int httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
+    }
+
+    public String getExceptionClassOccurred() {
+        return exceptionClassOccurred;
+    }
+
+    public void setExceptionClassOccurred(String exceptionClassOccurred) {
+        this.exceptionClassOccurred = exceptionClassOccurred;
+    }
+
+    public String getExceptionMethodOccurred() {
+        return exceptionMethodOccurred;
+    }
+
+    public void setExceptionMethodOccurred(String exceptionMethodOccurred) {
+        this.exceptionMethodOccurred = exceptionMethodOccurred;
     }
 }

@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,10 +38,10 @@ public class CardRegistry {
 	private String imgCardUrl;
 	@Value("${yugioh.api.url.img.cropped}")
 	private String imgCroppedCardUrl;
-	
 
 
-	@Transactional
+
+	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public List<Card> registryCardFromYuGiOhAPI(List<CardYuGiOhAPI> cardsToBeRegistered) {
 		
 		if(cardsToBeRegistered == null)

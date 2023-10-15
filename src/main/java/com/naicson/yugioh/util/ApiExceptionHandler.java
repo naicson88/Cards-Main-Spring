@@ -13,7 +13,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,14 +31,17 @@ public class ApiExceptionHandler {
     @Autowired
     LogEntityRepository logRepository;
 
+       public void saveLogEntity(Exception e, HttpStatus http, String url){
+           logRepository.save(new LogEntity(e.getMessage(), http.value(), http.getReasonPhrase(),
+                   ZonedDateTime.now(), url, e.getClass().toString(),e.getStackTrace()[0].getClassName(), e.getStackTrace()[0].getMethodName()));
+       }
 
        @ExceptionHandler(value = {Exception.class})
 		public ResponseEntity<ApiExceptionsDTO> handleExceptionError(Exception e, HttpServletRequest request) {
            ApiExceptionsDTO ex = new ApiExceptionsDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR,
                    ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString());
 
-           logRepository.save(new LogEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                   ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString()));
+           saveLogEntity(e, HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURL().toString());
 
 			logger.error(e.getMessage());
 			return ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR.value()).body(ex);
@@ -52,9 +54,11 @@ public class ApiExceptionHandler {
         String errorMessage = fieldErrors.get(0).getDefaultMessage();
         ApiExceptionsDTO ex = new ApiExceptionsDTO(errorMessage, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now(), request.getRequestURL().toString(), em.getClass().toString());
+//
+//        logRepository.save(new LogEntity(errorMessage, HttpStatus.BAD_REQUEST.value(),
+//                HttpStatus.BAD_REQUEST.getReasonPhrase(), ZonedDateTime.now(), request.getRequestURL().toString(), em.getClass().toString()));
 
-        logRepository.save(new LogEntity(errorMessage, HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(), ZonedDateTime.now(), request.getRequestURL().toString(), "MethodArgumentNotValidException"));
+        saveLogEntity(em, HttpStatus.BAD_REQUEST, request.getRequestURL().toString());
 
         logger.error("MethodArgumentNotValidException: {}", errorMessage);
         return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
@@ -66,8 +70,11 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleValiationException(IllegalArgumentException e, HttpServletRequest request) {
         ApiExceptionsDTO ex = new ApiExceptionsDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString());
-        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(), ZonedDateTime.now(), request.getRequestURL().toString(), "IllegalArgumentException"));
+
+//        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
+//                HttpStatus.BAD_REQUEST.getReasonPhrase(), ZonedDateTime.now(), request.getRequestURL().toString(), "IllegalArgumentException"));
+
+        saveLogEntity(e, HttpStatus.BAD_REQUEST, request.getRequestURL().toString());
 
         logger.error(e.getMessage());
         return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
@@ -79,8 +86,10 @@ public class ApiExceptionHandler {
         ApiExceptionsDTO ex = new ApiExceptionsDTO(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,
                 ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString());
 
-        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(),
-                ZonedDateTime.now(), request.getRequestURL().toString(), "NoSuchElementException"));
+//        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(),
+//                ZonedDateTime.now(), request.getRequestURL().toString(), "NoSuchElementException"));
+
+        saveLogEntity(e, HttpStatus.NOT_FOUND, request.getRequestURL().toString());
 
         logger.error("NoSuchElementException: {}", e.getMessage());
         return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
@@ -91,8 +100,10 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleEntityNotFoundlErros(EntityNotFoundException e, HttpServletRequest request){
         ApiExceptionsDTO ex = new ApiExceptionsDTO(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,
                 ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString());
-        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(),
-                ZonedDateTime.now(), request.getRequestURL().toString(), "EntityNotFoundException"));
+
+//        logRepository.save(new LogEntity(e.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(),
+//                ZonedDateTime.now(), request.getRequestURL().toString(), "EntityNotFoundException"));
+        saveLogEntity(e, HttpStatus.NOT_FOUND, request.getRequestURL().toString());
         logger.error(e.getMessage());
         return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
     }
@@ -101,9 +112,10 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleSQLException(SQLException sql, HttpServletRequest request) {
         ApiExceptionsDTO ex = new ApiExceptionsDTO(sql.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR,
                 ZonedDateTime.now(), request.getRequestURL().toString(), sql.getClass().toString());
-        logRepository.save(new LogEntity(sql.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ZonedDateTime.now(), request.getRequestURL().toString(), "SQLException"));
 
+//        logRepository.save(new LogEntity(sql.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+//                ZonedDateTime.now(), request.getRequestURL().toString(), "SQLException"));
+        saveLogEntity(sql, HttpStatus.NOT_FOUND, request.getRequestURL().toString());
         logger.error("SQLException: {}", ex.getMsg());
         return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -112,9 +124,10 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleErrorMessage(ErrorMessage em, HttpServletRequest request) {
         ApiExceptionsDTO ex = new ApiExceptionsDTO(em.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR,
                 ZonedDateTime.now(), request.getRequestURL().toString(), em.getClass().toString());
-        logRepository.save(new LogEntity(em.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ZonedDateTime.now(), request.getRequestURL().toString(), "ErrorMessage"));
 
+//        logRepository.save(new LogEntity(em.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+//                ZonedDateTime.now(), request.getRequestURL().toString(), "ErrorMessage"));
+        saveLogEntity(em, HttpStatus.NOT_FOUND, request.getRequestURL().toString());
         logger.error("ErrorMessage: {}", em.getMessage());
         return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }

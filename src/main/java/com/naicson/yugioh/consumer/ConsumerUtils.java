@@ -55,6 +55,7 @@ public class ConsumerUtils {
 	}
 
 	public Object convertJsonToDTO(String json, String obj) {
+		logger.info("Converting JSON to DTO...{}", json);
 		try {
 
 			for (JsonConverterValidationComposite<?> criteria : JsonConverterValidationFactory.getAllCriterias()) {

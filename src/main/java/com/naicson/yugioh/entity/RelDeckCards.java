@@ -37,9 +37,9 @@ public class RelDeckCards implements Serializable {
 	private String card_raridade;
 	private Date dt_criacao;	
 	@NotNull
-	private Boolean isSideDeck;
+	private boolean isSideDeck;
 	@NotNull
-	private Boolean isSpeedDuel;
+	private boolean isSpeedDuel;
 	@Column(nullable = false)
 	@NotNull
 	private Integer cardId;
