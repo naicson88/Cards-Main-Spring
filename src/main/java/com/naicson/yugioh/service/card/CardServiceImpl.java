@@ -19,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.Tuple;
 
+import com.naicson.yugioh.util.CardServicesUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -63,18 +64,17 @@ public class CardServiceImpl  {
 	@Autowired
 	CardAlternativeNumberService alternativeService;
 
-	CardPriceInformationServiceImpl cardPriceService;
+	@Autowired
+	private CardPriceInformationServiceImpl cardServicesUtil;
 	@Autowired
 	CardViewsInformationServiceImpl viewsService;
 	
 	Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);	
 	
-	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository,
-			@Lazy CardPriceInformationServiceImpl cardPriceService) {
+	public CardServiceImpl(CardRepository cardRepository, CardDAO dao, RelDeckCardsRepository relDeckCardsRepository) {
 		this.cardRepository = cardRepository;
 		this.dao = dao;
 		this.relDeckCardsRepository = relDeckCardsRepository;
-		this.cardPriceService = cardPriceService;
 	}
 
 	public CardServiceImpl() {
@@ -82,8 +82,8 @@ public class CardServiceImpl  {
 	}
 
 	public Card cardDetails(Integer id) {
-		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :deckId", Card.class);
-		Card card = (Card) query.setParameter("deckId", id).getSingleResult();
+		Query query = em.createNativeQuery("SELECT * FROM TAB_CARDS WHERE ID = :cardId", Card.class);
+		Card card = (Card) query.setParameter("cardId", id).getSingleResult();
 		
 		if(card == null)
 			throw new IllegalArgumentException("Cannot find Card with ID: " + id);
@@ -190,7 +190,7 @@ public class CardServiceImpl  {
 		dto.setKonamiSets(this.setAllSetsWithThisCard(card));
 		dto.setCard(card);
 		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId()));
-		dto.setPrices(cardPriceService.getAllPricesOfACardById(card.getId()));
+		dto.setPrices(cardServicesUtil.getAllPricesOfACardById(card.getId()));
 		
 		dto.setViews(viewsService.updateCardViewsOrInsertInDB(cardNumero));	
 		
