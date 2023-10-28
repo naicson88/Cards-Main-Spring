@@ -1,6 +1,8 @@
 package com.naicson.yugioh.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityNotFoundException;
@@ -33,7 +35,7 @@ public class ArchetypeController {
 	@Cacheable("archetypes")
 	@Operation(summary="Return all Archetypes", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping("/all")
-	public List<Archetype> getAllArchetypes(){	
+	public Map<String, ArrayList<Archetype>> getAllArchetypes(){
 		return archetypeService.getAllArchetypes();
 	}
 	

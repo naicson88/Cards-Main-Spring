@@ -1,12 +1,13 @@
 package com.naicson.yugioh.service;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
@@ -24,8 +25,27 @@ public class ArchetypeServiceImpl {
 	
 	Logger logger = LoggerFactory.getLogger(ArchetypeServiceImpl.class);
 	
-	public List<Archetype> getAllArchetypes() {	
-		return archRepository.findAll();		
+	public Map<String, ArrayList<Archetype>> getAllArchetypes() {
+		List<Archetype> archList =  archRepository.findAll(Sort.by(Sort.Direction.ASC, "arcName"));
+		Map<String, ArrayList<Archetype>> archMap = new LinkedHashMap<>();
+
+		for(Archetype arch : archList){
+			try {
+				String firstChar = String.valueOf(arch.getArcName().charAt(0));
+
+				if(archMap.containsKey(firstChar))
+					archMap.get(firstChar).add(arch);
+				else{
+					archMap.put(firstChar, new ArrayList<>());
+					archMap.get(firstChar).add(arch);
+				}
+
+			} catch (Exception e){
+				logger.error(arch.getArcName());
+			}
+		}
+
+		return archMap;
 	}
 	
 	public Archetype getByArchetypeId(Integer archetypeId) {
