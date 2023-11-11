@@ -191,7 +191,7 @@ public class CardServiceImpl  {
 		dto.setCard(card);
 		dto.setQtdUserHaveByUserCollection(this.findQtdCardUserHaveByCollection(card.getId()));
 		dto.setPrices(cardServicesUtil.getAllPricesOfACardById(card.getId()));
-		
+		dto.setQtdUserHasTotal(cardRepository.findQtdUserHave(card.getId()));
 		dto.setViews(viewsService.updateCardViewsOrInsertInDB(cardNumero));	
 		
 		return dto;
@@ -229,10 +229,6 @@ public class CardServiceImpl  {
 				.orElse(Collections.emptyList());
 		
 		return listKonamiSets.stream().map(KonamiSetsWithCardDTO::new).collect(Collectors.toList());
-		
-//		return listKonamiSets.stream().map(set -> {
-//			return new KonamiSetsWithCardDTO(set);
-//		}).collect(Collectors.toList());
 						
 	}
 

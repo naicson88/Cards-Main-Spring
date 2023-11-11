@@ -28,7 +28,7 @@ public class DeckConsumerRabbitMQ {
 	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
 	
 	@RabbitListener(queues = "${rabbitmq.queue.deck}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+	@Transactional(rollbackFor = {Exception.class})
 	public void consumer(String json) {		
 
 		try {

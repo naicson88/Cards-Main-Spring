@@ -10,7 +10,7 @@ import com.naicson.yugioh.entity.stats.CardViewsInformation;
 public class CardDetailsDTO {
 	
 	private Card card;
-	private Map<String, Integer> qtdUserHaveByKonamiCollection;
+	private int qtdUserHasTotal;
 	private Map<String,List<String>> qtdUserHaveByUserCollection;
 	private List<CardPriceInformation> prices;
 	private CardViewsInformation views;
@@ -25,12 +25,12 @@ public class CardDetailsDTO {
 		this.card = card;
 	}
 
-	public Map<String, Integer> getQtdUserHaveByKonamiCollection() {
-		return qtdUserHaveByKonamiCollection;
+	public int getQtdUserHasTotal() {
+		return qtdUserHasTotal;
 	}
 
-	public void setQtdUserHaveByKonamiCollection(Map<String, Integer> qtdUserHaveByKonamiCollection) {
-		this.qtdUserHaveByKonamiCollection = qtdUserHaveByKonamiCollection;
+	public void setQtdUserHasTotal(int qtdUserHasTotal) {
+		this.qtdUserHasTotal = qtdUserHasTotal;
 	}
 
 	public Map<String,List<String>> getQtdUserHaveByUserCollection() {

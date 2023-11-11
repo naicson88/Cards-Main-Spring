@@ -33,7 +33,6 @@ import java.util.Map;
 @RequestMapping({"yugiohAPI/cards"})
 @CrossOrigin(origins = "${angular.path}", maxAge = 3600)
 public class CardController {
-	
 	@Autowired
 	CardServiceImpl cardService;
 	@Autowired

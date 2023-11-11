@@ -1,7 +1,10 @@
 package com.naicson.yugioh.util.enums;
 import java.util.Arrays;
 
-public enum CardProperty {
+public enum
+
+
+CardProperty {
 	
 	CONTINUOUS("Continuous", "assets/img/outras/Continuous.png"),
 	QUICK_PLAY("Quick-Play", "assets/img/outras/Quick.png"),
