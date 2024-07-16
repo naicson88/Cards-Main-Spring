@@ -2,19 +2,14 @@ package com.naicson.yugioh.controller;
 
 import javax.validation.Valid;
 
+import com.naicson.yugioh.util.RedisCache;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.naicson.yugioh.data.builders.ResponseBuilderAPI;
 import com.naicson.yugioh.data.dto.AccountManageDTO;
@@ -33,18 +28,28 @@ public class AuthController {
 	
 	@Autowired
 	AuthServiceImpl authService;
+
+	@Autowired
+	RedisCache redisCache;
 	
 	Logger logger = LoggerFactory.getLogger(AuthController.class);
 	
 
+//	@Operation(summary="Login in the application")
+//	@PostMapping("/login")
+//	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+//		//return authService.authenticateUser(loginRequest);
+//	}
+
 	@Operation(summary="Login in the application")
-	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
-		return authService.authenticateUser(loginRequest);		
+	@GetMapping("/login/{input}")
+	public ResponseEntity<String> authenticateUser(@PathVariable String input){
+		return new ResponseEntity<>(redisCache.getCachedData(input), HttpStatus.OK);
+		//return authService.authenticateUser(loginRequest);
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?>  registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		return authService.registerUser(signUpRequest);
 	}
 	
