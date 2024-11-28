@@ -1,19 +1,23 @@
 package com.naicson.yugioh.service;
 
-import java.util.*;
-
-import javax.persistence.EntityNotFoundException;
-
+import cardscommons.exceptions.ErrorMessage;
+import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
+import com.naicson.yugioh.entity.Archetype;
+import com.naicson.yugioh.repository.ArchetypeRepository;
+import com.naicson.yugioh.service.card.CardServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.data.dto.cards.CardOfArchetypeDTO;
-import com.naicson.yugioh.entity.Archetype;
-import com.naicson.yugioh.repository.ArchetypeRepository;
-import com.naicson.yugioh.service.card.CardServiceImpl;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ArchetypeServiceImpl {
@@ -29,7 +33,7 @@ public class ArchetypeServiceImpl {
 		List<Archetype> archList =  archRepository.findAll(Sort.by(Sort.Direction.ASC, "arcName"));
 		Map<String, ArrayList<Archetype>> archMap = new LinkedHashMap<>();
 
-		for(Archetype arch : archList){
+		for(Archetype arch : archList) {
 			try {
 				String firstChar = String.valueOf(arch.getArcName().charAt(0));
 
@@ -42,6 +46,7 @@ public class ArchetypeServiceImpl {
 
 			} catch (Exception e){
 				logger.error(arch.getArcName());
+				throw e;
 			}
 		}
 
@@ -70,5 +75,13 @@ public class ArchetypeServiceImpl {
 			throw new IllegalArgumentException("Invalid Archetype name to save");
 		
 		return archRepository.save(new Archetype(archetype.trim()));
+	}
+
+	public List<String> getFirstLetterAllArchetypes() {
+		List<Tuple> tuple = archRepository.getFirstLetterAllArchetypes();
+		if(tuple == null || tuple.isEmpty())
+			throw new ErrorMessage(" #getFirstLetterAllArchetypes -> Error when finding Archetypes");
+
+		return tuple.stream().map(it ->  it.get(0, String.class)).collect(Collectors.toList());
 	}
 }

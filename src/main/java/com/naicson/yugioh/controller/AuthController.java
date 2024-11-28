@@ -1,16 +1,5 @@
 package com.naicson.yugioh.controller;
 
-import javax.validation.Valid;
-
-import com.naicson.yugioh.util.RedisCache;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.naicson.yugioh.data.builders.ResponseBuilderAPI;
 import com.naicson.yugioh.data.dto.AccountManageDTO;
 import com.naicson.yugioh.entity.auth.LoginRequest;
@@ -18,8 +7,18 @@ import com.naicson.yugioh.entity.auth.SignupRequest;
 import com.naicson.yugioh.entity.auth.User;
 import com.naicson.yugioh.service.AuthServiceImpl;
 import com.naicson.yugioh.util.ApiResponse;
-
 import io.swagger.v3.oas.annotations.Operation;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -28,24 +27,13 @@ public class AuthController {
 	
 	@Autowired
 	AuthServiceImpl authService;
-
-	@Autowired
-	RedisCache redisCache;
 	
 	Logger logger = LoggerFactory.getLogger(AuthController.class);
-	
-
-//	@Operation(summary="Login in the application")
-//	@PostMapping("/login")
-//	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
-//		//return authService.authenticateUser(loginRequest);
-//	}
 
 	@Operation(summary="Login in the application")
-	@GetMapping("/login/{input}")
-	public ResponseEntity<String> authenticateUser(@PathVariable String input){
-		return new ResponseEntity<>(redisCache.getCachedData(input), HttpStatus.OK);
-		//return authService.authenticateUser(loginRequest);
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+		return authService.authenticateUser(loginRequest);
 	}
 	
 	@PostMapping("/signup")
@@ -96,6 +84,12 @@ public class AuthController {
 		else
 			return new ResponseEntity<>("Wrong!", HttpStatus.FORBIDDEN);
 	}
-	
 
+	@Cacheable("isAdmin")
+	@GetMapping("/is-admin/{userName}")
+	public ResponseEntity<Map<String, Boolean>> isUserAdmin(@PathVariable("userName") String userName) {
+		Boolean isAdmin = authService.isUserAdmin(userName);
+		Map<String, Boolean> map = Map.of("isAdmin", isAdmin);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
 }

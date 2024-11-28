@@ -32,7 +32,7 @@ public class ArchetypeController {
 	@Autowired
 	ArchetypeServiceImpl archetypeService;
 	
-	@Cacheable("archetypes")
+	//@Cacheable("archetypes")
 	@Operation(summary="Return all Archetypes", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping("/all")
 	public Map<String, ArrayList<Archetype>> getAllArchetypes(){
@@ -54,10 +54,16 @@ public class ArchetypeController {
 		if(dto.getTeste().equals("aaa"))
 			throw new EntityNotFoundException("EntityNotFound bad request");
 
-		Double.parseDouble(dto.getTeste());
+		//Double.parseDouble(dto.getTeste());
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 		
+	}
+	
+
+	@GetMapping("/inicial-letter")
+	public ResponseEntity<List<String>> getFirstLetterAllArchetypes() {
+		return new ResponseEntity<>(archetypeService.getFirstLetterAllArchetypes(), HttpStatus.OK);
 	}
 
 //	@ExceptionHandler(Exception.class)

@@ -11,7 +11,9 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
-//@EnableSwagger2
+@EnableSwagger2
+@Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
+
 public class SwaggerConfig {
 	
 	@Bean
@@ -38,27 +40,27 @@ public class SwaggerConfig {
 	     new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
 	}
 	
-//	@Bean
-//	public Docket api() {
-//		return new Docket(DocumentationType.SWAGGER_2)
-//				.select()
-//				.apis(RequestHandlerSelectors.any())
-//				.paths(PathSelectors.any())
-//				.build()				
-//				.apiInfo(metaInfo())
-//				.securitySchemes(Arrays.asList(apiKey()));
-//	}
-//
-//	private ApiInfo metaInfo() {
-//		return new ApiInfoBuilder()
-//				.title("Cards API base for YugiHub")
-//				.description("")
-//				.version("1.0")
-//				.termsOfServiceUrl("localhost")
-//				.build();
-//	}
-//	
-//	  private ApiKey apiKey() {
-//	        return new ApiKey("JWT", "Authorization", "header");
-//	    }
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build()
+				.apiInfo(metaInfo())
+				.securitySchemes(Arrays.asList(apiKey()));
+	}
+
+	private ApiInfo metaInfo() {
+		return new ApiInfoBuilder()
+				.title("Cards API base for YugiHub")
+				.description("")
+				.version("1.0")
+				.termsOfServiceUrl("localhost")
+				.build();
+	}
+
+	  private ApiKey apiKey() {
+	        return new ApiKey("JWT", "Authorization", "header");
+	    }
 }

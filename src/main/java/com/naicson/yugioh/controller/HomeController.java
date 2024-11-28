@@ -26,7 +26,7 @@ public class HomeController {
 	@Autowired
 	HomeServiceImpl homeService;
 	
-	@GetMapping(path = "/info")
+	@GetMapping("/info")
 	@Operation(summary="Get informations of Home", security = { @SecurityRequirement(name = "bearer-key") })
 	public ResponseEntity<HomeDTO> homeInformations(){
 		

@@ -30,7 +30,7 @@ public interface HomeRepository extends JpaRepository<HomeDTO, Long>{
 	List<Tuple> returnLastSetsAddedToUser(long userId);
 	
 	@Query(value = 	
-			 " select distinct cards.numero, cards.nome, rel.card_set_code, rel.card_price from tab_cards cards "
+			 " select distinct cards.numero, cards.nome, rel.card_set_code, rel.card_price, du.dt_criacao from tab_cards cards "
 			+ " inner join tab_rel_deckusers_cards rel on rel.card_numero = cards.numero "
 			+ " inner join tab_user_deck du on du.id = rel.deck_id "
 			+ " where du.user_id = :userId"
