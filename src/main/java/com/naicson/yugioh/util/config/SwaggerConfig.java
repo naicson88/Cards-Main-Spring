@@ -1,5 +1,6 @@
 package com.naicson.yugioh.util.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,17 +10,30 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+
+
+
 
 @Configuration
-@EnableSwagger2
-@Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
-
 public class SwaggerConfig {
-	
+
 	@Bean
-	public OpenAPI openAPI() {
-	    return new OpenAPI()
-            .info(new Info()
+	public OpenAPI customOpenAPI() {
+		final String securitySchemeName = "bearer-key";
+		return new OpenAPI()
+				.addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+				.components(
+						new Components()
+								.addSecuritySchemes(securitySchemeName,
+										new SecurityScheme()
+												.name(securitySchemeName)
+												.type(SecurityScheme.Type.HTTP)
+												.scheme("bearer")
+												.bearerFormat("JWT")
+								)
+				)
+				.info(new Info()
                     .title("Cards API")
                     .description("Cards API base for YugiHub")
                     .version("1.0")
@@ -33,34 +47,5 @@ public class SwaggerConfig {
                     .description("Alan Naicson")
                     .url("http://www.yugihub.com"));
 	}
-	
-	@Bean
-	 public OpenAPI customOpenAPI() {
-	   return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key",
-	     new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
-	}
-	
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
-				.build()
-				.apiInfo(metaInfo())
-				.securitySchemes(Arrays.asList(apiKey()));
-	}
 
-	private ApiInfo metaInfo() {
-		return new ApiInfoBuilder()
-				.title("Cards API base for YugiHub")
-				.description("")
-				.version("1.0")
-				.termsOfServiceUrl("localhost")
-				.build();
-	}
-
-	  private ApiKey apiKey() {
-	        return new ApiKey("JWT", "Authorization", "header");
-	    }
 }
