@@ -1,6 +1,8 @@
 package com.naicson.yugioh.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityNotFoundException;
@@ -30,10 +32,10 @@ public class ArchetypeController {
 	@Autowired
 	ArchetypeServiceImpl archetypeService;
 	
-	@Cacheable("archetypes")
+	//@Cacheable("archetypes")
 	@Operation(summary="Return all Archetypes", security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping("/all")
-	public List<Archetype> getAllArchetypes(){	
+	public Map<String, ArrayList<Archetype>> getAllArchetypes(){
 		return archetypeService.getAllArchetypes();
 	}
 	
@@ -52,10 +54,16 @@ public class ArchetypeController {
 		if(dto.getTeste().equals("aaa"))
 			throw new EntityNotFoundException("EntityNotFound bad request");
 
-		Double.parseDouble(dto.getTeste());
+		//Double.parseDouble(dto.getTeste());
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 		
+	}
+	
+
+	@GetMapping("/inicial-letter")
+	public ResponseEntity<List<String>> getFirstLetterAllArchetypes() {
+		return new ResponseEntity<>(archetypeService.getFirstLetterAllArchetypes(), HttpStatus.OK);
 	}
 
 //	@ExceptionHandler(Exception.class)

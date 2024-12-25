@@ -57,6 +57,7 @@ public class HomeServiceImpl implements HomeDetailService {
 
 	@Override
 	public HomeDTO getHomeDto() {
+		logger.info(" -> Getting Home Info...");
 		HomeDTO homeDto = new HomeDTO();
 		UserDetailsImpl user = GeneralFunctions.userLogged();
 

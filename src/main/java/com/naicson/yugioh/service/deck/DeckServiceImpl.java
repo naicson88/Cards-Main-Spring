@@ -255,11 +255,8 @@ public class DeckServiceImpl implements DeckDetailService {
 		if(setsFoundTuple == null)
 			 return new PageImpl<>(Collections.emptyList());
 		
-		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null).map(set -> {
-			
-			return new DeckSummaryDTO(set);
-						
-		}).collect(Collectors.toList());
+		List<DeckSummaryDTO> summaryList = setsFoundTuple.stream().filter(set -> set.get(0) != null)
+				.map(DeckSummaryDTO::new).collect(Collectors.toList());
 		
 		return new PageImpl<>(summaryList);
 

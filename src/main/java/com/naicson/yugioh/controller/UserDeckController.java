@@ -64,7 +64,7 @@ public class UserDeckController<T> {
 	public ResponseEntity<Deck> editUserDeck(@RequestParam("id") Long deckId, @RequestParam("setSource") String setSource){
 		Deck deck = userDeckService.editUserDeck(deckId);
 		
-		return new ResponseEntity<Deck>(deck, HttpStatus.OK);
+		return new ResponseEntity<>(deck, HttpStatus.OK);
 	}
 	
 	@PostMapping(path = "/save-userdeck")

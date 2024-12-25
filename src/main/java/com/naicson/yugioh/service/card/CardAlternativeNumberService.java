@@ -30,8 +30,7 @@ public class CardAlternativeNumberService {
 	Logger LOGGER = LoggerFactory.getLogger(CardAlternativeNumberService.class);
 	
 	public Card findCardByCardNumber(Long cardNumber) {
-		return repository.findCardByCardNumber(cardNumber)
-				.orElseThrow(() -> new EntityNotFoundException("Cant find Card with number: "+ cardNumber)) ;
+		return repository.findCardByCardNumber(cardNumber).orElseThrow(() -> new EntityNotFoundException("Cant find Card with number: "+ cardNumber)) ;
 
 	}
 	

@@ -5,6 +5,12 @@ import java.util.Date;
 import javax.persistence.Tuple;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.naicson.yugioh.entity.Deck;
+import com.naicson.yugioh.entity.sets.SetCollection;
+import com.naicson.yugioh.entity.sets.UserSetCollection;
+import com.naicson.yugioh.repository.UserSetCollectionRepository;
+import com.naicson.yugioh.service.deck.UserDeckServiceImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
 
 public class DeckSummaryDTO {
 	private Long id;
@@ -28,6 +34,48 @@ public class DeckSummaryDTO {
 		this.setType = set.get(5, String.class);
 		this.quantityUserHave = Integer.parseInt(String.valueOf(set.get(6)));
 	}
+
+	public static DeckSummaryDTO dtoFromSetCollection(SetCollection set, UserSetCollectionRepository userSetRepository) {
+		DeckSummaryDTO deck = new DeckSummaryDTO();
+
+		deck.setId(set.getId().longValue());
+		deck.setLancamento(set.getReleaseDate());
+		deck.setNome(set.getName());
+		deck.setSetType(set.getSetCollectionType().toString());
+		deck.setImagem(set.getImgurUrl());
+		deck.setNomePortugues(set.getPortugueseName());
+		deck.setQuantityUserHave(userSetRepository
+				.countQuantityOfASetUserHave(set.getId(), GeneralFunctions.userLogged().getId())
+		);
+
+		return deck;
+	}
+
+	public static DeckSummaryDTO convertDeckToDTO(Deck originalDeck, UserDeckServiceImpl userDeckService){
+		DeckSummaryDTO deck = new DeckSummaryDTO();
+		deck.setId(originalDeck.getId());
+		deck.setLancamento(originalDeck.getLancamento());
+		deck.setNome(originalDeck.getNome());
+		deck.setSetType(originalDeck.getSetType());
+		deck.setImagem(originalDeck.getImgurUrl() != null ? originalDeck.getImgurUrl() : originalDeck.getImagem());
+		deck.setNomePortugues(originalDeck.getNomePortugues());
+		deck.setQuantityUserHave(userDeckService.countQuantityOfADeckUserHave(originalDeck.getId()));
+		return deck;
+	}
+
+	public static DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set){
+		DeckSummaryDTO deck = new DeckSummaryDTO();
+		deck.setId(set.getId());
+		deck.setLancamento(set.getReleaseDate());
+		deck.setNome(set.getName());
+		deck.setSetType(set.getSetCollectionType().toString());
+		deck.setImagem(set.getImgurUrl());
+		deck.setNomePortugues(set.getPortugueseName());
+		deck.setQuantityUserHave(0);
+
+		return deck;
+	}
+
 
 	public String getNome() {
 		return nome;

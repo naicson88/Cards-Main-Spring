@@ -46,7 +46,7 @@ public class ConsumerUtils {
 
 		listRelDeckCards.stream().filter(rel -> !ECardRarity.DEFAULT_RARITIES.contains(rel.getCard_raridade()))
 				.forEach(rel -> {
-					rel = ECardRarity.checkOtherRarities(rel);
+					ECardRarity.checkOtherRarities(rel);
 					ECardRarity rarity = ECardRarity.getRarityByRarityCode(rel.getSetRarityCode());
 					rel.setCard_raridade(rarity.getCardRarity());
 				});

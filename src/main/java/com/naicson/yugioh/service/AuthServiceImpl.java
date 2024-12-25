@@ -1,15 +1,14 @@
 package com.naicson.yugioh.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.naicson.yugioh.data.chainResponsability.user.UserValidationChain;
+import com.naicson.yugioh.data.dto.AccountManageDTO;
+import com.naicson.yugioh.data.security.JwtUtils;
+import com.naicson.yugioh.entity.auth.*;
+import com.naicson.yugioh.repository.RoleRepository;
+import com.naicson.yugioh.repository.UserRepository;
+import com.naicson.yugioh.service.user.UserDetailsImpl;
+import com.naicson.yugioh.util.GeneralFunctions;
+import com.naicson.yugioh.util.mail.EmailService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,20 +23,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.naicson.yugioh.data.chainResponsability.user.UserValidationChain;
-import com.naicson.yugioh.data.dto.AccountManageDTO;
-import com.naicson.yugioh.data.security.JwtUtils;
-import com.naicson.yugioh.entity.auth.ERole;
-import com.naicson.yugioh.entity.auth.JwtResponse;
-import com.naicson.yugioh.entity.auth.LoginRequest;
-import com.naicson.yugioh.entity.auth.Role;
-import com.naicson.yugioh.entity.auth.SignupRequest;
-import com.naicson.yugioh.entity.auth.User;
-import com.naicson.yugioh.repository.RoleRepository;
-import com.naicson.yugioh.repository.UserRepository;
-import com.naicson.yugioh.service.user.UserDetailsImpl;
-import com.naicson.yugioh.util.GeneralFunctions;
-import com.naicson.yugioh.util.mail.EmailService;
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl {
@@ -60,6 +54,8 @@ public class AuthServiceImpl {
 	EmailService emailService;
 
 	public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
+
+		logger.info("-> Fazendo login: {}", loginRequest.getUsername());
 
 		Authentication auth = authManeger.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -241,6 +237,18 @@ public class AuthServiceImpl {
 		String curPass = GeneralFunctions.userLogged().getPassword();		
 		return encoder.matches(password, curPass);
 	}
-	
+
+
+	public Boolean isUserAdmin(String userName) {
+		Optional<User> user = userRepository.findByUserName(userName);
+
+		if(user.isPresent()){
+			if(user.get().getRole().getRoleName() == ERole.ROLE_ADMIN
+					|| user.get().getRole().getRoleName() == ERole.ROLE_MODERATOR)
+				return true;
+		}
+
+		return false;
+	}
 }
 	

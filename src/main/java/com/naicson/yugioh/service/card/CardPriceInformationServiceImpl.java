@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import cardscommons.dto.PriceDTO;
+import com.naicson.yugioh.util.CardServicesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,8 @@ public class CardPriceInformationServiceImpl {
 
 	@Autowired
 	private CardPriceInformationRepository cardInfoRepository;
-
 	@Autowired
-	private CardServiceImpl cardService;
+	private CardServicesUtil cardServicesUtil;
 
 	@Autowired
 	private RelDeckCardsServiceImpl relDeckService;
@@ -43,11 +43,9 @@ public class CardPriceInformationServiceImpl {
 
 	public void saveWeeklyPercentageVariable(CardPriceInformation cardInfo) {
 		this.validateWeeklyPercentageObj(cardInfo);
-		
 		cardInfo.setWeeklyPercentVariable(calculateWeeklyPercentageVariable(cardInfo));
 		cardInfo.setLastUpdate(LocalDateTime.now());
 		this.saveCardPriceInfo(cardInfo);
-
 	}
 	
 	private double calculateWeeklyPercentageVariable(CardPriceInformation cardInfo) {
@@ -132,7 +130,7 @@ public class CardPriceInformationServiceImpl {
 	}
 
 	private String getCardName(Long cardNumber) {
-		Card card = cardService.findByNumero(cardNumber);
+		Card card = cardServicesUtil.cardServiceFindByNumero(cardNumber);
 
 		if (card.getNome() == null || card.getNome().isBlank()) {
 			logger.error("Invalid card name of card: {} ", card.getNumero());
@@ -207,7 +205,7 @@ public class CardPriceInformationServiceImpl {
 			cardInfo.setLastUpdate(LocalDateTime.now());
 			cardInfo.setWeeklyPercentVariable(this.calculateWeeklyPercentageVariable(cardInfo));
 			logger.info("Updating Card Price {}", cardInfo.getCardSetCode());
-			this.saveCardPriceInfo(cardInfo);			
+			saveCardPriceInfo(cardInfo);
 		}	
 	}
 

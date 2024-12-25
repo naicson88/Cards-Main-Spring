@@ -12,7 +12,7 @@ import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.CardAlternativeNumber;
 
 @Repository
-public interface CardAlternativeNumberRepository extends JpaRepository<CardAlternativeNumber, Integer> {
+public interface CardAlternativeNumberRepository extends JpaRepository<CardAlternativeNumber, Long> {
 
 	CardAlternativeNumber findByCardAlternativeNumber(Long cardNumber);
 

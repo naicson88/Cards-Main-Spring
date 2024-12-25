@@ -22,7 +22,7 @@ public enum ECardRarity {
 			List.of("(NPR)", "(SFR)", "(MSR)", "(SHR)", "(CR)", "(HGPR)", "(KCC)", "(KCR)", "(KCUR)")),
 	GHOST_RARE("Ghost Rare", List.of("(GR)"));
 	//UNKNOWN("Not Defined", List.of(""));
-	
+
 	private final String name;
 	private final List<String> listRarityCode;
 	public static final List<String> DEFAULT_RARITIES = List.of("Common", "Rare",
@@ -53,6 +53,10 @@ public enum ECardRarity {
 			rel.setSetRarityCode("(UR)");
 			rel.setCard_raridade("Ultra Rare");
 			rel.setRarityDetails("Ultra Rare (Pharaoh's Rare)");
+		} else if (rel.getCard_raridade().equals("Quarter Century Secret Rare")){
+			rel.setSetRarityCode("(ScR)");
+			rel.setCard_raridade("Secret Rare");
+			rel.setRarityDetails("Quarter Century Secret Rare");
 		}
 			
 		return rel;

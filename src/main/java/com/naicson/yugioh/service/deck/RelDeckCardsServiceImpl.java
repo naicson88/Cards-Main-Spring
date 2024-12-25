@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import com.naicson.yugioh.util.CardServicesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,14 @@ import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Service
-public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
+public class
+RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
 	
 	@Autowired
 	RelDeckCardsRepository relDeckCardsRepository;
 	
 	@Autowired
-	CardServiceImpl cardServiceImpl;
+	CardServicesUtil cardServiceImpl;
 	
 	@Autowired
 	DeckRepository deckRepository;
@@ -103,7 +105,7 @@ public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCard
 	}
 	
 	private void validateNewRelation(RelDeckCards rel) {	
-		cardServiceImpl.cardDetails(rel.getCardId());
+		cardServiceImpl.cardServiceFindById(rel.getCardId());
 		DeckServiceImpl deckService = new DeckServiceImpl(deckRepository);
 		deckService.findById(rel.getDeckId());
 		ECardRarity.getRarityByName(rel.getCard_raridade());

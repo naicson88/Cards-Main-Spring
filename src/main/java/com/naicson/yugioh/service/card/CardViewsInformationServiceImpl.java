@@ -31,7 +31,7 @@ public class CardViewsInformationServiceImpl implements CardViewsInformationDeta
 	@Autowired
 	private CardRepository cardRepository;
 	
-	Logger logger = LoggerFactory.getLogger(HomeServiceImpl.class);	
+	Logger logger = LoggerFactory.getLogger(CardViewsInformationServiceImpl.class);
 	
 	@Override
 	public List<RankingForHomeDTO> getWeeklyMostViewed(){

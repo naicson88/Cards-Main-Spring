@@ -1,22 +1,8 @@
 package com.naicson.yugioh.service.setcollection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-
 import com.naicson.yugioh.data.dto.GenericTypeDTO;
 import com.naicson.yugioh.data.dto.cards.CardRarityDTO;
 import com.naicson.yugioh.data.dto.cards.CardSetDetailsDTO;
-import com.naicson.yugioh.data.dto.set.InsideDeckDTO;
 import com.naicson.yugioh.data.dto.set.SetDetailsDTO;
 import com.naicson.yugioh.data.dto.set.SetStatsDTO;
 import com.naicson.yugioh.entity.Atributo;
@@ -24,6 +10,13 @@ import com.naicson.yugioh.entity.RelDeckCards;
 import com.naicson.yugioh.entity.TipoCard;
 import com.naicson.yugioh.util.enums.CardProperty;
 import com.naicson.yugioh.util.enums.GenericTypesCards;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SetsUtils {
@@ -64,8 +57,8 @@ public class SetsUtils {
 		
 		List<Atributo> attrListAux = listDetails.stream()
 				.map(CardSetDetailsDTO::getAtributo)
-				.filter(at -> !at.getName().equals("SPELL") && !at.getName().equals("TRAP"))
-				.collect(Collectors.toList());
+				.filter(at -> !at.getName().equals(GenericTypesCards.SPELL.toString()) && !at.getName().equals(GenericTypesCards.TRAP.toString()))
+				.toList();
 		
 		Map<Long, Long> quantityByAttributeId = attrListAux.stream().collect(Collectors.groupingBy(Atributo::getId, Collectors.counting()));
 		
@@ -83,13 +76,13 @@ public class SetsUtils {
 	
 	private List<TipoCard> setQuantityByCardType(List<CardSetDetailsDTO> list){	
 		
-		List<CardSetDetailsDTO> listDetails = list.stream().filter(c -> c.getTipo() != null && c.getTipo().getId() > 1).collect(Collectors.toList());
+		List<CardSetDetailsDTO> listDetails = list.stream().filter(c -> c.getTipo() != null && c.getTipo().getId() > 1).toList();
 		
 		Map<Long, Long> quantityByTipo = listDetails.stream()
 				.map(CardSetDetailsDTO::getTipo)
 				.collect(Collectors.groupingBy(TipoCard::getId, Collectors.counting()));
 		
-		List<TipoCard> tipoList =  listDetails.stream().map(CardSetDetailsDTO::getTipo).distinct().collect(Collectors.toList());
+		List<TipoCard> tipoList =  listDetails.stream().map(CardSetDetailsDTO::getTipo).distinct().toList();
 		
 		for (TipoCard tipo : tipoList) {
 			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
@@ -207,7 +200,7 @@ public class SetsUtils {
 	
 	private List<Map<String, Object>> listMostValuable(SetDetailsDTO detailDTO, List<CardSetDetailsDTO> listDetails){
 		
-		List<RelDeckCards> listRel = detailDTO.getInsideDecks().stream().flatMap(card -> card.getRelDeckCards().stream()).collect(Collectors.toList());
+		List<RelDeckCards> listRel = detailDTO.getInsideDecks().stream().flatMap(card -> card.getRelDeckCards().stream()).toList();
 		
 		Map<Long, Double> mapVal = listRel.stream().sorted((v1, v2) -> Double.compare(v2.getCard_price(), v1.getCard_price())).limit(6)
 				.collect(Collectors.toMap(RelDeckCards::getCardNumber, RelDeckCards::getCard_price
