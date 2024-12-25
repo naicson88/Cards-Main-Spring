@@ -205,7 +205,7 @@ public class CardPriceInformationServiceImpl {
 			cardInfo.setLastUpdate(LocalDateTime.now());
 			cardInfo.setWeeklyPercentVariable(this.calculateWeeklyPercentageVariable(cardInfo));
 			logger.info("Updating Card Price {}", cardInfo.getCardSetCode());
-			this.saveCardPriceInfo(cardInfo);			
+			saveCardPriceInfo(cardInfo);
 		}	
 	}
 

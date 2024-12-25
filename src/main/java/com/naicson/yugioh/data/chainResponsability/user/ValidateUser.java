@@ -17,11 +17,11 @@ public class ValidateUser implements HandleUserValidation {
 
 	@Override
 	public User validateUserAttribute(User user, AccountManageDTO dto) {	
-		if(dto.getUsername() != null && !dto.getUsername().isBlank()) {
-			if(dto.getUsername().length() < 6)
+		if(dto.username() != null && !dto.username().isBlank()) {
+			if(dto.username().length() < 6)
 				throw new IllegalArgumentException("Invalid Username");
 			
-			user.setUserName(dto.getUsername());  
+			user.setUserName(dto.username());
 		 }
 		
 		return user;
@@ -31,14 +31,14 @@ public class ValidateUser implements HandleUserValidation {
 
 		@Override
 		public User validateUserAttribute(User user, AccountManageDTO dto) {	
-			if(dto.getPass() != null && !dto.getPass().isBlank()) {
+			if(dto.pass() != null && !dto.pass().isBlank()) {
 				
-				if(!dto.getPass().equals(dto.getNewpass()))
-					throw new IllegalArgumentException("Passwords value dont match!");
-				if(dto.getPass().length() < 6)
+				if(!dto.pass().equals(dto.newpass()))
+					throw new IllegalArgumentException("Passwords value don't match!");
+				if(dto.pass().length() < 6)
 					throw new IllegalArgumentException("Password value is too small");
 				
-				user.setPassword(encoder.encode(dto.getPass()));
+				user.setPassword(encoder.encode(dto.pass()));
 			}
 			
 			return user;
@@ -50,13 +50,13 @@ public class ValidateUser implements HandleUserValidation {
 
 		@Override
 		public User validateUserAttribute(User user, AccountManageDTO dto) {			
-			if(dto.getEmail() != null && !dto.getEmail().isBlank()) {				
-				if(!dto.getEmail().equals(dto.getNewemail()))
+			if(dto.email() != null && !dto.email().isBlank()) {
+				if(!dto.email().equals(dto.newemail()))
 					throw new IllegalArgumentException("Emails value dont match!");
-				if(dto.getEmail().length() < 6)
+				if(dto.email().length() < 6)
 					throw new IllegalArgumentException("Email value is too small");
 				
-				user.setEmail(dto.getEmail());
+				user.setEmail(dto.email());
 			}
 			
 			return user;

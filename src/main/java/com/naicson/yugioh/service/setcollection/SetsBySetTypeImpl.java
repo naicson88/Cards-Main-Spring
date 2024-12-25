@@ -56,39 +56,20 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 	}
 
 	private DeckSummaryDTO convertSetCollectionToDTO(SetCollection set) {
-		
-		DeckSummaryDTO deck = new DeckSummaryDTO();
-		
-		deck.setId(set.getId().longValue());
-		deck.setLancamento(set.getReleaseDate());
-		deck.setNome(set.getName());
-		deck.setSetType(set.getSetCollectionType().toString());
-		deck.setImagem(set.getImgurUrl());
-		deck.setNomePortugues(set.getPortugueseName());
-		deck.setQuantityUserHave(userSetRepository.countQuantityOfASetUserHave(set.getId(), GeneralFunctions.userLogged().getId()));
-		
-		return deck;
-	}
-	
-	private Page<DeckSummaryDTO> convertPageDeck(Page<Deck> deck){
-		
-		return deck.map(this::convertDeckToDTO);
-			
+		return DeckSummaryDTO.dtoFromSetCollection(set, userSetRepository);
 	}
 
 	private DeckSummaryDTO convertDeckToDTO(Deck originalDeck) {
-				
-		DeckSummaryDTO deck = new DeckSummaryDTO();
-		deck.setId(originalDeck.getId());
-		deck.setLancamento(originalDeck.getLancamento());
-		deck.setNome(originalDeck.getNome());
-		deck.setSetType(originalDeck.getSetType().toString());
-		deck.setImagem(originalDeck.getImgurUrl() != null ? originalDeck.getImgurUrl() : originalDeck.getImagem());
-		deck.setNomePortugues(originalDeck.getNomePortugues());
-		deck.setQuantityUserHave(userDeckService.countQuantityOfADeckUserHave(originalDeck.getId()));
-		return deck;
+		return DeckSummaryDTO.convertDeckToDTO(originalDeck, userDeckService);
+	}
+	
+	private Page<DeckSummaryDTO> convertPageDeck(Page<Deck> deck){
+		return deck.map(this::convertDeckToDTO);
 	}
 
+	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {
+		return DeckSummaryDTO.convertSetCollectionToDTO(set);
+	}
 
 	@Override
 	public Page<DeckSummaryDTO> findAllUserSetsByType(Pageable pageable, String setType) {
@@ -112,35 +93,15 @@ public class SetsBySetTypeImpl <T> implements ISetsByType<T>{
 		});
 		
 	}
-	
-	private DeckSummaryDTO convertSetCollectionToDTO(UserSetCollection set) {
-		
-		DeckSummaryDTO deck = new DeckSummaryDTO();
-		deck.setId(set.getId());
-		deck.setLancamento(set.getReleaseDate());
-		deck.setNome(set.getName());
-		deck.setSetType(set.getSetCollectionType().toString());
-		deck.setImagem(set.getImgurUrl());
-		deck.setNomePortugues(set.getPortugueseName());
-		deck.setQuantityUserHave(0);
-		
-		return deck;
-	}
 
 
 	private Page<DeckSummaryDTO> convertPageUserDeck(Page<UserDeck> userDeck){
-		
-		Page<DeckSummaryDTO> pageDeck = userDeck.map(originalPage -> {
+		return userDeck.map(originalPage -> {
 			DeckSummaryDTO deckDTO = new DeckSummaryDTO();
 			
 			BeanUtils.copyProperties(originalPage, deckDTO);
 			
 			return deckDTO;
 		});
-		
-		return pageDeck;		
 	}
-
-
-
 }

@@ -54,9 +54,6 @@ public class ApiExceptionHandler {
         String errorMessage = fieldErrors.get(0).getDefaultMessage();
         ApiExceptionsDTO ex = new ApiExceptionsDTO(errorMessage, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now(), request.getRequestURL().toString(), em.getClass().toString());
-//
-//        logRepository.save(new LogEntity(errorMessage, HttpStatus.BAD_REQUEST.value(),
-//                HttpStatus.BAD_REQUEST.getReasonPhrase(), ZonedDateTime.now(), request.getRequestURL().toString(), em.getClass().toString()));
 
         saveLogEntity(em, HttpStatus.BAD_REQUEST, request.getRequestURL().toString());
 

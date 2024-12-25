@@ -26,7 +26,8 @@ import com.naicson.yugioh.util.enums.ECardRarity;
 import com.naicson.yugioh.util.search.GeneralSpecification;
 
 @Service
-public class RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
+public class
+RelDeckCardsServiceImpl implements RelDeckCardsDetails, RelDeckCardsRelationBySource {
 	
 	@Autowired
 	RelDeckCardsRepository relDeckCardsRepository;
