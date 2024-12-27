@@ -1,28 +1,10 @@
 package com.naicson.yugioh.service;
 
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.persistence.Tuple;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-
 import com.naicson.yugioh.data.dto.home.GeneralSearchDTO;
 import com.naicson.yugioh.data.dto.home.HomeDTO;
 import com.naicson.yugioh.data.dto.home.LastAddedDTO;
+import com.naicson.yugioh.data.factory.LastAddedDTOFactory;
+import com.naicson.yugioh.data.factory.LastAddedDTOTypes;
 import com.naicson.yugioh.repository.HomeRepository;
 import com.naicson.yugioh.repository.UserSetCollectionRepository;
 import com.naicson.yugioh.service.card.CardPriceInformationServiceImpl;
@@ -31,6 +13,22 @@ import com.naicson.yugioh.service.interfaces.HomeDetailService;
 import com.naicson.yugioh.service.user.UserDetailsImpl;
 import com.naicson.yugioh.util.GeneralFunctions;
 import com.naicson.yugioh.util.enums.SetType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.Tuple;
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class HomeServiceImpl implements HomeDetailService {
@@ -85,8 +83,6 @@ public class HomeServiceImpl implements HomeDetailService {
 		return Stream.concat(lastsDecksAdded.stream(), lastSetCollections.stream())
 				.sorted(Comparator.comparing(LastAddedDTO::getRegisteredDate).reversed()).limit(10)
 				.collect(Collectors.toList());
-
-
 	}
 
 	private Double totalDeckPrice(Long setId) {
@@ -111,17 +107,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (lastCardsAddedTuple == null || lastCardsAddedTuple.isEmpty()) 
 			return Collections.emptyList();
 		
-		return	lastCardsAddedTuple.stream().map(card -> {
-				LastAddedDTO lastCard = new LastAddedDTO();
-				lastCard.setCardNumber(card.get(0, Integer.class).longValue());
-				lastCard.setName(card.get(1, String.class));
-				lastCard.setSetCode(card.get(2, String.class));
-				lastCard.setPrice(card.get(3, Double.class));
-
-				return lastCard;
-			}).collect(Collectors.toList());
-
-		
+		return LastAddedDTOFactory.createDto(lastCardsAddedTuple, LastAddedDTOTypes.LAST_CARDS_ADDED_TO_USER);
 	}
 
 	private List<LastAddedDTO> hotNews(List<Tuple> hotNews) {
@@ -129,16 +115,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (hotNews == null || hotNews.isEmpty())
 			throw new NoSuchElementException("Hot News list is empty");
 		
-		return hotNews.stream().map(set -> {
-			LastAddedDTO lastAdded = new LastAddedDTO();
-
-			lastAdded.setId(set.get(0, BigInteger.class).longValue());
-			lastAdded.setImg(set.get(2, String.class));
-			lastAdded.setName(set.get(1, String.class));
-			lastAdded.setSetType(set.get(4, String.class));
-			
-			return lastAdded;
-		}).collect(Collectors.toList());
+		return LastAddedDTOFactory.createDto(hotNews, LastAddedDTOTypes.HOT_NEWS);
 		
 	}
 	
@@ -149,19 +126,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (sets == null || sets.isEmpty())
 			return Collections.emptyList();
 
-		return sets.stream().map(set -> {
-			LastAddedDTO lastSet = new LastAddedDTO();
-	
-			lastSet.setId(set.get(0, BigInteger.class).longValue());
-			lastSet.setName(set.get(2, String.class));
-			lastSet.setImg(set.get(1, String.class));
-			lastSet.setPrice(totalDeckPrice(lastSet.getId()));
-			lastSet.setRegisteredDate(set.get(5, Date.class));
-			lastSet.setSetType("DECK");
-			return lastSet;
-		}).collect(Collectors.toList());					
-
-		
+		return  LastAddedDTOFactory.createDto(sets, LastAddedDTOTypes.LAST_DECK_ADDED);
 	}
 
 	private List<LastAddedDTO> lastsSetCollectionAdded() {
@@ -171,19 +136,7 @@ public class HomeServiceImpl implements HomeDetailService {
 		if (sets == null || sets.isEmpty()) 
 			return Collections.emptyList();
 		
-		return sets.stream().map(set -> {
-
-			LastAddedDTO lastSet = new LastAddedDTO();
-
-			lastSet.setId(set.get(0, BigInteger.class).longValue());
-			lastSet.setName(set.get(5, String.class));
-			lastSet.setImg(set.get(3, String.class));
-			lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));						
-			lastSet.setRegisteredDate(set.get(8, Date.class));
-			lastSet.setSetType(set.get(10, String.class));
-
-			return lastSet;
-		}).collect(Collectors.toList());
+		return  LastAddedDTOFactory.createDto(sets, LastAddedDTOTypes.LAST_SET_COLLECTION_ADDED);
 		
 	}
 	
@@ -210,7 +163,7 @@ public class HomeServiceImpl implements HomeDetailService {
 			
 			return dto;
 			
-		}).collect(Collectors.toList());	
+		}).toList();
 	
 	}
 

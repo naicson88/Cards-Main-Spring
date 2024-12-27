@@ -1,5 +1,7 @@
 package com.naicson.yugioh.data.dto.home;
 
+import com.naicson.yugioh.util.enums.SetType;
+
 import java.util.Date;
 
 public class LastAddedDTO {
@@ -11,7 +13,7 @@ public class LastAddedDTO {
 	private String img;
 	private Long cardNumber;
 	private Date registeredDate;
-	private String setType;
+	private SetType setType;
 
 	public Long getId() {
 		return id;
@@ -77,11 +79,11 @@ public class LastAddedDTO {
 		this.registeredDate = registeredDate;
 	}
 
-	public String getSetType() {
+	public SetType getSetType() {
 		return setType;
 	}
 
-	public void setSetType(String setType) {
+	public void setSetType(SetType setType) {
 		this.setType = setType;
 	}
 	

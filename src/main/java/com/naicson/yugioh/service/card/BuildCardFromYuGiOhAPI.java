@@ -90,7 +90,7 @@ public class BuildCardFromYuGiOhAPI {
 			
 	   if(arch == null) {
 		   arch = archService.saveArchetype(archetype.trim());
-		   logger.info("New Archetype registered: {} ", arch.toString());
+		   logger.info("New Archetype registered: {} ", arch);
 	   }
 	
 		return arch;	

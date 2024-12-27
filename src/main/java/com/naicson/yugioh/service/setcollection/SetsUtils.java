@@ -82,14 +82,21 @@ public class SetsUtils {
 				.map(CardSetDetailsDTO::getTipo)
 				.collect(Collectors.groupingBy(TipoCard::getId, Collectors.counting()));
 		
-		List<TipoCard> tipoList =  listDetails.stream().map(CardSetDetailsDTO::getTipo).distinct().toList();
-		
-		for (TipoCard tipo : tipoList) {
-			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
-		}
-		
-		return tipoList.stream().sorted((v1, v2) -> Long.compare(v2.getQuantity(), v1.getQuantity())).collect(Collectors.toList());
-		
+		return  listDetails.stream().map(CardSetDetailsDTO::getTipo)
+				.distinct()
+				.map(tipo -> {
+					int quantity = quantityByTipo.get(tipo.getId()).intValue();
+					return new TipoCard(tipo.getId(), tipo.getName(), tipo.getTipoCardImgPath(), quantity);
+				})
+				.sorted((v1, v2) -> Long.compare(v2.getQuantity(), v1.getQuantity()))
+				.toList();
+
+//		for (TipoCard tipo : tipoList) {
+//			tipo.setQuantity(quantityByTipo.get(tipo.getId()).intValue());
+//		}
+//
+//		return tipoList.stream().sorted((v1, v2) -> Long.compare(v2.getQuantity(), v1.getQuantity())).collect(Collectors.toList());
+
 	}
 	
 	private List<GenericTypeDTO> setQuantityByGenericType(List<CardSetDetailsDTO> listDetails){
