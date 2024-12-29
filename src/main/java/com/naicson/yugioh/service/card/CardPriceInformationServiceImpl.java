@@ -83,59 +83,43 @@ public class CardPriceInformationServiceImpl {
 
 	public List<RankingForHomeDTO> findWeeklyCards(CardStats stats) {
 
-		List<RankingForHomeDTO> rankingByStatsList = new ArrayList<>();
+		if (stats == null)
+			throw new IllegalArgumentException("Invalid stats for weekly consulting");
 
-		try {
+		List<CardPriceInformation> cardsByStats = stats.getStats(cardInfoRepository);
 
-			if (stats == null) {
-				logger.error("Invalid stats for weekly consulting");
-				throw new IllegalArgumentException("Invalid stats for weekly consulting");
-			}
+		this.validadeStatsList(cardsByStats, stats);
 
-			CardStats.valueOf(stats.toString());
-			List<CardPriceInformation> cardsByStats = stats.getStats(cardInfoRepository);
+		List<RankingForHomeDTO> rankingByStatsList = this.convertFromCardInfoToRankingDTO(cardsByStats, stats);
 
-			this.validadeStatsList(cardsByStats, stats);
-
-			rankingByStatsList = this.convertFromCardInfoToRankingDTO(cardsByStats, stats);
-
-			if (rankingByStatsList == null || rankingByStatsList.isEmpty()) {
-				logger.error("Ranking stats list is empty");
-				throw new NoSuchElementException("Ranking stats list is empty");
-			}
-
-		} catch (Exception e) {
-			logger.error("Something bad happened: {}", e.getMessage());
-		}
+		if (rankingByStatsList == null || rankingByStatsList.isEmpty())
+			throw new NoSuchElementException("Ranking stats list is empty");
 
 		return rankingByStatsList;
 	}
 
 	private List<RankingForHomeDTO> convertFromCardInfoToRankingDTO(List<CardPriceInformation> cardsByStats,
 			CardStats stats) {
+
 		this.validadeStatsList(cardsByStats, stats);
 
 		return cardsByStats.stream().map(card -> {
-			String cardName = this.getCardName(card.getCardNumber().longValue());
+			String cardName = this.getCardName(card.getCardNumber());
 			RankingForHomeDTO cardByStats = new RankingForHomeDTO();
-
 			cardByStats.setCardName(cardName);
 			cardByStats.setCardNumber(String.valueOf(card.getCardNumber()));
 			cardByStats.setCardPrice(card.getCurrentPrice());
 			cardByStats.setPercentVariable(card.getWeeklyPercentVariable());
 			cardByStats.setSetCode(card.getCardSetCode());
-
 			return cardByStats;
-		}).collect(Collectors.toList());
+		}).toList();
 	}
 
 	private String getCardName(Long cardNumber) {
 		Card card = cardServicesUtil.cardServiceFindByNumero(cardNumber);
 
-		if (card.getNome() == null || card.getNome().isBlank()) {
-			logger.error("Invalid card name of card: {} ", card.getNumero());
+		if (card.getNome() == null || card.getNome().isBlank())
 			throw new NoSuchElementException("Invalid card name of card = " + card.getNumero() + "".toUpperCase());
-		}
 
 		return card.getNome();
 	}
@@ -150,12 +134,8 @@ public class CardPriceInformationServiceImpl {
 		if (cardId == null || cardId == 0)
 			throw new IllegalArgumentException("Invalid card id for search prices");
 
-		List<CardPriceInformation> prices = cardInfoRepository.findByCardId(cardId);
+		return cardInfoRepository.findByCardId(cardId).orElse(Collections.emptyList());
 
-		if (prices == null || prices.isEmpty())
-			return Collections.emptyList();
-
-		return prices;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -169,7 +149,7 @@ public class CardPriceInformationServiceImpl {
 				listCardsNotFound.add(price);
 				
 			} else {
-				listRel.stream().forEach(rel -> {
+				listRel.forEach(rel -> {
 					List<CardPriceInformation> cardsInfo = cardInfoRepository.findByCardSetCode(rel.getCardSetCode());
 					
 					if (cardsInfo == null || cardsInfo.isEmpty())

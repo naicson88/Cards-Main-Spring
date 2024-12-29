@@ -22,7 +22,6 @@ public enum CardStats {
 
 		@Override
 		public List<CardViewsInformation> getStatsView(CardViewsInformationRepository cardViewRepo) {
-			// TODO Auto-generated method stub
 			return null;
 		} 
     },
@@ -30,14 +29,11 @@ public enum CardStats {
     LOW {
         @Override
         public List<CardPriceInformation> getStats(CardPriceInformationRepository cardInfoRepo) {
-        	List<CardPriceInformation> lowCards = cardInfoRepo.findTop6ByOrderByWeeklyPercentVariableAsc();     	
-        	return lowCards;
-      	
+        	return  cardInfoRepo.findTop6ByOrderByWeeklyPercentVariableAsc();
         }
 
 		@Override
 		public List<CardViewsInformation> getStatsView(CardViewsInformationRepository cardViewRepo) {
-			// TODO Auto-generated method stub
 			return null;
 		}
     },

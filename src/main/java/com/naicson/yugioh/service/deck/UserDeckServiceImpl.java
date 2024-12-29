@@ -171,7 +171,8 @@ public class UserDeckServiceImpl {
 		
 		int qtdRemoved = 0;
 
-		userDeckRepository.findById(setId).orElseThrow(() -> new NoSuchElementException("Set not found with this code. ID = " + setId));
+		userDeckRepository.findById(setId)
+				.orElseThrow(() -> new NoSuchElementException("Set not found with this code. ID = " + setId));
 		
 		if(!dao.findRelationByDeckId(setId).isEmpty())
 			 qtdRemoved = dao.removeCardsFromUserSet(setId);
@@ -298,13 +299,11 @@ public class UserDeckServiceImpl {
 		for (DeckDTO relation : relDeckAndCards) {
 			
 			if (dao.verifyIfUserAleadyHasTheCard(userId, relation.getCard_set_code())) {
-				
+
 				if (dao.changeQuantityOfEspecifCardUserHas(userId, relation.getCard_set_code(),flagAddOrRemove) < 1)
 					throw new NoSuchElementException("It was not possible to manege card to the user's collection!");
-				
-				qtdCardsAddedOrRemoved++;
 
-			} else {
+            } else {
 				
 				RelUserCardsDTO rel = new RelUserCardsDTO();
 				rel.setUserId(userId);
@@ -316,9 +315,9 @@ public class UserDeckServiceImpl {
 				if (dao.insertCardToUserCollection(rel) < 1)
 					throw new NoSuchElementException("It was not possible to add this Card to the user's collection.");
 
-				qtdCardsAddedOrRemoved++;
-			}
-		}
+            }
+            qtdCardsAddedOrRemoved++;
+        }
 				
 		return qtdCardsAddedOrRemoved;
 
@@ -350,7 +349,7 @@ public class UserDeckServiceImpl {
 						Long.parseLong(String.valueOf(t.get(0))),
 						String.valueOf(t.get(1))
 				);
-			}).collect(Collectors.toList());
+			}).toList();
 
 	}
 
