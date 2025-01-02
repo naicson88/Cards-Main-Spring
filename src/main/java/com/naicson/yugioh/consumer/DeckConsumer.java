@@ -3,9 +3,8 @@ package com.naicson.yugioh.consumer;
 import cardscommons.dto.KonamiDeckDTO;
 import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
+import com.naicson.yugioh.data.facade.consumer.ConsumerFacade;
 import com.naicson.yugioh.entity.Deck;
-import com.naicson.yugioh.entity.LogEntity;
 import com.naicson.yugioh.util.enums.SetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,24 +12,36 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Component
-public class DeckConsumerRabbitMQ {
+public class DeckConsumer {
 
 	@Autowired
-	RabbitMQConsumerFacade facade;
-	
-	Logger logger = LoggerFactory.getLogger(DeckConsumerRabbitMQ.class);
-	
-	@RabbitListener(queues = "${rabbitmq.queue.deck}", autoStartup = "${rabbitmq.autostart.consumer}")
-	@Transactional(rollbackFor = {Exception.class})
-	public void consumer(String json) {		
+	ConsumerFacade facade;
 
+	private final static String DECK_QUEUE = "DECK_QUEUE";
+	
+	Logger logger = LoggerFactory.getLogger(DeckConsumer.class);
+	
+	@RabbitListener(queues = DECK_QUEUE, autoStartup = "${rabbitmq.autostart.consumer}")
+	public void consumer(String json) {		
+		deckQueueConsumer(json);
+	}
+
+	@KafkaListener(topics = DECK_QUEUE, groupId = "cards-main-ms")
+	public void kafkaConsumer(String message){
+		logger.info(" -> Consuming from Kafka {}", message);
+		deckQueueConsumer(message);
+	}
+
+
+	@Transactional(rollbackFor = {Exception.class})
+	public void deckQueueConsumer(String json) {
 		try {
 			logger.info("Start consuming new KonamiDeck: {}" , json);
 
@@ -46,9 +57,13 @@ public class DeckConsumerRabbitMQ {
 			newDeck = facade.saveDeckProcess(newDeck);
 
 			logger.info("Deck successfully saved! {}", newDeck.getNome());
-		} catch (Exception e){
+		} catch (DuplicateKeyException e){
 			logger.error(e.getMessage());
-			facade.saveLogEntity(e ,HttpStatus.INTERNAL_SERVER_ERROR, "DECK_QUEUE");
+			facade.saveLogEntity(e ,HttpStatus.INTERNAL_SERVER_ERROR, DECK_QUEUE);
+		}
+		catch (Exception e){
+			logger.error(e.getMessage());
+			facade.saveLogEntity(e ,HttpStatus.INTERNAL_SERVER_ERROR, DECK_QUEUE);
 			throw  e;
 		}
 	}

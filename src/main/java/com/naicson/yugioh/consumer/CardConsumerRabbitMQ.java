@@ -1,10 +1,12 @@
 package com.naicson.yugioh.consumer;
 
-import java.util.Date;
-import java.util.List;
-
 import cardscommons.dto.AddNewCardToDeckDTO;
-import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
+import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
+import com.naicson.yugioh.data.facade.consumer.ConsumerFacade;
+import com.naicson.yugioh.entity.Card;
+import com.naicson.yugioh.entity.RelDeckCards;
+import com.naicson.yugioh.service.card.CardAlternativeNumberService;
+import com.naicson.yugioh.service.card.CardServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,11 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.entity.Card;
-import com.naicson.yugioh.entity.RelDeckCards;
-import com.naicson.yugioh.service.card.CardAlternativeNumberService;
-import com.naicson.yugioh.service.card.CardServiceImpl;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class CardConsumerRabbitMQ {
@@ -28,7 +27,7 @@ public class CardConsumerRabbitMQ {
 	CardServiceImpl cardService;
 
 	@Autowired
-	RabbitMQConsumerFacade facade;
+	ConsumerFacade facade;
 
 	Logger logger = LoggerFactory.getLogger(CardConsumerRabbitMQ.class);
 

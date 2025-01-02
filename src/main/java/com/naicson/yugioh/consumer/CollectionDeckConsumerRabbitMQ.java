@@ -3,7 +3,7 @@ package com.naicson.yugioh.consumer;
 import cardscommons.dto.CollectionDeckDTO;
 import com.naicson.yugioh.data.builders.DeckBuilder;
 import com.naicson.yugioh.data.composite.JsonConverterValidationFactory;
-import com.naicson.yugioh.data.facade.consumer.RabbitMQConsumerFacade;
+import com.naicson.yugioh.data.facade.consumer.ConsumerFacade;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.sets.SetCollection;
 import com.naicson.yugioh.service.setcollection.SetCollectionServiceImpl;
@@ -23,7 +23,7 @@ public class CollectionDeckConsumerRabbitMQ {
 	SetCollectionServiceImpl setCollectionService;
 
 	@Autowired
-	RabbitMQConsumerFacade facade;
+	ConsumerFacade facade;
 	
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	

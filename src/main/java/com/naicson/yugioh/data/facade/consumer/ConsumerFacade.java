@@ -2,7 +2,6 @@ package com.naicson.yugioh.data.facade.consumer;
 
 import cardscommons.dto.CardYuGiOhAPI;
 import com.naicson.yugioh.consumer.ConsumerUtils;
-import com.naicson.yugioh.consumer.DeckConsumerRabbitMQ;
 import com.naicson.yugioh.entity.Card;
 import com.naicson.yugioh.entity.Deck;
 import com.naicson.yugioh.entity.LogEntity;
@@ -14,7 +13,6 @@ import com.naicson.yugioh.service.deck.RelDeckCardsServiceImpl;
 import com.naicson.yugioh.util.ApiExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-public class RabbitMQConsumerFacade {
+public class ConsumerFacade {
     RelDeckCardsServiceImpl relDeckCardService;
     ConsumerUtils consumerUtils;
     CardRegistry cardRegistry;
@@ -31,8 +29,8 @@ public class RabbitMQConsumerFacade {
     LogEntityRepository logRepository;
     ApiExceptionHandler exceptionHandler;
 
-    Logger logger = LoggerFactory.getLogger(RabbitMQConsumerFacade.class);
-    public RabbitMQConsumerFacade(RelDeckCardsServiceImpl relDeckCardService, ConsumerUtils consumerUtils, CardRegistry cardRegistry, LogEntityRepository logRepository,
+    Logger logger = LoggerFactory.getLogger(ConsumerFacade.class);
+    public ConsumerFacade(RelDeckCardsServiceImpl relDeckCardService, ConsumerUtils consumerUtils, CardRegistry cardRegistry, LogEntityRepository logRepository,
                                   DeckServiceImpl deckService, ApiExceptionHandler exceptionHandler){
         this.relDeckCardService = relDeckCardService;
         this.consumerUtils = consumerUtils;
