@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,32 +25,42 @@ public class CollectionDeckConsumerRabbitMQ {
 
 	@Autowired
 	ConsumerFacade facade;
+	private  final static String DECK_COLLECTION_QUEUE = "DECK_COLLECTION_QUEUE";
 	
 	Logger logger = LoggerFactory.getLogger(CollectionDeckConsumerRabbitMQ.class);
 	
-	@RabbitListener(queues = "${rabbitmq.queue.deckcollection}", autoStartup = "${rabbitmq.autostart.consumer}")
+	@RabbitListener(queues = DECK_COLLECTION_QUEUE, autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = {Exception.class})
 	public void consumer (String json) {
 		logger.info("Start consuming new CollectionDeck: {}" , json);
-		
+		consumeCollectionDeck(json);
+	}
+
+	@KafkaListener(topics = DECK_COLLECTION_QUEUE, groupId = "cards-main-ms")
+	@Transactional(rollbackFor = {Exception.class})
+	public void kafkaConsumer(String message){
+		logger.info(" -> Consuming from Kafka {}", message);
+		consumeCollectionDeck(message);
+	}
+
+	public void consumeCollectionDeck(String json) {
 		CollectionDeckDTO cDeck = (CollectionDeckDTO) facade.convertJsonToDTO(json, JsonConverterValidationFactory.COLLECTION_DECK);
-		
+
 		if(cDeck.getSetId() == null)
 			throw new IllegalArgumentException("Invalid Set ID");
-		
+
 		if(cDeck.getCardsToBeRegistered() != null && !cDeck.getCardsToBeRegistered().isEmpty())
 			facade.registryCardFromYuGiOhAPI(cDeck.getCardsToBeRegistered());
-		
+
 		Deck newDeck = this.crateNewDeckOfCollection(cDeck);
 
 		newDeck = facade.saveDeckProcess(newDeck);
-		
+
 		this.setCollectionService.saveSetDeckRelation(cDeck.getSetId().longValue(), newDeck.getId());
-		
+
 		logger.info("Collection Deck successfully saved! {}", newDeck.getNome());
-				
 	}
-	
+
 	private Deck crateNewDeckOfCollection(CollectionDeckDTO cDeck) {
 		
 		if(cDeck == null || cDeck.getSetId() < 1)

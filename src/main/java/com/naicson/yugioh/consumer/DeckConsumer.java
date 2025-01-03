@@ -29,18 +29,18 @@ public class DeckConsumer {
 	Logger logger = LoggerFactory.getLogger(DeckConsumer.class);
 	
 	@RabbitListener(queues = DECK_QUEUE, autoStartup = "${rabbitmq.autostart.consumer}")
+	@Transactional(rollbackFor = { Exception.class })
 	public void consumer(String json) {		
 		deckQueueConsumer(json);
 	}
 
 	@KafkaListener(topics = DECK_QUEUE, groupId = "cards-main-ms")
+	@Transactional(rollbackFor = { Exception.class })
 	public void kafkaConsumer(String message){
 		logger.info(" -> Consuming from Kafka {}", message);
 		deckQueueConsumer(message);
 	}
 
-
-	@Transactional(rollbackFor = {Exception.class})
 	public void deckQueueConsumer(String json) {
 		try {
 			logger.info("Start consuming new KonamiDeck: {}" , json);

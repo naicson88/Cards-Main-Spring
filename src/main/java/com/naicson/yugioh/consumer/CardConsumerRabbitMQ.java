@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +30,25 @@ public class CardConsumerRabbitMQ {
 	@Autowired
 	ConsumerFacade facade;
 
+	private  final static String CARD_QUEUE = "CARD_QUEUE";
+
 	Logger logger = LoggerFactory.getLogger(CardConsumerRabbitMQ.class);
 
-	@RabbitListener(queues = "${rabbitmq.queue.card}", autoStartup = "${rabbitmq.autostart.consumer}")
+	@RabbitListener(queues = CARD_QUEUE, autoStartup = "${rabbitmq.autostart.consumer}")
 	@Transactional(rollbackFor = { Exception.class })
 	public void consumer(String json) {
 		logger.info(" Start saving Card on Deck: {}", json);
+		cardConsumer(json);
+	}
 
+	@KafkaListener(topics = CARD_QUEUE, groupId = "cards-main-ms")
+	@Transactional(rollbackFor = { Exception.class })
+	public void kafkaConsumer(String message){
+		logger.info(" -> Consuming from Kafka {}", message);
+		cardConsumer(message);
+	}
+
+	private void cardConsumer(String json) {
 		AddNewCardToDeckDTO card = (AddNewCardToDeckDTO) facade
 				.convertJsonToDTO(json, JsonConverterValidationFactory.ADD_NEW_CARD);
 
@@ -46,7 +59,6 @@ public class CardConsumerRabbitMQ {
 		facade.saveRelDeckCards(List.of(cardToBeAdded));
 
 		logger.info("Card successfully saved on Deck: {}", cardToBeAdded.getCardNumber());
-
 	}
 
 	private Long verifyIfCardIsAlreadyRegistered(AddNewCardToDeckDTO card) {
@@ -56,7 +68,7 @@ public class CardConsumerRabbitMQ {
 			cardFound = cardService.findByCardNome(card.getName());
 
 		if (cardFound == null)
-			cardFound = facade.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered());//.get(0);
+			cardFound = facade.registryCardFromYuGiOhAPI(card.getCardsToBeRegistered());
 
 
 		return cardFound.getId().longValue();
