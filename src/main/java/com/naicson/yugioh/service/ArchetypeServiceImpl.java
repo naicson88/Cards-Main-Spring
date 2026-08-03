@@ -7,7 +7,7 @@ import com.naicson.yugioh.repository.ArchetypeRepository;
 import com.naicson.yugioh.service.card.CardServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 @Service
 public class ArchetypeServiceImpl {
 	
-	@Autowired
+
 	ArchetypeRepository archRepository;	
-	@Autowired
+
 	CardServiceImpl cardService;
 	
 	Logger logger = LoggerFactory.getLogger(ArchetypeServiceImpl.class);
@@ -43,6 +43,7 @@ public class ArchetypeServiceImpl {
 					archMap.put(firstChar, new ArrayList<>());
 					archMap.get(firstChar).add(arch);
 				}
+
 
 			} catch (Exception e){
 				logger.error(arch.getArcName());
@@ -81,7 +82,6 @@ public class ArchetypeServiceImpl {
 		List<Tuple> tuple = archRepository.getFirstLetterAllArchetypes();
 		if(tuple == null || tuple.isEmpty())
 			throw new ErrorMessage(" #getFirstLetterAllArchetypes -> Error when finding Archetypes");
-
 		return tuple.stream().map(it ->  it.get(0, String.class)).collect(Collectors.toList());
 	}
 }

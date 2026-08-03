@@ -251,7 +251,7 @@ public class UserDeckServiceImpl {
 	
 	@Transactional(rollbackFor = {Exception.class, IllegalArgumentException.class})
 	public UserDeck addSetToUserCollection(Long originalDeckId) {
-		
+
 		logger.info("Starting copy Konami Deck to User's collection");
 
 		Deck deckOrigem = deckService.findById(originalDeckId);
@@ -286,15 +286,15 @@ public class UserDeckServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public int addOrRemoveCardsToUserCollection(Long originalDeckId, long userId, String flagAddOrRemove) {
 
+		if (!flagAddOrRemove.equals("A") && !flagAddOrRemove.equals("R"))
+			throw new IllegalArgumentException("Check the Add or Remove parameter sent!");
+
 		int qtdCardsAddedOrRemoved = 0;
 
 		List<DeckDTO> relDeckAndCards = dao.relationDeckAndCards(originalDeckId);
 
 		if (relDeckAndCards == null || relDeckAndCards.isEmpty()) 
 			return qtdCardsAddedOrRemoved;
-		
-		if (!flagAddOrRemove.equals("A") && !flagAddOrRemove.equals("R"))
-			throw new IllegalArgumentException("Check the Add or Remove parameter sent!");
 
 		for (DeckDTO relation : relDeckAndCards) {
 			
