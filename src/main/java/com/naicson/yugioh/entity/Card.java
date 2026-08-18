@@ -32,6 +32,8 @@ public class Card {
 	@JoinColumn(name = "atributo_id",  referencedColumnName = "id")
 	private Atributo atributo;
 	private String propriedade;
+
+	// ===== ATRIBUTOS DE MONSTRO =====
 	private Integer nivel;
 	private Integer atk;
 	private Integer def;
@@ -41,11 +43,14 @@ public class Card {
 	@JsonIgnore
 	private String descricaoPortugues;
 	private String imagem;
+
+	// ===== PENDULUM ESPECÍFICO =====
 	private Integer escala;
 	@Column(columnDefinition="text")
 	private String descr_pendulum;
 	@Column(columnDefinition="text")
 	private String descr_pendulum_pt;
+
 	private String qtd_link;
 	@Transient
 	private List<Deck> sets;
@@ -73,7 +78,6 @@ public class Card {
 		this.nome = nome;
 		this.imagem = imagem;
 	}
-
 
 	public Atributo getAtributo() {
 		return atributo;

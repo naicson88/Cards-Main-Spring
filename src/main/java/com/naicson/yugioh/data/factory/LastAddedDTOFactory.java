@@ -48,7 +48,7 @@ public class LastAddedDTOFactory {
                 // TENTAR COLOCAR ISSO NA QUERY DO TUPLE
                // lastSet.setPrice(totalSetCollectionPrice(userSetRepository.consultSetUserDeckRelation(lastSet.getId())));
                 lastSet.setRegisteredDate(set.get(8, Date.class));
-                lastSet.setSetType(set.get(10, SetType.class));
+               // lastSet.setSetType(set.get(10, SetType.class));
                 return lastSet;
             }).toList();
 
@@ -59,7 +59,7 @@ public class LastAddedDTOFactory {
                 lastAdded.setId(set.get(0, BigInteger.class).longValue());
                 lastAdded.setImg(set.get(2, String.class));
                 lastAdded.setName(set.get(1, String.class));
-                lastAdded.setSetType(set.get(4, SetType.class));
+                //lastAdded.setSetType(set.get(4, SetType.class));
                 return lastAdded;
             }).toList();
         }

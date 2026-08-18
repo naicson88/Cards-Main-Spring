@@ -63,7 +63,7 @@ public interface UserSetCollectionRepository extends JpaRepository<UserSetCollec
 			+ "	select rel.card_set_code , sum(rel.quantity) as qtd, rel.card_numero "
 			+ "    from tab_rel_deckusers_cards rel "
 			+ "    where deck_id = :userDeckId "
-			+ "    group by rel.card_set_code "
+			+ "    group by rel.card_set_code, rel.card_numero "
 			+ " ) as counter on counter.card_set_code = rdc.card_set_code "
 			+ " where rdc.deck_id in (select deck_id from tab_setcollection_deck where set_collection_id = :konamiCollectionId) "
 				, nativeQuery = true)
