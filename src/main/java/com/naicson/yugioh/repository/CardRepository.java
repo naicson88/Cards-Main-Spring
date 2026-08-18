@@ -41,20 +41,22 @@ public interface CardRepository extends JpaRepository<Card, Integer>, JpaSpecifi
 			nativeQuery = true)
 	Page<Card> findCardsByTypeAndUser(String type, int userId, Pageable page);
 	
-	@Query(value = " SELECT DISTINCT * FROM yugioh.tab_cards CARDS "
-			+ " INNER JOIN TAB_REL_DECKUSERS_CARDS UCARDS ON UCARDS.CARD_NUMERO = CARDS.NUMERO "
-			+ " INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
-			+ " WHERE CARDS.GENERIC_TYPE = :genericType AND DUSERS.USER_ID = :userId "
-			+ " GROUP BY CARDS.NUMERO ",
+	@Query(value = " SELECT * FROM yugioh.tab_cards CARDS "
+			+ " WHERE CARDS.GENERIC_TYPE = :genericType AND EXISTS ( "
+			+ "   SELECT 1 FROM TAB_REL_DECKUSERS_CARDS UCARDS "
+			+ "   INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
+			+ "   WHERE UCARDS.CARD_NUMERO = CARDS.NUMERO AND DUSERS.USER_ID = :userId "
+			+ " ) ",
 			countQuery = "SELECT count(*) FROM tab_cards",
 			nativeQuery=true)
 	Page<Card> getByGenericType (Pageable page, String genericType, long userId);
-	
-	@Query(value = " SELECT DISTINCT * FROM yugioh.tab_cards CARDS "
-			+ " INNER JOIN TAB_REL_DECKUSERS_CARDS UCARDS ON UCARDS.CARD_NUMERO = CARDS.NUMERO "
-			+ " INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
-			+ " WHERE CARDS.nome like CONCAT('%',:cardName,'%') AND DUSERS.USER_ID = :userId "
-			+ " GROUP BY CARDS.NUMERO ",
+
+	@Query(value = " SELECT * FROM yugioh.tab_cards CARDS "
+			+ " WHERE CARDS.nome like CONCAT('%',:cardName,'%') AND EXISTS ( "
+			+ "   SELECT 1 FROM TAB_REL_DECKUSERS_CARDS UCARDS "
+			+ "   INNER JOIN tab_user_deck DUSERS ON DUSERS.ID = UCARDS.DECK_ID "
+			+ "   WHERE UCARDS.CARD_NUMERO = CARDS.NUMERO AND DUSERS.USER_ID = :userId "
+			+ " ) ",
 			countQuery = "SELECT count(*) FROM tab_cards",
 			nativeQuery=true)
 	Page<Card> cardSearchByNameUserCollection(String cardName, long userId, Pageable pageable);

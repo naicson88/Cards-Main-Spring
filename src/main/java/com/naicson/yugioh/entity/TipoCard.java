@@ -23,6 +23,8 @@ public class TipoCard {
 	@Transient
 	private int quantity;
 
+	public TipoCard(){}
+
 	public TipoCard(Long id, String name, String tipoCardImgPath, int quantity) {
 		this.id = id;
 		this.name = name;

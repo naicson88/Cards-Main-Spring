@@ -42,7 +42,7 @@ public class ApiExceptionHandler {
                    ZonedDateTime.now(), request.getRequestURL().toString(), e.getClass().toString());
 
            saveLogEntity(e, HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURL().toString());
-
+            logger.error("ERROR {}", e.getStackTrace());
 			logger.error(e.getMessage());
 			return ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR.value()).body(ex);
 		}

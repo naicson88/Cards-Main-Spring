@@ -36,7 +36,7 @@ public class CollectionDeckConsumerRabbitMQ {
 		consumeCollectionDeck(json);
 	}
 
-	@KafkaListener(topics = DECK_COLLECTION_QUEUE, groupId = "cards-main-ms")
+	//@KafkaListener(topics = DECK_COLLECTION_QUEUE, groupId = "cards-main-ms")
 	@Transactional(rollbackFor = {Exception.class})
 	public void kafkaConsumer(String message){
 		logger.info(" -> Consuming from Kafka {}", message);
